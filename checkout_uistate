@@ -1,0 +1,3 @@
+#!/bin/bash
+
+git checkout project-a-ios.xcodeproj/project.xcworkspace/xcuserdata/Mike.xcuserdatad/UserInterfaceState.xcuserstate
