@@ -7,8 +7,10 @@
 #import "cocos2d.h"
 
 @interface GameLayer : CCLayer {
+    NSMutableArray *grounds;
 }
 
 +(CCScene *) scene;
+-(void) appendNewGround;
 
 @end

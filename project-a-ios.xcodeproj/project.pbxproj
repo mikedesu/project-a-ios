@@ -131,6 +131,7 @@
 		272EF65116C5695F005DF231 /* GameLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF65016C5695F005DF231 /* GameLayer.m */; };
 		272EF65B16C569BE005DF231 /* AsyncObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF65816C569BE005DF231 /* AsyncObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		272EF65C16C569BE005DF231 /* CCMutableTexture2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF65A16C569BE005DF231 /* CCMutableTexture2D.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		27C88FE016C57607004AB4D8 /* ground_vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 27C88FDF16C57607004AB4D8 /* ground_vertical.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -394,6 +395,8 @@
 		272EF65816C569BE005DF231 /* AsyncObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AsyncObject.m; path = "../../Pixel-based-destructible-ground-with-Cocos2d-iPhone/DestructibleGround/AsyncObject.m"; sourceTree = "<group>"; };
 		272EF65916C569BE005DF231 /* CCMutableTexture2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCMutableTexture2D.h; path = "../../Pixel-based-destructible-ground-with-Cocos2d-iPhone/DestructibleGround/CCMutableTexture2D.h"; sourceTree = "<group>"; };
 		272EF65A16C569BE005DF231 /* CCMutableTexture2D.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCMutableTexture2D.m; path = "../../Pixel-based-destructible-ground-with-Cocos2d-iPhone/DestructibleGround/CCMutableTexture2D.m"; sourceTree = "<group>"; };
+		27C88FDE16C573D4004AB4D8 /* MLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLog.h; sourceTree = "<group>"; };
+		27C88FDF16C57607004AB4D8 /* ground_vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_vertical.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -452,6 +455,7 @@
 		272EF4DB16C5695D005DF231 /* project-a-ios */ = {
 			isa = PBXGroup;
 			children = (
+				27C88FDE16C573D4004AB4D8 /* MLog.h */,
 				272EF64C16C5695F005DF231 /* AppDelegate.h */,
 				272EF64D16C5695F005DF231 /* AppDelegate.m */,
 				272EF65716C569BE005DF231 /* AsyncObject.h */,
@@ -470,6 +474,7 @@
 		272EF4DC16C5695D005DF231 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				27C88FDF16C57607004AB4D8 /* ground_vertical.png */,
 				272EF4DD16C5695D005DF231 /* Default.png */,
 				272EF4DF16C5695D005DF231 /* fps_images.png */,
 				272EF4E116C5695D005DF231 /* fps_images-hd.png */,
@@ -888,6 +893,7 @@
 				272EF4F016C5695D005DF231 /* Icon@2x.png in Resources */,
 				272EF4F316C5695D005DF231 /* iTunesArtwork in Resources */,
 				272EF62C16C5695F005DF231 /* ChangeLog in Resources */,
+				27C88FE016C57607004AB4D8 /* ground_vertical.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1063,6 +1069,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1082,6 +1089,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
