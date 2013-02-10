@@ -15,6 +15,11 @@
 
 @implementation GameLayer
 
+/*
+ ====================
+ scene
+ ====================
+ */
 +(CCScene *) scene {
 	CCScene *scene = [CCScene node];
 	GameLayer *layer = [GameLayer node];
@@ -23,96 +28,47 @@
 }
 
 
+/*
+ ====================
+ init
+ ====================
+ */
 -(id) init {
 	if( (self=[super init]) ) {
-		
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Hello World" fontName:@"Marker Felt" fontSize:64];
-		CGSize size = [[CCDirector sharedDirector] winSize];
-		label.position =  ccp( size.width /2 , size.height/2 );
-		[self addChild: label];
-        
         self.isTouchEnabled = YES;
-        
-        grounds = [ NSMutableArray arrayWithCapacity: 4];
-        
-        [ self appendNewGround ];
-        [ self appendNewGround ];
-        [ self appendNewGround ];
-        [ self appendNewGround ];
-        
-        
-        
-        CCSprite *sprite=[grounds objectAtIndex:0];
-        
-        CGPoint local=ccp( 0, 0 );
-
-        CGPoint activeLocal1=ccp( 0, 0 );
-        CGPoint activeLocal2=ccp( 1, 0 );
-        CGPoint activeLocal3=ccp( 2, 0 );
-        CGPoint activeLocal4=ccp( 3, 0 );
-        
-        CGPoint activeLocal5=ccp( 4, 0 );
-        CGPoint activeLocal6=ccp( 5, 0 );
-        CGPoint activeLocal7=ccp( 6, 0 );
-        CGPoint activeLocal8=ccp( 7, 0 );
-        
-        CGPoint activeLocal9=ccp( 8,  0);
-        CGPoint activeLocal10=ccp( 9,  0);
-        CGPoint activeLocal11=ccp( 10, 0 );
-        CGPoint activeLocal12=ccp( 11, 0 );
-        
-        CGPoint activeLocal13=ccp( 12, 0 );
-        CGPoint activeLocal14=ccp( 13, 0 );
-        CGPoint activeLocal15=ccp( 14, 0 );
-        CGPoint activeLocal16=ccp( 15, 0 );
-        
-         
-        CCMutableTexture2D* groundMutableTexture=(CCMutableTexture2D*)(sprite.texture);
-        
-        //[groundMutableTexture drawLineFrom:activeLocal to:local withLineWidth:DRAW_WIDTH andColor:currentColor];
-        ccColor4B color = ccc4( 0, 0, 0, 255 );
-        
-        [groundMutableTexture setPixelAt: activeLocal1 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal2 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal3 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal4 rgba: color ];
-        
-        [groundMutableTexture setPixelAt: activeLocal5 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal6 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal7 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal8 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal9 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal10 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal11 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal12 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal13 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal14 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal15 rgba: color ];
-        [groundMutableTexture setPixelAt: activeLocal16 rgba: color ];
-        
-        
-        [groundMutableTexture apply]; //Redraw texture
-
-        
-		
+        [ self colorTest ];
+        [ self schedule:@selector(tick:)];
 	}
 	return self;
 }
 
+
+/*
+ ====================
+ dealloc
+ ====================
+ */
 - (void) dealloc {
 	//[super dealloc];
 }
 
-//////////////////////////////////////////////////////////////////////
 
+/*
+ ====================
+ tick: dt
+ ====================
+ */
 -(void)tick:(ccTime)dt {
     MLOG( @"tick" );
+    [ self colorScrambleAllTiles ];
 }
 
-//////////////////////////////////////////////////////////////////////
 
-
-
+/*
+ ====================
+ ccTouchesBegan: touches withEvent: event
+ ====================
+ */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     MLOG( @"touches began" );
 	UITouch *touch=[touches anyObject];
@@ -125,6 +81,11 @@
 }
 
 
+/*
+ ====================
+ ccTouchesMoved: touches withEvent: event
+ ====================
+ */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     MLOG( @"touches moved" );
 	UITouch *touch;
@@ -150,46 +111,170 @@
 }
 
 
+/*
+ ====================
+ ccTouchesEnded: touches withEvent: event
+ ====================
+ */
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     MLOG( @"touches ended" );
 }
 
 
+/*
+ ====================
+ ccTouchesCancelled: touches withEvent: event
+ ====================
+ */
 - (void)ccTouchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     MLOG( @"touches cancelled" );
 	[self ccTouchesEnded:touches withEvent:event];
 }
 
-///////////////////////////////////////////////////////////////////////
 
--(void)appendNewGround {
-    CGSize size = [[CCDirector sharedDirector] winSize];
-    float y=size.height;
+
+/*
+ ====================
+ appendNewTile
+ ====================
+ */
+-( void ) appendNewTile {
+    CGSize size = [ [ CCDirector sharedDirector ] winSize ];
+    float x = 0;
+    float y = size.height;
     
-    UIImage *image = [UIImage imageNamed:@"ground_vertical.png"];
-    CCMutableTexture2D *groundMutableTexture = [[CCMutableTexture2D alloc] initWithImage:image];
-    [groundMutableTexture setAliasTexParameters];
-    CCSprite *groundSprite = [CCSprite spriteWithTexture:groundMutableTexture];
-    groundSprite.scale=GROUND_SCALE;
-    if (grounds.count!=0) {
-        y=((CCSprite*)([grounds lastObject])).position.y-groundSprite.contentSize.height*groundSprite.scaleY;
+    CCMutableTexture2D *tileMutableTexture = [ [ CCMutableTexture2D alloc ] initWithSize: CGSizeMake( 16, 16 ) pixelFormat: kCCTexture2DPixelFormat_Default ];
+    [ tileMutableTexture setAliasTexParameters ];
+    
+    srand( time( NULL ) );
+    ccColor4B randomColor = ccc4( random() % 255, random() % 255, random() % 255, 255 );
+    
+    [ tileMutableTexture fill: randomColor ];
+    [ tileMutableTexture apply ];
+    
+    CCSprite *tileSprite = [ CCSprite spriteWithTexture: tileMutableTexture ];
+    tileSprite.scale = GROUND_SCALE;
+    
+    if ( gfxTiles.count != 0 ) {
+        
+        if ( gfxTiles.count % 10 == 0 ) {
+            x = tileSprite.contentSize.width * tileSprite.scaleX * 0.5f;
+            y = ( ( CCSprite * )( [ gfxTiles lastObject ] ) ).position.y - tileSprite.contentSize.height * tileSprite.scaleY;
+        } else {
+            x = ( ( CCSprite * )[ gfxTiles lastObject ] ).position.x + tileSprite.contentSize.width * tileSprite.scaleX;
+            y = ( ( CCSprite * )( [ gfxTiles lastObject ] ) ).position.y;
+        }
+        
     } else {
-        y-=groundSprite.contentSize.height*groundSprite.scaleY*0.5f;
+        
+        x += tileSprite.contentSize.width * tileSprite.scaleX * 0.5f;
+        y -= tileSprite.contentSize.height * tileSprite.scaleY*0.5f;
+        
     }
-    groundSprite.position=ccp(size.width*0.5f,y);
-    [self addChild:groundSprite];
-    [grounds addObject:groundSprite];
     
+    tileSprite.position = ccp( x, y );
+    [ self addChild: tileSprite ];
+    [ gfxTiles addObject: tileSprite ];
     
-    CCLabelTTF *label = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"grounds [ %d ]",grounds.count-1] fontName:@"Marker Felt" fontSize:13];
-    label.rotation=90;
-    label.position =  ccp( label.contentSize.height*0.5f +2, groundSprite.position.y);
-    [self addChild: label];
 }
 
 
+/*
+ ====================
+ appendNewColorTestTile
+ ====================
+ */
+-( void ) appendNewColorTestTile {
+    CGSize size = [ [ CCDirector sharedDirector ] winSize ];
+    float x = 0;
+    float y = size.height;
+    
+    CCMutableTexture2D *tileMutableTexture = [ [ CCMutableTexture2D alloc ] initWithSize: CGSizeMake( 16, 16 ) pixelFormat: kCCTexture2DPixelFormat_Default ];
+    [ tileMutableTexture setAliasTexParameters ];
+    
+    srand( time( NULL ) );
+    
+    
+    for ( int i = 0; i < 16; i++ ) {
+        for ( int j = 0; j < 16; j++ ) {
+            ccColor4B randomColor = ccc4( random() % 255, random() % 255, random() % 255, 255 );
+            [ tileMutableTexture setPixelAt: ccp( i, j ) rgba: randomColor ];
+        }
+    }
+    
+    [ tileMutableTexture apply ];
+    
+    CCSprite *tileSprite = [ CCSprite spriteWithTexture: tileMutableTexture ];
+    tileSprite.scale = GROUND_SCALE;
+    
+    if ( gfxTiles.count != 0 ) {
+        
+        if ( gfxTiles.count % 10 == 0 ) {
+            x = tileSprite.contentSize.width * tileSprite.scaleX * 0.5f;
+            y = ( ( CCSprite * )( [ gfxTiles lastObject ] ) ).position.y - tileSprite.contentSize.height * tileSprite.scaleY;
+        } else {
+            x = ( ( CCSprite * )[ gfxTiles lastObject ] ).position.x + tileSprite.contentSize.width * tileSprite.scaleX;
+            y = ( ( CCSprite * )( [ gfxTiles lastObject ] ) ).position.y;
+        }
+        
+    } else {
+        
+        x += tileSprite.contentSize.width * tileSprite.scaleX * 0.5f;
+        y -= tileSprite.contentSize.height * tileSprite.scaleY*0.5f;
+        
+    }
+    
+    tileSprite.position = ccp( x, y );
+    [ self addChild: tileSprite ];
+    [ gfxTiles addObject: tileSprite ];
+    
+}
 
 
+/*
+ ====================
+ colorScrambleTile
+ ====================
+ */
+-( void ) colorScrambleTile: ( CCSprite * ) tileSprite {
+    CCMutableTexture2D *tileTex = ( CCMutableTexture2D * ) tileSprite.texture;
+    srand( time( NULL ) );
+    for ( int i = 0; i < 16; i++ ) {
+        for ( int j = 0; j < 16; j++ ) {
+            ccColor4B randomColor = ccc4( random() % 255, random() % 255, random() % 255, 255 );
+            [ tileTex setPixelAt: ccp( i, j ) rgba: randomColor ];
+        }
+    }
+    [ tileTex apply ];
+}
 
+
+/*
+ ====================
+ colorScrambleAllTiles
+ ====================
+ */
+-( void ) colorScrambleAllTiles {
+    for ( int i = 0; i < [ gfxTiles count ]; i++ ) {
+        CCSprite *tileSprite = [ gfxTiles objectAtIndex: i ];
+        [ self colorScrambleTile: tileSprite ];
+    }
+}
+
+
+/*
+ ====================
+ colorTest
+ ====================
+ */
+-( void ) colorTest {
+    int tilemax = 150;
+    //grounds = [ NSMutableArray arrayWithCapacity: tilemax ];
+    gfxTiles = [ NSMutableArray arrayWithCapacity: tilemax ];
+    
+    for ( int i = 0 ; i < tilemax ; i++ ) {
+        [ self appendNewColorTestTile ];
+    }
+}
 
 @end

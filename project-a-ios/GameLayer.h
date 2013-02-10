@@ -7,10 +7,16 @@
 #import "cocos2d.h"
 
 @interface GameLayer : CCLayer {
-    NSMutableArray *grounds;
+    //NSMutableArray *grounds;
+    NSMutableArray *gfxTiles;
 }
 
 +(CCScene *) scene;
--(void) appendNewGround;
+
+-(void) appendNewTile;
+-(void) appendNewColorTestTile;
+-(void) colorTest;
+-(void) colorScrambleTile;
+-(void) colorScrambleAllTiles;
 
 @end
