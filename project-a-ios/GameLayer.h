@@ -9,17 +9,20 @@
 #import "Tile.h"
 
 @interface GameLayer : CCLayer <UIAlertViewDelegate> {
-    //NSMutableArray *tileSpriteArray;
-    
     NSMutableArray *tileArray;
     NSMutableArray *tileDataArray;
-    
+    NSMutableArray *entityArray;
     
     //NSInteger visibleTiles[ NUMBER_OF_TILES_ONSCREEN ];
     //Tile *visibleTiles[ NUMBER_OF_TILES_ONSCREEN ];
-    
+ 
+    BOOL isTouched;
+    NSInteger touchedTileIndex;
     NSInteger selectedTile;
     NSInteger prevSelectedTile;
+    
+    double touchBeganTime;    
+
 }
 
 +(CCScene *) scene;

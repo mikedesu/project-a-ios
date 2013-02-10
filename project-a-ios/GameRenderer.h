@@ -4,7 +4,8 @@
 //  Created by Mike Bell on 2/10/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
-@class Tile;
+#import "Tile.h"
+
 @interface GameRenderer : NSObject {
     
 }
@@ -12,5 +13,8 @@
 +( void ) colorScrambleAllTiles: ( NSArray * ) tileArray;
 +( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data;
 +( void ) setAllTiles: ( NSArray * ) tileArray withData: ( NSArray * ) data;
+
++( void ) setAllTiles: ( NSArray * ) tileArray toTileType: ( Tile_t ) tileType;
++( void ) setTileArrayBoundary: ( NSArray * ) tileArray toTileType: ( Tile_t ) tileType withLevel: ( NSInteger ) level;
 
 @end

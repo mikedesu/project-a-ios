@@ -5,12 +5,14 @@
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
 typedef enum {
-    TILE_GRASS=0,
-    TILE_ICE,
+    TILE_VOID=0,
+    TILE_FLOOR_GRASS,
+    TILE_FLOOR_STONE,
+    TILE_FLOOR_ICE,
 } Tile_t;
 
-//#define TILE_DEFAULT    TILE_GRASS
-#define TILE_DEFAULT    TILE_ICE
+#define TILE_DEFAULT    TILE_FLOOR_GRASS
+//#define TILE_DEFAULT    TILE_ICE
 
 
 @class CCSprite;
@@ -18,10 +20,12 @@ typedef enum {
 @interface Tile : NSObject {
 @public
     Tile_t tileType;
+    BOOL isSelected;
     CCSprite *tileSprite;
     NSMutableArray *contents;
 }
 -( id ) init;
 -( id ) initWithTileType: ( Tile_t ) tileType;
 
+    
 @end

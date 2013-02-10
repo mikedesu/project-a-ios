@@ -5,11 +5,9 @@
 
 #import "AppDelegate.h"
 #import "CCMutableTexture2D.h"
-#import "Colors.h"
 #import "GameConfig.h"
 #import "GameLayer.h"
 #import "GameRenderer.h"
-#import "MLog.h"
 #import "Tile.h"
 
 
@@ -39,6 +37,8 @@
         self.isTouchEnabled = YES;
         selectedTile = -1;
         prevSelectedTile = -1;
+        touchedTileIndex = -1;
+        isTouched = NO;
         
         [ self initializeTiles ];
         [ self initializeTileData ];
@@ -70,8 +70,6 @@
     //[ self colorScrambleAllTiles ];
     //[ GameRenderer colorScrambleAllTiles: tileArray ];
     [GameRenderer setAllTiles:tileArray withData: tileDataArray ];
-    
-    
     // [ self renderGameState ];
 }
 
@@ -84,14 +82,15 @@
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches began" );
 	UITouch *touch=[touches anyObject];
-    double now=[NSDate timeIntervalSinceReferenceDate];
+    touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     
+    isTouched = YES;
+    touchedTileIndex = [ self getTileIndexForTouch: touch ];
     prevSelectedTile = selectedTile;
-    selectedTile = [ self getTileIndexForTouch: touch ];
+    selectedTile = touchedTileIndex;
     
-    //CCSprite *tmp = [ gfxTiles objectAtIndex: selectedTile ];
-    //CCMutableTexture2D *tmptx = (CCMutableTexture2D *)[ tmp texture ];
-    //[tmptx fill: random_color ];
+    Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
+    touchedTile->isSelected = YES;
     
     //[tmptx apply];
     //[ self colorScrambleTile: tmp ];
@@ -112,11 +111,24 @@
  */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches moved" );
-	UITouch *touch;
+	UITouch *touch = [ touches anyObject ];
 	NSArray *allTouches = [[event allTouches] allObjects];
     
 	double now=[NSDate timeIntervalSinceReferenceDate];
 	
+    isTouched = YES;
+    NSInteger prevTouchedTileIndex = touchedTileIndex;
+    Tile *prevTouchedTile = [ tileDataArray objectAtIndex: prevTouchedTileIndex ];
+    prevTouchedTile->isSelected = NO;
+    
+    touchedTileIndex = [ self getTileIndexForTouch: touch ];
+    
+    Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
+    touchedTile->isSelected = YES;
+    
+    //prevSelectedTile = selectedTile;
+    //selectedTile = touchedTileIndex;
+    
     /*
     if (now-lastDigTime>0.05f) {
 		touch=[touches anyObject];
@@ -141,7 +153,26 @@
  ====================
  */
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    
     //MLOG( @"touches ended" );
+    isTouched = NO;
+    
+    double now = [ NSDate timeIntervalSinceReferenceDate ];
+    double timeElapsedSinceTouchBegan = now - touchBeganTime;
+    
+    
+    if ( timeElapsedSinceTouchBegan >= 0.5 ) {
+        UIAlertView *alert = [[ UIAlertView alloc ] initWithTitle:@"" message:[NSString stringWithFormat:@"Long press"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    } else {
+        UIAlertView *alert = [[ UIAlertView alloc ] initWithTitle:@"" message:[NSString stringWithFormat:@"Short press"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    }
+    
+    Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
+    touchedTile->isSelected = NO;
+    
+    touchedTileIndex = -1;
 }
 
 
@@ -275,16 +306,10 @@
         tile->tileSprite = [ tileArray objectAtIndex: i ];
         [ tileDataArray addObject: tile ];
     }
+    [ GameRenderer setAllTiles: tileArray toTileType: TILE_DEFAULT ];
+    [ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_FLOOR_STONE withLevel: 2 ];
+    [ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_VOID withLevel: 1 ];
 }
-
-
-
-
-
-
-
-
-
 
 
 /*
@@ -302,12 +327,8 @@
     @catch (NSException *exception) {
         MLOG( @"%@", exception );
     }
-    @finally {
-        
-    }
     return sprite;
 }
-
 
 
 /*
@@ -357,7 +378,4 @@
     NSInteger index = tx + ty * 10;
     return index;
 }
-
-
-
 @end
