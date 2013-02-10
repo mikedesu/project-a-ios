@@ -44,8 +44,6 @@
             visibleTiles[ i ] = 0;
         }
         visibleTiles[ 0 ] = 1;
-        visibleTiles[ 1 ] = 1;
-        visibleTiles[ 2 ] = 1;
         
         
         [ self initializeTiles ];

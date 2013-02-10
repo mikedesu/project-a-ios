@@ -18,17 +18,17 @@
 
 +(CCScene *) scene;
 
--(void) appendNewTile;
--(void) appendNewColorTestTile;
--(void) colorTest;
--(void) colorScrambleTile;
--(void) colorScrambleAllTiles;
--(void) addBlankTiles;
--(void) addColorTiles;
+-( id ) init;
+-( void ) appendNewTile;
+-( void ) appendNewColorTestTile;
+-( void ) colorTest;
+-( void ) colorScrambleTile;
+-( void ) colorScrambleAllTiles;
+-( void ) addBlankTiles;
+-( void ) addColorTiles;
 -( void ) initializeTiles;
 
--(CCSprite *) getTileForTouch: (UITouch *) touch;
--(NSInteger) getTileIndexForTouch: (UITouch *) touch;
-
+-( CCSprite * ) getTileForTouch: (UITouch *) touch;
+-( NSInteger ) getTileIndexForTouch: (UITouch *) touch;
 
 @end

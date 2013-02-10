@@ -52,7 +52,11 @@
  ====================
  */
 +( void ) setTile: ( CCSprite * ) tileSprite withData: ( NSInteger ) data {
-    Color_t color = data==0 ? black : white;
+    Color_t color =
+    data==0 ? black :
+    data==1 ? white :
+    data==2 ? green :
+    blue;
     
     CCMutableTexture2D *texture = ( CCMutableTexture2D * ) tileSprite.texture;
     [ texture fill: color ];
