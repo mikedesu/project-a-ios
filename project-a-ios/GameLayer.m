@@ -4,14 +4,14 @@
 //  Created by Mike Bell on 2/8/13.
 
 #import "AppDelegate.h"
-#import "GameLayer.h"
-#import "MLog.h"
 #import "CCMutableTexture2D.h"
+#import "Colors.h"
+#import "GameConfig.h"
+#import "GameLayer.h"
+#import "GameRenderer.h"
+#import "MLog.h"
 
-#define GROUND_SCALE 2
-#define DRAW_WIDTH 6.5f
-#define MINERS_COUNT 20
-#define SHOW_DRAWN_GROUND_STRIPES
+
 
 @implementation GameLayer
 
@@ -36,7 +36,19 @@
 -(id) init {
 	if( (self=[super init]) ) {
         self.isTouchEnabled = YES;
-        [ self colorTest ];
+        selectedTile = -1;
+        prevSelectedTile = -1;
+        
+        // on-screen map
+        for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN; i++ ) {
+            visibleTiles[ i ] = 0;
+        }
+        visibleTiles[ 0 ] = 1;
+        visibleTiles[ 1 ] = 1;
+        visibleTiles[ 2 ] = 1;
+        
+        
+        [ self initializeTiles ];
         [ self schedule:@selector(tick:)];
 	}
 	return self;
@@ -60,7 +72,13 @@
  */
 -(void)tick:(ccTime)dt {
     MLOG( @"tick" );
-    [ self colorScrambleAllTiles ];
+    
+    //[ self colorScrambleAllTiles ];
+    //[ GameRenderer colorScrambleAllTiles: tileArray ];
+    [GameRenderer setAllTiles:tileArray withData:visibleTiles];
+    
+    
+    // [ self renderGameState ];
 }
 
 
@@ -70,8 +88,20 @@
  ====================
  */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    MLOG( @"touches began" );
+    //MLOG( @"touches began" );
 	UITouch *touch=[touches anyObject];
+    double now=[NSDate timeIntervalSinceReferenceDate];
+    
+    prevSelectedTile = selectedTile;
+    selectedTile = [ self getTileIndexForTouch: touch ];
+    
+    //CCSprite *tmp = [ gfxTiles objectAtIndex: selectedTile ];
+    //CCMutableTexture2D *tmptx = (CCMutableTexture2D *)[ tmp texture ];
+    //[tmptx fill: random_color ];
+    
+    //[tmptx apply];
+    //[ self colorScrambleTile: tmp ];
+    
     //currentColor=ccc4(0,0,0,0); //Transparent >> Draw holes (dig)
 	//CGPoint touchLocation = [touch locationInView:nil];
 	//touchLocation = [[CCDirector sharedDirector] convertToGL: touchLocation];
@@ -87,7 +117,7 @@
  ====================
  */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    MLOG( @"touches moved" );
+    //MLOG( @"touches moved" );
 	UITouch *touch;
 	NSArray *allTouches = [[event allTouches] allObjects];
     
@@ -117,7 +147,7 @@
  ====================
  */
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    MLOG( @"touches ended" );
+    //MLOG( @"touches ended" );
 }
 
 
@@ -127,11 +157,9 @@
  ====================
  */
 - (void)ccTouchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    MLOG( @"touches cancelled" );
+    //MLOG( @"touches cancelled" );
 	[self ccTouchesEnded:touches withEvent:event];
 }
-
-
 
 /*
  ====================
@@ -143,39 +171,30 @@
     float x = 0;
     float y = size.height;
     
-    CCMutableTexture2D *tileMutableTexture = [ [ CCMutableTexture2D alloc ] initWithSize: CGSizeMake( 16, 16 ) pixelFormat: kCCTexture2DPixelFormat_Default ];
+    CCMutableTexture2D *tileMutableTexture = [ [ CCMutableTexture2D alloc ] initWithSize: CGSizeMake( TILE_SIZE, TILE_SIZE ) pixelFormat: kCCTexture2DPixelFormat_Default ];
     [ tileMutableTexture setAliasTexParameters ];
     
     srand( time( NULL ) );
-    ccColor4B randomColor = ccc4( random() % 255, random() % 255, random() % 255, 255 );
-    
-    [ tileMutableTexture fill: randomColor ];
+    [ tileMutableTexture fill: black ];
     [ tileMutableTexture apply ];
     
     CCSprite *tileSprite = [ CCSprite spriteWithTexture: tileMutableTexture ];
     tileSprite.scale = GROUND_SCALE;
-    
-    if ( gfxTiles.count != 0 ) {
-        
-        if ( gfxTiles.count % 10 == 0 ) {
+    if ( tileArray.count != 0 ) {
+        if ( tileArray.count % 10 == 0 ) {
             x = tileSprite.contentSize.width * tileSprite.scaleX * 0.5f;
-            y = ( ( CCSprite * )( [ gfxTiles lastObject ] ) ).position.y - tileSprite.contentSize.height * tileSprite.scaleY;
+            y = ( ( CCSprite * )( [ tileArray lastObject ] ) ).position.y - tileSprite.contentSize.height * tileSprite.scaleY;
         } else {
-            x = ( ( CCSprite * )[ gfxTiles lastObject ] ).position.x + tileSprite.contentSize.width * tileSprite.scaleX;
-            y = ( ( CCSprite * )( [ gfxTiles lastObject ] ) ).position.y;
+            x = ( ( CCSprite * )[ tileArray lastObject ] ).position.x + tileSprite.contentSize.width * tileSprite.scaleX;
+            y = ( ( CCSprite * )( [ tileArray lastObject ] ) ).position.y;
         }
-        
     } else {
-        
         x += tileSprite.contentSize.width * tileSprite.scaleX * 0.5f;
         y -= tileSprite.contentSize.height * tileSprite.scaleY*0.5f;
-        
     }
-    
     tileSprite.position = ccp( x, y );
     [ self addChild: tileSprite ];
-    [ gfxTiles addObject: tileSprite ];
-    
+    [ tileArray addObject: tileSprite ];
 }
 
 
@@ -189,92 +208,143 @@
     float x = 0;
     float y = size.height;
     
-    CCMutableTexture2D *tileMutableTexture = [ [ CCMutableTexture2D alloc ] initWithSize: CGSizeMake( 16, 16 ) pixelFormat: kCCTexture2DPixelFormat_Default ];
+    CCMutableTexture2D *tileMutableTexture = [ [ CCMutableTexture2D alloc ] initWithSize: CGSizeMake( TILE_SIZE, TILE_SIZE ) pixelFormat: kCCTexture2DPixelFormat_Default ];
     [ tileMutableTexture setAliasTexParameters ];
-    
-    srand( time( NULL ) );
-    
-    
-    for ( int i = 0; i < 16; i++ ) {
-        for ( int j = 0; j < 16; j++ ) {
-            ccColor4B randomColor = ccc4( random() % 255, random() % 255, random() % 255, 255 );
-            [ tileMutableTexture setPixelAt: ccp( i, j ) rgba: randomColor ];
-        }
-    }
-    
+    [ tileMutableTexture fill: random_color ];
     [ tileMutableTexture apply ];
     
     CCSprite *tileSprite = [ CCSprite spriteWithTexture: tileMutableTexture ];
     tileSprite.scale = GROUND_SCALE;
     
-    if ( gfxTiles.count != 0 ) {
-        
-        if ( gfxTiles.count % 10 == 0 ) {
+    if ( tileArray.count != 0 ) {
+        if ( tileArray.count % 10 == 0 ) {
             x = tileSprite.contentSize.width * tileSprite.scaleX * 0.5f;
-            y = ( ( CCSprite * )( [ gfxTiles lastObject ] ) ).position.y - tileSprite.contentSize.height * tileSprite.scaleY;
+            y = ( ( CCSprite * )( [ tileArray lastObject ] ) ).position.y - tileSprite.contentSize.height * tileSprite.scaleY;
         } else {
-            x = ( ( CCSprite * )[ gfxTiles lastObject ] ).position.x + tileSprite.contentSize.width * tileSprite.scaleX;
-            y = ( ( CCSprite * )( [ gfxTiles lastObject ] ) ).position.y;
+            x = ( ( CCSprite * )[ tileArray lastObject ] ).position.x + tileSprite.contentSize.width * tileSprite.scaleX;
+            y = ( ( CCSprite * )( [ tileArray lastObject ] ) ).position.y;
         }
-        
     } else {
-        
         x += tileSprite.contentSize.width * tileSprite.scaleX * 0.5f;
         y -= tileSprite.contentSize.height * tileSprite.scaleY*0.5f;
-        
     }
-    
     tileSprite.position = ccp( x, y );
     [ self addChild: tileSprite ];
-    [ gfxTiles addObject: tileSprite ];
-    
+    [ tileArray addObject: tileSprite ];
 }
-
 
 /*
  ====================
- colorScrambleTile
+ addBlankTiles
  ====================
  */
--( void ) colorScrambleTile: ( CCSprite * ) tileSprite {
-    CCMutableTexture2D *tileTex = ( CCMutableTexture2D * ) tileSprite.texture;
-    srand( time( NULL ) );
-    for ( int i = 0; i < 16; i++ ) {
-        for ( int j = 0; j < 16; j++ ) {
-            ccColor4B randomColor = ccc4( random() % 255, random() % 255, random() % 255, 255 );
-            [ tileTex setPixelAt: ccp( i, j ) rgba: randomColor ];
-        }
-    }
-    [ tileTex apply ];
-}
-
-
-/*
- ====================
- colorScrambleAllTiles
- ====================
- */
--( void ) colorScrambleAllTiles {
-    for ( int i = 0; i < [ gfxTiles count ]; i++ ) {
-        CCSprite *tileSprite = [ gfxTiles objectAtIndex: i ];
-        [ self colorScrambleTile: tileSprite ];
+-( void ) addBlankTiles {
+    tileArray = [ NSMutableArray arrayWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
+    for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN ; i++ ) {
+        [ self appendNewTile ];
     }
 }
 
 
 /*
  ====================
- colorTest
+ addColorTiles
  ====================
  */
--( void ) colorTest {
-    int tilemax = 150;
-    //grounds = [ NSMutableArray arrayWithCapacity: tilemax ];
-    gfxTiles = [ NSMutableArray arrayWithCapacity: tilemax ];
-    
-    for ( int i = 0 ; i < tilemax ; i++ ) {
+-( void ) addColorTiles {
+    tileArray = [ NSMutableArray arrayWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
+    for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN ; i++ ) {
         [ self appendNewColorTestTile ];
     }
 }
+
+/*
+ ====================
+ initializeTiles
+ ====================
+ */
+-( void ) initializeTiles {
+    [ self addBlankTiles ];
+}
+
+
+
+
+
+
+
+
+/*
+ ====================
+ getTileForTouch
+ ====================
+ */
+-( CCSprite * ) getTileForTouch: ( UITouch * ) touch {
+    // calculate tile position based on (x,y)
+    NSInteger index = [ self getTileIndexForTouch: touch ];
+    CCSprite *sprite = [ tileArray objectAtIndex: index ];
+    @try {
+        sprite = [ tileArray objectAtIndex: index ];
+    }
+    @catch (NSException *exception) {
+        MLOG( @"%@", exception );
+    }
+    @finally {
+        
+    }
+    return sprite;
+}
+
+
+
+/*
+ ====================
+ getTileIndexForTouch
+ ====================
+ */
+-( NSInteger ) getTileIndexForTouch: ( UITouch * ) touch {
+    CGPoint touchLocation = [ touch locationInView: nil ];
+    touchLocation = [ [ CCDirector sharedDirector ] convertToGL: touchLocation ];
+    
+    NSUInteger x = ( NSUInteger ) touchLocation.x;
+    NSUInteger y = ( NSUInteger ) touchLocation.y;
+    
+    // magic numbers below are for 16x16 tiles w/ 150 tiles on-screen
+    NSUInteger tx =
+    ( x < 32 ) ? 0 :
+    ( x < 64 ) ? 1 :
+    ( x < 96 ) ? 2 :
+    ( x < 128 ) ? 3 :
+    ( x < 150 ) ? 4 :
+    ( x < 192 ) ? 5 :
+    ( x < 224 ) ? 6 :
+    ( x < 256 ) ? 7 :
+    ( x < 288 ) ? 8 :
+    ( x < 320 ) ? 9 :
+    ( x < 352 ) ? 10 : -1 ;
+    
+    NSUInteger ty =
+    ( y < 32 ) ? 14 :
+    ( y < 64 ) ? 13 :
+    ( y < 96 ) ? 12 :
+    ( y < 128 ) ? 11 :
+    ( y < 150 ) ? 10 :
+    ( y < 192 ) ? 9 :
+    ( y < 224 ) ? 8 :
+    ( y < 256 ) ? 7 :
+    ( y < 288 ) ? 6 :
+    ( y < 320 ) ? 5 :
+    ( y < 352 ) ? 4 :
+    ( y < 384 ) ? 3 :
+    ( y < 416 ) ? 2 :
+    ( y < 448 ) ? 1 :
+    ( y < 480 ) ? 0 : -1;
+    
+    // calculate tile position based on (x,y)
+    NSInteger index = tx + ty * 10;
+    return index;
+}
+
+
 
 @end
