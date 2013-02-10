@@ -4,12 +4,13 @@
 //  Created by Mike Bell on 2/10/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
+@class Tile;
 @interface GameRenderer : NSObject {
     
 }
 +( void ) colorScrambleTile: ( CCSprite * ) tileSprite;
 +( void ) colorScrambleAllTiles: ( NSArray * ) tileArray;
-+( void ) setTile: ( CCSprite * ) tileSprite withData: ( NSInteger ) data;
-+( void ) setAllTiles: ( NSArray * ) tileArray withData: ( NSInteger * ) data;
++( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data;
++( void ) setAllTiles: ( NSArray * ) tileArray withData: ( NSArray * ) data;
 
 @end

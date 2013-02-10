@@ -6,11 +6,17 @@
 
 #import "cocos2d.h"
 #import "GameConfig.h"
+#import "Tile.h"
 
 @interface GameLayer : CCLayer <UIAlertViewDelegate> {
-    NSMutableArray *tileArray;
+    //NSMutableArray *tileSpriteArray;
     
-    NSInteger visibleTiles[ NUMBER_OF_TILES_ONSCREEN ];
+    NSMutableArray *tileArray;
+    NSMutableArray *tileDataArray;
+    
+    
+    //NSInteger visibleTiles[ NUMBER_OF_TILES_ONSCREEN ];
+    //Tile *visibleTiles[ NUMBER_OF_TILES_ONSCREEN ];
     
     NSInteger selectedTile;
     NSInteger prevSelectedTile;

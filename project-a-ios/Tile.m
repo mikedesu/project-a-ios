@@ -14,8 +14,10 @@
  ====================
  */
 -( id ) init {
-    if ( ( self = [ self initWithTileType: TILE_DEFAULT ] ) ) {
-    
+    if ( ( self = [ super init ] ) ) {
+        self->tileType = TILE_DEFAULT;
+        self->tileSprite = nil;
+        self->contents = [ [ NSMutableArray alloc ] init ];
     }
     return self;
 }
@@ -29,14 +31,9 @@
 -( id ) initWithTileType: ( Tile_t ) tileType {
     if ( ( self = [ super init ] ) ) {
         self->tileType = tileType;
+        self->tileSprite = nil;
         self->contents = [ [ NSMutableArray alloc ] init ];
     }
     return self;
 }
-
-
-
-
-
-
 @end

@@ -10,6 +10,7 @@
 #import "GameLayer.h"
 #import "GameRenderer.h"
 #import "MLog.h"
+#import "Tile.h"
 
 
 
@@ -39,14 +40,9 @@
         selectedTile = -1;
         prevSelectedTile = -1;
         
-        // on-screen map
-        for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN; i++ ) {
-            visibleTiles[ i ] = 0;
-        }
-        visibleTiles[ 0 ] = 1;
-        
-        
         [ self initializeTiles ];
+        [ self initializeTileData ];
+        
         [ self schedule:@selector(tick:)];
 	}
 	return self;
@@ -73,7 +69,7 @@
     
     //[ self colorScrambleAllTiles ];
     //[ GameRenderer colorScrambleAllTiles: tileArray ];
-    [GameRenderer setAllTiles:tileArray withData:visibleTiles];
+    [GameRenderer setAllTiles:tileArray withData: tileDataArray ];
     
     
     // [ self renderGameState ];
@@ -264,6 +260,25 @@
 -( void ) initializeTiles {
     [ self addBlankTiles ];
 }
+
+
+/*
+ ====================
+ initializeTileData
+ ====================
+ */
+-( void ) initializeTileData {
+    tileDataArray = [ [ NSMutableArray alloc ] initWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
+    for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN; i++ ) {
+        Tile *tile = [ [ Tile alloc ] init ];
+        tile->tileType = TILE_DEFAULT;
+        tile->tileSprite = [ tileArray objectAtIndex: i ];
+        [ tileDataArray addObject: tile ];
+    }
+}
+
+
+
 
 
 

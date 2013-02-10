@@ -8,6 +8,7 @@
 #import "cocos2d.h"
 #import "GameConfig.h"
 #import "GameRenderer.h"
+#import "Tile.h"
 
 @implementation GameRenderer
 
@@ -51,13 +52,10 @@
  setTile
  ====================
  */
-+( void ) setTile: ( CCSprite * ) tileSprite withData: ( NSInteger ) data {
-    Color_t color =
-    data==0 ? black :
-    data==1 ? white :
-    data==2 ? green :
-    blue;
-    
++( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data {
+    Tile_t tileType = data->tileType;
+    Color_t color =     (tileType==TILE_GRASS) ? green :
+                        blue ;
     CCMutableTexture2D *texture = ( CCMutableTexture2D * ) tileSprite.texture;
     [ texture fill: color ];
     [ texture apply ];
@@ -69,17 +67,11 @@
  setAllTiles: withData
  ====================
  */
-+( void ) setAllTiles: ( NSArray * ) tileArray withData: ( NSInteger * ) data {
++( void ) setAllTiles: ( NSArray * ) tileArray withData: ( NSArray * ) data {
     for ( int i = 0; i < [tileArray count]; i++ ) {
         CCSprite *sprite = [ tileArray objectAtIndex: i ];
-        [ GameRenderer setTile: sprite withData: data[ i ] ];
+        [ GameRenderer setTile: sprite withData: [ data objectAtIndex: i ] ];
     }
 }
-
-
-
-
-
-
 
 @end
