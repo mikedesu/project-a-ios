@@ -77,12 +77,59 @@
         
         
         [ self initEditorHUD ];
-        [ self addEditorHUD: editorHUD ];
+        //[ self addEditorHUD: editorHUD ];
+        
+        
+        [ self initPlayerHUD ];
+        [ self addPlayerHUD: playerHUD ];
         
         [ self schedule:@selector(tick:)];
 	}
 	return self;
 }
+
+
+
+
+/*
+ ====================
+ initPlayerMenu
+ ====================
+ */
+-( void ) initPlayerMenu {
+    CGSize size = [[CCDirector sharedDirector] winSize];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
+    playerMenu.position = ccp(  0 , size.height - (editorHUD.contentSize.height) );
+}
+
+
+/*
+ ====================
+ addPlayerMenu: menu
+ ====================
+ */
+-( void ) addPlayerMenu: ( PlayerMenu * ) menu {
+    if ( ! playerMenuIsVisible ) {
+        [ self addChild: menu ];
+        playerMenuIsVisible = YES;
+    }
+}
+
+
+/*
+ ====================
+ removePlayerMenu: menu
+ ====================
+ */
+-( void ) removePlayerMenu: ( PlayerMenu * ) menu {
+    if ( playerMenuIsVisible ) {
+        [ self removeChild: menu cleanup: NO ];
+        playerMenuIsVisible = NO;
+    }
+}
+
+
+
 
 
 /*
@@ -103,7 +150,7 @@
  updateEditorHUDLabel
  ====================
  */
--( void ) updateEditorHUDLabel {  
+-( void ) updateEditorHUDLabel {
     [editorHUD->label setString: [ NSString stringWithFormat: @"%@%@%@%@%@",
                                   [dLog objectAtIndex: dLogIndex+0 ],
                                   [dLog objectAtIndex: dLogIndex+1 ],
@@ -112,7 +159,6 @@
                                   [dLog objectAtIndex: dLogIndex+4 ]
                                   ]];
 }
-
 
 
 /*
@@ -143,6 +189,56 @@
 
 /*
  ====================
+ initPlayerHUD
+ ====================
+ */
+-( void ) initPlayerHUD {
+    CGSize size = [[CCDirector sharedDirector] winSize];
+    playerHUD = [[ PlayerHUD alloc ] initWithColor:black_alpha(150) width: size.width height:100 ];
+    playerHUD.position = ccp(  0 , 0 );
+    [ self updatePlayerHUDLabel ];
+}
+
+
+/*
+ ====================
+ addPlayerHUD: hud
+ ====================
+ */
+-( void ) addPlayerHUD: ( PlayerHUD * ) hud {
+    if ( ! playerHUDIsVisible ) {
+        [ self addChild: hud ];
+        playerHUDIsVisible = YES;
+    }
+}
+
+
+/*
+ ====================
+ removePlayerHUD: hud
+ ====================
+ */
+-( void ) removePlayerHUD: ( PlayerHUD * ) hud {
+    if ( playerHUDIsVisible ) {
+        [ self removeChild: hud cleanup: NO ];
+        playerHUDIsVisible = NO;
+    }
+}
+
+
+/*
+ ====================
+ updateEditorHUDLabel
+ ====================
+ */
+-( void ) updatePlayerHUDLabel {
+    [ playerHUD->label setString: @"Player HUD" ];
+}
+
+
+
+/*
+ ====================
  dealloc
  ====================
  */
@@ -160,9 +256,18 @@
     //MLOG( @"tick" );
     //[ self colorScrambleAllTiles ];
     //[ GameRenderer colorScrambleAllTiles: tileArray ];
-    [GameRenderer setAllTiles:tileArray withData: tileDataArray ];
-    [ self updateEditorHUDLabel ];
     // [ self renderGameState ];
+    
+    
+    [GameRenderer setAllTiles:tileArray withData: tileDataArray ];
+    
+    if ( editorHUDIsVisible ) {
+        [ self updateEditorHUDLabel ];
+    }
+    if ( playerHUDIsVisible ) {
+        [ self updatePlayerHUDLabel ];
+    }
+    
 }
 
 
@@ -183,13 +288,6 @@
     Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
     touchedTile->isSelected = YES;
     
-    NSString *tileTypeStr =
-    ( touchedTile->tileType == TILE_FLOOR_GRASS ) ? @"Grass" :
-    ( touchedTile->tileType == TILE_FLOOR_ICE ) ? @"Ice" :
-    ( touchedTile->tileType == TILE_FLOOR_STONE ) ? @"Stone" :
-    @"Void";
-    
-    [ self addMessage: [NSString stringWithFormat:@"Tile type: %@", tileTypeStr] ];
     
     //currentColor=ccc4(0,0,0,0); //Transparent >> Draw holes (dig)
 	//CGPoint touchLocation = [touch locationInView:nil];
@@ -250,10 +348,7 @@
  ====================
  */
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    
     //MLOG( @"touches ended" );
-    //[ self addMessage: @"ccTouchesEnded\n" ];
-    
     UITouch *touch = [ touches anyObject ];
         
     isTouched = NO;
@@ -264,16 +359,48 @@
     double now = [ NSDate timeIntervalSinceReferenceDate ];
     double timeElapsedSinceTouchBegan = now - touchBeganTime;
     
-    if ( timeElapsedSinceTouchBegan >= 0.5 ) {
-        [ self longPress ];
-    } else {
-        [ self shortPress: touch ];
+    
+    if ( timeElapsedSinceTouchBegan >= 3.0f ) {
+ 
+        /*
+        if ( editorHUDIsVisible ) {
+            [ self removeEditorHUD: editorHUD ];
+        } else {
+            [ self addEditorHUD: editorHUD ];
+        }
+         */
         
+    } else {
+    
+        [ self shortPress: touch ];
         Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
         
+        BOOL containsHero = NO;
+        for ( Entity *e in touchedTile->contents ) {
+            if ( [e->name isEqualToString: @"Hero" ] ) {
+                containsHero = YES;
+                break;
+            }
+        }
+        
         if ( touchedTile->isSelected ) {
-            touchedTile->isSelected = NO;
-            touchedTileIndex = -1;
+            if ( containsHero ) {
+                [self addMessage: @"Touched Hero" ];
+                if ( editorHUDIsVisible ) {
+                    //[ self removeEditorHUD: editorHUD ];
+                } else {
+                    //[ self addEditorHUD: editorHUD ];
+                }
+            } else {
+                touchedTile->isSelected = NO;
+                touchedTileIndex = -1;
+                NSString *tileTypeStr =
+                ( touchedTile->tileType == TILE_FLOOR_GRASS ) ? @"Grass" :
+                ( touchedTile->tileType == TILE_FLOOR_ICE ) ? @"Ice" :
+                ( touchedTile->tileType == TILE_FLOOR_STONE ) ? @"Stone" :
+                @"Void";
+                [ self addMessage: [NSString stringWithFormat:@"Tile type: %@", tileTypeStr] ];
+            }
         } else {
             touchedTile->isSelected = YES;
         }

@@ -7,6 +7,8 @@
 #import "cocos2d.h"
 #import "EditorHUD.h"
 #import "GameConfig.h"
+#import "PlayerHUD.h"
+#import "PlayerMenu.h"
 #import "Tile.h"
 
 typedef enum {
@@ -30,6 +32,12 @@ typedef enum {
     BOOL editorHUDIsVisible;
     EditorHUD *editorHUD;
     
+    BOOL playerHUDIsVisible;
+    PlayerHUD *playerHUD;
+    
+    BOOL playerMenuIsVisible;
+    PlayerMenu *playerMenu;
+    
     double touchBeganTime;    
 }
 
@@ -37,9 +45,21 @@ typedef enum {
 
 -( id ) init;
 -( void ) dealloc;
+
+-( void ) initPlayerMenu;
+-( void ) addPlayerMenu: ( PlayerMenu * ) menu;
+-( void ) removePlayerMenu: ( PlayerMenu * ) menu;
+
 -( void ) initEditorHUD;
 -( void ) addEditorHUD: ( EditorHUD * ) hud;
 -( void ) removeEditorHUD: ( EditorHUD * ) hud;
+-( void ) updateEditorHUDLabel;
+
+-( void ) initPlayerHUD;
+-( void ) addPlayerHUD: ( PlayerHUD * ) hud;
+-( void ) removePlayerHUD: ( PlayerHUD * ) hud;
+-( void ) updatePlayerHUDLabel;
+
 -( void ) appendNewTile;
 -( void ) appendNewColorTestTile;
 -( void ) colorTest;
@@ -49,7 +69,6 @@ typedef enum {
 -( void ) addColorTiles;
 -( void ) initializeTiles;
 
--( void ) updateEditorHUDLabel;
 
 -( CCSprite * ) getTileForTouch: (UITouch *) touch;
 -( NSInteger ) getTileIndexForTouch: (UITouch *) touch;

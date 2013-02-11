@@ -133,6 +133,8 @@
 		272EF65C16C569BE005DF231 /* CCMutableTexture2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF65A16C569BE005DF231 /* CCMutableTexture2D.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2773F28F16C8447D001C3E83 /* Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F28E16C8447D001C3E83 /* Entity.m */; };
 		2773F29216C85469001C3E83 /* EditorHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29116C85469001C3E83 /* EditorHUD.m */; };
+		2773F29516C949C4001C3E83 /* PlayerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29416C949C4001C3E83 /* PlayerHUD.m */; };
+		2773F29816C94DA3001C3E83 /* PlayerMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29716C94DA3001C3E83 /* PlayerMenu.m */; };
 		27C4145116C7FB1F00BE09F9 /* GameRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C4145016C7FB1F00BE09F9 /* GameRenderer.m */; };
 		27C4145516C804E400BE09F9 /* Tile.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C4145416C804E300BE09F9 /* Tile.m */; };
 		27C88FE016C57607004AB4D8 /* ground_vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 27C88FDF16C57607004AB4D8 /* ground_vertical.png */; };
@@ -403,6 +405,10 @@
 		2773F28E16C8447D001C3E83 /* Entity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entity.m; sourceTree = "<group>"; };
 		2773F29016C85469001C3E83 /* EditorHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorHUD.h; sourceTree = "<group>"; };
 		2773F29116C85469001C3E83 /* EditorHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorHUD.m; sourceTree = "<group>"; };
+		2773F29316C949C4001C3E83 /* PlayerHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerHUD.h; sourceTree = "<group>"; };
+		2773F29416C949C4001C3E83 /* PlayerHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerHUD.m; sourceTree = "<group>"; };
+		2773F29616C94DA3001C3E83 /* PlayerMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerMenu.h; sourceTree = "<group>"; };
+		2773F29716C94DA3001C3E83 /* PlayerMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerMenu.m; sourceTree = "<group>"; };
 		27C4144E16C7D32400BE09F9 /* Colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
 		27C4144F16C7FB1E00BE09F9 /* GameRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRenderer.h; sourceTree = "<group>"; };
 		27C4145016C7FB1F00BE09F9 /* GameRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameRenderer.m; sourceTree = "<group>"; };
@@ -486,6 +492,10 @@
 				27C4144F16C7FB1E00BE09F9 /* GameRenderer.h */,
 				27C4145016C7FB1F00BE09F9 /* GameRenderer.m */,
 				27C88FDE16C573D4004AB4D8 /* MLog.h */,
+				2773F29316C949C4001C3E83 /* PlayerHUD.h */,
+				2773F29416C949C4001C3E83 /* PlayerHUD.m */,
+				2773F29616C94DA3001C3E83 /* PlayerMenu.h */,
+				2773F29716C94DA3001C3E83 /* PlayerMenu.m */,
 				27C4145316C804E300BE09F9 /* Tile.h */,
 				27C4145416C804E300BE09F9 /* Tile.m */,
 				272EF4DC16C5695D005DF231 /* Resources */,
@@ -1035,6 +1045,8 @@
 				27C4145516C804E400BE09F9 /* Tile.m in Sources */,
 				2773F28F16C8447D001C3E83 /* Entity.m in Sources */,
 				2773F29216C85469001C3E83 /* EditorHUD.m in Sources */,
+				2773F29516C949C4001C3E83 /* PlayerHUD.m in Sources */,
+				2773F29816C94DA3001C3E83 /* PlayerMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
