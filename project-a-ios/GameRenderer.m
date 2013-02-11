@@ -7,6 +7,7 @@
 
 #import "CCMutableTexture2D.h"
 #import "cocos2d.h"
+#import "Entity.h"
 #import "GameConfig.h"
 #import "GameRenderer.h"
 #import "Tile.h"
@@ -53,23 +54,40 @@
 +( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data {
     Tile_t tileType = data->tileType;
     
+    // Select our primary working color based on tileType
     Color_t color =
     (tileType==TILE_VOID) ?  black :
     (tileType==TILE_FLOOR_GRASS) ? green :
     (tileType==TILE_FLOOR_STONE) ? gray :
     blue ;
     
-    
     if (  data->isSelected ) {
         Color_t tmpColor = newColor( color.r + 0xAA , color.g + 0xAA , color.b + 0x00, color.a );
         color = tmpColor;
     }
-    
-    
+ 
+    // in most cases, we will fill our texture
     CCMutableTexture2D *texture = ( CCMutableTexture2D * ) tileSprite.texture;
     [ texture fill: color ];
-    
     [ texture apply ];
+    
+    for (Entity *entity in data->contents) {
+        
+        if ( [entity->name isEqualToString: @"Hero" ] ) {
+            // draw on the texture
+            [ texture fill: white ];
+            [ texture apply ];
+            
+        } else if ( [ entity->name isEqualToString: @"Test1" ] ) {
+            // Test1 will get rendered as colorFuzz
+            for ( int i = 0; i < 16; i++ ) {
+                for ( int j = 0; j < 16; j++ ) {
+                    [ texture setPixelAt: ccp(i, j) rgba: random_color ];
+                }
+            }
+            [ texture apply ];
+        }
+    }
 }
 
 
@@ -88,10 +106,26 @@
 
 /*
  ====================
+ setAllTiles: withEntityData
+ ====================
+ */
++( void ) setAllTiles: ( NSArray * ) tileArray withEntityData: ( NSArray * ) data {
+    for ( int i = 0; i < [tileArray count]; i++ ) {
+        CCSprite *sprite = [ tileArray objectAtIndex: i ];
+        [ GameRenderer setTile: sprite withData: [ data objectAtIndex: i ] ];
+    }
+}
+
+
+
+
+
+
+/*
+ ====================
  setTileArrayBoundary: tileArray toTileType: tileType withLevel: level
  ====================
  */
-//+( void ) setTileArrayBoundary: ( NSMutableArray * ) tileArray toTileType: ( Tile_t ) tileType withLevel: ( NSInteger ) level {
 +( void ) setTileArrayBoundary: ( NSArray * ) tileArray toTileType: ( Tile_t ) tileType withLevel: ( NSInteger ) level {
 
     Tile *tile = nil;
@@ -119,7 +153,6 @@
  setAllTiles: tileArray toTileType: tileType
  ====================
  */
-//+( void ) setAllTiles: ( NSMutableArray * ) tileArray toTileType: ( Tile_t ) tileType {
 +( void ) setAllTiles: ( NSArray * ) tileArray toTileType: ( Tile_t ) tileType {
 
     for ( Tile * tile in tileArray ) {

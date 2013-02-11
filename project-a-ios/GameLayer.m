@@ -5,6 +5,8 @@
 
 #import "AppDelegate.h"
 #import "CCMutableTexture2D.h"
+#import "EditorHUD.h"
+#import "Entity.h"
 #import "GameConfig.h"
 #import "GameLayer.h"
 #import "GameRenderer.h"
@@ -43,9 +45,99 @@
         [ self initializeTiles ];
         [ self initializeTileData ];
         
+        Entity *hero = [ [ Entity alloc ] init ];
+        [ hero->name setString: @"Hero" ];
+        hero->positionOnMap = ccp( 5, 7 );
+        
+        /*
+        Entity *test1 = [ [ Entity alloc ] init ];
+        [ test1->name setString: @"Test1" ];
+        test1->positionOnMap = ccp( 2, 3 );
+        */
+        
+        entityArray = [ [ NSMutableArray alloc ] init ];
+        [ entityArray addObject: hero ];
+        //[ entityArray addObject: test1 ];
+        
+        // link the entityArray up with the tileArray
+        for ( Entity *entity in entityArray ) {
+            Tile *entityTile = [ tileDataArray objectAtIndex: entity->positionOnMap.x + entity->positionOnMap.y * NUMBER_OF_TILES_ONSCREEN_X ];
+            [ entityTile->contents addObject: entity ];
+        }
+        
+        messages = [ [ NSMutableArray alloc ] init ];
+        messagesIndex = 0;
+        
+        [ self addMessage: @"Testing" ];
+        [ self addMessage: @"Editor" ];
+        [ self addMessage: @"HUD" ];
+        [ self addMessage: @"Output" ];
+        [ self addMessage: @"Nice :)" ];
+        [ self addMessage: @"Let's roll" ];
+        
+        
+        [ self initEditorHUD ];
+        [ self addEditorHUD: editorHUD ];
+        
         [ self schedule:@selector(tick:)];
 	}
 	return self;
+}
+
+
+/*
+ ====================
+ initEditorHUD
+ ====================
+ */
+-( void ) initEditorHUD {
+    CGSize size = [[CCDirector sharedDirector] winSize];
+    editorHUD = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
+    editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) );
+    [ self updateEditorHUDLabel ];
+}
+
+
+/*
+ ====================
+ updateEditorHUDLabel
+ ====================
+ */
+-( void ) updateEditorHUDLabel {  
+    [editorHUD->label setString: [ NSString stringWithFormat: @"%@%@%@%@%@",
+                                  [messages objectAtIndex: messagesIndex+0 ],
+                                  [messages objectAtIndex: messagesIndex+1 ],
+                                  [messages objectAtIndex: messagesIndex+2 ],
+                                  [messages objectAtIndex: messagesIndex+3 ],
+                                  [messages objectAtIndex: messagesIndex+4 ]
+                                  ]];
+}
+
+
+
+/*
+ ====================
+ addEditorHUD: hud
+ ====================
+ */
+-( void ) addEditorHUD: ( EditorHUD * ) hud {
+    if ( ! editorHUDIsVisible ) {
+        [ self addChild: hud ];
+        editorHUDIsVisible = YES;
+    }
+}
+
+
+/*
+ ====================
+ removeEditorHUD: hud
+ ====================
+ */
+-( void ) removeEditorHUD: ( EditorHUD * ) hud {
+    if ( editorHUDIsVisible ) {
+        [ self removeChild: hud cleanup: NO ];
+        editorHUDIsVisible = NO;
+    }
 }
 
 
@@ -65,11 +157,11 @@
  ====================
  */
 -(void)tick:(ccTime)dt {
-    MLOG( @"tick" );
-    
+    //MLOG( @"tick" );
     //[ self colorScrambleAllTiles ];
     //[ GameRenderer colorScrambleAllTiles: tileArray ];
     [GameRenderer setAllTiles:tileArray withData: tileDataArray ];
+    [ self updateEditorHUDLabel ];
     // [ self renderGameState ];
 }
 
@@ -81,19 +173,23 @@
  */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches began" );
+    //[ self addMessage:  @"ccTouchesBegan\n" ];
 	UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     
     isTouched = YES;
     touchedTileIndex = [ self getTileIndexForTouch: touch ];
-    prevSelectedTile = selectedTile;
-    selectedTile = touchedTileIndex;
     
     Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
     touchedTile->isSelected = YES;
     
-    //[tmptx apply];
-    //[ self colorScrambleTile: tmp ];
+    NSString *tileTypeStr =
+    ( touchedTile->tileType == TILE_FLOOR_GRASS ) ? @"Grass" :
+    ( touchedTile->tileType == TILE_FLOOR_ICE ) ? @"Ice" :
+    ( touchedTile->tileType == TILE_FLOOR_STONE ) ? @"Stone" :
+    @"Void";
+    
+    [ self addMessage: [NSString stringWithFormat:@"Tile type: %@", tileTypeStr] ];
     
     //currentColor=ccc4(0,0,0,0); //Transparent >> Draw holes (dig)
 	//CGPoint touchLocation = [touch locationInView:nil];
@@ -111,6 +207,7 @@
  */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches moved" );
+    //[ self addMessage: @"ccTouchesMoved\n" ];
 	UITouch *touch = [ touches anyObject ];
 	NSArray *allTouches = [[event allTouches] allObjects];
     
@@ -155,24 +252,63 @@
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
     //MLOG( @"touches ended" );
+    //[ self addMessage: @"ccTouchesEnded\n" ];
+    
+    UITouch *touch = [ touches anyObject ];
+        
     isTouched = NO;
+    //NSInteger prevTouchedTileIndex = touchedTileIndex;
+    //Tile *prevTouchedTile = [ tileDataArray objectAtIndex: prevTouchedTileIndex ];
+    //prevTouchedTile->isSelected = NO;
     
     double now = [ NSDate timeIntervalSinceReferenceDate ];
     double timeElapsedSinceTouchBegan = now - touchBeganTime;
     
-    
     if ( timeElapsedSinceTouchBegan >= 0.5 ) {
-        UIAlertView *alert = [[ UIAlertView alloc ] initWithTitle:@"" message:[NSString stringWithFormat:@"Long press"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
+        [ self longPress ];
     } else {
-        UIAlertView *alert = [[ UIAlertView alloc ] initWithTitle:@"" message:[NSString stringWithFormat:@"Short press"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
+        [ self shortPress: touch ];
+        
+        Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
+        
+        if ( touchedTile->isSelected ) {
+            touchedTile->isSelected = NO;
+            touchedTileIndex = -1;
+        } else {
+            touchedTile->isSelected = YES;
+        }
     }
     
-    Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
-    touchedTile->isSelected = NO;
+}
+
+
+/*
+ ====================
+ shortPress: touch
+ ====================
+ */
+-( void ) shortPress: (UITouch *) touch {
+    //[ self addMessage:  @"shortPress\n" ];
+}
+
+
+/*
+ ====================
+ longPress
+ ====================
+ */
+-( void ) longPress {
+    //UIAlertView *alert = [[ UIAlertView alloc ] initWithTitle:@"" message:[NSString stringWithFormat:@"Long press"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    //[alert show];
+    //[ self addMessage:  @"longPress\n" ];
     
-    touchedTileIndex = -1;
+    /*
+    if ( editorHUDIsVisible ) {
+        [ self removeEditorHUD: editorHUD ];
+    } else {
+        [ self addEditorHUD: editorHUD ];
+    }
+     */
 }
 
 
@@ -183,6 +319,7 @@
  */
 - (void)ccTouchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches cancelled" );
+    //[ messages addObject: @"ccTouchesCancelled\n" ];
 	[self ccTouchesEnded:touches withEvent:event];
 }
 
@@ -307,8 +444,8 @@
         [ tileDataArray addObject: tile ];
     }
     [ GameRenderer setAllTiles: tileArray toTileType: TILE_DEFAULT ];
-    [ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_FLOOR_STONE withLevel: 2 ];
-    [ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_VOID withLevel: 1 ];
+    //[ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_FLOOR_STONE withLevel: 2 ];
+    //[ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_VOID withLevel: 1 ];
 }
 
 
@@ -378,4 +515,20 @@
     NSInteger index = tx + ty * 10;
     return index;
 }
+
+
+/*
+ ====================
+ addMessage: message
+ ====================
+ */
+#define MAX_DISPLAYED_MESSAGES      5
+-( void ) addMessage: (NSString * ) message {
+    NSString *str = [ NSString stringWithFormat: @"%@\n", message ];
+    [ messages addObject: str ];
+    if ( [ messages count ] > MAX_DISPLAYED_MESSAGES ) {
+        messagesIndex++;
+    }
+}
+
 @end

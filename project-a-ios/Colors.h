@@ -50,6 +50,7 @@
 
 #define random_color CC4B_RANDOM
 
+#define black_alpha(a) CC4B_BLACK_ALPHA(a)
 #define red_alpha(a)   CC4B_RED_ALPHA(a)
 #define green_alpha(a) CC4B_GREEN_ALPHA(a)
 #define blue_alpha(a)  CC4B_BLUE_ALPHA(a)
