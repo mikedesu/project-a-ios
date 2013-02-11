@@ -74,6 +74,7 @@
         [ self addMessage: @"Output" ];
         [ self addMessage: @"Nice :)" ];
         [ self addMessage: @"Let's roll" ];
+        [ self addMessage: @"" ];
         
         
         editorHUDIsVisible = NO;
@@ -91,6 +92,7 @@
         
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
+        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"ShowHideEditorHUD" object:nil];
         
         
         [ self schedule:@selector(tick:)];
@@ -113,6 +115,18 @@
         [ self addMessage: @"TestNotification2" ];
         MLOG( @"TestNotification2" );
     }
+    
+    else if ( [[ notification name ] isEqualToString: @"ShowHideEditorHUD" ] ) {
+        [ self addMessage: @"ShowHideEditorHUD" ];
+        MLOG( @"ShowHideEditorHUD" );
+        
+        if ( ! editorHUDIsVisible ) {
+            [ self addEditorHUD: editorHUD ];
+        } else {
+            [ self removeEditorHUD: editorHUD ];
+        }
+    }
+    
     
 }
 
@@ -140,6 +154,7 @@
     if ( ! playerMenuIsVisible ) {
         [ self addChild: menu ];
         playerMenuIsVisible = YES;
+        [ self addMessage: @"Opened Player Menu" ];
     }
 }
 
@@ -153,6 +168,7 @@
     if ( playerMenuIsVisible ) {
         [ self removeChild: menu cleanup: NO ];
         playerMenuIsVisible = NO;
+        [ self addMessage: @"Closed Player Menu" ];
     }
 }
 
@@ -179,12 +195,14 @@
  ====================
  */
 -( void ) updateEditorHUDLabel {
-    [editorHUD->label setString: [ NSString stringWithFormat: @"%@%@%@%@%@",
+    [editorHUD->label setString: [ NSString stringWithFormat: @"%@%@%@%@%@%@%@",
                                   [dLog objectAtIndex: dLogIndex+0 ],
                                   [dLog objectAtIndex: dLogIndex+1 ],
                                   [dLog objectAtIndex: dLogIndex+2 ],
                                   [dLog objectAtIndex: dLogIndex+3 ],
-                                  [dLog objectAtIndex: dLogIndex+4 ]
+                                  [dLog objectAtIndex: dLogIndex+4 ],
+                                  [dLog objectAtIndex: dLogIndex+5 ],
+                                  [dLog objectAtIndex: dLogIndex+6 ]
                                   ]];
 }
 
@@ -687,7 +705,7 @@
  addMessage: message
  ====================
  */
-#define MAX_DISPLAYED_MESSAGES      5
+#define MAX_DISPLAYED_MESSAGES      7
 -( void ) addMessage: (NSString * ) message {
     NSString *str = [ NSString stringWithFormat: @"%@\n", message ];
     [ dLog addObject: str ];
