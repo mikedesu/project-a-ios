@@ -7,9 +7,9 @@
 #import "cocos2d.h"
 
 @interface PlayerMenu : CCLayerColor {
-    
+@public
+    CCLabelTTF *label;
 }
-
 -( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h;
-
+-( void ) menuItem0Pressed;
 @end

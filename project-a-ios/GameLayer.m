@@ -76,16 +76,44 @@
         [ self addMessage: @"Let's roll" ];
         
         
+        editorHUDIsVisible = NO;
         [ self initEditorHUD ];
         //[ self addEditorHUD: editorHUD ];
         
         
+        playerHUDIsVisible = NO;
         [ self initPlayerHUD ];
         [ self addPlayerHUD: playerHUD ];
+        
+        playerMenuIsVisible = NO;
+        [ self initPlayerMenu ];
+        //[ self addPlayerMenu: playerMenu ];
+        
+        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
+        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
+        
         
         [ self schedule:@selector(tick:)];
 	}
 	return self;
+}
+
+
+/*
+ ====================
+ receiveNotification: notification
+ ====================
+ */
+-( void ) receiveNotification: ( NSNotification * ) notification {
+    
+    if ( [[ notification name ] isEqualToString: @"TestNotification1" ] ) {
+        [ self addMessage: @"TestNotification1" ];
+        MLOG( @"TestNotification1" );
+    } else if ( [[ notification name ] isEqualToString: @"TestNotification2" ] ) {
+        [ self addMessage: @"TestNotification2" ];
+        MLOG( @"TestNotification2" );
+    }
+    
 }
 
 
@@ -98,8 +126,8 @@
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
-    playerMenu.position = ccp(  0 , size.height - (editorHUD.contentSize.height) );
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:150 height:250 ];
+    playerMenu.position = ccp(  size.width - (playerMenu.contentSize.width) , size.height - (playerMenu.contentSize.height) );
 }
 
 
@@ -384,13 +412,23 @@
         }
         
         if ( touchedTile->isSelected ) {
+            
             if ( containsHero ) {
+                
                 [self addMessage: @"Touched Hero" ];
-                if ( editorHUDIsVisible ) {
+                
+                if ( playerMenuIsVisible ) {
+                    
                     //[ self removeEditorHUD: editorHUD ];
+                    [ self removePlayerMenu: playerMenu ];
+                    
                 } else {
+                    
                     //[ self addEditorHUD: editorHUD ];
+                    [ self addPlayerMenu: playerMenu ];
+                    
                 }
+                
             } else {
                 touchedTile->isSelected = NO;
                 touchedTileIndex = -1;

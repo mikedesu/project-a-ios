@@ -39,6 +39,30 @@
 /* ==================== */
 /* ==================== */
 
+
+#define CC3B_WHITE          ccc3( 0xff, 0xff, 0xff )
+#define CC3B_BLACK          ccc3( 0x00, 0x00, 0x00 )
+
+#define CC3B_RED            ccc3( 0xff, 0x00, 0x00 )
+#define CC3B_GREEN          ccc3( 0x00, 0xff, 0x00 )
+#define CC3B_BLUE           ccc3( 0x00, 0x00, 0xff )
+
+#define CC3B_RANDOM         ccc3( random() % 255, random() % 255, random() % 255 )
+
+#define white3              CC3B_WHITE
+#define black3              CC3B_BLACK
+#define red3                CC3B_RED
+#define green3              CC3B_GREEN
+#define blue3               CC3B_BLUE
+
+#define random_color3        CC3B_RANDOM
+
+
+/* ==================== */
+/* ==================== */
+/* ==================== */
+
+
 #define black       CC4B_BLACK
 #define white       CC4B_WHITE
 #define gray        CC4B_GRAY
@@ -48,16 +72,26 @@
 #define green  CC4B_GREEN
 #define blue   CC4B_BLUE
 
-#define random_color CC4B_RANDOM
+#define random_color4 CC4B_RANDOM
+#define random_color  random_color4
 
 #define black_alpha(a) CC4B_BLACK_ALPHA(a)
+
+#define gray_alpha(a) CC4B_GRAY_ALPHA(a)
+#define darkgray_alpha(a) CC4B_DARKGRAY_ALPHA(a)
+
 #define red_alpha(a)   CC4B_RED_ALPHA(a)
 #define green_alpha(a) CC4B_GREEN_ALPHA(a)
 #define blue_alpha(a)  CC4B_BLUE_ALPHA(a)
 #define random_alpha(a) CC4B_RANDOM_ALPHA(a)
 
 #define newColor(r,g,b,a) ccc4(r,g,b,a)
+#define newColor3(r,g,b) ccc3(r,g,b)
 
-typedef ccColor4B Color_t;
+
+typedef ccColor4B Color4_t;
+typedef ccColor3B Color3_t;
+
+typedef Color4_t Color_t;
 
 #endif

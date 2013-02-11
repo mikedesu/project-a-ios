@@ -46,6 +46,8 @@ typedef enum {
 -( id ) init;
 -( void ) dealloc;
 
+-( void ) receiveNotification: ( NSNotification * ) notification;
+
 -( void ) initPlayerMenu;
 -( void ) addPlayerMenu: ( PlayerMenu * ) menu;
 -( void ) removePlayerMenu: ( PlayerMenu * ) menu;
