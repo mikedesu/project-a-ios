@@ -19,8 +19,8 @@ typedef enum {
     NSMutableArray *tileDataArray;
     NSMutableArray *entityArray;
     
-    NSMutableArray *messages;
-    NSInteger messagesIndex;
+    NSMutableArray *dLog;
+    NSInteger dLogIndex;
     
     BOOL isTouched;
     NSInteger touchedTileIndex;

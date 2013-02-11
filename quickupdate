@@ -1,0 +1,9 @@
+#!/bin/bash
+# This is Mike Bell's "quickupdate" script
+# usage: ./quickupdate  
+
+./checkout_uistate
+git ci -a
+git push origin master
+./update_dropbox
+echo "quickupdate script successful :)"

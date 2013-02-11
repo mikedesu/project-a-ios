@@ -65,8 +65,8 @@
             [ entityTile->contents addObject: entity ];
         }
         
-        messages = [ [ NSMutableArray alloc ] init ];
-        messagesIndex = 0;
+        dLog = [ [ NSMutableArray alloc ] init ];
+        dLogIndex = 0;
         
         [ self addMessage: @"Testing" ];
         [ self addMessage: @"Editor" ];
@@ -105,11 +105,11 @@
  */
 -( void ) updateEditorHUDLabel {  
     [editorHUD->label setString: [ NSString stringWithFormat: @"%@%@%@%@%@",
-                                  [messages objectAtIndex: messagesIndex+0 ],
-                                  [messages objectAtIndex: messagesIndex+1 ],
-                                  [messages objectAtIndex: messagesIndex+2 ],
-                                  [messages objectAtIndex: messagesIndex+3 ],
-                                  [messages objectAtIndex: messagesIndex+4 ]
+                                  [dLog objectAtIndex: dLogIndex+0 ],
+                                  [dLog objectAtIndex: dLogIndex+1 ],
+                                  [dLog objectAtIndex: dLogIndex+2 ],
+                                  [dLog objectAtIndex: dLogIndex+3 ],
+                                  [dLog objectAtIndex: dLogIndex+4 ]
                                   ]];
 }
 
@@ -525,9 +525,9 @@
 #define MAX_DISPLAYED_MESSAGES      5
 -( void ) addMessage: (NSString * ) message {
     NSString *str = [ NSString stringWithFormat: @"%@\n", message ];
-    [ messages addObject: str ];
-    if ( [ messages count ] > MAX_DISPLAYED_MESSAGES ) {
-        messagesIndex++;
+    [ dLog addObject: str ];
+    if ( [ dLog count ] > MAX_DISPLAYED_MESSAGES ) {
+        dLogIndex++;
     }
 }
 
