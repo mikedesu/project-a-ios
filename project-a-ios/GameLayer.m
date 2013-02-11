@@ -90,6 +90,8 @@
         [ self initPlayerMenu ];
         //[ self addPlayerMenu: playerMenu ];
         
+        heroTouches = 0;
+        
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"ShowHideEditorHUD" object:nil];
@@ -433,19 +435,27 @@
             
             if ( containsHero ) {
                 
+                if ( ! playerMenuIsVisible ) {
+                    heroTouches++;
+                }
+                
                 [self addMessage: @"Touched Hero" ];
                 
-                if ( playerMenuIsVisible ) {
-                    
-                    //[ self removeEditorHUD: editorHUD ];
-                    [ self removePlayerMenu: playerMenu ];
-                    
+                if ( heroTouches >= 2 ) {
+                    if ( ! playerMenuIsVisible ) {
+                        [ self addPlayerMenu: playerMenu ];
+                    } else {
+                        [ self removePlayerMenu: playerMenu ];
+                    }
+                    heroTouches = 0;
                 } else {
-                    
-                    //[ self addEditorHUD: editorHUD ];
-                    [ self addPlayerMenu: playerMenu ];
-                    
+                    if ( playerMenuIsVisible ) {
+                        [ self removePlayerMenu: playerMenu ];
+                    }
                 }
+                
+                
+                
                 
             } else {
                 touchedTile->isSelected = NO;
