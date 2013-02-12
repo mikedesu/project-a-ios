@@ -19,6 +19,7 @@
         self->tileType = TILE_DEFAULT;
         self->isSelected = NO;
         self->tileSprite = nil;
+        self->position = ccp( 0, 0 );
         self->contents = [ [ NSMutableArray alloc ] init ];
     }
     return self;
@@ -35,6 +36,7 @@
         self->tileType = tileType;
         self->isSelected = NO;
         self->tileSprite = nil;
+        self->position = ccp( 0, 0 );
         self->contents = [ [ NSMutableArray alloc ] init ];
     }
     return self;

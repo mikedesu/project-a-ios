@@ -21,7 +21,7 @@
 #define MENUITEM_LABEL_FONTCOLOR    white3
         
 #define MENUITEM0_LABEL_TEXT    @"EditorHUD"
-#define MENUITEM1_LABEL_TEXT    @"MenuItemLabel1"
+#define MENUITEM1_LABEL_TEXT    @"Move"
         
         
         CCLabelTTF *menuItemLabel0 = [[ CCLabelTTF alloc ] initWithString: MENUITEM0_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
@@ -58,7 +58,7 @@
 }
 
 
-#define MENUITEM1_NOTIFICATIONNAME      @"TestNotification1"
+#define MENUITEM1_NOTIFICATIONNAME      @"MoveNotification"
 -( void ) menuItem1Pressed {
     MLOG( @"menuItem1Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM1_NOTIFICATIONNAME object: self ];

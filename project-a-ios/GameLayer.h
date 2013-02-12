@@ -76,7 +76,9 @@ typedef enum {
 
 -( CCSprite * ) getTileForTouch: (UITouch *) touch;
 -( NSInteger ) getTileIndexForTouch: (UITouch *) touch;
-
+-( CGPoint ) getTileCGPointForTouch: ( UITouch * ) touch;
+-( Tile * ) getTileForIndex: ( NSInteger ) index;
+    
 -( void ) addMessage: (NSString * ) message;
 
 @end

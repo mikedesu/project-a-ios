@@ -10,6 +10,7 @@
 
 -( id ) init {
     if ( ( self = [super init] ) ) {
+        isPC = NO;
         name = [ [ NSMutableString alloc ] init ];
         positionOnMap.x = 0;
         positionOnMap.y = 0;

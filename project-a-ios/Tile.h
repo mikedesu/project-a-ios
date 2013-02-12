@@ -22,6 +22,7 @@ typedef enum {
     Tile_t tileType;
     BOOL isSelected;
     CCSprite *tileSprite;
+    CGPoint position;
     NSMutableArray *contents;
 }
 -( id ) init;

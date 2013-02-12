@@ -75,8 +75,14 @@
         
         if ( [entity->name isEqualToString: @"Hero" ] ) {
             // draw on the texture
-            [ texture fill: white ];
-            [ texture apply ];
+            
+            if ( data->isSelected ) {
+                [ texture fill: blue_alpha( 255 ) ];
+                [ texture apply ];
+            } else {
+                [ texture fill: white ];
+                [ texture apply ];
+            }
             
         } else if ( [ entity->name isEqualToString: @"Test1" ] ) {
             // Test1 will get rendered as colorFuzz
@@ -117,10 +123,6 @@
 }
 
 
-
-
-
-
 /*
  ====================
  setTileArrayBoundary: tileArray toTileType: tileType withLevel: level
@@ -154,7 +156,6 @@
  ====================
  */
 +( void ) setAllTiles: ( NSArray * ) tileArray toTileType: ( Tile_t ) tileType {
-
     for ( Tile * tile in tileArray ) {
         tile->tileType = tileType;
     }

@@ -14,6 +14,7 @@ typedef enum {
 
 @interface Entity : NSObject {
 @public
+    BOOL isPC;
     NSMutableString *name;
     CGPoint positionOnMap;
 }
