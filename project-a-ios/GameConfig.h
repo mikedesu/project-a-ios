@@ -13,9 +13,6 @@
 
 
 #define GROUND_SCALE 2
-#define DRAW_WIDTH 6.5f
-#define MINERS_COUNT 20
-#define SHOW_DRAWN_GROUND_STRIPES
 
 #define TILE_SIZE                   16
 
