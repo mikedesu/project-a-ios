@@ -145,7 +145,6 @@
         [ self addMessage: @"MoveNotification" ];
         MLOG( @"MoveNotification" );
         
-        //TILE_SCALE = TILE_SCALE * 2;
     }
 }
 
@@ -658,7 +657,7 @@
  */
 -( void ) initializeTileArray {
     //tileArray = [ NSMutableArray arrayWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
-    tileArray = [[ NSMutableArray alloc ] init ];
+   tileArray = [[ NSMutableArray alloc ] init ];
 }
 
 
