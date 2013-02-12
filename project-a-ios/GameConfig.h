@@ -12,9 +12,12 @@
 #import "MLog.h"
 
 
-#define GROUND_SCALE 2
+#define TILE_SCALE      4
 
-#define TILE_SIZE                   16
+//#define TILE_SIZE                   16
+
+
+#define TILE_SIZE                   8
 
 #define NUMBER_OF_TILES_ONSCREEN_X  10
 #define NUMBER_OF_TILES_ONSCREEN_Y  15

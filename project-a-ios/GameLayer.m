@@ -582,9 +582,9 @@
     [ tileMutableTexture apply ];
     
     CCSprite *tileSprite = [ CCSprite spriteWithTexture: tileMutableTexture ];
-    tileSprite.scale = GROUND_SCALE;
+    tileSprite.scale = TILE_SCALE;
     if ( tileArray.count != 0 ) {
-        if ( tileArray.count % 10 == 0 ) {
+        if ( tileArray.count % NUMBER_OF_TILES_ONSCREEN_X == 0 ) {
             x = tileSprite.contentSize.width * tileSprite.scaleX * 0.5f;
             y = ( ( CCSprite * )( [ tileArray lastObject ] ) ).position.y - tileSprite.contentSize.height * tileSprite.scaleY;
         } else {
@@ -617,7 +617,7 @@
     [ tileMutableTexture apply ];
     
     CCSprite *tileSprite = [ CCSprite spriteWithTexture: tileMutableTexture ];
-    tileSprite.scale = GROUND_SCALE;
+    tileSprite.scale = TILE_SCALE;
     
     if ( tileArray.count != 0 ) {
         if ( tileArray.count % 10 == 0 ) {
