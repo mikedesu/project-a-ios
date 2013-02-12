@@ -60,10 +60,17 @@
         //[ entityArray addObject: test1 ];
         
         // link the entityArray up with the tileArray
+        MLOG(@"Linking entityArray up to tileArray");
         for ( Entity *entity in entityArray ) {
-            Tile *entityTile = [ tileDataArray objectAtIndex: entity->positionOnMap.x + entity->positionOnMap.y * NUMBER_OF_TILES_ONSCREEN_X ];
-            [ entityTile->contents addObject: entity ];
+            @try {
+                Tile *entityTile = [ tileDataArray objectAtIndex: entity->positionOnMap.x + entity->positionOnMap.y * NUMBER_OF_TILES_ONSCREEN_X ];
+                [ entityTile->contents addObject: entity ];
+            }
+            @catch (NSException *exception) {
+                MLOG( @"Exception caught: %@", exception );
+            }
         }
+        MLOG(@"End linkup");
         
         dLog = [ [ NSMutableArray alloc ] init ];
         dLogIndex = 0;
@@ -89,6 +96,8 @@
         playerMenuIsVisible = NO;
         [ self initPlayerMenu ];
         //[ self addPlayerMenu: playerMenu ];
+        
+        cameraAnchorPoint = hero->positionOnMap;
         
         heroTouches = 0;
         
@@ -135,6 +144,8 @@
     
         [ self addMessage: @"MoveNotification" ];
         MLOG( @"MoveNotification" );
+        
+        //TILE_SCALE = TILE_SCALE * 2;
     }
 }
 
@@ -570,6 +581,7 @@
  ====================
  */
 -( void ) appendNewTile {
+    MLOG( @"appendNewTile" );
     CGSize size = [ [ CCDirector sharedDirector ] winSize ];
     float x = 0;
     float y = size.height;
@@ -598,6 +610,7 @@
     tileSprite.position = ccp( x, y );
     [ self addChild: tileSprite ];
     [ tileArray addObject: tileSprite ];
+    MLOG( @"End appendNewTile" );
 }
 
 
@@ -636,16 +649,31 @@
     [ tileArray addObject: tileSprite ];
 }
 
+
+
+/*
+ ====================
+ initializeTileArray
+ ====================
+ */
+-( void ) initializeTileArray {
+    //tileArray = [ NSMutableArray arrayWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
+    tileArray = [[ NSMutableArray alloc ] init ];
+}
+
+
+
 /*
  ====================
  addBlankTiles
  ====================
  */
 -( void ) addBlankTiles {
-    tileArray = [ NSMutableArray arrayWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
+    MLOG(@"addBlankTiles");
     for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN ; i++ ) {
         [ self appendNewTile ];
     }
+    MLOG(@"End addBlankTiles");
 }
 
 
@@ -667,8 +695,12 @@
  ====================
  */
 -( void ) initializeTiles {
+    MLOG(@"initializeTiles");
+    [ self initializeTileArray ];
     [ self addBlankTiles ];
+    MLOG(@"End initializeTiles");
 }
+
 
 
 /*
@@ -677,7 +709,10 @@
  ====================
  */
 -( void ) initializeTileData {
-    tileDataArray = [ [ NSMutableArray alloc ] initWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
+    MLOG(@"initializeTileData");
+    //tileDataArray = [ [ NSMutableArray alloc ] initWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
+    tileDataArray = [ [ NSMutableArray alloc ] init ];
+    //MLOG( @"initializeTileData capacity: %d", NUMBER_OF_TILES_ONSCREEN );
     for ( int j = 0 ; j < NUMBER_OF_TILES_ONSCREEN_Y ; j++ ) {
         for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
             Tile *tile = [ [ Tile alloc ] init ];
@@ -690,6 +725,7 @@
     [ GameRenderer setAllTiles: tileArray toTileType: TILE_DEFAULT ];
     [ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_FLOOR_STONE withLevel: 2 ];
     [ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_VOID withLevel: 1 ];
+    MLOG(@"End initializeTileData");
 }
 
 

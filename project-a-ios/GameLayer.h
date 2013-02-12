@@ -40,6 +40,8 @@ typedef enum {
     BOOL playerMenuIsVisible;
     PlayerMenu *playerMenu;
     
+    CGPoint cameraAnchorPoint;
+    
     double touchBeganTime;    
 }
 
@@ -72,6 +74,7 @@ typedef enum {
 -( void ) addBlankTiles;
 -( void ) addColorTiles;
 -( void ) initializeTiles;
+-( void ) initializeTileArray;
 
 
 -( CCSprite * ) getTileForTouch: (UITouch *) touch;

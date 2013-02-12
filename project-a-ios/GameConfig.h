@@ -12,15 +12,30 @@
 #import "MLog.h"
 
 
-#define TILE_SCALE      4
 
-//#define TILE_SIZE                   16
-
-
+// Defines the width x length of tiles in pixels
 #define TILE_SIZE                   8
 
+// Defines how much to scale tiles up by
+//#define TILE_SCALE                  1
+//#define TILE_SCALE                  2
+//#define TILE_SCALE                  4
+#define TILE_SCALE                  4
+
+
+//#define NUMBER_OF_TILES_ONSCREEN_X  40
+//#define NUMBER_OF_TILES_ONSCREEN_X  20
+//#define NUMBER_OF_TILES_ONSCREEN_X  10
 #define NUMBER_OF_TILES_ONSCREEN_X  10
+
+
+//#define NUMBER_OF_TILES_ONSCREEN_Y  60
+//#define NUMBER_OF_TILES_ONSCREEN_Y  30
+//#define NUMBER_OF_TILES_ONSCREEN_Y  15
 #define NUMBER_OF_TILES_ONSCREEN_Y  15
+
+
+
 #define NUMBER_OF_TILES_ONSCREEN    ( NUMBER_OF_TILES_ONSCREEN_X * NUMBER_OF_TILES_ONSCREEN_Y )
 
 
