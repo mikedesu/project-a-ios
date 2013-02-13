@@ -9,7 +9,6 @@
 #import "GameConfig.h"
 #import "PlayerHUD.h"
 #import "PlayerMenu.h"
-#import "Tile.h"
 
 typedef enum {
     GAMESTATE_T_MAINMENU=0,
@@ -17,8 +16,13 @@ typedef enum {
 } GameState_t;
 
 @interface GameLayer : CCLayer <UIAlertViewDelegate> {
+    
+    DungeonFloor *floor;
+    
     NSMutableArray *tileArray;
+    
     NSMutableArray *tileDataArray;
+    
     NSMutableArray *entityArray;
     
     NSMutableArray *dLog;

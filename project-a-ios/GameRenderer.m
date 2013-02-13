@@ -112,6 +112,28 @@
 
 /*
  ====================
+ setAllVisibleTiles: withDungeonFloor:
+ ====================
+ */
++( void ) setAllVisibleTiles: ( NSArray * ) tileArray withDungeonFloor: ( DungeonFloor * ) floor {
+    MLOG( @"setAllVisibleTiles: withDungeonFloor:" );
+    
+    // this code is wrong but using for testing
+    for ( int i = 0; i < [tileArray count]; i++ ) {
+        CCSprite *sprite = [ tileArray objectAtIndex: i ];
+        [ GameRenderer setTile: sprite withData: [ floor->tileDataArray objectAtIndex: i ] ];
+    }
+}
+
+
+
+
+
+
+
+
+/*
+ ====================
  setAllTiles: withEntityData
  ====================
  */

@@ -15,18 +15,28 @@ typedef enum {
 //#define TILE_DEFAULT    TILE_ICE
 
 
-@class CCSprite;
+//@class CCSprite;
+@class CCMutableTexture2D;
 
 @interface Tile : NSObject {
 @public
     Tile_t tileType;
     BOOL isSelected;
-    CCSprite *tileSprite;
+    BOOL needsRedraw;
+    
+    //CCSprite *tileSprite;
+    CCMutableTexture2D *texture;
+    
     CGPoint position;
     NSMutableArray *contents;
 }
 -( id ) init;
 -( id ) initWithTileType: ( Tile_t ) tileType;
 
+
++( Tile * ) newTileWithType: ( Tile_t ) tileType withPosition: ( CGPoint ) position;
+
++( void ) renderTextureForTile: ( Tile * ) tile;
+    
     
 @end

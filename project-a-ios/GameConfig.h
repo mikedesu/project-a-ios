@@ -7,9 +7,16 @@
 #ifndef project_a_ios_GameConfig_h
 #define project_a_ios_GameConfig_h
 
+#import "CCMutableTexture2D.h"
 
+#import "cocos2d.h"
 #import "Colors.h"
 #import "MLog.h"
+
+#import "Dungeon.h"
+#import "DungeonFloor.h"
+#import "Entity.h"
+#import "Tile.h"
 
 
 

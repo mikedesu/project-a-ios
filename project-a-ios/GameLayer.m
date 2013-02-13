@@ -36,18 +36,35 @@
  */
 -(id) init {
 	if( (self=[super init]) ) {
-        self.isTouchEnabled = YES;
+        self.isTouchEnabled = NO;
         selectedTile = -1;
         prevSelectedTile = -1;
         touchedTileIndex = -1;
         isTouched = NO;
         
+        
+        
+        floor = [ DungeonFloor newFloor ];
+        
+        [ self initializeTiles ];
+        
+        [ self drawDungeonFloor: floor toTileArray: tileArray ];
+        
+        
+        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor ];
+        
+        /*
         [ self initializeTiles ];
         [ self initializeTileData ];
+        */
+        
         
         Entity *hero = [ [ Entity alloc ] init ];
         [ hero->name setString: @"Hero" ];
         hero->positionOnMap = ccp( 5, 7 );
+        
+        cameraAnchorPoint = ccp( 0, 0 );
+        
         
         /*
         Entity *test1 = [ [ Entity alloc ] init ];
@@ -55,12 +72,16 @@
         test1->positionOnMap = ccp( 2, 3 );
         */
         
-        entityArray = [ [ NSMutableArray alloc ] init ];
-        [ entityArray addObject: hero ];
+        
+        
+        
+        //entityArray = [ [ NSMutableArray alloc ] init ];
+        //[ entityArray addObject: hero ];
         //[ entityArray addObject: test1 ];
         
         // link the entityArray up with the tileArray
-        MLOG(@"Linking entityArray up to tileArray");
+        //MLOG(@"Linking entityArray up to tileArray");
+        /*
         for ( Entity *entity in entityArray ) {
             @try {
                 Tile *entityTile = [ tileDataArray objectAtIndex: entity->positionOnMap.x + entity->positionOnMap.y * NUMBER_OF_TILES_ONSCREEN_X ];
@@ -70,8 +91,11 @@
                 MLOG( @"Exception caught: %@", exception );
             }
         }
-        MLOG(@"End linkup");
+         */
+        //MLOG(@"End linkup");
         
+        
+        /*
         dLog = [ [ NSMutableArray alloc ] init ];
         dLogIndex = 0;
         
@@ -107,6 +131,9 @@
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"ShowHideEditorHUD" object:nil];
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
         
+        
+         
+         */
         
         [ self schedule:@selector(tick:)];
 	}
@@ -321,7 +348,7 @@
     // [ self renderGameState ];
     
     
-    [GameRenderer setAllTiles:tileArray withData: tileDataArray ];
+    //[GameRenderer setAllTiles:tileArray withData: floor->tileDataArray ];
     
     if ( editorHUDIsVisible ) {
         [ self updateEditorHUDLabel ];
@@ -670,7 +697,8 @@
 -( void ) addBlankTiles {
     MLOG(@"addBlankTiles");
     for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN ; i++ ) {
-        [ self appendNewTile ];
+       [ self appendNewTile ];
+        //[ self appendNewColorTestTile ];
     }
     MLOG(@"End addBlankTiles");
 }
@@ -707,6 +735,7 @@
  initializeTileData
  ====================
  */
+
 -( void ) initializeTileData {
     MLOG(@"initializeTileData");
     //tileDataArray = [ [ NSMutableArray alloc ] initWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
@@ -716,7 +745,9 @@
         for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
             Tile *tile = [ [ Tile alloc ] init ];
             tile->tileType = TILE_DEFAULT;
-            tile->tileSprite = [ tileArray objectAtIndex: ( i + j * NUMBER_OF_TILES_ONSCREEN_X ) ];
+            
+            //tile->tileSprite = [ tileArray objectAtIndex: ( i + j * NUMBER_OF_TILES_ONSCREEN_X ) ];
+            
             tile->position = ccp( i, j );
             [ tileDataArray addObject: tile ];
         }
@@ -726,6 +757,24 @@
     [ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_VOID withLevel: 1 ];
     MLOG(@"End initializeTileData");
 }
+
+
+
+-( void ) drawDungeonFloor: ( DungeonFloor * ) dungeonFloor toTileArray: ( NSArray * ) tileArray {
+    CGPoint c = cameraAnchorPoint;
+    for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
+        for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
+            Tile *tile = [ dungeonFloor->tileDataArray objectAtIndex: ((i+c.x) + ((j+c.y) * NUMBER_OF_TILES_ONSCREEN_X)) ];
+            [ Tile renderTextureForTile: tile ];
+            
+            CCSprite *sprite = [ tileArray objectAtIndex: (i + ( j * NUMBER_OF_TILES_ONSCREEN_X ) ) ];
+            sprite.texture = tile->texture;
+        }
+    }
+}
+
+
+
 
 
 /*
