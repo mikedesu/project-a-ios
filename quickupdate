@@ -6,5 +6,6 @@
 git ci -a
 git push origin master
 git push origin dev
+git push origin dev-dungeon
 ./update_dropbox
 echo "quickupdate script successful :)"
