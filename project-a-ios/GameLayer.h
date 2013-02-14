@@ -88,4 +88,6 @@ typedef enum {
     
 -( void ) addMessage: (NSString * ) message;
 
+-( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile;
+
 @end

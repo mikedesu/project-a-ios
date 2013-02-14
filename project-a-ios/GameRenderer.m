@@ -116,7 +116,7 @@
  ====================
  */
 +( void ) setAllVisibleTiles: ( NSArray * ) tileArray withDungeonFloor: ( DungeonFloor * ) floor {
-    MLOG( @"setAllVisibleTiles: withDungeonFloor:" );
+    //MLOG( @"setAllVisibleTiles: withDungeonFloor:" );
     
     // this code is wrong but using for testing
     for ( int i = 0; i < [tileArray count]; i++ ) {

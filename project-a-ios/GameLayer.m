@@ -35,22 +35,18 @@
  ====================
  */
 -(id) init {
-	if( (self=[super init]) ) {
-        self.isTouchEnabled = NO;
+    
+	if ( ( self = [ super init ] ) ) {
+        
+        self.isTouchEnabled = YES;
         selectedTile = -1;
         prevSelectedTile = -1;
         touchedTileIndex = -1;
         isTouched = NO;
         
-        
-        
         floor = [ DungeonFloor newFloor ];
-        
         [ self initializeTiles ];
-        
         [ self drawDungeonFloor: floor toTileArray: tileArray ];
-        
-        
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor ];
         
         /*
@@ -58,44 +54,43 @@
         [ self initializeTileData ];
         */
         
-        
         Entity *hero = [ [ Entity alloc ] init ];
         [ hero->name setString: @"Hero" ];
-        hero->positionOnMap = ccp( 5, 7 );
+        //hero->positionOnMap = ccp( 5, 7 ); // don't set the position of entities! add them to tiles!
         
         cameraAnchorPoint = ccp( 0, 0 );
         
-        
-        /*
-        Entity *test1 = [ [ Entity alloc ] init ];
-        [ test1->name setString: @"Test1" ];
-        test1->positionOnMap = ccp( 2, 3 );
-        */
-        
-        
-        
-        
-        //entityArray = [ [ NSMutableArray alloc ] init ];
-        //[ entityArray addObject: hero ];
-        //[ entityArray addObject: test1 ];
+        entityArray = [ [ NSMutableArray alloc ] init ];
+        [ entityArray addObject: hero ];
+ 
+        CGPoint startPoint = ccp( 0, 0 );
+        Tile *startTile = nil;
+        for ( Tile *t in floor->tileDataArray ) {
+            if ( t->position.x == startPoint.x && t->position.y == startPoint.y ) {
+                MLOG( @"" );
+                startTile = t;
+                break;
+            }
+        }
+        hero->positionOnMap = startPoint;
+        [ startTile->contents addObject: hero ];
         
         // link the entityArray up with the tileArray
-        //MLOG(@"Linking entityArray up to tileArray");
+        
         /*
-        for ( Entity *entity in entityArray ) {
+        //MLOG(@"Linking entityArray up to tileArray");
+         for ( Entity *entity in entityArray ) {
             @try {
-                Tile *entityTile = [ tileDataArray objectAtIndex: entity->positionOnMap.x + entity->positionOnMap.y * NUMBER_OF_TILES_ONSCREEN_X ];
+                Tile *entityTile = [ floor->tileDataArray objectAtIndex: entity->positionOnMap.x + entity->positionOnMap.y * NUMBER_OF_TILES_ONSCREEN_X ];
                 [ entityTile->contents addObject: entity ];
             }
             @catch (NSException *exception) {
                 MLOG( @"Exception caught: %@", exception );
             }
         }
-         */
         //MLOG(@"End linkup");
+         */
         
-        
-        /*
         dLog = [ [ NSMutableArray alloc ] init ];
         dLogIndex = 0;
         
@@ -107,13 +102,12 @@
         [ self addMessage: @"Let's roll" ];
         [ self addMessage: @"" ];
         
-        
         editorHUDIsVisible = NO;
         [ self initEditorHUD ];
         //[ self addEditorHUD: editorHUD ];
         
-        
-        playerHUDIsVisible = NO;
+        /*
+         playerHUDIsVisible = NO;
         [ self initPlayerHUD ];
         [ self addPlayerHUD: playerHUD ];
         
@@ -130,9 +124,6 @@
         
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"ShowHideEditorHUD" object:nil];
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
-        
-        
-         
          */
         
         [ self schedule:@selector(tick:)];
@@ -346,9 +337,9 @@
     //[ self colorScrambleAllTiles ];
     //[ GameRenderer colorScrambleAllTiles: tileArray ];
     // [ self renderGameState ];
-    
-    
     //[GameRenderer setAllTiles:tileArray withData: floor->tileDataArray ];
+    
+    [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor ];
     
     if ( editorHUDIsVisible ) {
         [ self updateEditorHUDLabel ];
@@ -356,7 +347,6 @@
     if ( playerHUDIsVisible ) {
         [ self updatePlayerHUDLabel ];
     }
-    
 }
 
 
@@ -373,17 +363,34 @@
     
     isTouched = YES;
     
-    touchedTileIndex = [ self getTileIndexForTouch: touch ];
+    
+    CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
+    CGPoint touchedTilePointAndOffset = ccp( touchedTilePoint.x + cameraAnchorPoint.x, touchedTilePoint.y + cameraAnchorPoint.y );
+    touchedTileIndex = touchedTilePoint.x + touchedTilePoint.y * floor->width;
     prevSelectedTile = selectedTile;
     selectedTile = touchedTileIndex;
     
-    Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
-    touchedTile->isSelected = YES;
     
+    Tile *touchedTile = [ floor->tileDataArray objectAtIndex: touchedTileIndex ];
+    touchedTile->isSelected = ! touchedTile->isSelected;
+    
+    MLOG( @"touches began: (%f,%f)", touchedTilePoint.x, touchedTilePoint.y );
+    MLOG( @"(%f,%f)", touchedTile->position.x, touchedTile->position.y );
+    MLOG( @"floor width = %d", floor->width );
+    /*
+    for ( Tile *t in floor->tileDataArray ) {
+        //if ( t->position.x == touchedTilePointAndOffset.x && t->position.y == touchedTilePointAndOffset.y ) {
+        if ( touchedTile == t ) {
+            t->isSelected = YES;
+            break;
+        }
+    }
+     */
+    
+    //touchedTile->isSelected = YES;
     //currentColor=ccc4(0,0,0,0); //Transparent >> Draw holes (dig)
 	//CGPoint touchLocation = [touch locationInView:nil];
 	//touchLocation = [[CCDirector sharedDirector] convertToGL: touchLocation];
-    
 	//activeLocation=touchLocation;
     //touchActiveLocationOK=YES;
 }
@@ -403,16 +410,19 @@
 	double now=[NSDate timeIntervalSinceReferenceDate];
 	
     isTouched = YES;
-    NSInteger prevTouchedTileIndex = touchedTileIndex;
-    Tile *prevTouchedTile = [ tileDataArray objectAtIndex: prevTouchedTileIndex ];
-    prevTouchedTile->isSelected = NO;
     
-    touchedTileIndex = [ self getTileIndexForTouch: touch ];
+    NSInteger prevTouchedTileIndex = touchedTileIndex;
+    
+    CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
+    CGPoint touchedTilePointAndOffset = ccp( touchedTilePoint.x + cameraAnchorPoint.x, touchedTilePoint.y + cameraAnchorPoint.y );
+    touchedTileIndex = touchedTilePointAndOffset.x + touchedTilePointAndOffset.y * floor->width;
     prevSelectedTile = selectedTile;
     selectedTile = touchedTileIndex;
     
-    
-    Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
+    Tile *prevTouchedTile = [ floor->tileDataArray objectAtIndex: prevTouchedTileIndex ];
+    prevTouchedTile->isSelected = NO;
+   
+    Tile *touchedTile = [ floor->tileDataArray objectAtIndex: touchedTileIndex ];
     touchedTile->isSelected = YES;
     
     //prevSelectedTile = selectedTile;
@@ -454,7 +464,7 @@
     double timeElapsedSinceTouchBegan = now - touchBeganTime;
     
     
-    if ( timeElapsedSinceTouchBegan >= 3.0f ) {
+    //if ( timeElapsedSinceTouchBegan >= 3.0f ) {
  
         /*
         if ( editorHUDIsVisible ) {
@@ -464,9 +474,11 @@
         }
          */
         
-    } else {
+        /*
+         } else {
     
         [ self shortPress: touch ];
+        
         Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
         
         prevSelectedTile = selectedTile;
@@ -556,7 +568,7 @@
             touchedTile->isSelected = YES;
         }
     }
-    
+    */
 }
 
 
@@ -908,6 +920,17 @@ NSUInteger getMagicY( NSUInteger y ) {
     if ( [ dLog count ] > MAX_DISPLAYED_MESSAGES ) {
         dLogIndex++;
     }
+}
+
+
+/*
+ ====================
+ setEntity: entity onTile: tile
+ ====================
+ */
+-( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile {
+    entity->positionOnMap = tile->position;
+    [ tile->contents addObject: entity ];
 }
 
 @end

@@ -35,6 +35,8 @@
     NSUInteger dungeonWidth = 40;
     NSUInteger dungeonHeight = 60;
     DungeonFloor *floor = [[ DungeonFloor alloc ] init ];
+    floor->width = dungeonWidth;
+    floor->height = dungeonHeight;
     for ( int i = 0 ; i < dungeonHeight ; i++ ) {
         for ( int j = 0; j < dungeonWidth; j++ ) {
             Tile *newTile = [ Tile newTileWithType: TILE_DEFAULT withPosition: ccp(j, i)];
