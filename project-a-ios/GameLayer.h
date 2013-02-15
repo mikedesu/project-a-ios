@@ -81,7 +81,10 @@ typedef enum {
 -( void ) initializeTileArray;
 
 
--( CCSprite * ) getTileForTouch: (UITouch *) touch;
+-( Tile * ) getTileForCGPoint: ( CGPoint ) p  ;
+    
+-( CCSprite * ) getTileSpriteForCGPoint: ( CGPoint ) p;
+    -( CCSprite * ) getTileForTouch: (UITouch *) touch;
 -( NSInteger ) getTileIndexForTouch: (UITouch *) touch;
 -( CGPoint ) getTileCGPointForTouch: ( UITouch * ) touch;
 -( Tile * ) getTileForIndex: ( NSInteger ) index;
@@ -89,5 +92,7 @@ typedef enum {
 -( void ) addMessage: (NSString * ) message;
 
 -( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile;
+
+-( CGPoint ) translateTouchPointToMapPoint: (CGPoint) touchPoint;
 
 @end

@@ -52,11 +52,11 @@
  ====================
  */
 +( Tile * ) newTileWithType: ( Tile_t ) tileType withPosition: ( CGPoint ) position {
-    MLOG( @"newTileWithType: withPosition: (%f,%f)", position.x, position.y );
+    //MLOG( @"newTileWithType: withPosition: (%f,%f)", position.x, position.y );
     Tile *tile = [[ Tile alloc ] initWithTileType: tileType ];
     tile->position.x = position.x;
     tile->position.y = position.y;
-    MLOG( @"end newTileWithType" );
+    //MLOG( @"end newTileWithType" );
     return tile;
 }
 

@@ -37,9 +37,9 @@
     DungeonFloor *floor = [[ DungeonFloor alloc ] init ];
     floor->width = dungeonWidth;
     floor->height = dungeonHeight;
-    for ( int i = 0 ; i < dungeonHeight ; i++ ) {
-        for ( int j = 0; j < dungeonWidth; j++ ) {
-            Tile *newTile = [ Tile newTileWithType: TILE_DEFAULT withPosition: ccp(j, i)];
+    for ( int j = 0 ; j < dungeonHeight ; j++ ) {
+        for ( int i = 0; i < dungeonWidth; i++ ) {
+            Tile *newTile = [ Tile newTileWithType: TILE_DEFAULT withPosition: ccp(i, j)];
             [ floor->tileDataArray addObject: newTile ];
         }
     }

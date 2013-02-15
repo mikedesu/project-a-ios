@@ -47,7 +47,7 @@
         floor = [ DungeonFloor newFloor ];
         [ self initializeTiles ];
         [ self drawDungeonFloor: floor toTileArray: tileArray ];
-        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor ];
+        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
         /*
         [ self initializeTiles ];
@@ -58,7 +58,7 @@
         [ hero->name setString: @"Hero" ];
         //hero->positionOnMap = ccp( 5, 7 ); // don't set the position of entities! add them to tiles!
         
-        cameraAnchorPoint = ccp( 0, 0 );
+        cameraAnchorPoint = ccp( 10, 10 );
         
         entityArray = [ [ NSMutableArray alloc ] init ];
         [ entityArray addObject: hero ];
@@ -339,7 +339,7 @@
     // [ self renderGameState ];
     //[GameRenderer setAllTiles:tileArray withData: floor->tileDataArray ];
     
-    [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor ];
+    [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
     
     if ( editorHUDIsVisible ) {
         [ self updateEditorHUDLabel ];
@@ -365,18 +365,45 @@
     
     
     CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
-    CGPoint touchedTilePointAndOffset = ccp( touchedTilePoint.x + cameraAnchorPoint.x, touchedTilePoint.y + cameraAnchorPoint.y );
-    touchedTileIndex = touchedTilePoint.x + touchedTilePoint.y * floor->width;
+    CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
+    
+    //touchedTileIndex = touchedTilePoint.x + touchedTilePoint.y * floor->width;
+    //touchedTileIndex = touchedTilePointAndOffset.x + ( touchedTilePointAndOffset.y * NUMBER_OF_TILES_ONSCREEN_X );
+    
+    
     prevSelectedTile = selectedTile;
     selectedTile = touchedTileIndex;
     
+    MLOG( @"touchedTilePoint: (%f, %f)", touchedTilePoint.x , touchedTilePoint.y );
+    MLOG( @"mapPoint: (%f, %f)", mapPoint.x, mapPoint.y );
     
-    Tile *touchedTile = [ floor->tileDataArray objectAtIndex: touchedTileIndex ];
-    touchedTile->isSelected = ! touchedTile->isSelected;
+    Tile *tile = [ self getMapTileFromPoint: mapPoint ];
     
-    MLOG( @"touches began: (%f,%f)", touchedTilePoint.x, touchedTilePoint.y );
-    MLOG( @"(%f,%f)", touchedTile->position.x, touchedTile->position.y );
-    MLOG( @"floor width = %d", floor->width );
+    MLOG( @"Tile.position: (%f, %f)", tile->position.x, tile->position.y );
+    
+    
+    tile->isSelected = YES;
+    
+    
+    /*
+    CCSprite *touchedSprite = [ tileArray objectAtIndex: touchedTileIndex ];
+    
+    for ( Tile *t in floor->tileDataArray ) {
+        if ( touchedSprite.texture == t->texture ) {
+            t->isSelected = YES;
+            MLOG( @"Selected tile position: (%f,%f)", t->position.x, t->position.y );
+            break;
+        }
+    }
+    */
+    
+    
+    //Tile *touchedTile = [ floor->tileDataArray objectAtIndex: touchedTileIndex ];
+    //touchedTile->isSelected = ! touchedTile->isSelected;
+    
+    //MLOG( @"touches began: (%f,%f)", touchedTilePoint.x, touchedTilePoint.y );
+    //MLOG( @"(%f,%f)", touchedTile->position.x, touchedTile->position.y );
+    //MLOG( @"floor width = %d", floor->width );
     /*
     for ( Tile *t in floor->tileDataArray ) {
         //if ( t->position.x == touchedTilePointAndOffset.x && t->position.y == touchedTilePointAndOffset.y ) {
@@ -404,6 +431,8 @@
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches moved" );
     //[ self addMessage: @"ccTouchesMoved\n" ];
+    
+    /*
 	UITouch *touch = [ touches anyObject ];
 	NSArray *allTouches = [[event allTouches] allObjects];
     
@@ -428,6 +457,8 @@
     //prevSelectedTile = selectedTile;
     //selectedTile = touchedTileIndex;
     
+     */
+     
     /*
     if (now-lastDigTime>0.05f) {
 		touch=[touches anyObject];
@@ -776,15 +807,30 @@
     CGPoint c = cameraAnchorPoint;
     for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
         for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
-            Tile *tile = [ dungeonFloor->tileDataArray objectAtIndex: ((i+c.x) + ((j+c.y) * NUMBER_OF_TILES_ONSCREEN_X)) ];
+            // grab the tile at ( i+c.x, j+c.y )
+            //Tile *tile = [ dungeonFloor->tileDataArray objectAtIndex: ((i+c.x) + ((j+c.y) * NUMBER_OF_TILES_ONSCREEN_X)) ];
+            Tile *tile = [ self getTileForCGPoint: ccp(i+c.x, j+c.y) ];
             [ Tile renderTextureForTile: tile ];
             
-            CCSprite *sprite = [ tileArray objectAtIndex: (i + ( j * NUMBER_OF_TILES_ONSCREEN_X ) ) ];
+            //CCSprite *sprite = [ tileArray objectAtIndex: (i + ( j * NUMBER_OF_TILES_ONSCREEN_X ) ) ];
+            CCSprite *sprite = [ self getTileSpriteForCGPoint: ccp(i, j) ];
             sprite.texture = tile->texture;
         }
     }
 }
 
+-( Tile * ) getTileForCGPoint: ( CGPoint ) p  {
+    Tile *tile = nil;
+    tile = [ floor->tileDataArray objectAtIndex: p.x + ( p.y * floor->width ) ];
+    return tile;
+}
+
+
+-( CCSprite * ) getTileSpriteForCGPoint: ( CGPoint ) p {
+    CCSprite *sprite = nil;
+    sprite = [ tileArray objectAtIndex: p.x + p.y * NUMBER_OF_TILES_ONSCREEN_X ];
+    return sprite;
+}
 
 
 
@@ -932,5 +978,42 @@ NSUInteger getMagicY( NSUInteger y ) {
     entity->positionOnMap = tile->position;
     [ tile->contents addObject: entity ];
 }
+
+
+/*
+ ====================
+ translateTouchPointToMapPoint: (CGPoint) touchPoint
+ ====================
+ */
+-( CGPoint ) translateTouchPointToMapPoint: (CGPoint) touchPoint {
+    CGPoint c = cameraAnchorPoint;
+    CGPoint mapPoint = ccp( touchPoint.x + c.x, touchPoint.y + c.y );
+    return mapPoint;
+}
+
+
+/*
+ ====================
+ getMapTileFromPoint: p
+ ====================
+ */
+-( Tile * ) getMapTileFromPoint: (CGPoint) p {
+    Tile *tile = nil;
+    for ( Tile *t in floor->tileDataArray ) {
+        if ( t->position.x == p.x && t->position.y == p.y ) {
+            tile = t;
+            break;
+        }
+    }
+    MLOG( @"Returning tile " );
+    return tile;
+}
+
+
+
+
+
+
+
 
 @end

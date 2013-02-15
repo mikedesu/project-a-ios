@@ -112,24 +112,19 @@
 
 /*
  ====================
- setAllVisibleTiles: withDungeonFloor:
+ setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera: camera
  ====================
  */
-+( void ) setAllVisibleTiles: ( NSArray * ) tileArray withDungeonFloor: ( DungeonFloor * ) floor {
++( void ) setAllVisibleTiles: ( NSArray * ) tileArray withDungeonFloor: ( DungeonFloor * ) floor withCamera: ( CGPoint ) camera {
     //MLOG( @"setAllVisibleTiles: withDungeonFloor:" );
-    
-    // this code is wrong but using for testing
-    for ( int i = 0; i < [tileArray count]; i++ ) {
-        CCSprite *sprite = [ tileArray objectAtIndex: i ];
-        [ GameRenderer setTile: sprite withData: [ floor->tileDataArray objectAtIndex: i ] ];
+    CGPoint c = camera;
+    for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
+        for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
+            CCSprite *sprite = [ tileArray objectAtIndex: i+j*NUMBER_OF_TILES_ONSCREEN_X ];
+            [ GameRenderer setTile: sprite withData: [ floor->tileDataArray objectAtIndex: (i+c.x)+((j+c.y)*floor->width) ] ];
+        }
     }
 }
-
-
-
-
-
-
 
 
 /*
