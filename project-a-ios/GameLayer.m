@@ -68,7 +68,7 @@
         
         pcEntity = hero;
         
-        [ Entity drawTextureForEntity: hero ];
+        //[ Entity drawTextureForEntity: hero ];
         
         cameraAnchorPoint = ccp( 10, 10 );
         

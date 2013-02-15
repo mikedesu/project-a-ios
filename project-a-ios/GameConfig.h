@@ -21,10 +21,10 @@
 #import "Tile.h"
 
 // Defines the width x length of tiles in pixels
-#define TILE_SIZE                   8
+#define TILE_SIZE                   16
 
 // Defines how much to scale tiles up by
-#define TILE_SCALE                  4
+#define TILE_SCALE                  2
 
 // Defines how many tiles onscreen on each axis
 #define NUMBER_OF_TILES_ONSCREEN_X  10
