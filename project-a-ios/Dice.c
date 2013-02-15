@@ -16,11 +16,25 @@ long int rollDiceOnce( int sides ) {
     return ROLL_DICE_ONCE(sides);
 }
 
+long int rollDiceOnceWithModifier( int sides, int modifier ) {
+    return rollDiceOnce(sides) + modifier;
+}
+
 long int rollDice( int sides, int times ) {
     long int sum = 0;
     int i = 0;
     while ( i < times ) {
         sum += rollDiceOnce( sides );
+        i++;
+    }
+    return sum;
+}
+
+long int rollDiceWithModifier( int sides, int modifier, int times ) {
+    long int sum = 0;
+    int i = 0;
+    while ( i < times ) {
+        sum += rollDiceOnceWithModifier(sides, modifier);
         i++;
     }
     return sum;

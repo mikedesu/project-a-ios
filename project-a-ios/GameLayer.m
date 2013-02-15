@@ -405,7 +405,7 @@
     
     //[ self addMessage: [ NSString stringWithFormat: @"PC.position = (%d,%d)", (int)pcEntity->positionOnMap.x, (int)pcEntity->positionOnMap.y ] ];
     
-    [ self addMessage: [ NSString stringWithFormat: @"Rolled d6...%ld!", rollDice(6,1) ] ];
+    [ self addMessage: [ NSString stringWithFormat: @"Rolled d6+1...%ld!", rollDiceWithModifier(6, 1, 1) ] ];
     
 }
 
