@@ -3,15 +3,8 @@
 //
 //  Created by Mike Bell on 2/8/13.
 
-//#import "AppDelegate.h"
-//#import "CCMutableTexture2D.h"
-//#import "EditorHUD.h"
-//#import "Entity.h"
-//#import "GameConfig.h"
 #import "Dice.h"
 #import "GameLayer.h"
-//#import "GameRenderer.h"
-//#import "Tile.h"
 
 @implementation GameLayer
 
@@ -357,7 +350,8 @@
  */
 -(void)tick:(ccTime)dt {
     //MLOG( @"tick" );
-    
+    double before = [NSDate timeIntervalSinceReferenceDate];
+
     [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
     
     if ( editorHUDIsVisible ) {
@@ -366,6 +360,11 @@
     if ( playerHUDIsVisible ) {
         [ self updatePlayerHUDLabel ];
     }
+    
+    double after = [NSDate timeIntervalSinceReferenceDate] - before;
+    
+    MLOG( @"tick time: %f", after );
+    
 }
 
 
