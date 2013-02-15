@@ -31,7 +31,7 @@
  ====================
  */
 +( DungeonFloor * ) newFloor {
-    MLOG( @"newFloor" );
+    //MLOG( @"newFloor" );
     NSUInteger dungeonWidth = 40;
     NSUInteger dungeonHeight = 60;
     DungeonFloor *floor = [[ DungeonFloor alloc ] init ];
@@ -43,7 +43,7 @@
             [ floor->tileDataArray addObject: newTile ];
         }
     }
-    MLOG( @"end newFloor" );
+    //MLOG( @"end newFloor" );
     return floor;
 }
 

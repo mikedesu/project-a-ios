@@ -4,18 +4,20 @@
 //
 //  Created by Mike Bell on 2/10/13.
 
-#ifndef project_a_ios_GameConfig_h
-#define project_a_ios_GameConfig_h
-
-#import "CCMutableTexture2D.h"
-
 #import "cocos2d.h"
-#import "Colors.h"
-#import "MLog.h"
 
+#import "AppDelegate.h"
+#import "CCMutableTexture2D.h"
+#import "Colors.h"
 #import "Dungeon.h"
 #import "DungeonFloor.h"
+#import "EditorHUD.h"
 #import "Entity.h"
+#import "GameLayer.h"
+#import "GameRenderer.h"
+#import "MLog.h"
+#import "PlayerHUD.h"
+#import "PlayerMenu.h"
 #import "Tile.h"
 
 // Defines the width x length of tiles in pixels
@@ -30,4 +32,3 @@
 
 #define NUMBER_OF_TILES_ONSCREEN    ( NUMBER_OF_TILES_ONSCREEN_X * NUMBER_OF_TILES_ONSCREEN_Y )
 
-#endif

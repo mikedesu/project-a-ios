@@ -5,6 +5,7 @@
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
 #import "cocos2d.h"
+#import "GameConfig.h"
 
 #define NUMBER_OF_LABELS        4
 @interface EditorHUD : CCLayerColor {

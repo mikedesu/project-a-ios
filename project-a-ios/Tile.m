@@ -70,7 +70,6 @@
     if ( tile->texture == nil ) {
         [ tile->texture setAliasTexParameters ];
         [ tile->texture fill: black ];
- 
         
         Tile_t tileType = tile->tileType;
         
@@ -91,10 +90,8 @@
         [ tile->texture apply ];
         
         for (Entity *entity in tile->contents) {
-            
             if ( [entity->name isEqualToString: @"Hero" ] ) {
                 // draw on the texture
-                
                 if ( tile->isSelected ) {
                     [ tile->texture fill: blue_alpha( 255 ) ];
                     [ tile->texture apply ];
@@ -102,7 +99,6 @@
                     [ tile->texture fill: white ];
                     [ tile->texture apply ];
                 }
-                
             } else if ( [ entity->name isEqualToString: @"Test1" ] ) {
                 // Test1 will get rendered as colorFuzz
                 for ( int i = 0; i < 16; i++ ) {
@@ -115,6 +111,4 @@
         }
     }
 }
-
-
 @end

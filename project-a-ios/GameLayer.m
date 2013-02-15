@@ -3,22 +3,22 @@
 //
 //  Created by Mike Bell on 2/8/13.
 
-#import "AppDelegate.h"
-#import "CCMutableTexture2D.h"
-#import "EditorHUD.h"
-#import "Entity.h"
-#import "GameConfig.h"
+//#import "AppDelegate.h"
+//#import "CCMutableTexture2D.h"
+//#import "EditorHUD.h"
+//#import "Entity.h"
+//#import "GameConfig.h"
 #import "GameLayer.h"
-#import "GameRenderer.h"
-#import "Tile.h"
-
-
+//#import "GameRenderer.h"
+//#import "Tile.h"
 
 @implementation GameLayer
 
 /*
  ====================
  scene
+ 
+ returns a CCScene for this layer
  ====================
  */
 +(CCScene *) scene {
@@ -32,12 +32,12 @@
 /*
  ====================
  init
+ 
+ initializes and returns the layer
  ====================
  */
 -(id) init {
-    
 	if ( ( self = [ super init ] ) ) {
-        
         self.isTouchEnabled = YES;
         selectedTile = -1;
         prevSelectedTile = -1;
@@ -47,27 +47,42 @@
         floor = [ DungeonFloor newFloor ];
         [ self initializeTiles ];
         [ self drawDungeonFloor: floor toTileArray: tileArray ];
+        
+        [ GameRenderer setAllTilesInFloor: floor toTileType: TILE_FLOOR_GRASS ];
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 1 ];
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 2 ];
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 3 ];
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 4 ];
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 5 ];
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 6 ];
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 7 ];
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 8 ];
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 9 ];
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 10 ];
+        
+        
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
         Entity *hero = [ [ Entity alloc ] init ];
         [ hero->name setString: @"Hero" ];
         
-        cameraAnchorPoint = ccp( 0, 0 );
+        pcEntity = hero;
+        
+        
+        cameraAnchorPoint = ccp( 10, 10 );
         
         entityArray = [ [ NSMutableArray alloc ] init ];
         [ entityArray addObject: hero ];
  
-        CGPoint startPoint = ccp( 0, 0 );
+        CGPoint startPoint = ccp( 15, 17 );
         Tile *startTile = nil;
         for ( Tile *t in floor->tileDataArray ) {
             if ( t->position.x == startPoint.x && t->position.y == startPoint.y ) {
-                MLOG( @"" );
                 startTile = t;
                 break;
             }
         }
-        hero->positionOnMap = startPoint;
-        [ startTile->contents addObject: hero ];
+        [ self setEntity:hero onTile: startTile ];
         
         dLog = [ [ NSMutableArray alloc ] init ];
         dLogIndex = 0;
@@ -108,6 +123,22 @@
 }
 
 
+
+/*
+ ====================
+ dealloc
+ 
+ deallocates this object
+ ====================
+ */
+- (void) dealloc {
+	//[super dealloc];
+}
+
+
+#pragma mark - Notification code
+
+
 /*
  ====================
  receiveNotification: notification
@@ -134,11 +165,14 @@
     }
 }
 
+#pragma mark - Menus and HUD code
 
 
 /*
  ====================
  initPlayerMenu
+ 
+ initializes the Player menu
  ====================
  */
 -( void ) initPlayerMenu {
@@ -151,6 +185,8 @@
 /*
  ====================
  addPlayerMenu: menu
+ 
+ adds the Player menu to the visible screen
  ====================
  */
 -( void ) addPlayerMenu: ( PlayerMenu * ) menu {
@@ -165,6 +201,8 @@
 /*
  ====================
  removePlayerMenu: menu
+ 
+ removes the Player menu from the visible screen
  ====================
  */
 -( void ) removePlayerMenu: ( PlayerMenu * ) menu {
@@ -179,6 +217,8 @@
 /*
  ====================
  initEditorHUD
+ 
+ initializes the Editor HUD
  ====================
  */
 -( void ) initEditorHUD {
@@ -192,6 +232,8 @@
 /*
  ====================
  updateEditorHUDLabel
+ 
+ updates the Editor HUD Label
  ====================
  */
 -( void ) updateEditorHUDLabel {
@@ -210,6 +252,8 @@
 /*
  ====================
  addEditorHUD: hud
+ 
+ adds the Editor HUD to the visible screen
  ====================
  */
 -( void ) addEditorHUD: ( EditorHUD * ) hud {
@@ -223,6 +267,8 @@
 /*
  ====================
  removeEditorHUD: hud
+ 
+ removes the Editor HUD from the visible screen
  ====================
  */
 -( void ) removeEditorHUD: ( EditorHUD * ) hud {
@@ -236,6 +282,8 @@
 /*
  ====================
  initPlayerHUD
+ 
+ initializes the Player HUD
  ====================
  */
 -( void ) initPlayerHUD {
@@ -249,6 +297,8 @@
 /*
  ====================
  addPlayerHUD: hud
+ 
+ adds the Player HUD to the visible screen
  ====================
  */
 -( void ) addPlayerHUD: ( PlayerHUD * ) hud {
@@ -262,6 +312,8 @@
 /*
  ====================
  removePlayerHUD: hud
+ 
+ removes the Player HUD from the visible screen
  ====================
  */
 -( void ) removePlayerHUD: ( PlayerHUD * ) hud {
@@ -274,7 +326,9 @@
 
 /*
  ====================
- updateEditorHUDLabel
+ updatePlayerHUDLabel
+ 
+ updates the Player HUD Label
  ====================
  */
 -( void ) updatePlayerHUDLabel {
@@ -283,19 +337,15 @@
 
 
 
-/*
- ====================
- dealloc
- ====================
- */
-- (void) dealloc {
-	//[super dealloc];
-}
 
+
+#pragma mark - Update code
 
 /*
  ====================
  tick: dt
+ 
+ represents a single frame tick
  ====================
  */
 -(void)tick:(ccTime)dt {
@@ -310,6 +360,9 @@
         [ self updatePlayerHUDLabel ];
     }
 }
+
+
+#pragma mark - Touch code
 
 
 /*
@@ -332,14 +385,24 @@
     prevSelectedTile = selectedTile;
     selectedTile = touchedTileIndex;
     
-    MLOG( @"touchedTilePoint: (%f, %f)", touchedTilePoint.x , touchedTilePoint.y );
-    MLOG( @"mapPoint: (%f, %f)", mapPoint.x, mapPoint.y );
+    //MLOG( @"touchedTilePoint: (%f, %f)", touchedTilePoint.x , touchedTilePoint.y );
+    //MLOG( @"mapPoint: (%f, %f)", mapPoint.x, mapPoint.y );
     
     Tile *tile = [ self getMapTileFromPoint: mapPoint ];
-    
+    //tile->isSelected = YES;
     MLOG( @"Tile.position: (%f, %f)", tile->position.x, tile->position.y );
     
-    tile->isSelected = YES;
+    if ( tile->tileType != TILE_VOID ) {
+        Tile *prevTile = [ self getTileForCGPoint: pcEntity->positionOnMap ];
+        [prevTile->contents removeObject: pcEntity];
+        [ self setEntity: pcEntity onTile: tile ];
+        // [ self movePCEntityToTile: tile ];
+        // [ self movePCEntityToCGPoint: tile->position ];
+    }
+    
+    // reset the camera position
+    cameraAnchorPoint.x = pcEntity->positionOnMap.x - 5;
+    cameraAnchorPoint.y = pcEntity->positionOnMap.y - 7;
 }
 
 
@@ -372,6 +435,18 @@
 
 /*
  ====================
+ ccTouchesCancelled: touches withEvent: event
+ ====================
+ */
+- (void)ccTouchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	[self ccTouchesEnded:touches withEvent:event];
+}
+
+
+
+
+/*
+ ====================
  shortPress: touch
  ====================
  */
@@ -390,14 +465,7 @@
 }
 
 
-/*
- ====================
- ccTouchesCancelled: touches withEvent: event
- ====================
- */
-- (void)ccTouchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-	[self ccTouchesEnded:touches withEvent:event];
-}
+#pragma mark - Tile code
 
 
 /*
@@ -529,6 +597,7 @@
  ====================
  */
 
+/*
 -( void ) initializeTileData {
     //MLOG(@"initializeTileData");
     tileDataArray = [ [ NSMutableArray alloc ] init ];
@@ -545,6 +614,7 @@
     [ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_VOID withLevel: 1 ];
     MLOG(@"End initializeTileData");
 }
+ */
 
 
 
@@ -630,6 +700,7 @@ static NSUInteger magicXArray[ 352 ];
 static NSUInteger magicYArray[ 480 ];
 
 void initializeMagicXArray() {
+    //MLOG( @"initializeMagicXArray()" );
     for ( int i = 0; i < 10; i++ ) {
         for ( int j = 0; j < 32; j++ ) {
             magicXArray[ j + (i * 32) ] = i;
@@ -638,6 +709,7 @@ void initializeMagicXArray() {
 }
 
 void initializeMagicYArray() {
+    //MLOG( @"initializeMagicYArray()" );
     NSUInteger counter = 14;
     for ( int i = 0; i < 14; i++ ) {
         for ( int j = 0; j < 32; j++ ) {
@@ -650,6 +722,7 @@ void initializeMagicYArray() {
 
 
 NSUInteger getMagicX( NSUInteger x ) {
+    //MLOG( @"getMagicX()" );
     if ( ! isMagicXArrayInitialized ) {
         initializeMagicXArray();
         isMagicXArrayInitialized = YES;
@@ -675,6 +748,7 @@ NSUInteger getMagicX( NSUInteger x ) {
 
 // magic numbers below are for 16x16 tiles w/ 150 tiles on-screen
 NSUInteger getMagicY( NSUInteger y ) {
+    //MLOG( @"getMagicY()" );
     if ( ! isMagicYArrayInitialized ) {
         initializeMagicYArray();
         isMagicYArrayInitialized = YES;
@@ -738,19 +812,6 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
-/*
- ====================
- addMessage: message
- ====================
- */
-#define MAX_DISPLAYED_MESSAGES      7
--( void ) addMessage: (NSString * ) message {
-    NSString *str = [ NSString stringWithFormat: @"%@\n", message ];
-    [ dLog addObject: str ];
-    if ( [ dLog count ] > MAX_DISPLAYED_MESSAGES ) {
-        dLogIndex++;
-    }
-}
 
 
 /*
@@ -791,6 +852,35 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     MLOG( @"Returning tile " );
     return tile;
+}
+
+
+/*
+ ====================
+ addMessage: message
+ ====================
+ */
+#define MAX_DISPLAYED_MESSAGES      7
+-( void ) addMessage: (NSString * ) message {
+    NSString *str = [ NSString stringWithFormat: @"%@\n", message ];
+    [ dLog addObject: str ];
+    if ( [ dLog count ] > MAX_DISPLAYED_MESSAGES ) {
+        dLogIndex++;
+    }
+}
+
+
+#pragma mark - Entity code
+
+-( Entity * ) getEntityForName: ( NSString * ) name {
+    Entity *entity = nil;
+    for ( Entity *e in entityArray ) {
+        if ( [e->name isEqualToString: name ] ) {
+            entity = e;
+            break;
+        }
+    }
+    return entity;
 }
 
 @end

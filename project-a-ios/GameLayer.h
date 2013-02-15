@@ -4,19 +4,22 @@
 //  Created by Mike Bell on 2/8/13.
 //  Copyright __MyCompanyName__ 2013. All rights reserved.
 
-#import "cocos2d.h"
-#import "EditorHUD.h"
 #import "GameConfig.h"
-#import "PlayerHUD.h"
-#import "PlayerMenu.h"
 
 typedef enum {
     GAMESTATE_T_MAINMENU=0,
     GAMESTATE_T_GAME,
 } GameState_t;
 
+@class DungeonFloor;
+@class EditorHUD;
+@class PlayerHUD;
+@class PlayerMenu;
+@class Tile;
+
 @interface GameLayer : CCLayer <UIAlertViewDelegate> {
     
+    Entity *pcEntity;
     DungeonFloor *floor;
     
     NSMutableArray *tileArray;
@@ -72,19 +75,21 @@ typedef enum {
 
 -( void ) appendNewTile;
 -( void ) appendNewColorTestTile;
+
 -( void ) colorTest;
 -( void ) colorScrambleTile;
 -( void ) colorScrambleAllTiles;
+
 -( void ) addBlankTiles;
 -( void ) addColorTiles;
+
 -( void ) initializeTiles;
 -( void ) initializeTileArray;
 
-
 -( Tile * ) getTileForCGPoint: ( CGPoint ) p  ;
-    
 -( CCSprite * ) getTileSpriteForCGPoint: ( CGPoint ) p;
-    -( CCSprite * ) getTileForTouch: (UITouch *) touch;
+-( CCSprite * ) getTileForTouch: (UITouch *) touch;
+
 -( NSInteger ) getTileIndexForTouch: (UITouch *) touch;
 -( CGPoint ) getTileCGPointForTouch: ( UITouch * ) touch;
 -( Tile * ) getTileForIndex: ( NSInteger ) index;
@@ -94,5 +99,7 @@ typedef enum {
 -( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile;
 
 -( CGPoint ) translateTouchPointToMapPoint: (CGPoint) touchPoint;
+
+-( Entity * ) getEntityForName: ( NSString * ) name;
 
 @end

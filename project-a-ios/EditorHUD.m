@@ -4,7 +4,6 @@
 //  Created by Mike Bell on 2/10/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
-#import "GameConfig.h"
 #import "EditorHUD.h"
 
 @implementation EditorHUD

@@ -4,13 +4,7 @@
 //  Created by Mike Bell on 2/10/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
-
-#import "CCMutableTexture2D.h"
-#import "cocos2d.h"
-#import "Entity.h"
-#import "GameConfig.h"
 #import "GameRenderer.h"
-#import "Tile.h"
 
 @implementation GameRenderer
 
@@ -72,10 +66,8 @@
     [ texture apply ];
     
     for (Entity *entity in data->contents) {
-        
         if ( [entity->name isEqualToString: @"Hero" ] ) {
             // draw on the texture
-            
             if ( data->isSelected ) {
                 [ texture fill: blue_alpha( 255 ) ];
                 [ texture apply ];
@@ -83,7 +75,6 @@
                 [ texture fill: white ];
                 [ texture apply ];
             }
-            
         } else if ( [ entity->name isEqualToString: @"Test1" ] ) {
             // Test1 will get rendered as colorFuzz
             for ( int i = 0; i < 16; i++ ) {
@@ -142,29 +133,28 @@
 
 /*
  ====================
- setTileArrayBoundary: tileArray toTileType: tileType withLevel: level
+ setTileArrayBoundary: floor toTileType: tileType withLevel: level
  ====================
  */
-+( void ) setTileArrayBoundary: ( NSArray * ) tileArray toTileType: ( Tile_t ) tileType withLevel: ( NSInteger ) level {
++( void ) setTileArrayBoundary: ( DungeonFloor * ) floor toTileType: ( Tile_t ) tileType withLevel: ( NSInteger ) level {
 
     Tile *tile = nil;
     // can set up to 5 levels
-    NSAssert( level >= 0 && level <= 5 , @"Level should be >=0 || <= 5" );
+    //NSAssert( level >= 0 && level <= 5 , @"Level should be >=0 || <= 5" );
     //int level = 6;
-    for ( int j = level-1; j < NUMBER_OF_TILES_ONSCREEN_Y-(level-1); j++ ) {
-        for ( int i = level-1; i < NUMBER_OF_TILES_ONSCREEN_X-(level-1); i++ ) {
-            if ( (i == level-1 || i == NUMBER_OF_TILES_ONSCREEN_X-level) ) {
-                tile = [ tileArray objectAtIndex: i + (j * NUMBER_OF_TILES_ONSCREEN_X) ];
+    for ( int j = level-1; j < floor->height-(level-1); j++ ) {
+        for ( int i = level-1; i < floor->width-(level-1); i++ ) {
+            if ( (i == level-1 || i == floor->width-level) ) {
+                tile = [ floor->tileDataArray objectAtIndex: i + (j * floor->width) ];
                 tile->tileType = tileType;
             }
-            if ( j == level-1 || j == NUMBER_OF_TILES_ONSCREEN_Y-level ) {
-                tile = [ tileArray objectAtIndex: i + (j * NUMBER_OF_TILES_ONSCREEN_X) ];
+            if ( j == level-1 || j == floor->height-level ) {
+                tile = [ floor->tileDataArray objectAtIndex: i + (j * floor->width) ];
                 tile->tileType = tileType;
             }
         }
     }
 }
-
 
 
 /*
@@ -176,6 +166,15 @@
     for ( Tile * tile in tileArray ) {
         tile->tileType = tileType;
     }
+}
+
+/*
+ ====================
+ setAllTilesInDungeon: dungeon toTileType: tileType
+ ====================
+ */
++( void ) setAllTilesInFloor: ( DungeonFloor * ) floor toTileType: ( Tile_t ) tileType {
+    [ GameRenderer setAllTiles: floor->tileDataArray toTileType: tileType ];
 }
 
 @end
