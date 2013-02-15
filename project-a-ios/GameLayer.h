@@ -39,6 +39,7 @@ typedef enum {
     NSInteger prevSelectedTile;
     
     NSInteger heroTouches;
+    NSUInteger turnCounter;
     
     BOOL editorHUDIsVisible;
     EditorHUD *editorHUD;

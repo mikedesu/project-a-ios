@@ -109,6 +109,8 @@
         
         heroTouches = 0;
         
+        turnCounter = 1;
+        
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
         
@@ -332,11 +334,12 @@
  ====================
  */
 -( void ) updatePlayerHUDLabel {
-    [ playerHUD->label setString: @"Player HUD" ];
+    [ playerHUD->label setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
+                                   [ NSString stringWithFormat: @"%@ the Great     T:%d", pcEntity->name, turnCounter ],
+                                   [ NSString stringWithFormat: @"St:0 Dx:0 Co:0 In:0 Wi:0 Ch:0 Align" ],
+                                   [ NSString stringWithFormat: @"Dlvl:1 $:0 HP:1/1 Pw: 0/0 AC:0 Xp:0/100"]
+                                   ]];
 }
-
-
-
 
 
 #pragma mark - Update code
@@ -350,8 +353,9 @@
  */
 -(void)tick:(ccTime)dt {
     //MLOG( @"tick" );
-    double before = [NSDate timeIntervalSinceReferenceDate];
+    //double before = [NSDate timeIntervalSinceReferenceDate];
 
+    // only if we need redraw, really...
     [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
     
     if ( editorHUDIsVisible ) {
@@ -361,9 +365,9 @@
         [ self updatePlayerHUDLabel ];
     }
     
-    double after = [NSDate timeIntervalSinceReferenceDate] - before;
+    //double after = [NSDate timeIntervalSinceReferenceDate] - before;
     
-    MLOG( @"tick time: %f", after );
+    //MLOG( @"tick time: %f", after );
     
 }
 
@@ -388,23 +392,89 @@
     //touchedTileIndex = touchedTilePoint.x + touchedTilePoint.y * floor->width;
     //touchedTileIndex = touchedTilePointAndOffset.x + ( touchedTilePointAndOffset.y * NUMBER_OF_TILES_ONSCREEN_X );
     
-    prevSelectedTile = selectedTile;
-    selectedTile = touchedTileIndex;
+    //prevSelectedTile = selectedTile;
+    //selectedTile = touchedTileIndex;
+    
+    Tile *prevSelectedTile = [ self getTileForCGPoint: selectedTilePoint ];
+    if ( prevSelectedTile->position.x == mapPoint.x && prevSelectedTile->position.y == mapPoint.y ) {
+        
+        [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
+        selectedTilePoint = mapPoint;   // sets this tile to be remembered
+        
+        //MLOG( @"touchedTilePoint: (%f, %f)", touchedTilePoint.x , touchedTilePoint.y );
+        //MLOG( @"mapPoint: (%f, %f)", mapPoint.x, mapPoint.y );
+        
+        //[ self moveEntity: pcEntity toPosition: mapPoint ];
+        //[ self resetCameraPosition ];
+        [ self selectTileAtPosition: mapPoint ];
+        
+        Tile *selectedTile = [ self getTileForCGPoint: mapPoint ];
+        
+        if ( pcEntity->positionOnMap.x == mapPoint.x && pcEntity->positionOnMap.y == mapPoint.y ) {
+            heroTouches++;
+            if ( heroTouches == 2 ) {
+                if ( ! playerMenuIsVisible ) {
+                    [ self addPlayerMenu: playerMenu ];
+                } else {
+                    [ self removePlayerMenu: playerMenu ];
+                }
+                heroTouches = 0;
+            } else if ( heroTouches == 1 && playerMenuIsVisible ) {
+                [ self removePlayerMenu: playerMenu ];
+                heroTouches = 0;
+            }
+        } else {
+            [ self moveEntity:pcEntity toPosition:mapPoint ];
+            [ self resetCameraPosition ];
+            //[ self selectTileAtPosition: mapPoint ];
+            turnCounter++;
+        }
+        
+    } else {
+        
+        [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
+        selectedTilePoint = mapPoint;   // sets this tile to be remembered
+        
+        //MLOG( @"touchedTilePoint: (%f, %f)", touchedTilePoint.x , touchedTilePoint.y );
+        //MLOG( @"mapPoint: (%f, %f)", mapPoint.x, mapPoint.y );
+        
+        //[ self moveEntity: pcEntity toPosition: mapPoint ];
+        //[ self resetCameraPosition ];
+        [ self selectTileAtPosition: mapPoint ];
+        
+        //Tile *selectedTile = [ self getTileForCGPoint: mapPoint ];
+        
+        /*
+        if ( pcEntity->positionOnMap.x == mapPoint.x && pcEntity->positionOnMap.y == mapPoint.y ) {
+            heroTouches++;
+            if ( heroTouches == 2 ) {
+                if ( ! playerMenuIsVisible ) {
+                    [ self addPlayerMenu: playerMenu ];
+                } else {
+                    [ self removePlayerMenu: playerMenu ];
+                }
+                heroTouches = 0;
+            } else if ( heroTouches == 1 && playerMenuIsVisible ) {
+                [ self removePlayerMenu: playerMenu ];
+                heroTouches = 0;
+            }
+        } else {
+            //[ self moveEntity:pcEntity toPosition:mapPoint ];
+            //[ self resetCameraPosition ];
+            //[ self selectTileAtPosition: mapPoint ];
+            //turnCounter++;
+        }
+         */
+        
+    }
     
     
-    [ self selectTileAtPosition: selectedTilePoint ];
-    selectedTilePoint = mapPoint;
     
-    //MLOG( @"touchedTilePoint: (%f, %f)", touchedTilePoint.x , touchedTilePoint.y );
-    //MLOG( @"mapPoint: (%f, %f)", mapPoint.x, mapPoint.y );
     
-    //[ self moveEntity: pcEntity toPosition: mapPoint ];
-    //[ self resetCameraPosition ];
-    [ self selectTileAtPosition: mapPoint ];
     
     //[ self addMessage: [ NSString stringWithFormat: @"PC.position = (%d,%d)", (int)pcEntity->positionOnMap.x, (int)pcEntity->positionOnMap.y ] ];
-    
-    [ self addMessage: [ NSString stringWithFormat: @"Rolled d6+1...%ld!", rollDiceWithModifier(6, 1, 1) ] ];
+    //[ self addMessage: [ NSString stringWithFormat: @"Rolled d6+1...%ld!", rollDiceWithModifier(6, 1, 1) ] ];
+    //[ self addMessage: [ NSString stringWithFormat: @"Turn: %d", turnCounter ] ];
     
 }
 
@@ -924,8 +994,16 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) selectTileAtPosition: ( CGPoint ) position {
-    Tile *tile = [ self getMapTileFromPoint: position ];
-    tile->isSelected = ! tile->isSelected;
+    if ( position.x >= 0 && position.y >= 0 ) {
+        Tile *tile = [ self getMapTileFromPoint: position ];
+        tile->isSelected = ! tile->isSelected;
+        if ( tile->isSelected ) {
+            selectedTilePoint = position;
+        } else {
+            selectedTilePoint.x = -1;
+            selectedTilePoint.y = -1;
+        }
+    }
 }
 
 
