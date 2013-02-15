@@ -102,4 +102,8 @@ typedef enum {
 
 -( Entity * ) getEntityForName: ( NSString * ) name;
 
+-( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position;
+-( void ) resetCameraPosition;
+
+
 @end

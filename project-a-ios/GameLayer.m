@@ -389,21 +389,11 @@
     //MLOG( @"touchedTilePoint: (%f, %f)", touchedTilePoint.x , touchedTilePoint.y );
     //MLOG( @"mapPoint: (%f, %f)", mapPoint.x, mapPoint.y );
     
-    Tile *tile = [ self getMapTileFromPoint: mapPoint ];
-    //tile->isSelected = YES;
-    MLOG( @"Tile.position: (%f, %f)", tile->position.x, tile->position.y );
+    [ self moveEntity: pcEntity toPosition: mapPoint ];
+    [ self resetCameraPosition ];
     
-    if ( tile->tileType != TILE_VOID ) {
-        Tile *prevTile = [ self getTileForCGPoint: pcEntity->positionOnMap ];
-        [prevTile->contents removeObject: pcEntity];
-        [ self setEntity: pcEntity onTile: tile ];
-        // [ self movePCEntityToTile: tile ];
-        // [ self movePCEntityToCGPoint: tile->position ];
-    }
     
-    // reset the camera position
-    cameraAnchorPoint.x = pcEntity->positionOnMap.x - 5;
-    cameraAnchorPoint.y = pcEntity->positionOnMap.y - 7;
+    
     
     [ self addMessage: [ NSString stringWithFormat: @"PC.position = (%d,%d)", (int)pcEntity->positionOnMap.x, (int)pcEntity->positionOnMap.y ] ];
 }
@@ -885,5 +875,29 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     return entity;
 }
+
+
+-( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
+    MLOG( @"moveEntity: toPosition:" );
+    Tile *tile = [ self getMapTileFromPoint: position ];
+    //MLOG( @"Tile.position: (%f, %f)", tile->position.x, tile->position.y );
+    
+    if ( tile->tileType != TILE_VOID ) {
+        Tile *prevTile = [ self getTileForCGPoint: entity->positionOnMap ];
+        [prevTile->contents removeObject: entity];
+        [ self setEntity: entity onTile: tile ];
+        // [ self movePCEntityToTile: tile ];
+        // [ self movePCEntityToCGPoint: tile->position ];
+    }
+}
+
+-( void ) resetCameraPosition {
+    // reset the camera position
+    cameraAnchorPoint.x = pcEntity->positionOnMap.x - 5;
+    cameraAnchorPoint.y = pcEntity->positionOnMap.y - 7;
+}
+
+
+
 
 @end
