@@ -85,6 +85,10 @@
         }
         [ self setEntity:hero onTile: startTile ];
         
+//        selectedTilePoint = hero->positionOnMap;
+        [ self selectTileAtPosition: hero->positionOnMap ];
+        
+        
         dLog = [ [ NSMutableArray alloc ] init ];
         dLogIndex = 0;
         
@@ -386,14 +390,16 @@
     prevSelectedTile = selectedTile;
     selectedTile = touchedTileIndex;
     
+    
+    [ self selectTileAtPosition: selectedTilePoint ];
+    selectedTilePoint = mapPoint;
+    
     //MLOG( @"touchedTilePoint: (%f, %f)", touchedTilePoint.x , touchedTilePoint.y );
     //MLOG( @"mapPoint: (%f, %f)", mapPoint.x, mapPoint.y );
     
-    [ self moveEntity: pcEntity toPosition: mapPoint ];
-    [ self resetCameraPosition ];
-    
-    
-    
+    //[ self moveEntity: pcEntity toPosition: mapPoint ];
+    //[ self resetCameraPosition ];
+    [ self selectTileAtPosition: mapPoint ];
     
     [ self addMessage: [ NSString stringWithFormat: @"PC.position = (%d,%d)", (int)pcEntity->positionOnMap.x, (int)pcEntity->positionOnMap.y ] ];
 }
@@ -416,12 +422,12 @@
  */
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches ended" );
-    UITouch *touch = [ touches anyObject ];
+    //UITouch *touch = [ touches anyObject ];
         
     isTouched = NO;
     
-    double now = [ NSDate timeIntervalSinceReferenceDate ];
-    double timeElapsedSinceTouchBegan = now - touchBeganTime;
+    //double now = [ NSDate timeIntervalSinceReferenceDate ];
+    //double timeElapsedSinceTouchBegan = now - touchBeganTime;
     
 }
 
@@ -865,6 +871,13 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 #pragma mark - Entity code
 
+/*
+ ====================
+ getEntityForName: name
+ 
+ returns the entity for the given name
+ ====================
+ */
 -( Entity * ) getEntityForName: ( NSString * ) name {
     Entity *entity = nil;
     for ( Entity *e in entityArray ) {
@@ -877,6 +890,13 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
+/*
+ ====================
+ moveEntity: entity toPosition: position
+ 
+ moves the entity on the map to position
+ ====================
+ */
 -( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
     MLOG( @"moveEntity: toPosition:" );
     Tile *tile = [ self getMapTileFromPoint: position ];
@@ -891,13 +911,31 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
+
+/*
+ ====================
+ selectTileAtPosition: position
+ 
+ selects/deselects the tile at given position
+ ====================
+ */
+-( void ) selectTileAtPosition: ( CGPoint ) position {
+    Tile *tile = [ self getMapTileFromPoint: position ];
+    tile->isSelected = ! tile->isSelected;
+}
+
+
+/*
+ ====================
+ resetCameraPosition
+ 
+ resets the camera position relative to the pcEntity
+ ====================
+ */
 -( void ) resetCameraPosition {
     // reset the camera position
     cameraAnchorPoint.x = pcEntity->positionOnMap.x - 5;
     cameraAnchorPoint.y = pcEntity->positionOnMap.y - 7;
 }
-
-
-
 
 @end

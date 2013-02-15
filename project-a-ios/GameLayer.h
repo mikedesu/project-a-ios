@@ -19,6 +19,8 @@ typedef enum {
 
 @interface GameLayer : CCLayer <UIAlertViewDelegate> {
     
+    CGPoint selectedTilePoint;
+    
     Entity *pcEntity;
     DungeonFloor *floor;
     
@@ -103,6 +105,7 @@ typedef enum {
 -( Entity * ) getEntityForName: ( NSString * ) name;
 
 -( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position;
+-( void ) selectTileAtPosition: ( CGPoint ) position;
 -( void ) resetCameraPosition;
 
 

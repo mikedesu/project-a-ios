@@ -72,8 +72,8 @@
                 [ texture fill: blue_alpha( 255 ) ];
                 [ texture apply ];
             } else {
-                //[ texture fill: white ];
-                //[ texture apply ];
+                [ texture fill: white ];
+                [ texture apply ];
                 
                 /*
                 for ( int i = 0; i < 8; i++ ) {
@@ -84,61 +84,7 @@
                 }
                  */
                 
-                [texture setPixelAt:ccp(0,0) rgba:white];
-                [texture setPixelAt:ccp(1,0) rgba:white];
-                [texture setPixelAt:ccp(2,0) rgba:white];
-                [texture setPixelAt:ccp(3,0) rgba:white];
-                [texture setPixelAt:ccp(4,0) rgba:white];
-                
-                [texture setPixelAt:ccp(0,1) rgba:white];
-                [texture setPixelAt:ccp(1,1) rgba:white];
-                [texture setPixelAt:ccp(2,1) rgba:white];
-                [texture setPixelAt:ccp(3,1) rgba:white];
-                [texture setPixelAt:ccp(4,1) rgba:white];
-                
-                [texture setPixelAt:ccp(0,2) rgba:white];
-                [texture setPixelAt:ccp(1,2) rgba:white];
-                [texture setPixelAt:ccp(2,2) rgba:white];
-                [texture setPixelAt:ccp(3,2) rgba:white];
-                [texture setPixelAt:ccp(4,2) rgba:white];
-                
-                [texture setPixelAt:ccp(0,3) rgba:white];
-                [texture setPixelAt:ccp(1,3) rgba:white];
-                [texture setPixelAt:ccp(2,3) rgba:white];
-                [texture setPixelAt:ccp(3,3) rgba:white];
-                [texture setPixelAt:ccp(4,3) rgba:white];
-                
-                [texture setPixelAt:ccp(0,4) rgba:white];
-                [texture setPixelAt:ccp(1,4) rgba:white];
-                [texture setPixelAt:ccp(2,4) rgba:white];
-                [texture setPixelAt:ccp(3,4) rgba:white];
-                [texture setPixelAt:ccp(4,4) rgba:white];
-                
-                [texture setPixelAt:ccp(2,4) rgba:black];
-                [texture setPixelAt:ccp(2,3) rgba:black];
-                [texture setPixelAt:ccp(2,2) rgba:black];
-                [texture setPixelAt:ccp(1,2) rgba:black];
-                [texture setPixelAt:ccp(3,2) rgba:black];
-                
-                [texture setPixelAt:ccp(0,5) rgba:gray];
-                [texture setPixelAt:ccp(1,5) rgba:gray];
-                [texture setPixelAt:ccp(2,5) rgba:gray];
-                [texture setPixelAt:ccp(3,5) rgba:gray];
-                
-                [texture setPixelAt:ccp(0,6) rgba:gray];
-                [texture setPixelAt:ccp(1,6) rgba:gray];
-                [texture setPixelAt:ccp(2,6) rgba:gray];
-                [texture setPixelAt:ccp(3,6) rgba:gray];
-                
-                [texture setPixelAt:ccp(0,7) rgba:gray];
-                [texture setPixelAt:ccp(1,7) rgba:gray];
-                [texture setPixelAt:ccp(2,7) rgba:gray];
-                [texture setPixelAt:ccp(3,7) rgba:gray];
-                
-                
-                
-                
-                [texture apply ];
+                //[texture apply ];
                 
             }
         } else if ( [ entity->name isEqualToString: @"Test1" ] ) {
