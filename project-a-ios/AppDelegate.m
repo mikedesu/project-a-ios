@@ -51,10 +51,12 @@
 
 	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
 	
-    if( ! [director_ enableRetinaDisplay:YES] )
+    /*
+     if( ! [director_ enableRetinaDisplay:YES] )
 		CCLOG(@"Retina Display Not supported");
+    */
     //[ director_ enableRetinaDisplay: NO ];
-    
+     
 	// Create a Navigation Controller with the Director
 	navController_ = [[UINavigationController alloc] initWithRootViewController:director_];
 	navController_.navigationBarHidden = YES;

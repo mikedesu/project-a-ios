@@ -58,7 +58,7 @@
         [ hero->name setString: @"Hero" ];
         //hero->positionOnMap = ccp( 5, 7 ); // don't set the position of entities! add them to tiles!
         
-        cameraAnchorPoint = ccp( 10, 10 );
+        cameraAnchorPoint = ccp( 0, 0 );
         
         entityArray = [ [ NSMutableArray alloc ] init ];
         [ entityArray addObject: hero ];
@@ -948,6 +948,9 @@ NSUInteger getMagicY( NSUInteger y ) {
     NSUInteger tx = getMagicX( x );
     NSUInteger ty = getMagicY( y );
 
+    
+    MLOG(@"getTileCGPointForTouch:  x = %d, y = %d, tx = %d, ty = %d", x, y, tx, ty );
+    
     // calculate tile position based on (x,y)
     CGPoint returnPoint = ccp( tx, ty );
     return returnPoint;
