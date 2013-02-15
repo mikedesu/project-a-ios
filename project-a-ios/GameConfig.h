@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "CCMutableTexture2D.h"
 #import "Colors.h"
+#import "Dice.h"
 #import "Dungeon.h"
 #import "DungeonFloor.h"
 #import "EditorHUD.h"

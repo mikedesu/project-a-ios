@@ -137,6 +137,7 @@
 		2773F29816C94DA3001C3E83 /* PlayerMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29716C94DA3001C3E83 /* PlayerMenu.m */; };
 		27C26D8416CAFDBE008B0E29 /* DungeonFloor.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C26D8316CAFDBE008B0E29 /* DungeonFloor.m */; };
 		27C26D8716CAFF66008B0E29 /* Dungeon.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C26D8616CAFF66008B0E29 /* Dungeon.m */; };
+		27C26D8A16CEEADE008B0E29 /* Dice.c in Sources */ = {isa = PBXBuildFile; fileRef = 27C26D8916CEEADE008B0E29 /* Dice.c */; };
 		27C4145116C7FB1F00BE09F9 /* GameRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C4145016C7FB1F00BE09F9 /* GameRenderer.m */; };
 		27C4145516C804E400BE09F9 /* Tile.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C4145416C804E300BE09F9 /* Tile.m */; };
 		27C88FE016C57607004AB4D8 /* ground_vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 27C88FDF16C57607004AB4D8 /* ground_vertical.png */; };
@@ -415,6 +416,8 @@
 		27C26D8316CAFDBE008B0E29 /* DungeonFloor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DungeonFloor.m; sourceTree = "<group>"; };
 		27C26D8516CAFF66008B0E29 /* Dungeon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dungeon.h; sourceTree = "<group>"; };
 		27C26D8616CAFF66008B0E29 /* Dungeon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dungeon.m; sourceTree = "<group>"; };
+		27C26D8816CEE904008B0E29 /* Dice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dice.h; sourceTree = "<group>"; };
+		27C26D8916CEEADE008B0E29 /* Dice.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Dice.c; sourceTree = "<group>"; };
 		27C4144E16C7D32400BE09F9 /* Colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
 		27C4144F16C7FB1E00BE09F9 /* GameRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRenderer.h; sourceTree = "<group>"; };
 		27C4145016C7FB1F00BE09F9 /* GameRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameRenderer.m; sourceTree = "<group>"; };
@@ -488,6 +491,8 @@
 				272EF65916C569BE005DF231 /* CCMutableTexture2D.h */,
 				272EF65A16C569BE005DF231 /* CCMutableTexture2D.m */,
 				27C4144E16C7D32400BE09F9 /* Colors.h */,
+				27C26D8816CEE904008B0E29 /* Dice.h */,
+				27C26D8916CEEADE008B0E29 /* Dice.c */,
 				27C26D8516CAFF66008B0E29 /* Dungeon.h */,
 				27C26D8616CAFF66008B0E29 /* Dungeon.m */,
 				27C26D8216CAFDBE008B0E29 /* DungeonFloor.h */,
@@ -1059,6 +1064,7 @@
 				2773F29816C94DA3001C3E83 /* PlayerMenu.m in Sources */,
 				27C26D8416CAFDBE008B0E29 /* DungeonFloor.m in Sources */,
 				27C26D8716CAFF66008B0E29 /* Dungeon.m in Sources */,
+				27C26D8A16CEEADE008B0E29 /* Dice.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
