@@ -49,14 +49,8 @@
         [ self drawDungeonFloor: floor toTileArray: tileArray ];
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
-        /*
-        [ self initializeTiles ];
-        [ self initializeTileData ];
-        */
-        
         Entity *hero = [ [ Entity alloc ] init ];
         [ hero->name setString: @"Hero" ];
-        //hero->positionOnMap = ccp( 5, 7 ); // don't set the position of entities! add them to tiles!
         
         cameraAnchorPoint = ccp( 0, 0 );
         
@@ -75,22 +69,6 @@
         hero->positionOnMap = startPoint;
         [ startTile->contents addObject: hero ];
         
-        // link the entityArray up with the tileArray
-        
-        /*
-        //MLOG(@"Linking entityArray up to tileArray");
-         for ( Entity *entity in entityArray ) {
-            @try {
-                Tile *entityTile = [ floor->tileDataArray objectAtIndex: entity->positionOnMap.x + entity->positionOnMap.y * NUMBER_OF_TILES_ONSCREEN_X ];
-                [ entityTile->contents addObject: entity ];
-            }
-            @catch (NSException *exception) {
-                MLOG( @"Exception caught: %@", exception );
-            }
-        }
-        //MLOG(@"End linkup");
-         */
-        
         dLog = [ [ NSMutableArray alloc ] init ];
         dLogIndex = 0;
         
@@ -106,7 +84,6 @@
         [ self initEditorHUD ];
         //[ self addEditorHUD: editorHUD ];
         
-        /*
          playerHUDIsVisible = NO;
         [ self initPlayerHUD ];
         [ self addPlayerHUD: playerHUD ];
@@ -115,8 +92,6 @@
         [ self initPlayerMenu ];
         //[ self addPlayerMenu: playerMenu ];
         
-        cameraAnchorPoint = hero->positionOnMap;
-        
         heroTouches = 0;
         
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
@@ -124,6 +99,7 @@
         
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"ShowHideEditorHUD" object:nil];
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
+        /*
          */
         
         [ self schedule:@selector(tick:)];
@@ -138,34 +114,25 @@
  ====================
  */
 -( void ) receiveNotification: ( NSNotification * ) notification {
-    
     if ( [[ notification name ] isEqualToString: @"TestNotification1" ] ) {
         [ self addMessage: @"TestNotification1" ];
         MLOG( @"TestNotification1" );
     } else if ( [[ notification name ] isEqualToString: @"TestNotification2" ] ) {
         [ self addMessage: @"TestNotification2" ];
         MLOG( @"TestNotification2" );
-    }
-    
-    else if ( [[ notification name ] isEqualToString: @"ShowHideEditorHUD" ] ) {
+    } else if ( [[ notification name ] isEqualToString: @"ShowHideEditorHUD" ] ) {
         [ self addMessage: @"ShowHideEditorHUD" ];
         MLOG( @"ShowHideEditorHUD" );
-        
         if ( ! editorHUDIsVisible ) {
             [ self addEditorHUD: editorHUD ];
         } else {
             [ self removeEditorHUD: editorHUD ];
         }
-    }
-    
-    else if ( [[ notification name ] isEqualToString: @"MoveNotification" ] ) {
-    
+    } else if ( [[ notification name ] isEqualToString: @"MoveNotification" ] ) {
         [ self addMessage: @"MoveNotification" ];
         MLOG( @"MoveNotification" );
-        
     }
 }
-
 
 
 
@@ -207,7 +174,6 @@
         [ self addMessage: @"Closed Player Menu" ];
     }
 }
-
 
 
 /*
@@ -334,10 +300,6 @@
  */
 -(void)tick:(ccTime)dt {
     //MLOG( @"tick" );
-    //[ self colorScrambleAllTiles ];
-    //[ GameRenderer colorScrambleAllTiles: tileArray ];
-    // [ self renderGameState ];
-    //[GameRenderer setAllTiles:tileArray withData: floor->tileDataArray ];
     
     [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
     
@@ -357,19 +319,15 @@
  */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches began" );
-    //[ self addMessage:  @"ccTouchesBegan\n" ];
 	UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
-    
     isTouched = YES;
-    
     
     CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
     CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
     
     //touchedTileIndex = touchedTilePoint.x + touchedTilePoint.y * floor->width;
     //touchedTileIndex = touchedTilePointAndOffset.x + ( touchedTilePointAndOffset.y * NUMBER_OF_TILES_ONSCREEN_X );
-    
     
     prevSelectedTile = selectedTile;
     selectedTile = touchedTileIndex;
@@ -381,45 +339,7 @@
     
     MLOG( @"Tile.position: (%f, %f)", tile->position.x, tile->position.y );
     
-    
     tile->isSelected = YES;
-    
-    
-    /*
-    CCSprite *touchedSprite = [ tileArray objectAtIndex: touchedTileIndex ];
-    
-    for ( Tile *t in floor->tileDataArray ) {
-        if ( touchedSprite.texture == t->texture ) {
-            t->isSelected = YES;
-            MLOG( @"Selected tile position: (%f,%f)", t->position.x, t->position.y );
-            break;
-        }
-    }
-    */
-    
-    
-    //Tile *touchedTile = [ floor->tileDataArray objectAtIndex: touchedTileIndex ];
-    //touchedTile->isSelected = ! touchedTile->isSelected;
-    
-    //MLOG( @"touches began: (%f,%f)", touchedTilePoint.x, touchedTilePoint.y );
-    //MLOG( @"(%f,%f)", touchedTile->position.x, touchedTile->position.y );
-    //MLOG( @"floor width = %d", floor->width );
-    /*
-    for ( Tile *t in floor->tileDataArray ) {
-        //if ( t->position.x == touchedTilePointAndOffset.x && t->position.y == touchedTilePointAndOffset.y ) {
-        if ( touchedTile == t ) {
-            t->isSelected = YES;
-            break;
-        }
-    }
-     */
-    
-    //touchedTile->isSelected = YES;
-    //currentColor=ccc4(0,0,0,0); //Transparent >> Draw holes (dig)
-	//CGPoint touchLocation = [touch locationInView:nil];
-	//touchLocation = [[CCDirector sharedDirector] convertToGL: touchLocation];
-	//activeLocation=touchLocation;
-    //touchActiveLocationOK=YES;
 }
 
 
@@ -430,50 +350,6 @@
  */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches moved" );
-    //[ self addMessage: @"ccTouchesMoved\n" ];
-    
-    /*
-	UITouch *touch = [ touches anyObject ];
-	NSArray *allTouches = [[event allTouches] allObjects];
-    
-	double now=[NSDate timeIntervalSinceReferenceDate];
-	
-    isTouched = YES;
-    
-    NSInteger prevTouchedTileIndex = touchedTileIndex;
-    
-    CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
-    CGPoint touchedTilePointAndOffset = ccp( touchedTilePoint.x + cameraAnchorPoint.x, touchedTilePoint.y + cameraAnchorPoint.y );
-    touchedTileIndex = touchedTilePointAndOffset.x + touchedTilePointAndOffset.y * floor->width;
-    prevSelectedTile = selectedTile;
-    selectedTile = touchedTileIndex;
-    
-    Tile *prevTouchedTile = [ floor->tileDataArray objectAtIndex: prevTouchedTileIndex ];
-    prevTouchedTile->isSelected = NO;
-   
-    Tile *touchedTile = [ floor->tileDataArray objectAtIndex: touchedTileIndex ];
-    touchedTile->isSelected = YES;
-    
-    //prevSelectedTile = selectedTile;
-    //selectedTile = touchedTileIndex;
-    
-     */
-     
-    /*
-    if (now-lastDigTime>0.05f) {
-		touch=[touches anyObject];
-        
-		CGPoint touchLocation = [touch locationInView:nil];
-		touchLocation = [[CCDirector sharedDirector] convertToGL: touchLocation];
-        
-        if (touchActiveLocationOK) {
-            [self fingerAction:activeLocation :touchLocation];
-            lastDigTime=now;
-		}
-		activeLocation=touchLocation;
-        touchActiveLocationOK=YES;
-	}
-     */
 }
 
 
@@ -487,119 +363,10 @@
     UITouch *touch = [ touches anyObject ];
         
     isTouched = NO;
-    //NSInteger prevTouchedTileIndex = touchedTileIndex;
-    //Tile *prevTouchedTile = [ tileDataArray objectAtIndex: prevTouchedTileIndex ];
-    //prevTouchedTile->isSelected = NO;
     
     double now = [ NSDate timeIntervalSinceReferenceDate ];
     double timeElapsedSinceTouchBegan = now - touchBeganTime;
     
-    
-    //if ( timeElapsedSinceTouchBegan >= 3.0f ) {
- 
-        /*
-        if ( editorHUDIsVisible ) {
-            [ self removeEditorHUD: editorHUD ];
-        } else {
-            [ self addEditorHUD: editorHUD ];
-        }
-         */
-        
-        /*
-         } else {
-    
-        [ self shortPress: touch ];
-        
-        Tile *touchedTile = [ tileDataArray objectAtIndex: touchedTileIndex ];
-        
-        prevSelectedTile = selectedTile;
-        selectedTile = touchedTileIndex;
-        
-        Tile *prevTouchedTile = [ self getTileForIndex: prevSelectedTile ];
-        
-        
-        BOOL containsHero = NO;
-        for ( Entity *e in touchedTile->contents ) {
-            if ( [e->name isEqualToString: @"Hero" ] ) {
-                containsHero = YES;
-                break;
-            }
-        }
-        
-        if ( touchedTile->isSelected ) {
-            
-            if ( containsHero ) {
-                
-                if ( ! playerMenuIsVisible ) {
-                    heroTouches++;
-                }
-                
-                [self addMessage: @"Touched Hero" ];
-                
-                if ( heroTouches >= 2 ) {
-                    if ( ! playerMenuIsVisible ) {
-                        [ self addPlayerMenu: playerMenu ];
-                    } else {
-                        [ self removePlayerMenu: playerMenu ];
-                        touchedTile->isSelected = NO;
-                    }
-                    heroTouches = 0;
-                } else {
-                    if ( playerMenuIsVisible ) {
-                        [ self removePlayerMenu: playerMenu ];
-                        touchedTile->isSelected = NO;
-                    }
-                }
-            }
-            
-            else if ( heroTouches == 1 ) {
-                heroTouches = 0;
-                
-                // find the hero
-                Entity *hero = nil;
-                for ( Entity *e in entityArray ) {
-                    if ( [e->name isEqualToString:@"Hero"] ) {
-                        hero = e;
-                        break;
-                    }
-                }
-                
-                Tile *heroTile = [ self getTileForIndex: (hero->positionOnMap.x + hero->positionOnMap.y * NUMBER_OF_TILES_ONSCREEN_X ) ];
-                [ heroTile->contents removeObject: hero ];
-                heroTile->isSelected = NO;
-                
-                CGPoint oldPosition;
-                CGPoint touchedPoint = [ self getTileCGPointForTouch: touch ];
-                
-                oldPosition = hero->positionOnMap;
-                hero->positionOnMap = touchedPoint;
-                
-                [ touchedTile->contents addObject: hero ];
-                touchedTile->isSelected = NO;
-                
-                [ self addMessage: [NSString stringWithFormat:@"Moved %@ from (%.0f,%.0f) to (%.0f,%.0f)", hero->name, oldPosition.x, oldPosition.y, hero->positionOnMap.x, hero->positionOnMap.y ]];
-                MLOG( @"" );
-            }
-            
-            
-            else {
-                touchedTile->isSelected = NO;
-                touchedTileIndex = -1;
-                prevSelectedTile = selectedTile;
-                selectedTile = touchedTileIndex;
-                
-                NSString *tileTypeStr =
-                ( touchedTile->tileType == TILE_FLOOR_GRASS ) ? @"Grass" :
-                ( touchedTile->tileType == TILE_FLOOR_ICE ) ? @"Ice" :
-                ( touchedTile->tileType == TILE_FLOOR_STONE ) ? @"Stone" :
-                @"Void";
-                [ self addMessage: [NSString stringWithFormat:@"Tile type: %@", tileTypeStr] ];
-            }
-        } else {
-            touchedTile->isSelected = YES;
-        }
-    }
-    */
 }
 
 
@@ -609,7 +376,7 @@
  ====================
  */
 -( void ) shortPress: (UITouch *) touch {
-    //[ self addMessage:  @"shortPress\n" ];
+    //MLOG( @"short press" );
 }
 
 
@@ -619,17 +386,7 @@
  ====================
  */
 -( void ) longPress {
-    //UIAlertView *alert = [[ UIAlertView alloc ] initWithTitle:@"" message:[NSString stringWithFormat:@"Long press"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    //[alert show];
-    //[ self addMessage:  @"longPress\n" ];
-    
-    /*
-    if ( editorHUDIsVisible ) {
-        [ self removeEditorHUD: editorHUD ];
-    } else {
-        [ self addEditorHUD: editorHUD ];
-    }
-     */
+    //MLOG( @"long press" );
 }
 
 
@@ -639,10 +396,9 @@
  ====================
  */
 - (void)ccTouchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    //MLOG( @"touches cancelled" );
-    //[ messages addObject: @"ccTouchesCancelled\n" ];
 	[self ccTouchesEnded:touches withEvent:event];
 }
+
 
 /*
  ====================
@@ -650,7 +406,7 @@
  ====================
  */
 -( void ) appendNewTile {
-    MLOG( @"appendNewTile" );
+    //MLOG( @"appendNewTile" );
     CGSize size = [ [ CCDirector sharedDirector ] winSize ];
     float x = 0;
     float y = size.height;
@@ -679,7 +435,6 @@
     tileSprite.position = ccp( x, y );
     [ self addChild: tileSprite ];
     [ tileArray addObject: tileSprite ];
-    MLOG( @"End appendNewTile" );
 }
 
 
@@ -726,8 +481,7 @@
  ====================
  */
 -( void ) initializeTileArray {
-    //tileArray = [ NSMutableArray arrayWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
-   tileArray = [[ NSMutableArray alloc ] init ];
+    tileArray = [[ NSMutableArray alloc ] init ];
 }
 
 
@@ -738,12 +492,10 @@
  ====================
  */
 -( void ) addBlankTiles {
-    MLOG(@"addBlankTiles");
+    //MLOG(@"addBlankTiles");
     for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN ; i++ ) {
        [ self appendNewTile ];
-        //[ self appendNewColorTestTile ];
     }
-    MLOG(@"End addBlankTiles");
 }
 
 
@@ -765,10 +517,8 @@
  ====================
  */
 -( void ) initializeTiles {
-    MLOG(@"initializeTiles");
     [ self initializeTileArray ];
     [ self addBlankTiles ];
-    MLOG(@"End initializeTiles");
 }
 
 
@@ -780,17 +530,12 @@
  */
 
 -( void ) initializeTileData {
-    MLOG(@"initializeTileData");
-    //tileDataArray = [ [ NSMutableArray alloc ] initWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
+    //MLOG(@"initializeTileData");
     tileDataArray = [ [ NSMutableArray alloc ] init ];
-    //MLOG( @"initializeTileData capacity: %d", NUMBER_OF_TILES_ONSCREEN );
     for ( int j = 0 ; j < NUMBER_OF_TILES_ONSCREEN_Y ; j++ ) {
         for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
             Tile *tile = [ [ Tile alloc ] init ];
             tile->tileType = TILE_DEFAULT;
-            
-            //tile->tileSprite = [ tileArray objectAtIndex: ( i + j * NUMBER_OF_TILES_ONSCREEN_X ) ];
-            
             tile->position = ccp( i, j );
             [ tileDataArray addObject: tile ];
         }
@@ -808,16 +553,15 @@
     for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
         for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
             // grab the tile at ( i+c.x, j+c.y )
-            //Tile *tile = [ dungeonFloor->tileDataArray objectAtIndex: ((i+c.x) + ((j+c.y) * NUMBER_OF_TILES_ONSCREEN_X)) ];
             Tile *tile = [ self getTileForCGPoint: ccp(i+c.x, j+c.y) ];
             [ Tile renderTextureForTile: tile ];
             
-            //CCSprite *sprite = [ tileArray objectAtIndex: (i + ( j * NUMBER_OF_TILES_ONSCREEN_X ) ) ];
             CCSprite *sprite = [ self getTileSpriteForCGPoint: ccp(i, j) ];
             sprite.texture = tile->texture;
         }
     }
 }
+
 
 -( Tile * ) getTileForCGPoint: ( CGPoint ) p  {
     Tile *tile = nil;
@@ -831,8 +575,6 @@
     sprite = [ tileArray objectAtIndex: p.x + p.y * NUMBER_OF_TILES_ONSCREEN_X ];
     return sprite;
 }
-
-
 
 
 /*
@@ -860,11 +602,10 @@
  ====================
  */
 -( Tile * ) getTileForIndex: ( NSInteger ) index {
-    Tile *t;
+    Tile *t = nil;
     @try {
         t = [ tileDataArray objectAtIndex: index ];
     } @catch ( NSException *exception ) {
-        MLOG( @"" );
         [ self addEditorHUD: editorHUD ];
         [ self addMessage: [NSString stringWithFormat:@"%@", exception] ];
         [ self addMessage: [NSString stringWithFormat:@"index: %d", index] ];
@@ -881,24 +622,66 @@
  */
 
 // magic numbers below are for 16x16 tiles w/ 150 tiles on-screen
+
+static BOOL isMagicXArrayInitialized = NO;
+static BOOL isMagicYArrayInitialized = NO;
+
+static NSUInteger magicXArray[ 352 ];
+static NSUInteger magicYArray[ 480 ];
+
+void initializeMagicXArray() {
+    for ( int i = 0; i < 10; i++ ) {
+        for ( int j = 0; j < 32; j++ ) {
+            magicXArray[ j + (i * 32) ] = i;
+        }
+    }
+}
+
+void initializeMagicYArray() {
+    NSUInteger counter = 14;
+    for ( int i = 0; i < 14; i++ ) {
+        for ( int j = 0; j < 32; j++ ) {
+            magicYArray[ j + (i * 32) ] = counter;
+        }
+        counter--;
+    }
+}
+
+
+
 NSUInteger getMagicX( NSUInteger x ) {
+    if ( ! isMagicXArrayInitialized ) {
+        initializeMagicXArray();
+        isMagicXArrayInitialized = YES;
+    }
+    return magicXArray[ x ];
+    
+    /*
     return
-        ( x < 32 ) ? 0 :
-        ( x < 64 ) ? 1 :
-        ( x < 96 ) ? 2 :
-        ( x < 128 ) ? 3 :
-        ( x < 150 ) ? 4 :
-        ( x < 192 ) ? 5 :
-        ( x < 224 ) ? 6 :
-        ( x < 256 ) ? 7 :
-        ( x < 288 ) ? 8 :
-        ( x < 320 ) ? 9 :
-        ( x < 352 ) ? 10 : -1 ;
+        ( x < 32 ) ? 0 :        // 32 =     0x020 = 0b0 0010 0000
+        ( x < 64 ) ? 1 :        // 64 =     0x040 = 0b0 0100 0000
+        ( x < 96 ) ? 2 :        // 96 =     0x060 = 0b0 0110 0000
+        ( x < 128 ) ? 3 :       // 128 =    0x080 = 0b0 1000 0000
+        ( x < 150 ) ? 4 :       // 150 =    0x0a0 = 0b0 1010 0000
+        ( x < 192 ) ? 5 :       // 192 =    0x0c0 = 0b0 1100 0000
+        ( x < 224 ) ? 6 :       // 224 =    0x0e0 = 0b0 1110 0000
+        ( x < 256 ) ? 7 :       // 256 =    0x100 = 0b1 0000 0000
+        ( x < 288 ) ? 8 :       // 288 =    0x120 = 0b1 0010 0000
+        ( x < 320 ) ? 9 :       // 320 =    0x140 = 0b1 0100 0000
+        ( x < 352 ) ? 10 : -1 ; // 352 =    0x160 = 0b1 0110 0000
+     */
 }
 
 
 // magic numbers below are for 16x16 tiles w/ 150 tiles on-screen
 NSUInteger getMagicY( NSUInteger y ) {
+    if ( ! isMagicYArrayInitialized ) {
+        initializeMagicYArray();
+        isMagicYArrayInitialized = YES;
+    }
+    return magicYArray[ y ];
+    
+    /*
     return
         ( y < 32 ) ? 14 :
         ( y < 64 ) ? 13 :
@@ -915,6 +698,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         ( y < 416 ) ? 2 :
         ( y < 448 ) ? 1 :
         ( y < 480 ) ? 0 : -1;
+     */
 }
 
 
@@ -947,9 +731,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     NSUInteger y = ( NSUInteger ) touchLocation.y;
     NSUInteger tx = getMagicX( x );
     NSUInteger ty = getMagicY( y );
-
-    
-    MLOG(@"getTileCGPointForTouch:  x = %d, y = %d, tx = %d, ty = %d", x, y, tx, ty );
     
     // calculate tile position based on (x,y)
     CGPoint returnPoint = ccp( tx, ty );
@@ -1011,12 +792,5 @@ NSUInteger getMagicY( NSUInteger y ) {
     MLOG( @"Returning tile " );
     return tile;
 }
-
-
-
-
-
-
-
 
 @end
