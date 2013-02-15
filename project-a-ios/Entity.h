@@ -11,11 +11,16 @@ typedef enum {
     ENTITY_T_ITEM
 } EntityTypes_t;
 
+@class CCMutableTexture2D;
+
 @interface Entity : NSObject {
 @public
     BOOL isPC;
     NSMutableString *name;
     CGPoint positionOnMap;
+    CCMutableTexture2D *texture;
 }
+
++( void ) drawTextureForEntity: ( Entity * ) entity;
 
 @end

@@ -66,14 +66,22 @@
     [ texture apply ];
     
     for (Entity *entity in data->contents) {
-        if ( [entity->name isEqualToString: @"Hero" ] ) {
+        if ( [entity->name isEqualToString: @"Mike" ] ) {
             // draw on the texture
             if ( data->isSelected ) {
                 [ texture fill: blue_alpha( 255 ) ];
                 [ texture apply ];
             } else {
-                [ texture fill: white ];
+                //[ texture fill: white ];
+                //[ texture apply ];
+                
+                for ( int i = 0; i < 8; i++ ) {
+                    for ( int j = 0; j < 8; j++ ) {
+                        [ texture setPixelAt: ccp(i, j) rgba: random_color ];
+                    }
+                }
                 [ texture apply ];
+                
             }
         } else if ( [ entity->name isEqualToString: @"Test1" ] ) {
             // Test1 will get rendered as colorFuzz

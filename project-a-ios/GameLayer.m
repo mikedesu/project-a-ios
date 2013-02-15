@@ -59,15 +59,16 @@
         [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 8 ];
         [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 9 ];
         [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 10 ];
-        
+        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_ICE withLevel: 11 ];
         
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
         Entity *hero = [ [ Entity alloc ] init ];
-        [ hero->name setString: @"Hero" ];
+        [ hero->name setString: @"Mike" ];
         
         pcEntity = hero;
         
+        [ Entity drawTextureForEntity: hero ];
         
         cameraAnchorPoint = ccp( 10, 10 );
         
@@ -97,7 +98,7 @@
         
         editorHUDIsVisible = NO;
         [ self initEditorHUD ];
-        //[ self addEditorHUD: editorHUD ];
+        [ self addEditorHUD: editorHUD ];
         
          playerHUDIsVisible = NO;
         [ self initPlayerHUD ];
@@ -403,6 +404,8 @@
     // reset the camera position
     cameraAnchorPoint.x = pcEntity->positionOnMap.x - 5;
     cameraAnchorPoint.y = pcEntity->positionOnMap.y - 7;
+    
+    [ self addMessage: [ NSString stringWithFormat: @"PC.position = (%d,%d)", (int)pcEntity->positionOnMap.x, (int)pcEntity->positionOnMap.y ] ];
 }
 
 
