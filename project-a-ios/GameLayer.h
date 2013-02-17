@@ -109,5 +109,6 @@ typedef enum {
 -( void ) selectTileAtPosition: ( CGPoint ) position;
 -( void ) resetCameraPosition;
 
+-( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b;
 
 @end
