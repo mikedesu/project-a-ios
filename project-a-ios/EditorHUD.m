@@ -8,6 +8,8 @@
 
 @implementation EditorHUD
 
+@synthesize label;
+
 -( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h {
     if ( ( self = [ super initWithColor:color width:w height:h ] ) ) {
         //CGSize size = [[ CCDirector sharedDirector ] winSize];

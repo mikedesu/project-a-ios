@@ -9,6 +9,10 @@
 
 @implementation DungeonFloor
 
+@synthesize height;
+@synthesize width;
+@synthesize tileDataArray;
+
 /*
  ====================
  init

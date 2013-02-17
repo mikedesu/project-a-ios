@@ -7,9 +7,10 @@
 #import "cocos2d.h"
 
 @interface PlayerHUD : CCLayerColor {
-@public
     CCLabelTTF *label;
 }
+
+@property (atomic) CCLabelTTF *label;
 
 -( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h;
 

@@ -14,12 +14,17 @@ typedef enum {
 @class CCMutableTexture2D;
 
 @interface Entity : NSObject {
-@public
+//@public
     BOOL isPC;
     NSMutableString *name;
     CGPoint positionOnMap;
     CCMutableTexture2D *texture;
 }
+
+@property (atomic, assign) BOOL isPC;
+@property (atomic) NSMutableString *name;
+@property (atomic, assign) CGPoint positionOnMap;
+@property (atomic) CCMutableTexture2D *texture;
 
 +( void ) drawTextureForEntity: ( Entity * ) entity;
 

@@ -8,4 +8,6 @@
     NSMutableArray *floorArray;
 }
 
+@property (atomic) NSMutableArray *floorArray;
+
 @end

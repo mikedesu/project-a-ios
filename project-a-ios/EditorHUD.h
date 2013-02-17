@@ -9,8 +9,9 @@
 
 #define NUMBER_OF_LABELS        4
 @interface EditorHUD : CCLayerColor {
-@public
     CCLabelTTF *label;
 }
+
+@property (atomic) CCLabelTTF *label;
 
 @end

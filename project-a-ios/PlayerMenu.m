@@ -9,6 +9,8 @@
 
 @implementation PlayerMenu
 
+@synthesize label;
+
 -( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h {
     if ( ( self = [ super initWithColor: color width: w height: h ] ) ) {
         label = [[ CCLabelTTF alloc ] initWithString:@"PlayerMenu" dimensions:CGSizeMake(w, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:12];

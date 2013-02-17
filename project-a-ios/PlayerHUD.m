@@ -8,6 +8,8 @@
 
 @implementation PlayerHUD
 
+@synthesize label;
+
 /*
  ====================
  initWithColor: color width: w height: h

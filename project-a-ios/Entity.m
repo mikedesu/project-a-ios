@@ -9,6 +9,11 @@
 
 @implementation Entity
 
+@synthesize isPC;
+@synthesize name;
+@synthesize positionOnMap;
+@synthesize texture;
+
 /*
  ====================
  init

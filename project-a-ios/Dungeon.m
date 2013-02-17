@@ -8,6 +8,8 @@
 
 @implementation Dungeon
 
+@synthesize floorArray;
+
 -( id ) init {
     if ( ( self = [ super init ] ) ) {
         floorArray = [[ NSMutableArray alloc ] init ] ;

@@ -46,7 +46,7 @@
  ====================
  */
 +( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data {
-    Tile_t tileType = data->tileType;
+    Tile_t tileType = data.tileType;
     
     // Select our primary working color based on tileType
     Color_t color =
@@ -55,7 +55,7 @@
     (tileType==TILE_FLOOR_STONE) ? gray :
     blue ;
     
-    if (  data->isSelected ) {
+    if (  data.isSelected ) {
         Color_t tmpColor = newColor( color.r + 0xAA , color.g + 0xAA , color.b + 0x00, color.a );
         color = tmpColor;
     }
@@ -65,10 +65,10 @@
     [ texture fill: color ];
     [ texture apply ];
     
-    for (Entity *entity in data->contents) {
-        if ( [entity->name isEqualToString: @"Mike" ] ) {
+    for (Entity *entity in data.contents) {
+        if ( [[entity name] isEqualToString: @"Mike" ] ) {
             // draw on the texture
-            if ( data->isSelected ) {
+            if ( data.isSelected ) {
                 [ texture fill: blue_alpha( 255 ) ];
                 [ texture apply ];
             } else {
@@ -87,7 +87,7 @@
                 //[texture apply ];
                 
             }
-        } else if ( [ entity->name isEqualToString: @"Test1" ] ) {
+        } else if ( [ [entity name] isEqualToString: @"Test1" ] ) {
             // Test1 will get rendered as colorFuzz
             for ( int i = 0; i < 16; i++ ) {
                 for ( int j = 0; j < 16; j++ ) {
@@ -124,7 +124,7 @@
     for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
         for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
             CCSprite *sprite = [ tileArray objectAtIndex: i+j*NUMBER_OF_TILES_ONSCREEN_X ];
-            [ GameRenderer setTile: sprite withData: [ floor->tileDataArray objectAtIndex: (i+c.x)+((j+c.y)*floor->width) ] ];
+            [ GameRenderer setTile: sprite withData: [ [floor tileDataArray] objectAtIndex: (i+c.x)+((j+c.y)*[floor width]) ] ];
         }
     }
 }
@@ -154,15 +154,15 @@
     // can set up to 5 levels
     //NSAssert( level >= 0 && level <= 5 , @"Level should be >=0 || <= 5" );
     //int level = 6;
-    for ( int j = level-1; j < floor->height-(level-1); j++ ) {
-        for ( int i = level-1; i < floor->width-(level-1); i++ ) {
-            if ( (i == level-1 || i == floor->width-level) ) {
-                tile = [ floor->tileDataArray objectAtIndex: i + (j * floor->width) ];
-                tile->tileType = tileType;
+    for ( int j = level-1; j < [floor height ]-(level-1); j++ ) {
+        for ( int i = level-1; i < [floor width ]-(level-1); i++ ) {
+            if ( (i == level-1 || i == [floor width]-level) ) {
+                tile = [ [floor tileDataArray ] objectAtIndex: i + (j * [floor width]) ];
+                tile.tileType = tileType;
             }
-            if ( j == level-1 || j == floor->height-level ) {
-                tile = [ floor->tileDataArray objectAtIndex: i + (j * floor->width) ];
-                tile->tileType = tileType;
+            if ( j == level-1 || j == [floor height ]-level ) {
+                tile = [ [floor tileDataArray ] objectAtIndex: i + (j * [floor width ]) ];
+                tile.tileType = tileType;
             }
         }
     }
@@ -176,7 +176,7 @@
  */
 +( void ) setAllTiles: ( NSArray * ) tileArray toTileType: ( Tile_t ) tileType {
     for ( Tile * tile in tileArray ) {
-        tile->tileType = tileType;
+        tile.tileType = tileType;
     }
 }
 
@@ -186,7 +186,7 @@
  ====================
  */
 +( void ) setAllTilesInFloor: ( DungeonFloor * ) floor toTileType: ( Tile_t ) tileType {
-    [ GameRenderer setAllTiles: floor->tileDataArray toTileType: tileType ];
+    [ GameRenderer setAllTiles: [floor tileDataArray] toTileType: tileType ];
 }
 
 @end

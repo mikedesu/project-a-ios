@@ -58,7 +58,7 @@
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
         Entity *hero = [ [ Entity alloc ] init ];
-        [ hero->name setString: @"Mike" ];
+        [ [hero name] setString: @"Mike" ];
         
         pcEntity = hero;
         
@@ -71,8 +71,8 @@
  
         CGPoint startPoint = ccp( 15, 17 );
         Tile *startTile = nil;
-        for ( Tile *t in floor->tileDataArray ) {
-            if ( t->position.x == startPoint.x && t->position.y == startPoint.y ) {
+        for ( Tile *t in [ floor tileDataArray ] ) {
+            if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
                 startTile = t;
                 break;
             }
@@ -80,8 +80,8 @@
         [ self setEntity:hero onTile: startTile ];
         
 //        selectedTilePoint = hero->positionOnMap;
-        [ self selectTileAtPosition: hero->positionOnMap ];
-        selectedTilePoint = hero->positionOnMap;
+        [ self selectTileAtPosition: [hero positionOnMap] ];
+        selectedTilePoint = [hero positionOnMap ];
         
         
         dLog = [ [ NSMutableArray alloc ] init ];
@@ -239,7 +239,7 @@
  ====================
  */
 -( void ) updateEditorHUDLabel {
-    [editorHUD->label setString: [ NSString stringWithFormat: @"%@%@%@%@%@%@%@",
+    [[editorHUD label] setString: [ NSString stringWithFormat: @"%@%@%@%@%@%@%@",
                                   [dLog objectAtIndex: dLogIndex+0 ],
                                   [dLog objectAtIndex: dLogIndex+1 ],
                                   [dLog objectAtIndex: dLogIndex+2 ],
@@ -334,8 +334,8 @@
  ====================
  */
 -( void ) updatePlayerHUDLabel {
-    [ playerHUD->label setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
-                                   [ NSString stringWithFormat: @"%@ the Great     T:%d", pcEntity->name, turnCounter ],
+    [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
+                                   [ NSString stringWithFormat: @"%@ the Great     T:%d", [pcEntity name], turnCounter ],
                                    [ NSString stringWithFormat: @"St:0 Dx:0 Co:0 In:0 Wi:0 Ch:0 Align" ],
                                    [ NSString stringWithFormat: @"Dlvl:1 $:0 HP:1/1 Pw: 0/0 AC:0 Xp:0/100"]
                                    ]];
@@ -396,7 +396,7 @@
     //selectedTile = touchedTileIndex;
     
     Tile *prevSelectedTile = [ self getTileForCGPoint: selectedTilePoint ];
-    if ( prevSelectedTile->position.x == mapPoint.x && prevSelectedTile->position.y == mapPoint.y ) {
+    if ( prevSelectedTile.position.x == mapPoint.x && prevSelectedTile.position.y == mapPoint.y ) {
         
         [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
         selectedTilePoint = mapPoint;   // sets this tile to be remembered
@@ -410,7 +410,7 @@
         
         Tile *selectedTile = [ self getTileForCGPoint: mapPoint ];
         
-        if ( pcEntity->positionOnMap.x == mapPoint.x && pcEntity->positionOnMap.y == mapPoint.y ) {
+        if ( [pcEntity positionOnMap].x  == mapPoint.x && [pcEntity positionOnMap].y == mapPoint.y ) {
             heroTouches++;
             if ( heroTouches == 2 ) {
                 if ( ! playerMenuIsVisible ) {
@@ -700,7 +700,7 @@
             [ Tile renderTextureForTile: tile ];
             
             CCSprite *sprite = [ self getTileSpriteForCGPoint: ccp(i, j) ];
-            sprite.texture = tile->texture;
+            sprite.texture = tile.texture;
         }
     }
 }
@@ -708,7 +708,7 @@
 
 -( Tile * ) getTileForCGPoint: ( CGPoint ) p  {
     Tile *tile = nil;
-    tile = [ floor->tileDataArray objectAtIndex: p.x + ( p.y * floor->width ) ];
+    tile = [ [ floor tileDataArray ] objectAtIndex: p.x + ( p.y * [ floor width ] ) ];
     return tile;
 }
 
@@ -893,8 +893,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile {
-    entity->positionOnMap = tile->position;
-    [ tile->contents addObject: entity ];
+    entity.positionOnMap = tile.position;
+    [ tile.contents addObject: entity ];
 }
 
 
@@ -917,8 +917,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( Tile * ) getMapTileFromPoint: (CGPoint) p {
     Tile *tile = nil;
-    for ( Tile *t in floor->tileDataArray ) {
-        if ( t->position.x == p.x && t->position.y == p.y ) {
+    for ( Tile *t in [ floor tileDataArray ] ) {
+        if ( t.position.x == p.x && t.position.y == p.y ) {
             tile = t;
             break;
         }
@@ -955,7 +955,7 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( Entity * ) getEntityForName: ( NSString * ) name {
     Entity *entity = nil;
     for ( Entity *e in entityArray ) {
-        if ( [e->name isEqualToString: name ] ) {
+        if ( [e.name isEqualToString: name ] ) {
             entity = e;
             break;
         }
@@ -976,9 +976,9 @@ NSUInteger getMagicY( NSUInteger y ) {
     Tile *tile = [ self getMapTileFromPoint: position ];
     //MLOG( @"Tile.position: (%f, %f)", tile->position.x, tile->position.y );
     
-    if ( tile->tileType != TILE_VOID ) {
-        Tile *prevTile = [ self getTileForCGPoint: entity->positionOnMap ];
-        [prevTile->contents removeObject: entity];
+    if ( tile.tileType != TILE_VOID ) {
+        Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
+        [prevTile.contents removeObject: entity];
         [ self setEntity: entity onTile: tile ];
         // [ self movePCEntityToTile: tile ];
         // [ self movePCEntityToCGPoint: tile->position ];
@@ -996,8 +996,8 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( void ) selectTileAtPosition: ( CGPoint ) position {
     if ( position.x >= 0 && position.y >= 0 ) {
         Tile *tile = [ self getMapTileFromPoint: position ];
-        tile->isSelected = ! tile->isSelected;
-        if ( tile->isSelected ) {
+        tile.isSelected = ! tile.isSelected;
+        if ( tile.isSelected ) {
             selectedTilePoint = position;
         } else {
             selectedTilePoint.x = -1;
@@ -1016,8 +1016,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) resetCameraPosition {
     // reset the camera position
-    cameraAnchorPoint.x = pcEntity->positionOnMap.x - 5;
-    cameraAnchorPoint.y = pcEntity->positionOnMap.y - 7;
+    cameraAnchorPoint.x = pcEntity.positionOnMap.x - 5;
+    cameraAnchorPoint.y = pcEntity.positionOnMap.y - 7;
 }
 
 
@@ -1031,10 +1031,10 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b {
     MLOG( @"distanceFromTile: a toTile: b" );
-    NSInteger ax = (NSInteger)a->position.x;
-    NSInteger bx = (NSInteger)b->position.x;
-    NSInteger ay = (NSInteger)a->position.y;
-    NSInteger by = (NSInteger)b->position.y;
+    NSInteger ax = (NSInteger)a.position.x;
+    NSInteger bx = (NSInteger)b.position.x;
+    NSInteger ay = (NSInteger)a.position.y;
+    NSInteger by = (NSInteger)b.position.y;
     
     return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
 }
