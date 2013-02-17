@@ -1,4 +1,4 @@
 #!/bin/bash
 
-#rsync -av --progress ../playgifts365 /Users/Mike/Dropbox2/Dropbox/GG365\ Special/Mike\'s\ Folder/
-rsync -av --progress --bwlimit=20 ../project-a-ios /Users/Mike/Dropbox2/Dropbox/GG365\ Special/Mike\'s\ Folder2/.
+#rsync -av --progress --bwlimit=20 ../project-a-ios /Users/Mike/Dropbox2/Dropbox/GG365\ Special/Mike\'s\ Folder2/.
+rsync -av --progress ../project-a-ios /Users/Mike/Dropbox2/Dropbox/GG365\ Special/Mike\'s\ Folder2/.
