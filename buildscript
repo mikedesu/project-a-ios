@@ -1,4 +1,0 @@
-#!/bin/bash
-# this is Mike Bell's build script
-
-xcodebuild -Wall -sdk iphonesimulator6.1 -arch i386 install DSTROOT=/Volumes/ramdisk/tmp/test && waxsim -f ipad /Volumes/ramdisk/tmp/test/Applications/project-a-ios.app
