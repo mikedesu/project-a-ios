@@ -35,6 +35,7 @@
         
         name = [ [ NSMutableString alloc ] init ];
         level = 1;
+        entityType = ENTITY_T_VOID;
         
         stats.strength = 1;
         stats.dexterity = 1;

@@ -31,6 +31,7 @@ typedef struct {
     CCMutableTexture2D *texture;
     
     NSMutableString *name;
+    EntityTypes_t entityType;
     NSUInteger level;
     EntityStats_t stats;
     NSUInteger money;
@@ -43,6 +44,7 @@ typedef struct {
 @property (atomic) CCMutableTexture2D *texture;
 
 @property (atomic) NSMutableString *name;
+@property (atomic, assign) EntityTypes_t entityType;
 @property (atomic, assign) NSUInteger level;
 @property (atomic, assign) EntityStats_t stats;
 @property (atomic, assign) NSUInteger money;

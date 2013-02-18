@@ -58,7 +58,9 @@
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
         Entity *hero = [ [ Entity alloc ] init ];
-        [ [hero name] setString: @"Mike" ];
+        [ hero.name setString: @"Mike" ];
+        hero.entityType = ENTITY_T_PC;
+        hero.isPC = YES;
         
         pcEntity = hero;
         
