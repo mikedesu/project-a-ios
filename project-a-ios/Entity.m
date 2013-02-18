@@ -10,9 +10,14 @@
 @implementation Entity
 
 @synthesize isPC;
-@synthesize name;
 @synthesize positionOnMap;
 @synthesize texture;
+
+@synthesize name;
+@synthesize level;
+@synthesize stats;
+@synthesize money;
+@synthesize inventoryArray;
 
 /*
  ====================
@@ -24,15 +29,34 @@
 -( id ) init {
     if ( ( self = [super init] ) ) {
         isPC = NO;
-        name = [ [ NSMutableString alloc ] init ];
         positionOnMap.x = 0;
         positionOnMap.y = 0;
         texture = nil;
+        
+        name = [ [ NSMutableString alloc ] init ];
+        level = 1;
+        
+        stats.strength = 1;
+        stats.dexterity = 1;
+        stats.constitution = 1;
+        stats.intelligence = 1;
+        stats.wisdom = 1;
+        stats.charisma = 1;
+        
+        money = 0;
+        inventoryArray = [ [ NSMutableArray alloc ] init ];
     }
     return self;
 }
 
 
+/*
+ ====================
+ drawTextureForEntity: entity
+ 
+ draws a texture for the given entity
+ ====================
+ */
 +( void ) drawTextureForEntity: ( Entity * ) entity {
     [entity->texture fill: ccc4(0,0,0,0)];
     

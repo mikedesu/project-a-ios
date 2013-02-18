@@ -11,20 +11,42 @@ typedef enum {
     ENTITY_T_ITEM
 } EntityTypes_t;
 
+
+typedef struct {
+    NSUInteger strength;
+    NSUInteger dexterity;
+    NSUInteger constitution;
+    NSUInteger intelligence;
+    NSUInteger wisdom;
+    NSUInteger charisma;
+} EntityStats_t;
+
+
 @class CCMutableTexture2D;
 
 @interface Entity : NSObject {
 //@public
     BOOL isPC;
-    NSMutableString *name;
     CGPoint positionOnMap;
     CCMutableTexture2D *texture;
+    
+    NSMutableString *name;
+    NSUInteger level;
+    EntityStats_t stats;
+    NSUInteger money;
+    
+    NSMutableArray *inventoryArray;
 }
 
 @property (atomic, assign) BOOL isPC;
-@property (atomic) NSMutableString *name;
 @property (atomic, assign) CGPoint positionOnMap;
 @property (atomic) CCMutableTexture2D *texture;
+
+@property (atomic) NSMutableString *name;
+@property (atomic, assign) NSUInteger level;
+@property (atomic, assign) EntityStats_t stats;
+@property (atomic, assign) NSUInteger money;
+@property (atomic) NSMutableArray *inventoryArray;
 
 +( void ) drawTextureForEntity: ( Entity * ) entity;
 
