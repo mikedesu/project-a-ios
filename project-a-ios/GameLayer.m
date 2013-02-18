@@ -34,7 +34,7 @@
 	if ( ( self = [ super init ] ) ) {
         self.isTouchEnabled = YES;
         selectedTile = -1;
-        prevSelectedTile = -1;
+        //prevSelectedTile = -1;
         touchedTileIndex = -1;
         isTouched = NO;
         
@@ -82,8 +82,10 @@
         [ self setEntity:hero onTile: startTile ];
         
 //        selectedTilePoint = hero->positionOnMap;
-        [ self selectTileAtPosition: [hero positionOnMap] ];
-        selectedTilePoint = [hero positionOnMap ];
+        //[ self selectTileAtPosition: [hero positionOnMap] ];
+        //selectedTilePoint = [hero positionOnMap ];
+        selectedTilePoint.x = -1;
+        selectedTilePoint.y = -1;
         
         
         dLog = [ [ NSMutableArray alloc ] init ];
@@ -100,6 +102,10 @@
         editorHUDIsVisible = NO;
         [ self initEditorHUD ];
         [ self addEditorHUD: editorHUD ];
+        
+        monitorIsVisible = NO;
+        [ self initMonitor ];
+        [ self addMonitor: monitor ];
         
          playerHUDIsVisible = NO;
         [ self initPlayerHUD ];
@@ -150,13 +156,10 @@
  */
 -( void ) receiveNotification: ( NSNotification * ) notification {
     if ( [[ notification name ] isEqualToString: @"TestNotification1" ] ) {
-        [ self addMessage: @"TestNotification1" ];
         MLOG( @"TestNotification1" );
     } else if ( [[ notification name ] isEqualToString: @"TestNotification2" ] ) {
-        [ self addMessage: @"TestNotification2" ];
         MLOG( @"TestNotification2" );
     } else if ( [[ notification name ] isEqualToString: @"ShowHideEditorHUD" ] ) {
-        [ self addMessage: @"ShowHideEditorHUD" ];
         MLOG( @"ShowHideEditorHUD" );
         if ( ! editorHUDIsVisible ) {
             [ self addEditorHUD: editorHUD ];
@@ -164,9 +167,21 @@
             [ self removeEditorHUD: editorHUD ];
         }
     } else if ( [[ notification name ] isEqualToString: @"MoveNotification" ] ) {
-        [ self addMessage: @"MoveNotification" ];
         MLOG( @"MoveNotification" );
+        
+        [ self removePlayerMenu: playerMenu ];
+        gameState = GAMESTATE_T_GAME_PC_SELECTMOVE;
+        
+    } else if ( [[ notification name ] isEqualToString: @"AttackNotification" ] ) {
+        MLOG( @"AttackNotification" );
+        
+        [ self removePlayerMenu: playerMenu ];
+        gameState = GAMESTATE_T_GAME;
+    } else {
+        MLOG( @"Notification not handled: %@", notification.name );
     }
+    
+    
 }
 
 #pragma mark - Menus and HUD code
@@ -231,6 +246,47 @@
     editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) );
     [ self updateEditorHUDLabel ];
 }
+
+
+/*
+ ====================
+ initMonitor
+ 
+ initializes the Editor HUD 'Monitor'
+ ====================
+ */
+-( void ) initMonitor {
+    CGSize size = [[CCDirector sharedDirector] winSize];
+    monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:50 ];
+    monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
+    [ self updateMonitorLabel ];
+}
+
+
+-(void) addMonitor: (EditorHUD *) monitor {
+    if ( ! self->monitorIsVisible ) {
+        [ self addChild: monitor ];
+        monitorIsVisible = YES;
+    }
+}
+
+
+-(void) removeMonitor: (EditorHUD *) monitor {
+    if ( self->monitorIsVisible ) {
+        [ self removeChild: monitor cleanup: NO ];
+    }
+}
+
+
+-(void) updateMonitorLabel {
+    [monitor.label setString:
+     [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nHeroTouches: %d", gameState, selectedTilePoint.x, selectedTilePoint.y, pcEntity.positionOnMap.x, pcEntity.positionOnMap.y, heroTouches ]
+     ];
+}
+
+
+
+
 
 
 /*
@@ -363,6 +419,10 @@
     if ( editorHUDIsVisible ) {
         [ self updateEditorHUDLabel ];
     }
+    if ( monitorIsVisible ) {
+        [self updateMonitorLabel];
+    }
+    
     if ( playerHUDIsVisible ) {
         [ self updatePlayerHUDLabel ];
     }
@@ -383,7 +443,7 @@
  ====================
  */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    //MLOG( @"touches began" );
+    MLOG( @"ccTouchesBegan" );
 	UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = YES;
@@ -391,92 +451,127 @@
     CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
     CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
     
-    //touchedTileIndex = touchedTilePoint.x + touchedTilePoint.y * floor->width;
-    //touchedTileIndex = touchedTilePointAndOffset.x + ( touchedTilePointAndOffset.y * NUMBER_OF_TILES_ONSCREEN_X );
+    [ self addMessage: [NSString stringWithFormat: @"touched tile (%.0f,%.0f)", mapPoint.x, mapPoint.y ]];
+    //[ self addMessage: [NSString stringWithFormat: @"selectedTilePoint (%.0f,%.0f)", selectedTilePoint.x, selectedTilePoint.y ]];
     
-    //prevSelectedTile = selectedTile;
-    //selectedTile = touchedTileIndex;
+    //MLOG( @"selectedTilePoint: (%f, %f)", selectedTilePoint.x, selectedTilePoint.y );
     
-    Tile *prevSelectedTile = [ self getTileForCGPoint: selectedTilePoint ];
-    if ( prevSelectedTile.position.x == mapPoint.x && prevSelectedTile.position.y == mapPoint.y ) {
+    // valid selected point
+    if ( selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0 ) {
         
-        [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
-        selectedTilePoint = mapPoint;   // sets this tile to be remembered
+        //[ self addMessage: @"Tile was previously selected" ];
+    
         
-        //MLOG( @"touchedTilePoint: (%f, %f)", touchedTilePoint.x , touchedTilePoint.y );
-        //MLOG( @"mapPoint: (%f, %f)", mapPoint.x, mapPoint.y );
-        
-        //[ self moveEntity: pcEntity toPosition: mapPoint ];
-        //[ self resetCameraPosition ];
         [ self selectTileAtPosition: mapPoint ];
         
-        Tile *selectedTile = [ self getTileForCGPoint: mapPoint ];
+        if ( pcEntity.positionOnMap.x == mapPoint.x && pcEntity.positionOnMap.y == mapPoint.y ) {
+            [ self addMessage: @"Selected Player" ];
+            heroTouches++;
+            
+            if ( heroTouches == 2) {
+                [ self addPlayerMenu: playerMenu ];
+                heroTouches = 0;
+            } else if ( heroTouches == 1 && playerMenuIsVisible ) {
+                [ self removePlayerMenu: playerMenu ];
+                heroTouches = 0;
+            }
+            
+        }
+        
+        
+        
+        /*
+        Tile *prevSelectedTile = [ self getTileForCGPoint: selectedTilePoint ];
+        if ( prevSelectedTile.position.x == mapPoint.x && prevSelectedTile.position.y == mapPoint.y ) {
+            
+            [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
+            selectedTilePoint = mapPoint;   // sets this tile to be remembered
+            [ self selectTileAtPosition: mapPoint ];
+            
+            //Tile *selectedTile = [ self getTileForCGPoint: mapPoint ];
+            
+            if ( [pcEntity positionOnMap].x  == mapPoint.x && [pcEntity positionOnMap].y == mapPoint.y ) {
+                
+                heroTouches++;
+                [ self addMessage: [NSString stringWithFormat: @"heroTouches=%d", heroTouches ]];
+                
+                if ( heroTouches == 2 ) {
+                    if ( ! playerMenuIsVisible ) {
+                        [ self addPlayerMenu: playerMenu ];
+                    } else {
+                        [ self removePlayerMenu: playerMenu ];
+                    }
+                    heroTouches = 0;
+                } else if ( heroTouches == 1 && playerMenuIsVisible ) {
+                    [ self removePlayerMenu: playerMenu ];
+                    heroTouches = 0;
+                } else if ( heroTouches == 1 && !playerMenuIsVisible) {
+                    [ self selectTileAtPosition: mapPoint ];
+                }
+            } else {
+                
+                //[ self moveEntity:pcEntity toPosition:mapPoint ];
+                //[ self resetCameraPosition ];
+                //turnCounter++;
+                
+            }
+        
+        }
+    
+        else {
+            
+        
+            
+            if ( gameState == GAMESTATE_T_GAME_PC_SELECTMOVE ) {
+                
+                [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
+                [ self moveEntity:pcEntity toPosition:mapPoint ];
+                [ self resetCameraPosition ];
+                //[ self selectTileAtPosition: mapPoint ];
+                turnCounter++;
+                
+                gameState = GAMESTATE_T_GAME;
+                
+            } else {
+                
+                [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
+                selectedTilePoint = mapPoint;   // sets this tile to be remembered
+                [ self selectTileAtPosition: mapPoint ];
+                
+                //gameState = GAMESTATE_T_GAME_PC_SELECTMOVE;
+                
+            }
+         
+        }
+        
+          */
+    }
+    
+    // invalid selected point / nothing selected
+    else {
+        //[ self addMessage: @"Nothing previously selected" ];
+        
+        
+        [ self selectTileAtPosition: mapPoint ];
+        
         
         if ( [pcEntity positionOnMap].x  == mapPoint.x && [pcEntity positionOnMap].y == mapPoint.y ) {
             heroTouches++;
-            if ( heroTouches == 2 ) {
-                if ( ! playerMenuIsVisible ) {
-                    [ self addPlayerMenu: playerMenu ];
-                } else {
-                    [ self removePlayerMenu: playerMenu ];
-                }
+            
+            if ( heroTouches == 2) {
+                [ self addPlayerMenu: playerMenu ];
                 heroTouches = 0;
             } else if ( heroTouches == 1 && playerMenuIsVisible ) {
                 [ self removePlayerMenu: playerMenu ];
                 heroTouches = 0;
             }
-        } else {
-            [ self moveEntity:pcEntity toPosition:mapPoint ];
-            [ self resetCameraPosition ];
-            //[ self selectTileAtPosition: mapPoint ];
-            turnCounter++;
         }
-        
-    } else {
-        
-        [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
-        selectedTilePoint = mapPoint;   // sets this tile to be remembered
-        
-        //MLOG( @"touchedTilePoint: (%f, %f)", touchedTilePoint.x , touchedTilePoint.y );
-        //MLOG( @"mapPoint: (%f, %f)", mapPoint.x, mapPoint.y );
-        
-        //[ self moveEntity: pcEntity toPosition: mapPoint ];
-        //[ self resetCameraPosition ];
-        [ self selectTileAtPosition: mapPoint ];
-        
-        //Tile *selectedTile = [ self getTileForCGPoint: mapPoint ];
-        
-        /*
-        if ( pcEntity->positionOnMap.x == mapPoint.x && pcEntity->positionOnMap.y == mapPoint.y ) {
-            heroTouches++;
-            if ( heroTouches == 2 ) {
-                if ( ! playerMenuIsVisible ) {
-                    [ self addPlayerMenu: playerMenu ];
-                } else {
-                    [ self removePlayerMenu: playerMenu ];
-                }
-                heroTouches = 0;
-            } else if ( heroTouches == 1 && playerMenuIsVisible ) {
-                [ self removePlayerMenu: playerMenu ];
-                heroTouches = 0;
-            }
-        } else {
-            //[ self moveEntity:pcEntity toPosition:mapPoint ];
-            //[ self resetCameraPosition ];
-            //[ self selectTileAtPosition: mapPoint ];
-            //turnCounter++;
-        }
-         */
-        
+         
     }
     
     
+    [ self updateMonitorLabel ];
     
-    
-    
-    //[ self addMessage: [ NSString stringWithFormat: @"PC.position = (%d,%d)", (int)pcEntity->positionOnMap.x, (int)pcEntity->positionOnMap.y ] ];
-    //[ self addMessage: [ NSString stringWithFormat: @"Rolled d6+1...%ld!", rollDiceWithModifier(6, 1, 1) ] ];
-    //[ self addMessage: [ NSString stringWithFormat: @"Turn: %d", turnCounter ] ];
     
 }
 
@@ -974,16 +1069,13 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
-    MLOG( @"moveEntity: toPosition:" );
+    MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
+    [ self addMessage: [NSString stringWithFormat: @"%@ -> (%.0f,%.0f)", entity.name, position.x, position.y]];
     Tile *tile = [ self getMapTileFromPoint: position ];
-    //MLOG( @"Tile.position: (%f, %f)", tile->position.x, tile->position.y );
-    
     if ( tile.tileType != TILE_VOID ) {
         Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
         [prevTile.contents removeObject: entity];
         [ self setEntity: entity onTile: tile ];
-        // [ self movePCEntityToTile: tile ];
-        // [ self movePCEntityToCGPoint: tile->position ];
     }
 }
 
@@ -996,16 +1088,58 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) selectTileAtPosition: ( CGPoint ) position {
-    if ( position.x >= 0 && position.y >= 0 ) {
-        Tile *tile = [ self getMapTileFromPoint: position ];
-        tile.isSelected = ! tile.isSelected;
-        if ( tile.isSelected ) {
-            selectedTilePoint = position;
+    
+    if ( selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0 ) {
+    
+        Tile *prevTile = [ self getMapTileFromPoint: selectedTilePoint ];
+        prevTile.isSelected = NO;
+        selectedTilePoint.x = -1;
+        selectedTilePoint.y = -1;
+        
+        if ( position.x >= 0 && position.y >= 0 ) {
+            
+            Tile *tile = [ self getMapTileFromPoint: position ];
+            
+            if ( prevTile.position.x == position.x && prevTile.position.y == position.y ) {
+                tile.isSelected = NO;
+                selectedTilePoint.x = -1;
+                selectedTilePoint.y = -1;
+                
+            } else {
+            
+                tile.isSelected = ! tile.isSelected;
+                
+                if ( tile.isSelected ) {
+                    
+                    selectedTilePoint.x = position.x;
+                    selectedTilePoint.y = position.y;
+                    
+                } else {
+                    
+                    selectedTilePoint.x = -1;
+                    selectedTilePoint.y = -1;
+                    
+                }
+            }
         } else {
-            selectedTilePoint.x = -1;
-            selectedTilePoint.y = -1;
+            // invalid point fed into selection
+            MLOG( @"Invalid point: (%.0f,%.0f)", position.x, position.y );
         }
+    } else {
+        if ( position.x >= 0 && position.y >= 0 ) {
+            
+            Tile *tile = [ self getMapTileFromPoint: position ];
+            tile.isSelected = YES;
+            selectedTilePoint = position;
+        
+        } else {
+            
+            // invalid point fed into selection
+            MLOG( @"Invalid point: (%.0f,%.0f)", position.x, position.y );
+        }
+ 
     }
+    
 }
 
 

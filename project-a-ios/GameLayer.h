@@ -9,6 +9,7 @@
 typedef enum {
     GAMESTATE_T_MAINMENU=0,
     GAMESTATE_T_GAME,
+    GAMESTATE_T_GAME_PC_SELECTMOVE,
 } GameState_t;
 
 @class DungeonFloor;
@@ -18,6 +19,8 @@ typedef enum {
 @class Tile;
 
 @interface GameLayer : CCLayer <UIAlertViewDelegate> {
+    
+    GameState_t gameState;
     
     CGPoint selectedTilePoint;
     
@@ -36,13 +39,16 @@ typedef enum {
     BOOL isTouched;
     NSInteger touchedTileIndex;
     NSInteger selectedTile;
-    NSInteger prevSelectedTile;
+    //NSInteger prevSelectedTile;
     
     NSInteger heroTouches;
     NSUInteger turnCounter;
     
     BOOL editorHUDIsVisible;
+    BOOL monitorIsVisible;
     EditorHUD *editorHUD;
+    EditorHUD *monitor;
+    
     
     BOOL playerHUDIsVisible;
     PlayerHUD *playerHUD;
@@ -70,6 +76,14 @@ typedef enum {
 -( void ) addEditorHUD: ( EditorHUD * ) hud;
 -( void ) removeEditorHUD: ( EditorHUD * ) hud;
 -( void ) updateEditorHUDLabel;
+
+-( void ) initMonitor;
+-( void ) addMonitor: ( EditorHUD * ) monitor;
+-( void ) removeMonitor: ( EditorHUD * ) monitor;
+-( void ) updateMonitorLabel;
+
+
+
 
 -( void ) initPlayerHUD;
 -( void ) addPlayerHUD: ( PlayerHUD * ) hud;
