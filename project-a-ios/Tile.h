@@ -5,13 +5,13 @@
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
 typedef enum {
-    TILE_VOID=0,
+    TILE_FLOOR_VOID=0,
     TILE_FLOOR_GRASS,
     TILE_FLOOR_STONE,
     TILE_FLOOR_ICE,
 } Tile_t;
 
-#define TILE_DEFAULT    TILE_FLOOR_GRASS
+#define TILE_FLOOR_DEFAULT    TILE_FLOOR_GRASS
 //#define TILE_DEFAULT    TILE_ICE
 
 @class CCMutableTexture2D;

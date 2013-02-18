@@ -22,7 +22,7 @@
  */
 -( id ) init {
     if ( ( self = [ super init ] ) ) {
-        self->tileType = TILE_DEFAULT;
+        self->tileType = TILE_FLOOR_DEFAULT;
         self->isSelected = NO;
         self->needsRedraw = YES;
         //self->tileSprite = nil;
@@ -82,7 +82,7 @@
         
         // Select our primary working color based on tileType
         Color_t color =
-        (tileType==TILE_VOID) ?  black :
+        (tileType==TILE_FLOOR_VOID) ?  black :
         (tileType==TILE_FLOOR_GRASS) ? green :
         (tileType==TILE_FLOOR_STONE) ? gray :
         blue ;

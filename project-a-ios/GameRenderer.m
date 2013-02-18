@@ -50,7 +50,7 @@
     
     // Select our primary working color based on tileType
     Color_t color =
-    (tileType==TILE_VOID) ?  black :
+    (tileType==TILE_FLOOR_VOID) ?  black :
     (tileType==TILE_FLOOR_GRASS) ? green :
     (tileType==TILE_FLOOR_STONE) ? gray :
     blue ;
@@ -167,6 +167,34 @@
         }
     }
 }
+
+
++(void) setDefaultTileArrayBoundary: (DungeonFloor *) floor {
+    [ GameRenderer setAllTilesInFloor: floor toTileType: TILE_FLOOR_VOID ];
+    /*
+    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 1 ];
+    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 2 ];
+    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 3 ];
+    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 4 ];
+    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 5 ];
+    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 6 ];
+    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 7 ];
+    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 8 ];
+    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 9 ];
+    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 10 ];
+     */
+}
+
+
++(void) setTileAtPosition: (CGPoint) position onFloor: (DungeonFloor *) floor toType: (Tile_t) tileType {
+    [((Tile *)[floor.tileDataArray objectAtIndex: position.x + ( position.y * floor.width) ]) setTileType: tileType ];
+}
+
++(void) setTile: (Tile *) tile toType: (Tile_t) tileType {
+    tile.tileType = tileType;
+}
+
+
 
 
 /*

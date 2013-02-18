@@ -38,24 +38,23 @@
         touchedTileIndex = -1;
         isTouched = NO;
         
-        floor = [ DungeonFloor newFloor ];
+        // Dungeon Floor initialization
+        
+        //floor = [ DungeonFloor newFloor ];
+        floor = [ DungeonFloor newFloorWidth:10 andHeight:10 ];
         [ self initializeTiles ];
         [ self drawDungeonFloor: floor toTileArray: tileArray ];
+        [ GameRenderer setDefaultTileArrayBoundary: floor ];
         
-        [ GameRenderer setAllTilesInFloor: floor toTileType: TILE_FLOOR_GRASS ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 1 ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 2 ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 3 ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 4 ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 5 ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 6 ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 7 ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 8 ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 9 ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_VOID withLevel: 10 ];
-        [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_ICE withLevel: 11 ];
+        [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_GRASS];
+        [ GameRenderer setTileAtPosition:ccp(10,11) onFloor:floor toType:TILE_FLOOR_GRASS];
+        [ GameRenderer setTileAtPosition:ccp(10,12) onFloor:floor toType:TILE_FLOOR_GRASS];
+        [ GameRenderer setTileAtPosition:ccp(10,13) onFloor:floor toType:TILE_FLOOR_GRASS];
+        
         
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
+        
+        //////////////////////
         
         Entity *hero = [ [ Entity alloc ] init ];
         [ hero.name setString: @"Mike" ];
@@ -814,7 +813,9 @@
 -( void ) drawDungeonFloor: ( DungeonFloor * ) dungeonFloor toTileArray: ( NSArray * ) tileArray {
     CGPoint c = cameraAnchorPoint;
     for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
+    //for ( int j = 0; j < floor.height; j++ ) {
         for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
+        //for ( int i = 0; i < floor.width; i++ ) {
             // grab the tile at ( i+c.x, j+c.y )
             Tile *tile = [ self getTileForCGPoint: ccp(i+c.x, j+c.y) ];
             [ Tile renderTextureForTile: tile ];
@@ -1095,7 +1096,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
     [ self addMessage: [NSString stringWithFormat: @"%@ -> (%.0f,%.0f)", entity.name, position.x, position.y]];
     Tile *tile = [ self getMapTileFromPoint: position ];
-    if ( tile.tileType != TILE_VOID ) {
+    if ( tile.tileType != TILE_FLOOR_VOID ) {
         Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
         [prevTile.contents removeObject: entity];
         [ self setEntity: entity onTile: tile ];

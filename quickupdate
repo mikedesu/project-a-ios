@@ -8,5 +8,6 @@ git push origin master
 git push origin dev
 #git push origin dev-entity
 git push origin dev-ui
+git push origin dev-dungeon
 ./update_dropbox
 echo "quickupdate script successful :)"

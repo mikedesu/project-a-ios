@@ -14,5 +14,6 @@
 @property (atomic) NSMutableArray *tileDataArray;
 
 +( DungeonFloor * ) newFloor;
++( DungeonFloor * ) newFloorWidth: (NSUInteger) w andHeight: (NSUInteger) h;
 
 @end
