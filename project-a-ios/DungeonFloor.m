@@ -36,8 +36,8 @@
  */
 +( DungeonFloor * ) newFloor {
     //MLOG( @"newFloor" );
-    NSUInteger dungeonWidth = 40;
-    NSUInteger dungeonHeight = 60;
+    NSUInteger dungeonWidth = 25;
+    NSUInteger dungeonHeight = 25;
     DungeonFloor *floor = [[ DungeonFloor alloc ] init ];
     floor->width = dungeonWidth;
     floor->height = dungeonHeight;

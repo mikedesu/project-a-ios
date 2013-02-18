@@ -566,7 +566,29 @@
                 heroTouches = 0;
             }
         }
-         
+        
+        
+        else if ( gameState == GAMESTATE_T_GAME_PC_SELECTMOVE ) {
+            
+            [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
+            [ self moveEntity:pcEntity toPosition:mapPoint ];
+            [ self resetCameraPosition ];
+            //[ self selectTileAtPosition: mapPoint ];
+            turnCounter++;
+            
+            gameState = GAMESTATE_T_GAME;
+            
+        } else {
+            
+            //[ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
+            //selectedTilePoint = mapPoint;   // sets this tile to be remembered
+            //[ self selectTileAtPosition: mapPoint ];
+            
+            //gameState = GAMESTATE_T_GAME_PC_SELECTMOVE;
+            
+        }
+
+        
     }
     
     
