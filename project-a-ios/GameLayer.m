@@ -66,12 +66,12 @@
         
         //[ Entity drawTextureForEntity: hero ];
         
-        cameraAnchorPoint = ccp( 10, 10 );
+        cameraAnchorPoint = ccp( 7, 5 );
         
         entityArray = [ [ NSMutableArray alloc ] init ];
         [ entityArray addObject: hero ];
  
-        CGPoint startPoint = ccp( 15, 17 );
+        CGPoint startPoint = ccp( 10, 10 );
         Tile *startTile = nil;
         for ( Tile *t in [ floor tileDataArray ] ) {
             if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
@@ -80,6 +80,7 @@
             }
         }
         [ self setEntity:hero onTile: startTile ];
+        [ self resetCameraPosition ];
         
 //        selectedTilePoint = hero->positionOnMap;
         //[ self selectTileAtPosition: [hero positionOnMap] ];
@@ -257,7 +258,7 @@
  */
 -( void ) initMonitor {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:50 ];
+    monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
     monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
     [ self updateMonitorLabel ];
 }
@@ -280,7 +281,7 @@
 
 -(void) updateMonitorLabel {
     [monitor.label setString:
-     [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nHeroTouches: %d", gameState, selectedTilePoint.x, selectedTilePoint.y, pcEntity.positionOnMap.x, pcEntity.positionOnMap.y, heroTouches ]
+     [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nHeroTouches: %d", gameState, selectedTilePoint.x, selectedTilePoint.y, pcEntity.positionOnMap.x, pcEntity.positionOnMap.y, cameraAnchorPoint.x, cameraAnchorPoint.y, heroTouches ]
      ];
 }
 
