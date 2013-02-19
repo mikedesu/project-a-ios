@@ -44,6 +44,11 @@
         floor = [ DungeonFloor newFloorWidth:10 andHeight:10 ];
         [ self initializeTiles ];
         [ self drawDungeonFloor: floor toTileArray: tileArray ];
+        
+        
+        [ GameRenderer generateDungeonFloor: floor ];
+        
+        /*
         [ GameRenderer setDefaultTileArrayBoundary: floor ];
         
         [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_GRASS];
@@ -55,7 +60,10 @@
         [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_UPSTAIRS];
         [ GameRenderer setTileAtPosition:ccp(10,14) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
         
+        */
+         
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
+        
         
         //////////////////////
         

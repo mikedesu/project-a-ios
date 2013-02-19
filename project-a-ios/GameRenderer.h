@@ -27,5 +27,7 @@
 +( void ) setAllTilesInFloor: ( DungeonFloor * ) floor toTileType: ( Tile_t ) tileType;
 +(void) setTileAtPosition: (CGPoint) position onFloor: (DungeonFloor *) floor toType: (Tile_t) tileType;
 +(void) setTile: (Tile *) tile toType: (Tile_t) tileType;
+
++( void ) generateDungeonFloor: ( DungeonFloor * ) floor;
     
 @end

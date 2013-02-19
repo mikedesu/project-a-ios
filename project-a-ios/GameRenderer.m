@@ -219,4 +219,23 @@
     [ GameRenderer setAllTiles: [floor tileDataArray] toTileType: tileType ];
 }
 
+
+/*
+ ====================
+ generateDungeonFloor: floor
+ ====================
+ */
++( void ) generateDungeonFloor: ( DungeonFloor * ) floor {
+    [ GameRenderer setDefaultTileArrayBoundary: floor ];
+    
+    [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_GRASS];
+    [ GameRenderer setTileAtPosition:ccp(10,11) onFloor:floor toType:TILE_FLOOR_GRASS];
+    [ GameRenderer setTileAtPosition:ccp(10,12) onFloor:floor toType:TILE_FLOOR_GRASS];
+    [ GameRenderer setTileAtPosition:ccp(10,13) onFloor:floor toType:TILE_FLOOR_GRASS];
+    [ GameRenderer setTileAtPosition:ccp(10,14) onFloor:floor toType:TILE_FLOOR_GRASS];
+    
+    [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_UPSTAIRS];
+    [ GameRenderer setTileAtPosition:ccp(10,14) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
+}
+
 @end
