@@ -41,33 +41,13 @@
         // Dungeon Floor initialization
         
         //floor = [ DungeonFloor newFloor ];
-        floor = [ DungeonFloor newFloorWidth:4 andHeight:4 ];
+        floor = [ DungeonFloor newFloorWidth:10 andHeight:10 ];
         [ self initializeTiles ];
         [ self drawDungeonFloor: floor toTileArray: tileArray ];
         
-        
-        [ GameRenderer generateDungeonFloor: floor ];
-        
-        
-        
-//        [ GameRenderer setDefaultTileArrayBoundary: floor ];
-        
-        /*
-        [ GameRenderer setAllTilesInFloor: floor toTileType:TILE_FLOOR_VOID ];
-        
-        [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_GRASS];
-        [ GameRenderer setTileAtPosition:ccp(10,11) onFloor:floor toType:TILE_FLOOR_GRASS];
-        [ GameRenderer setTileAtPosition:ccp(10,12) onFloor:floor toType:TILE_FLOOR_GRASS];
-        [ GameRenderer setTileAtPosition:ccp(10,13) onFloor:floor toType:TILE_FLOOR_GRASS];
-        [ GameRenderer setTileAtPosition:ccp(10,14) onFloor:floor toType:TILE_FLOOR_GRASS];
-        
-        [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_UPSTAIRS];
-        [ GameRenderer setTileAtPosition:ccp(10,14) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
-        */
-        
-         
+        [ GameRenderer generateDungeonFloor: floor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
+ 
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
-        
         
         //////////////////////
         

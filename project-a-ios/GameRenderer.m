@@ -295,10 +295,10 @@
         NSUInteger x = floor.border/2;
         NSUInteger y = floor.border/2;
         
-        NSUInteger localWidth = 3;
-        NSUInteger localHeight = 3;
+        NSUInteger w = floor.width - floor.border;
+        NSUInteger h = floor.height - floor.border;
         
-        NSUInteger numTiles = 20;
+        NSUInteger numTiles = 100;
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
@@ -306,26 +306,53 @@
         for ( int i = 0; i < numTiles; i++ ) {
             
             // roll a d4
-            // 1234 = UDLR
+            NSUInteger roll;
+            //do {
+                roll = rollDiceOnce(4);
+                if ( roll == 1) {
+                    xo += 0;
+                    yo += -1;
+                } else if ( roll == 2) {
+                    xo += 0;
+                    yo += 1;
+                } else if ( roll == 3) {
+                    xo += -1;
+                    yo += 0;
+                } else if ( roll == 4) {
+                    xo += 1;
+                    yo += 0;
+                }
+           // }
+            //while ( (x+xo < x || y+yo < y) || (x+xo > x+w || y+yo > y+h) );
+                //MLOG(@"(%d,%d)", x+xo, y+yo);
             
-            NSUInteger roll = rollDiceOnce(4);
             
-            if ( roll == 1) {
-                xo += 0;
-                yo += -1;
-            } else if ( roll == 2) {
-                xo += 0;
-                yo += 1;
-            } else if ( roll == 3) {
-                xo += -1;
-                yo += 0;
-            } else if ( roll == 4) {
-                xo += 1;
-                yo += 0;
+            if ( x+xo < x || y+yo < y ) {
+                MLOG(@"upper collision");
+                
+                // undo the roll
+                if ( roll == 1) { yo++; }
+                else if ( roll == 2) { yo--; }
+                else if ( roll == 3) { xo++; }
+                else if ( roll == 4) { xo--; }
+                
+                i--;
             }
             
-            [ self setTileAtPosition:ccp(x + xo, y + yo) onFloor:floor toType:TILE_FLOOR_GRASS];
-        
+            else if ( x+xo > x+w || y+yo > y+h ) {
+                MLOG(@"lower collision");
+                // undo the roll
+                if ( roll == 1) { yo++; }
+                else if ( roll == 2) { yo--; }
+                else if ( roll == 3) { xo++; }
+                else if ( roll == 4) { xo--; }
+                i--;
+            }
+             
+            
+            else {
+                [ self setTileAtPosition:ccp(x + xo, y + yo) onFloor:floor toType:TILE_FLOOR_GRASS];
+            }
         }
     }
 }

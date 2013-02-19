@@ -29,5 +29,6 @@
 +(void) setTile: (Tile *) tile toType: (Tile_t) tileType;
 
 +( void ) generateDungeonFloor: ( DungeonFloor * ) floor;
-    
++( void ) generateDungeonFloor: ( DungeonFloor * ) floor withAlgorithm: (DungeonFloorAlgorithm_t) algorithm;
+
 @end
