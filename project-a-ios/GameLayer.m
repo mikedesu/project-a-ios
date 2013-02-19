@@ -50,7 +50,10 @@
         [ GameRenderer setTileAtPosition:ccp(10,11) onFloor:floor toType:TILE_FLOOR_GRASS];
         [ GameRenderer setTileAtPosition:ccp(10,12) onFloor:floor toType:TILE_FLOOR_GRASS];
         [ GameRenderer setTileAtPosition:ccp(10,13) onFloor:floor toType:TILE_FLOOR_GRASS];
+        [ GameRenderer setTileAtPosition:ccp(10,14) onFloor:floor toType:TILE_FLOOR_GRASS];
         
+        [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_UPSTAIRS];
+        [ GameRenderer setTileAtPosition:ccp(10,14) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
         
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
@@ -393,7 +396,7 @@
  */
 -( void ) updatePlayerHUDLabel {
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
-                                   [ NSString stringWithFormat: @"%@ the Great     T:%d", [pcEntity name], turnCounter ],
+                                   [ NSString stringWithFormat: @"%@     T:%d", pcEntity.name, turnCounter ],
                                    [ NSString stringWithFormat: @"St:0 Dx:0 Co:0 In:0 Wi:0 Ch:0 Align" ],
                                    [ NSString stringWithFormat: @"Dlvl:1 $:0 HP:1/1 Pw: 0/0 AC:0 Xp:0/100"]
                                    ]];
@@ -476,6 +479,10 @@
                 heroTouches = 0;
             }
             
+        } else {
+            if ( heroTouches > 0 ) {
+                heroTouches = 0;
+            }
         }
         
         
@@ -564,19 +571,41 @@
             } else if ( heroTouches == 1 && playerMenuIsVisible ) {
                 [ self removePlayerMenu: playerMenu ];
                 heroTouches = 0;
-            }
+            } 
         }
         
         
         else if ( gameState == GAMESTATE_T_GAME_PC_SELECTMOVE ) {
             
             [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
-            [ self moveEntity:pcEntity toPosition:mapPoint ];
-            [ self resetCameraPosition ];
-            //[ self selectTileAtPosition: mapPoint ];
-            turnCounter++;
             
-            gameState = GAMESTATE_T_GAME;
+            
+            if ( [self getTileForCGPoint:mapPoint].tileType == TILE_FLOOR_DOWNSTAIRS ) {
+                
+                [ self moveEntity:pcEntity toPosition:mapPoint ];
+                [ self resetCameraPosition ];
+                [ self addMessage: @"Going downstairs" ];
+                turnCounter++;
+                gameState = GAMESTATE_T_GAME;
+                
+            }
+            
+            else if ( [self getTileForCGPoint:mapPoint].tileType == TILE_FLOOR_UPSTAIRS ) {
+                [ self moveEntity:pcEntity toPosition:mapPoint ];
+                [ self resetCameraPosition ];
+                [ self addMessage: @"Going upstairs" ];
+                turnCounter++;
+                gameState = GAMESTATE_T_GAME;
+            }
+            
+            else {
+                [ self moveEntity:pcEntity toPosition:mapPoint ];
+                [ self resetCameraPosition ];
+                turnCounter++;
+                gameState = GAMESTATE_T_GAME;
+            }
+            
+            
             
         } else {
             
@@ -586,6 +615,9 @@
             
             //gameState = GAMESTATE_T_GAME_PC_SELECTMOVE;
             
+            if ( heroTouches > 0 ) {
+                heroTouches = 0;
+            }
         }
 
         

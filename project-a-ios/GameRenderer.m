@@ -51,6 +51,8 @@
     // Select our primary working color based on tileType
     Color_t color =
     (tileType==TILE_FLOOR_VOID) ?  black :
+    (tileType==TILE_FLOOR_UPSTAIRS) ? cyan :
+    (tileType==TILE_FLOOR_DOWNSTAIRS) ? purple :
     (tileType==TILE_FLOOR_GRASS) ? green :
     (tileType==TILE_FLOOR_STONE) ? gray :
     blue ;

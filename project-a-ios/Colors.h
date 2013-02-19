@@ -21,6 +21,12 @@
 #define CC4B_GREEN_ALPHA(a)  ccc4( 0x00, 0xFF, 0x00, a )
 #define CC4B_BLUE_ALPHA(a)   ccc4( 0x00, 0x00, 0xFF, a )
 
+#define CC4B_YELLOW_ALPHA(a)  ccc4( 0xff, 0xff, 0x00, a )
+#define CC4B_CYAN_ALPHA(a)    ccc4( 0x00, 0xff, 0xff, a )
+#define CC4B_PURPLE_ALPHA(a)  ccc4( 0xff, 0x00, 0xff, a )
+
+
+
 
 #define CC4B_RANDOM_ALPHA(a) ccc4( random() % 255, random() % 255, random() % 255, a )
 
@@ -33,6 +39,13 @@
 #define CC4B_RED             CC4B_RED_ALPHA( 0xFF )
 #define CC4B_GREEN           CC4B_GREEN_ALPHA( 0xFF )
 #define CC4B_BLUE            CC4B_BLUE_ALPHA( 0xFF )
+
+#define CC4B_YELLOW CC4B_YELLOW_ALPHA(0xff)
+#define CC4B_CYAN   CC4B_CYAN_ALPHA(0xff)
+#define CC4B_PURPLE CC4B_PURPLE_ALPHA(0xff)  
+
+
+
 #define CC4B_RANDOM          CC4B_RANDOM_ALPHA( 0xFF )
 
 /* ==================== */
@@ -47,6 +60,10 @@
 #define CC3B_GREEN          ccc3( 0x00, 0xff, 0x00 )
 #define CC3B_BLUE           ccc3( 0x00, 0x00, 0xff )
 
+#define CC3B_YELLOW         ccc3( 0xff, 0xff, 0x00 )
+#define CC3B_CYAN           ccc3( 0x00, 0xff, 0xff )
+#define CC3B_PURPLE         ccc3( 0xff, 0x00, 0xff )
+
 #define CC3B_RANDOM         ccc3( random() % 255, random() % 255, random() % 255 )
 
 #define white3              CC3B_WHITE
@@ -54,6 +71,9 @@
 #define red3                CC3B_RED
 #define green3              CC3B_GREEN
 #define blue3               CC3B_BLUE
+#define yellow3             CC3B_YELLOW
+#define cyan3               CC3B_CYAN
+#define purple3             CC3B_PURPLE
 
 #define random_color3        CC3B_RANDOM
 
@@ -71,6 +91,10 @@
 #define red    CC4B_RED
 #define green  CC4B_GREEN
 #define blue   CC4B_BLUE
+
+#define yellow CC4B_YELLOW
+#define cyan   CC4B_CYAN
+#define purple CC4B_PURPLE
 
 #define random_color4 CC4B_RANDOM
 #define random_color  random_color4
