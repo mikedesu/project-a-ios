@@ -10,8 +10,9 @@
 static int isSeeded = 0;
 
 long int rollDiceOnce( int sides ) {
-    if ( ! isSeeded ) {
+    if ( isSeeded==0 ) {
         srand( time( NULL ) ) ;
+        isSeeded = 1;
     }
     return ROLL_DICE_ONCE(sides);
 }

@@ -226,8 +226,10 @@
  ====================
  */
 +( void ) generateDungeonFloor: ( DungeonFloor * ) floor {
-    [ GameRenderer setDefaultTileArrayBoundary: floor ];
+    //[ GameRenderer generateDungeonFloor: floor withAlgorithm: DF_ALGORITHM_T_SMALLROOM ];
+    [ GameRenderer generateDungeonFloor: floor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
     
+    /*
     [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_GRASS];
     [ GameRenderer setTileAtPosition:ccp(10,11) onFloor:floor toType:TILE_FLOOR_GRASS];
     [ GameRenderer setTileAtPosition:ccp(10,12) onFloor:floor toType:TILE_FLOOR_GRASS];
@@ -236,6 +238,96 @@
     
     [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_UPSTAIRS];
     [ GameRenderer setTileAtPosition:ccp(10,14) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
+     */
+}
+
+
+
++( void ) generateDungeonFloor:(DungeonFloor *)floor withAlgorithm: ( DungeonFloorAlgorithm_t ) algorithm {
+    
+    [ self setAllTilesInFloor: floor toTileType:TILE_FLOOR_VOID ];
+    
+    //[ GameRenderer setDefaultTileArrayBoundary: floor ];
+    
+    if ( algorithm == DF_ALGORITHM_T_SMALLROOM ) {
+        
+        // calc the top-left editable tile
+        // border + 0, border + 0
+        NSUInteger x = floor.border/2;
+        NSUInteger y = floor.border/2;
+ 
+        //NSUInteger localWidth = floor.width - floor.border;
+        NSUInteger localWidth = 3;
+        //NSUInteger localHeight = floor.height - floor.border;
+        NSUInteger localHeight = 3;
+        
+        for ( int i = 0; i < localWidth; i++ ) {
+            for ( int j = 0; j < localHeight; j++ ) {
+                [ self setTileAtPosition:ccp(x+i, y+j) onFloor:floor toType:TILE_FLOOR_GRASS];
+            }
+        }
+        
+    }
+    
+    else if ( algorithm == DF_ALGORITHM_T_LARGEROOM ) {
+        
+        // calc the top-left editable tile
+        // border + 0, border + 0
+        NSUInteger x = floor.border/2;
+        NSUInteger y = floor.border/2;
+        
+        //NSUInteger localWidth = floor.width - floor.border;
+        NSUInteger localWidth = 10;
+        //NSUInteger localHeight = floor.height - floor.border;
+        NSUInteger localHeight = 10;
+        
+        for ( int i = 0; i < localWidth; i++ ) {
+            for ( int j = 0; j < localHeight; j++ ) {
+                [ self setTileAtPosition:ccp(x+i, y+j) onFloor:floor toType:TILE_FLOOR_GRASS];
+            }
+        }
+        
+    }
+    
+    else if ( algorithm == DF_ALGORITHM_T_ALGORITHM0 ) {
+        
+        // calc the top-left editable tile
+        NSUInteger x = floor.border/2;
+        NSUInteger y = floor.border/2;
+        
+        NSUInteger localWidth = 3;
+        NSUInteger localHeight = 3;
+        
+        NSUInteger numTiles = 20;
+        
+        NSUInteger xo = 0;
+        NSUInteger yo = 0;
+        
+        for ( int i = 0; i < numTiles; i++ ) {
+            
+            // roll a d4
+            // 1234 = UDLR
+            
+            NSUInteger roll = rollDiceOnce(4);
+            
+            if ( roll == 1) {
+                xo += 0;
+                yo += -1;
+            } else if ( roll == 2) {
+                xo += 0;
+                yo += 1;
+            } else if ( roll == 3) {
+                xo += -1;
+                yo += 0;
+            } else if ( roll == 4) {
+                xo += 1;
+                yo += 0;
+            }
+            
+            [ self setTileAtPosition:ccp(x + xo, y + yo) onFloor:floor toType:TILE_FLOOR_GRASS];
+        
+        }
+    }
 }
 
 @end

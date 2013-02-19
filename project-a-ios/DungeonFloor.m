@@ -11,6 +11,7 @@
 
 @synthesize height;
 @synthesize width;
+@synthesize border;
 @synthesize tileDataArray;
 
 /*
@@ -23,6 +24,7 @@
     if ( ( self = [ super init ] ) ) {
         width = 0;
         height = 0;
+        border = 0;
         tileDataArray = [[ NSMutableArray alloc ] init ];
     }
     return self;
@@ -42,12 +44,13 @@
     NSUInteger dungeonWidth = border + dw;  // x-20
     NSUInteger dungeonHeight = border + dw; // x-20
     DungeonFloor *floor = [[ DungeonFloor alloc ] init ];
-    floor->width = dungeonWidth;
-    floor->height = dungeonHeight;
+    floor.width = dungeonWidth;
+    floor.height = dungeonHeight;
+    floor.border = border;
     for ( int j = 0 ; j < dungeonHeight ; j++ ) {
         for ( int i = 0; i < dungeonWidth; i++ ) {
             Tile *newTile = [ Tile newTileWithType: TILE_FLOOR_DEFAULT withPosition: ccp(i, j)];
-            [ floor->tileDataArray addObject: newTile ];
+            [ floor.tileDataArray addObject: newTile ];
         }
     }
     //MLOG( @"end newFloor" );
@@ -67,14 +70,15 @@
     NSUInteger dh = h; // true dungeon height
     NSUInteger border = 20;
     NSUInteger dungeonWidth = border + dw;  // x-20
-    NSUInteger dungeonHeight = border + dw; // x-20
+    NSUInteger dungeonHeight = border + dh; // x-20
     DungeonFloor *floor = [[ DungeonFloor alloc ] init ];
-    floor->width = dungeonWidth;
-    floor->height = dungeonHeight;
+    floor.width = dungeonWidth;
+    floor.height = dungeonHeight;
+    floor.border = border;
     for ( int j = 0 ; j < dungeonHeight ; j++ ) {
         for ( int i = 0; i < dungeonWidth; i++ ) {
             Tile *newTile = [ Tile newTileWithType: TILE_FLOOR_DEFAULT withPosition: ccp(i, j)];
-            [ floor->tileDataArray addObject: newTile ];
+            [ floor.tileDataArray addObject: newTile ];
         }
     }
     //MLOG( @"end newFloor" );
