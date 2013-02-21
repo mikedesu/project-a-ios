@@ -31,4 +31,9 @@
 +( void ) generateDungeonFloor: ( DungeonFloor * ) floor;
 +( void ) generateDungeonFloor: ( DungeonFloor * ) floor withAlgorithm: (DungeonFloorAlgorithm_t) algorithm;
 
++( CGPoint ) getUpstairsTileForFloor: ( DungeonFloor * ) floor;
++( Tile * ) getTileForFloor: (DungeonFloor *) floor forCGPoint: (CGPoint) p;
+
++( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b;
+
 @end

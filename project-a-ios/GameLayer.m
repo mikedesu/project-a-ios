@@ -47,6 +47,9 @@
         
         [ GameRenderer generateDungeonFloor: floor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
  
+        
+        CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: floor ];
+        
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
         //////////////////////
@@ -65,7 +68,6 @@
         entityArray = [ [ NSMutableArray alloc ] init ];
         [ entityArray addObject: hero ];
  
-        CGPoint startPoint = ccp( 10, 10 );
         Tile *startTile = nil;
         for ( Tile *t in [ floor tileDataArray ] ) {
             if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
@@ -207,7 +209,7 @@
     if ( ! playerMenuIsVisible ) {
         [ self addChild: menu ];
         playerMenuIsVisible = YES;
-        [ self addMessage: @"Opened Player Menu" ];
+        //[ self addMessage: @"Opened Player Menu" ];
     }
 }
 
@@ -223,7 +225,7 @@
     if ( playerMenuIsVisible ) {
         [ self removeChild: menu cleanup: NO ];
         playerMenuIsVisible = NO;
-        [ self addMessage: @"Closed Player Menu" ];
+        //[ self addMessage: @"Closed Player Menu" ];
     }
 }
 
@@ -274,9 +276,38 @@
 
 
 -(void) updateMonitorLabel {
+    @try {
     [monitor.label setString:
-     [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nHeroTouches: %d", gameState, selectedTilePoint.x, selectedTilePoint.y, pcEntity.positionOnMap.x, pcEntity.positionOnMap.y, cameraAnchorPoint.x, cameraAnchorPoint.y, heroTouches ]
+     [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\n",
+      
+      gameState,
+      selectedTilePoint.x,
+      selectedTilePoint.y,
+      pcEntity.positionOnMap.x,
+      pcEntity.positionOnMap.y,
+      cameraAnchorPoint.x,
+      cameraAnchorPoint.y,
+      [GameRenderer distanceFromTile:[GameRenderer getTileForFloor:floor forCGPoint:selectedTilePoint] toTile:[GameRenderer getTileForFloor:floor forCGPoint:pcEntity.positionOnMap
+        ]] ]
      ];
+        
+    } @catch ( NSException *e ) {
+        //MLOG( @"Exception caught: %@", e );
+        [monitor.label setString:
+         [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\n",
+          
+          gameState,
+          selectedTilePoint.x,
+          selectedTilePoint.y,
+          pcEntity.positionOnMap.x,
+          pcEntity.positionOnMap.y,
+          cameraAnchorPoint.x,
+          cameraAnchorPoint.y,
+          0
+          ]
+         ];
+        
+    }
 }
 
 
@@ -446,7 +477,7 @@
     CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
     CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
     
-    [ self addMessage: [NSString stringWithFormat: @"touched tile (%.0f,%.0f)", mapPoint.x, mapPoint.y ]];
+    //[ self addMessage: [NSString stringWithFormat: @"touched tile (%.0f,%.0f)", mapPoint.x, mapPoint.y ]];
     //[ self addMessage: [NSString stringWithFormat: @"selectedTilePoint (%.0f,%.0f)", selectedTilePoint.x, selectedTilePoint.y ]];
     
     //MLOG( @"selectedTilePoint: (%f, %f)", selectedTilePoint.x, selectedTilePoint.y );
@@ -569,33 +600,45 @@
         
         else if ( gameState == GAMESTATE_T_GAME_PC_SELECTMOVE ) {
             
+            
+            NSInteger distance = [GameRenderer distanceFromTile:[GameRenderer getTileForFloor:floor forCGPoint:mapPoint] toTile:[GameRenderer getTileForFloor:floor forCGPoint:pcEntity.positionOnMap]];
+            
             [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
             
-            
-            if ( [self getTileForCGPoint:mapPoint].tileType == TILE_FLOOR_DOWNSTAIRS ) {
-                
-                [ self moveEntity:pcEntity toPosition:mapPoint ];
-                [ self resetCameraPosition ];
-                [ self addMessage: @"Going downstairs" ];
-                turnCounter++;
-                gameState = GAMESTATE_T_GAME;
-                
-            }
-            
-            else if ( [self getTileForCGPoint:mapPoint].tileType == TILE_FLOOR_UPSTAIRS ) {
-                [ self moveEntity:pcEntity toPosition:mapPoint ];
-                [ self resetCameraPosition ];
-                [ self addMessage: @"Going upstairs" ];
-                turnCounter++;
+            if ( distance > 1 ) {
+                [ self addMessage: @"Cannot move that far in one turn!" ];
                 gameState = GAMESTATE_T_GAME;
             }
             
             else {
-                [ self moveEntity:pcEntity toPosition:mapPoint ];
-                [ self resetCameraPosition ];
-                turnCounter++;
-                gameState = GAMESTATE_T_GAME;
+            
+                if ( [self getTileForCGPoint:mapPoint].tileType == TILE_FLOOR_DOWNSTAIRS ) {
+                    
+                    [ self moveEntity:pcEntity toPosition:mapPoint ];
+                    [ self resetCameraPosition ];
+                    [ self addMessage: @"Going downstairs" ];
+                    turnCounter++;
+                    gameState = GAMESTATE_T_GAME;
+                    
+                }
+                
+                else if ( [self getTileForCGPoint:mapPoint].tileType == TILE_FLOOR_UPSTAIRS ) {
+                    [ self moveEntity:pcEntity toPosition:mapPoint ];
+                    [ self resetCameraPosition ];
+                    [ self addMessage: @"Going upstairs" ];
+                    turnCounter++;
+                    gameState = GAMESTATE_T_GAME;
+                }
+                
+                else {
+                    [ self moveEntity:pcEntity toPosition:mapPoint ];
+                    [ self resetCameraPosition ];
+                    turnCounter++;
+                    gameState = GAMESTATE_T_GAME;
+                }
             }
+            
+            
             
             
             

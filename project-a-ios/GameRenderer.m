@@ -272,21 +272,12 @@
     else if ( algorithm == DF_ALGORITHM_T_LARGEROOM ) {
         
         // calc the top-left editable tile
-        // border + 0, border + 0
         NSUInteger x = floor.border/2;
         NSUInteger y = floor.border/2;
-        
-        //NSUInteger localWidth = floor.width - floor.border;
         NSUInteger localWidth = 10;
-        //NSUInteger localHeight = floor.height - floor.border;
         NSUInteger localHeight = 10;
         
-        for ( int i = 0; i < localWidth; i++ ) {
-            for ( int j = 0; j < localHeight; j++ ) {
-                [ self setTileAtPosition:ccp(x+i, y+j) onFloor:floor toType:TILE_FLOOR_GRASS];
-            }
-        }
-        
+        [ self setAllTilesInFloor:floor toTileType:TILE_FLOOR_GRASS ];
     }
     
     else if ( algorithm == DF_ALGORITHM_T_ALGORITHM0 ) {
@@ -298,37 +289,149 @@
         NSUInteger w = floor.width - floor.border;
         NSUInteger h = floor.height - floor.border;
         
-        NSUInteger numTiles = 100;
+        NSUInteger numTilesPlaced = 0;
+        NSUInteger numTiles = 10;
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
         
-        for ( int i = 0; i < numTiles; i++ ) {
+        NSUInteger roll;
+        NSUInteger totalRolls = 0;
+        
+        NSUInteger rerolls = 0;
+        NSUInteger totalRerolls = 0;
+        NSUInteger rerollTolerance = 1000;
+        NSUInteger toleranceBreaks = 0;
+        
+        const NSUInteger MAX_REROLLS = 4;
+        NSUInteger prevroll[ MAX_REROLLS ];
+        for ( int i = 0; i < MAX_REROLLS; i++ ) { prevroll[ i ] = -1; }
+        
+        NSMutableArray *placedTilesArray = [[ NSMutableArray alloc ] init ];
+        NSMutableArray *triedTilesArray = [[ NSMutableArray alloc ] init ];
+        
+        // determine a tile-type as the base tile type to use
+        Tile_t baseTileType;
+        
+        // roll a d4
+        roll = rollDiceOnce(4);
+        
+        // determine tiletype based on roll
+        if ( roll == 1 ) {
+            baseTileType = TILE_FLOOR_GRASS;
+        } else if ( roll == 2) {
+            baseTileType = TILE_FLOOR_ICE;
+        } else if ( roll == 3) {
+            baseTileType = TILE_FLOOR_STONE;
+        } else if ( roll == 4) {
+            baseTileType = TILE_FLOOR_STONE;
+        }
+        
+        
+        CGPoint point = ccp( x, y );
+        [ self setTileAtPosition:point onFloor:floor toType:baseTileType ];
+        [ placedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
+        numTilesPlaced++;
+        
+        
+        for ( int i = numTilesPlaced; i < numTiles; i++ ) {
+            
+            BOOL willReroll = NO;
             
             // roll a d4
-            NSUInteger roll;
-            //do {
-                roll = rollDiceOnce(4);
-                if ( roll == 1) {
-                    xo += 0;
-                    yo += -1;
-                } else if ( roll == 2) {
-                    xo += 0;
-                    yo += 1;
-                } else if ( roll == 3) {
-                    xo += -1;
-                    yo += 0;
-                } else if ( roll == 4) {
-                    xo += 1;
-                    yo += 0;
+            roll = rollDiceOnce(4);
+            totalRolls++;
+            
+            // handle the roll
+            if ( roll == 1) {
+                xo += 0;
+                yo += -1;
+            } else if ( roll == 2) {
+                xo += 0;
+                yo += 1;
+            } else if ( roll == 3) {
+                xo += -1;
+                yo += 0;
+            } else if ( roll == 4) {
+                xo += 1;
+                yo += 0;
+            }
+            
+            CGPoint point = ccp( x+xo, y+yo );
+            //MLOG( @"trying (%d, %d)...", x+xo, y+yo );
+            
+            // roll-checking
+            // check if this value exists in our placedTilesArray
+            NSValue *v = [ NSValue valueWithCGPoint: point ];
+            
+            for ( NSValue *p in triedTilesArray ) {
+                if ( [p isEqualToValue: v ] ) {
+                    willReroll = YES;
+                    break;
                 }
-           // }
-            //while ( (x+xo < x || y+yo < y) || (x+xo > x+w || y+yo > y+h) );
-                //MLOG(@"(%d,%d)", x+xo, y+yo);
+            }
             
+            if ( !willReroll ) {
+                for ( NSValue *p in placedTilesArray ) {
+                    if ( [p isEqualToValue:v ] ) {
+                        willReroll = YES;
+                        break;
+                    }
+                }
+            }
             
-            if ( x+xo < x || y+yo < y ) {
-                MLOG(@"upper collision");
+            // check to see if we are going out-of-bounds
+            if ( !willReroll ) {
+                willReroll = willReroll || (x+xo < x || y+yo < y) || (x+xo >= w+x || y+yo >= h+y );
+            }
+                
+            // check reroll tolerance
+            /*
+            if ( totalRerolls >= rerollTolerance ) {
+                willReroll = YES;
+                xo = 0;
+                yo = 0;
+                i = 0;
+                roll = -1;
+                toleranceBreaks++;
+                rerolls = 0;
+                totalRerolls = 0;
+                [ self setAllTilesInFloor:floor toTileType:TILE_FLOOR_VOID ];
+                MLOG( @"tolerance break # %d", toleranceBreaks );
+            }
+             */
+            
+            if ( ! willReroll ) {
+                
+                Tile_t tileType = baseTileType;
+                NSUInteger roll2 = rollDiceOnce(100);
+                    
+                if ( roll2 <= 5 ) {
+                    // change the tileType
+                    roll2 = rollDiceOnce(4);
+                        
+                    if ( roll2 == 1 ) {
+                        tileType = TILE_FLOOR_GRASS;
+                    } else if ( roll2 == 2 ) {
+                        tileType = TILE_FLOOR_ICE;
+                    } else if ( roll2 == 3 ) {
+                        tileType = TILE_FLOOR_STONE;
+                    } else if ( roll2 == 4 ) {
+                        tileType = TILE_FLOOR_STONE;
+                    }
+                }
+                    
+                [ self setTileAtPosition:point onFloor:floor toType:tileType ];
+                [ placedTilesArray addObject: v ];
+                [ triedTilesArray removeAllObjects ];
+                MLOG( @"tile placed at (%d,%d)", x+xo, y+yo );
+                numTilesPlaced++;
+            }
+        
+            else if ( willReroll ) {
+                
+//                Tile *tile = [ self getTileForFloor:floor forCGPoint:point ];
+                [ triedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
                 
                 // undo the roll
                 if ( roll == 1) { yo++; }
@@ -336,25 +439,91 @@
                 else if ( roll == 3) { xo++; }
                 else if ( roll == 4) { xo--; }
                 
+                rerolls++;
+                totalRerolls++;
+                //MLOG( @"Reroll # %d", totalRerolls );
+                
                 i--;
             }
-            
-            else if ( x+xo > x+w || y+yo > y+h ) {
-                MLOG(@"lower collision");
-                // undo the roll
-                if ( roll == 1) { yo++; }
-                else if ( roll == 2) { yo--; }
-                else if ( roll == 3) { xo++; }
-                else if ( roll == 4) { xo--; }
-                i--;
+        }
+        
+        MLOG( @"total tiles placed: %d" , numTilesPlaced );
+        MLOG( @"total rolls: %d", totalRolls );
+        MLOG( @"total rerolls: %d", totalRerolls );
+        MLOG( @"total tolerance breaks: %d", toleranceBreaks );
+        
+        // place the upstairs/downstairs tiles
+        BOOL isDownstairsPlaced = NO;
+        BOOL isUpstairsPlaced = NO;
+        
+        while ( !isUpstairsPlaced ) {
+            for ( NSValue *p in placedTilesArray ) {
+                // roll dice
+                roll = rollDiceOnce(100);
+                NSUInteger percentage = 5;
+                if ( roll <= percentage ) {
+                    [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_UPSTAIRS ];
+                    MLOG( @"Upstairs placed" );
+                    isUpstairsPlaced = YES;
+                    break;
+                }
             }
-             
-            
-            else {
-                [ self setTileAtPosition:ccp(x + xo, y + yo) onFloor:floor toType:TILE_FLOOR_GRASS];
+        }
+        
+        CGPoint upstairsPoint = [ self getUpstairsTileForFloor: floor ];
+        while ( !isDownstairsPlaced ) {
+            for ( NSValue *p in placedTilesArray ) {
+                roll = rollDiceOnce(100);
+                NSUInteger percentage = 5;
+                if ( roll <= percentage ) {
+                    if ( ! CGPointEqualToPoint(upstairsPoint, p.CGPointValue) ) {
+                        [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
+                        MLOG( @"Downstairs placed" );
+                        isDownstairsPlaced = YES;
+                        break;
+                    }
+                }
             }
         }
     }
+}
+
+
+
++( CGPoint ) getUpstairsTileForFloor: ( DungeonFloor * ) floor {
+    CGPoint p = { -1, -1 };
+    for ( Tile *t in floor.tileDataArray ) {
+        if ( t.tileType == TILE_FLOOR_UPSTAIRS ) {
+            p = t.position;
+            break;
+        }
+    }
+    return p;
+}
+
+
++( Tile * ) getTileForFloor: (DungeonFloor *) floor forCGPoint: (CGPoint) p {
+    Tile *tile = nil;
+    tile = [ floor.tileDataArray objectAtIndex: p.x + ( p.y * floor.width ) ];
+    return tile;
+}
+
+
+/*
+ ====================
+ distanceFromTile: toTile:
+ 
+ returns distance from a tile to another
+ ====================
+ */
++( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b {
+    //MLOG( @"distanceFromTile: a toTile: b" );
+    NSInteger ax = (NSInteger)a.position.x;
+    NSInteger bx = (NSInteger)b.position.x;
+    NSInteger ay = (NSInteger)a.position.y;
+    NSInteger by = (NSInteger)b.position.y;
+    
+    return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
 }
 
 @end
