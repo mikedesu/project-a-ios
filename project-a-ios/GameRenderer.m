@@ -170,33 +170,34 @@
     }
 }
 
-
+/*
+ ====================
+ setDefaultTileArrayBoundary
+ ====================
+ */
 +(void) setDefaultTileArrayBoundary: (DungeonFloor *) floor {
     [ GameRenderer setAllTilesInFloor: floor toTileType: TILE_FLOOR_VOID ];
-    /*
-    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 1 ];
-    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 2 ];
-    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 3 ];
-    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 4 ];
-    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 5 ];
-    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 6 ];
-    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 7 ];
-    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 8 ];
-    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 9 ];
-    [ GameRenderer setTileArrayBoundary: floor toTileType: TILE_FLOOR_VOID withLevel: 10 ];
-     */
 }
 
 
+/*
+ ====================
+ setTileAtPosition: position onFloor: floor toType: tileType
+ ====================
+ */
 +(void) setTileAtPosition: (CGPoint) position onFloor: (DungeonFloor *) floor toType: (Tile_t) tileType {
     [((Tile *)[floor.tileDataArray objectAtIndex: position.x + ( position.y * floor.width) ]) setTileType: tileType ];
 }
 
+
+/*
+ ====================
+ setTile: tile toType: tileType
+ ====================
+ */
 +(void) setTile: (Tile *) tile toType: (Tile_t) tileType {
     tile.tileType = tileType;
 }
-
-
 
 
 /*
@@ -226,56 +227,20 @@
  ====================
  */
 +( void ) generateDungeonFloor: ( DungeonFloor * ) floor {
-    //[ GameRenderer generateDungeonFloor: floor withAlgorithm: DF_ALGORITHM_T_SMALLROOM ];
     [ GameRenderer generateDungeonFloor: floor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
-    
-    /*
-    [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_GRASS];
-    [ GameRenderer setTileAtPosition:ccp(10,11) onFloor:floor toType:TILE_FLOOR_GRASS];
-    [ GameRenderer setTileAtPosition:ccp(10,12) onFloor:floor toType:TILE_FLOOR_GRASS];
-    [ GameRenderer setTileAtPosition:ccp(10,13) onFloor:floor toType:TILE_FLOOR_GRASS];
-    [ GameRenderer setTileAtPosition:ccp(10,14) onFloor:floor toType:TILE_FLOOR_GRASS];
-    
-    [ GameRenderer setTileAtPosition:ccp(10,10) onFloor:floor toType:TILE_FLOOR_UPSTAIRS];
-    [ GameRenderer setTileAtPosition:ccp(10,14) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
-     */
 }
 
 
-
+/*
+ ====================
+ generateDungeonFloor: floor withAlgorithm: algorithm
+ ====================
+*/
 +( void ) generateDungeonFloor:(DungeonFloor *)floor withAlgorithm: ( DungeonFloorAlgorithm_t ) algorithm {
     
     [ self setAllTilesInFloor: floor toTileType:TILE_FLOOR_VOID ];
     
-    //[ GameRenderer setDefaultTileArrayBoundary: floor ];
-    
-    if ( algorithm == DF_ALGORITHM_T_SMALLROOM ) {
-        
-        // calc the top-left editable tile
-        // border + 0, border + 0
-        NSUInteger x = floor.border/2;
-        NSUInteger y = floor.border/2;
- 
-        //NSUInteger localWidth = floor.width - floor.border;
-        NSUInteger localWidth = 3;
-        //NSUInteger localHeight = floor.height - floor.border;
-        NSUInteger localHeight = 3;
-        
-        for ( int i = 0; i < localWidth; i++ ) {
-            for ( int j = 0; j < localHeight; j++ ) {
-                [ self setTileAtPosition:ccp(x+i, y+j) onFloor:floor toType:TILE_FLOOR_GRASS];
-            }
-        }
-        
-    }
-    
-    else if ( algorithm == DF_ALGORITHM_T_LARGEROOM ) {
-        
-        // calc the top-left editable tile
-        NSUInteger x = floor.border/2;
-        NSUInteger y = floor.border/2;
-        NSUInteger localWidth = 10;
-        NSUInteger localHeight = 10;
+    if ( algorithm == DF_ALGORITHM_T_LARGEROOM ) {
         
         [ self setAllTilesInFloor:floor toTileType:TILE_FLOOR_GRASS ];
     }
@@ -290,7 +255,7 @@
         NSUInteger h = floor.height - floor.border;
         
         NSUInteger numTilesPlaced = 0;
-        NSUInteger numTiles = 10;
+        NSUInteger numTiles = 40;
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
@@ -300,7 +265,7 @@
         
         NSUInteger rerolls = 0;
         NSUInteger totalRerolls = 0;
-        NSUInteger rerollTolerance = 1000;
+        NSUInteger rerollTolerance = 100;
         NSUInteger toleranceBreaks = 0;
         
         const NSUInteger MAX_REROLLS = 4;
@@ -359,7 +324,6 @@
             
             CGPoint point = ccp( x+xo, y+yo );
             //MLOG( @"trying (%d, %d)...", x+xo, y+yo );
-            
             // roll-checking
             // check if this value exists in our placedTilesArray
             NSValue *v = [ NSValue valueWithCGPoint: point ];
@@ -385,22 +349,6 @@
                 willReroll = willReroll || (x+xo < x || y+yo < y) || (x+xo >= w+x || y+yo >= h+y );
             }
                 
-            // check reroll tolerance
-            /*
-            if ( totalRerolls >= rerollTolerance ) {
-                willReroll = YES;
-                xo = 0;
-                yo = 0;
-                i = 0;
-                roll = -1;
-                toleranceBreaks++;
-                rerolls = 0;
-                totalRerolls = 0;
-                [ self setAllTilesInFloor:floor toTileType:TILE_FLOOR_VOID ];
-                MLOG( @"tolerance break # %d", toleranceBreaks );
-            }
-             */
-            
             if ( ! willReroll ) {
                 
                 Tile_t tileType = baseTileType;
@@ -430,7 +378,6 @@
         
             else if ( willReroll ) {
                 
-//                Tile *tile = [ self getTileForFloor:floor forCGPoint:point ];
                 [ triedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
                 
                 // undo the roll
@@ -442,8 +389,18 @@
                 rerolls++;
                 totalRerolls++;
                 //MLOG( @"Reroll # %d", totalRerolls );
-                
                 i--;
+                
+                // check reroll tolerance
+                if ( totalRerolls >= rerollTolerance ) {
+                    xo = 0;
+                    yo = 0;
+                    i = 0;
+                    [ placedTilesArray removeAllObjects ];
+                    [ triedTilesArray removeAllObjects ];
+                    totalRerolls = 0;
+                    toleranceBreaks++;
+                }
             }
         }
         
@@ -489,7 +446,11 @@
 }
 
 
-
+/*
+ ====================
+ getUpstairsTileForFloor: floor
+ ====================
+ */
 +( CGPoint ) getUpstairsTileForFloor: ( DungeonFloor * ) floor {
     CGPoint p = { -1, -1 };
     for ( Tile *t in floor.tileDataArray ) {
@@ -502,6 +463,11 @@
 }
 
 
+/*
+ ====================
+ getTileForFloor: floor forCGPoint: p
+ ====================
+ */
 +( Tile * ) getTileForFloor: (DungeonFloor *) floor forCGPoint: (CGPoint) p {
     Tile *tile = nil;
     tile = [ floor.tileDataArray objectAtIndex: p.x + ( p.y * floor.width ) ];

@@ -477,21 +477,14 @@
     CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
     CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
     
-    //[ self addMessage: [NSString stringWithFormat: @"touched tile (%.0f,%.0f)", mapPoint.x, mapPoint.y ]];
-    //[ self addMessage: [NSString stringWithFormat: @"selectedTilePoint (%.0f,%.0f)", selectedTilePoint.x, selectedTilePoint.y ]];
-    
-    //MLOG( @"selectedTilePoint: (%f, %f)", selectedTilePoint.x, selectedTilePoint.y );
-    
     // valid selected point
     if ( selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0 ) {
         
         //[ self addMessage: @"Tile was previously selected" ];
-    
-        
         [ self selectTileAtPosition: mapPoint ];
         
         if ( pcEntity.positionOnMap.x == mapPoint.x && pcEntity.positionOnMap.y == mapPoint.y ) {
-            [ self addMessage: @"Selected Player" ];
+            //[ self addMessage: @"Selected Player" ];
             heroTouches++;
             
             if ( heroTouches == 2) {
@@ -508,82 +501,12 @@
             }
         }
         
-        
-        
-        /*
-        Tile *prevSelectedTile = [ self getTileForCGPoint: selectedTilePoint ];
-        if ( prevSelectedTile.position.x == mapPoint.x && prevSelectedTile.position.y == mapPoint.y ) {
-            
-            [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
-            selectedTilePoint = mapPoint;   // sets this tile to be remembered
-            [ self selectTileAtPosition: mapPoint ];
-            
-            //Tile *selectedTile = [ self getTileForCGPoint: mapPoint ];
-            
-            if ( [pcEntity positionOnMap].x  == mapPoint.x && [pcEntity positionOnMap].y == mapPoint.y ) {
-                
-                heroTouches++;
-                [ self addMessage: [NSString stringWithFormat: @"heroTouches=%d", heroTouches ]];
-                
-                if ( heroTouches == 2 ) {
-                    if ( ! playerMenuIsVisible ) {
-                        [ self addPlayerMenu: playerMenu ];
-                    } else {
-                        [ self removePlayerMenu: playerMenu ];
-                    }
-                    heroTouches = 0;
-                } else if ( heroTouches == 1 && playerMenuIsVisible ) {
-                    [ self removePlayerMenu: playerMenu ];
-                    heroTouches = 0;
-                } else if ( heroTouches == 1 && !playerMenuIsVisible) {
-                    [ self selectTileAtPosition: mapPoint ];
-                }
-            } else {
-                
-                //[ self moveEntity:pcEntity toPosition:mapPoint ];
-                //[ self resetCameraPosition ];
-                //turnCounter++;
-                
-            }
-        
-        }
-    
-        else {
-            
-        
-            
-            if ( gameState == GAMESTATE_T_GAME_PC_SELECTMOVE ) {
-                
-                [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
-                [ self moveEntity:pcEntity toPosition:mapPoint ];
-                [ self resetCameraPosition ];
-                //[ self selectTileAtPosition: mapPoint ];
-                turnCounter++;
-                
-                gameState = GAMESTATE_T_GAME;
-                
-            } else {
-                
-                [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
-                selectedTilePoint = mapPoint;   // sets this tile to be remembered
-                [ self selectTileAtPosition: mapPoint ];
-                
-                //gameState = GAMESTATE_T_GAME_PC_SELECTMOVE;
-                
-            }
-         
-        }
-        
-          */
     }
     
     // invalid selected point / nothing selected
     else {
         //[ self addMessage: @"Nothing previously selected" ];
-        
-        
         [ self selectTileAtPosition: mapPoint ];
-        
         
         if ( [pcEntity positionOnMap].x  == mapPoint.x && [pcEntity positionOnMap].y == mapPoint.y ) {
             heroTouches++;
@@ -597,7 +520,6 @@
             } 
         }
         
-        
         else if ( gameState == GAMESTATE_T_GAME_PC_SELECTMOVE ) {
             
             
@@ -605,7 +527,7 @@
             
             [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
             
-            if ( distance > 1 ) {
+            if ( distance > 4 ) {
                 [ self addMessage: @"Cannot move that far in one turn!" ];
                 gameState = GAMESTATE_T_GAME;
             }
