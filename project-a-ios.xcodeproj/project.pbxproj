@@ -130,9 +130,9 @@
 		272EF64E16C5695F005DF231 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF64D16C5695F005DF231 /* AppDelegate.m */; };
 		272EF65116C5695F005DF231 /* GameLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF65016C5695F005DF231 /* GameLayer.m */; };
 		272EF65B16C569BE005DF231 /* AsyncObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF65816C569BE005DF231 /* AsyncObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		272EF65C16C569BE005DF231 /* CCMutableTexture2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF65A16C569BE005DF231 /* CCMutableTexture2D.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		27506B7216D7599700245F72 /* DungeonTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7116D7599700245F72 /* DungeonTree.m */; };
 		27506B7516D759E900245F72 /* DungeonTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7416D759E900245F72 /* DungeonTreeNode.m */; };
+		27506B7816D7FF0200245F72 /* CCMutableTexture2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2773F28F16C8447D001C3E83 /* Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F28E16C8447D001C3E83 /* Entity.m */; };
 		2773F29216C85469001C3E83 /* EditorHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29116C85469001C3E83 /* EditorHUD.m */; };
 		2773F29516C949C4001C3E83 /* PlayerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29416C949C4001C3E83 /* PlayerHUD.m */; };
@@ -404,12 +404,12 @@
 		272EF65016C5695F005DF231 /* GameLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameLayer.m; sourceTree = "<group>"; };
 		272EF65716C569BE005DF231 /* AsyncObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AsyncObject.h; path = "../../Pixel-based-destructible-ground-with-Cocos2d-iPhone/DestructibleGround/AsyncObject.h"; sourceTree = "<group>"; };
 		272EF65816C569BE005DF231 /* AsyncObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AsyncObject.m; path = "../../Pixel-based-destructible-ground-with-Cocos2d-iPhone/DestructibleGround/AsyncObject.m"; sourceTree = "<group>"; };
-		272EF65916C569BE005DF231 /* CCMutableTexture2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCMutableTexture2D.h; path = "../../Pixel-based-destructible-ground-with-Cocos2d-iPhone/DestructibleGround/CCMutableTexture2D.h"; sourceTree = "<group>"; };
-		272EF65A16C569BE005DF231 /* CCMutableTexture2D.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCMutableTexture2D.m; path = "../../Pixel-based-destructible-ground-with-Cocos2d-iPhone/DestructibleGround/CCMutableTexture2D.m"; sourceTree = "<group>"; };
 		27506B7016D7599700245F72 /* DungeonTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DungeonTree.h; sourceTree = "<group>"; };
 		27506B7116D7599700245F72 /* DungeonTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DungeonTree.m; sourceTree = "<group>"; };
 		27506B7316D759E900245F72 /* DungeonTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DungeonTreeNode.h; sourceTree = "<group>"; };
 		27506B7416D759E900245F72 /* DungeonTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DungeonTreeNode.m; sourceTree = "<group>"; };
+		27506B7616D7FF0200245F72 /* CCMutableTexture2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCMutableTexture2D.h; sourceTree = "<group>"; };
+		27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCMutableTexture2D.m; sourceTree = "<group>"; };
 		2773F28D16C8447D001C3E83 /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		2773F28E16C8447D001C3E83 /* Entity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entity.m; sourceTree = "<group>"; };
 		2773F29016C85469001C3E83 /* EditorHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorHUD.h; sourceTree = "<group>"; };
@@ -494,8 +494,8 @@
 				272EF64D16C5695F005DF231 /* AppDelegate.m */,
 				272EF65716C569BE005DF231 /* AsyncObject.h */,
 				272EF65816C569BE005DF231 /* AsyncObject.m */,
-				272EF65916C569BE005DF231 /* CCMutableTexture2D.h */,
-				272EF65A16C569BE005DF231 /* CCMutableTexture2D.m */,
+				27506B7616D7FF0200245F72 /* CCMutableTexture2D.h */,
+				27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */,
 				27C4144E16C7D32400BE09F9 /* Colors.h */,
 				27C26D8816CEE904008B0E29 /* Dice.h */,
 				27C26D8916CEEADE008B0E29 /* Dice.c */,
@@ -1065,7 +1065,6 @@
 				272EF64E16C5695F005DF231 /* AppDelegate.m in Sources */,
 				272EF65116C5695F005DF231 /* GameLayer.m in Sources */,
 				272EF65B16C569BE005DF231 /* AsyncObject.m in Sources */,
-				272EF65C16C569BE005DF231 /* CCMutableTexture2D.m in Sources */,
 				27C4145116C7FB1F00BE09F9 /* GameRenderer.m in Sources */,
 				27C4145516C804E400BE09F9 /* Tile.m in Sources */,
 				2773F28F16C8447D001C3E83 /* Entity.m in Sources */,
@@ -1077,6 +1076,7 @@
 				27C26D8A16CEEADE008B0E29 /* Dice.c in Sources */,
 				27506B7216D7599700245F72 /* DungeonTree.m in Sources */,
 				27506B7516D759E900245F72 /* DungeonTreeNode.m in Sources */,
+				27506B7816D7FF0200245F72 /* CCMutableTexture2D.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
