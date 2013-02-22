@@ -38,18 +38,22 @@
         touchedTileIndex = -1;
         isTouched = NO;
         
-        // Dungeon Floor initialization
+        // Dungeon initialization
+        NSMutableArray *dungeon = [[ NSMutableArray alloc ] init ];
+        for ( int i = 0; i < 5; i++ ) {
+            DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:10 andHeight:10 andFloorNumber: i ];
+            [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
+            [ dungeon addObject: newFloor ];
+        }
         
-        //floor = [ DungeonFloor newFloor ];
-        floor = [ DungeonFloor newFloorWidth:10 andHeight:10 ];
+        floor = [ dungeon objectAtIndex:4 ];
+        
         [ self initializeTiles ];
-        [ self drawDungeonFloor: floor toTileArray: tileArray ];
+        [ self drawDungeonFloor ];
         
-        [ GameRenderer generateDungeonFloor: floor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
- 
+        //[ GameRenderer generateDungeonFloor: floor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
         
         CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: floor ];
-        
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
         //////////////////////
@@ -799,7 +803,8 @@
 
 
 
--( void ) drawDungeonFloor: ( DungeonFloor * ) dungeonFloor toTileArray: ( NSArray * ) tileArray {
+//-( void ) drawDungeonFloor: ( DungeonFloor * ) dungeonFloor toTileArray: ( NSArray * ) tileArray {
+-( void ) drawDungeonFloor {
     CGPoint c = cameraAnchorPoint;
     for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
     //for ( int j = 0; j < floor.height; j++ ) {
@@ -818,7 +823,7 @@
 
 -( Tile * ) getTileForCGPoint: ( CGPoint ) p  {
     Tile *tile = nil;
-    tile = [ [ floor tileDataArray ] objectAtIndex: p.x + ( p.y * [ floor width ] ) ];
+    tile = [ floor.tileDataArray objectAtIndex: p.x + ( p.y * [ floor width ] ) ];
     return tile;
 }
 

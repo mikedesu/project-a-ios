@@ -82,6 +82,7 @@ typedef enum {
 -( void ) removeMonitor: ( EditorHUD * ) monitor;
 -( void ) updateMonitorLabel;
 
+-( void ) drawDungeonFloor;
 
 
 

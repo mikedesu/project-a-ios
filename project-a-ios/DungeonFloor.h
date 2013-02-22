@@ -16,14 +16,17 @@ typedef enum
     NSUInteger height;
     NSUInteger border;
     NSMutableArray *tileDataArray;
+    NSUInteger floorNumber;
 }
 
 @property (atomic, assign) NSUInteger width;
 @property (atomic, assign) NSUInteger height;
 @property (atomic, assign) NSUInteger border;
 @property (atomic) NSMutableArray *tileDataArray;
+@property (atomic, assign) NSUInteger floorNumber;
 
 +( DungeonFloor * ) newFloor;
 +( DungeonFloor * ) newFloorWidth: (NSUInteger) w andHeight: (NSUInteger) h;
++( DungeonFloor * ) newFloorWidth: (NSUInteger) w andHeight: (NSUInteger) h andFloorNumber: (NSUInteger) floorNumber;
 
 @end
