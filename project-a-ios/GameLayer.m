@@ -51,8 +51,6 @@
         [ self initializeTiles ];
         [ self drawDungeonFloor ];
         
-        //[ GameRenderer generateDungeonFloor: floor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
-        
         CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: floor ];
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
@@ -62,9 +60,9 @@
         [ hero.name setString: @"Mike" ];
         hero.entityType = ENTITY_T_PC;
         hero.isPC = YES;
+        hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
         
         pcEntity = hero;
-        
         //[ Entity drawTextureForEntity: hero ];
         
         cameraAnchorPoint = ccp( 7, 5 );
@@ -82,9 +80,6 @@
         [ self setEntity:hero onTile: startTile ];
         [ self resetCameraPosition ];
         
-//        selectedTilePoint = hero->positionOnMap;
-        //[ self selectTileAtPosition: [hero positionOnMap] ];
-        //selectedTilePoint = [hero positionOnMap ];
         selectedTilePoint.x = -1;
         selectedTilePoint.y = -1;
         
@@ -125,8 +120,6 @@
         
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"ShowHideEditorHUD" object:nil];
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
-        /*
-         */
         
         [ self schedule:@selector(tick:)];
 	}
@@ -178,7 +171,15 @@
         
         [ self removePlayerMenu: playerMenu ];
         gameState = GAMESTATE_T_GAME;
-    } else {
+    }
+    else if ( [[ notification name ] isEqualToString: @"StepNotification" ] ) {
+        MLOG( @"AttackNotification" );
+        
+        [ self removePlayerMenu: playerMenu ];
+        gameState = GAMESTATE_T_GAME;
+    }
+    
+    else {
         MLOG( @"Notification not handled: %@", notification.name );
     }
     
@@ -264,6 +265,11 @@
 }
 
 
+/*
+ ====================
+ addMonitor: monitor
+ ====================
+ */
 -(void) addMonitor: (EditorHUD *) monitor {
     if ( ! self->monitorIsVisible ) {
         [ self addChild: monitor ];
@@ -272,6 +278,11 @@
 }
 
 
+/*
+ ====================
+ removeMonitor: monitor
+ ====================
+ */
 -(void) removeMonitor: (EditorHUD *) monitor {
     if ( self->monitorIsVisible ) {
         [ self removeChild: monitor cleanup: NO ];
@@ -279,6 +290,11 @@
 }
 
 
+/*
+ ====================
+ updateMonitorLabel
+ ====================
+ */
 -(void) updateMonitorLabel {
     @try {
     [monitor.label setString:
@@ -313,9 +329,6 @@
         
     }
 }
-
-
-
 
 
 
@@ -482,7 +495,8 @@
     CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
     
     // valid selected point
-    if ( selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0 ) {
+    BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
+    if ( validSelectedPoint ) {
         
         //[ self addMessage: @"Tile was previously selected" ];
         [ self selectTileAtPosition: mapPoint ];
@@ -490,11 +504,13 @@
         if ( pcEntity.positionOnMap.x == mapPoint.x && pcEntity.positionOnMap.y == mapPoint.y ) {
             //[ self addMessage: @"Selected Player" ];
             heroTouches++;
-            
             if ( heroTouches == 2) {
+                // double-touched hero
                 [ self addPlayerMenu: playerMenu ];
                 heroTouches = 0;
             } else if ( heroTouches == 1 && playerMenuIsVisible ) {
+                // touched hero while playerMenu is visible
+                // close the playerMenu
                 [ self removePlayerMenu: playerMenu ];
                 heroTouches = 0;
             }
@@ -512,7 +528,7 @@
         //[ self addMessage: @"Nothing previously selected" ];
         [ self selectTileAtPosition: mapPoint ];
         
-        if ( [pcEntity positionOnMap].x  == mapPoint.x && [pcEntity positionOnMap].y == mapPoint.y ) {
+        if ( pcEntity.positionOnMap.x  == mapPoint.x && pcEntity.positionOnMap.y == mapPoint.y ) {
             heroTouches++;
             
             if ( heroTouches == 2) {
@@ -531,13 +547,15 @@
             
             [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
             
-            if ( distance > 4 ) {
+            BOOL checkPlayerMoveDistance = distance > 4;
+            if ( checkPlayerMoveDistance ) {
                 [ self addMessage: @"Cannot move that far in one turn!" ];
                 gameState = GAMESTATE_T_GAME;
             }
             
             else {
             
+                // if we're moving onto the downstairs tile...
                 if ( [self getTileForCGPoint:mapPoint].tileType == TILE_FLOOR_DOWNSTAIRS ) {
                     
                     [ self moveEntity:pcEntity toPosition:mapPoint ];
@@ -548,6 +566,7 @@
                     
                 }
                 
+                // if we're moving onto the upstairs tile...
                 else if ( [self getTileForCGPoint:mapPoint].tileType == TILE_FLOOR_UPSTAIRS ) {
                     [ self moveEntity:pcEntity toPosition:mapPoint ];
                     [ self resetCameraPosition ];
@@ -556,6 +575,7 @@
                     gameState = GAMESTATE_T_GAME;
                 }
                 
+                // just a normal tile...
                 else {
                     [ self moveEntity:pcEntity toPosition:mapPoint ];
                     [ self resetCameraPosition ];
@@ -563,31 +583,14 @@
                     gameState = GAMESTATE_T_GAME;
                 }
             }
-            
-            
-            
-            
-            
         } else {
-            
-            //[ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
-            //selectedTilePoint = mapPoint;   // sets this tile to be remembered
-            //[ self selectTileAtPosition: mapPoint ];
-            
-            //gameState = GAMESTATE_T_GAME_PC_SELECTMOVE;
             
             if ( heroTouches > 0 ) {
                 heroTouches = 0;
             }
         }
-
-        
     }
-    
-    
     [ self updateMonitorLabel ];
-    
-    
 }
 
 

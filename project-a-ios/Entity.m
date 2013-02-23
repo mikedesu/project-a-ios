@@ -19,6 +19,8 @@
 @synthesize money;
 @synthesize inventoryArray;
 
+@synthesize pathFindingAlgorithm;
+
 /*
  ====================
  init
@@ -46,6 +48,8 @@
         
         money = 0;
         inventoryArray = [ [ NSMutableArray alloc ] init ];
+        
+        pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
     }
     return self;
 }

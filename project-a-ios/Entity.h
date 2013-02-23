@@ -11,7 +11,6 @@ typedef enum {
     ENTITY_T_ITEM
 } EntityTypes_t;
 
-
 typedef struct {
     NSUInteger strength;
     NSUInteger dexterity;
@@ -20,6 +19,11 @@ typedef struct {
     NSUInteger wisdom;
     NSUInteger charisma;
 } EntityStats_t;
+
+typedef enum {
+    ENTITYPATHFINDINGALGORITHM_T_RANDOM=0,
+    ENTITYPATHFINDINGALGORITHM_T_SIMPLE
+} EntityPathFindingAlgorithm_t;
 
 
 @class CCMutableTexture2D;
@@ -36,6 +40,8 @@ typedef struct {
     EntityStats_t stats;
     NSUInteger money;
     
+    EntityPathFindingAlgorithm_t pathFindingAlgorithm;
+    
     NSMutableArray *inventoryArray;
 }
 
@@ -47,6 +53,9 @@ typedef struct {
 @property (atomic, assign) EntityTypes_t entityType;
 @property (atomic, assign) NSUInteger level;
 @property (atomic, assign) EntityStats_t stats;
+
+@property (atomic, assign) EntityPathFindingAlgorithm_t pathFindingAlgorithm;
+
 @property (atomic, assign) NSUInteger money;
 @property (atomic) NSMutableArray *inventoryArray;
 

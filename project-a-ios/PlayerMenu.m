@@ -33,10 +33,9 @@
 #define MENUITEM0_LABEL_TEXT    @"EditorHUD"
 #define MENUITEM1_LABEL_TEXT    @"Move"
 #define MENUITEM2_LABEL_TEXT    @"Attack"
+
+#define MENUITEM3_LABEL_TEXT    @"Step"
         
-
-
-#define MENUITEM3_LABEL_TEXT    @"Label3"
 #define MENUITEM4_LABEL_TEXT    @"Label4"
 #define MENUITEM5_LABEL_TEXT    @"Label5"
 #define MENUITEM6_LABEL_TEXT    @"Label6"
@@ -216,7 +215,7 @@
 }
 
 
-#define MENUITEM3_NOTIFICATIONNAME      @"MENUITEM3_NOTIFICATIONNAME"
+#define MENUITEM3_NOTIFICATIONNAME      @"StepNotification"
 -( void ) menuItem3Pressed {
     MLOG( @"menuItem3Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM3_NOTIFICATIONNAME object: self ];

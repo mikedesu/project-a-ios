@@ -132,7 +132,7 @@
 		27506B7216D7599700245F72 /* DungeonTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7116D7599700245F72 /* DungeonTree.m */; };
 		27506B7516D759E900245F72 /* DungeonTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7416D759E900245F72 /* DungeonTreeNode.m */; };
 		27506B7816D7FF0200245F72 /* CCMutableTexture2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		27506B7B16D801FF00245F72 /* AsyncObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7A16D801FE00245F72 /* AsyncObject.m */; };
+		27506B7B16D801FF00245F72 /* AsyncObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7A16D801FE00245F72 /* AsyncObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2773F28F16C8447D001C3E83 /* Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F28E16C8447D001C3E83 /* Entity.m */; };
 		2773F29216C85469001C3E83 /* EditorHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29116C85469001C3E83 /* EditorHUD.m */; };
 		2773F29516C949C4001C3E83 /* PlayerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29416C949C4001C3E83 /* PlayerHUD.m */; };
