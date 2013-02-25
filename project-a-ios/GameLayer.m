@@ -153,10 +153,6 @@
 	return self;
 }
 
--( void ) scheduledStepAction {
-    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"StepNotification" object: self ];
-}
-
 
 
 /*
@@ -1419,6 +1415,8 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
+#pragma mark - Initialization helper code
+
 /*
  ====================
  initializeDungeon
@@ -1533,6 +1531,8 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
+#pragma mark - Game Logic code
+
 /*
  ====================
  stepGameLogic
@@ -1629,5 +1629,16 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
+
+/*
+ ====================
+ scheduledStepAction
+ 
+ this method is scheduled in the init for gameLogic autostepping
+ ====================
+ */
+-( void ) scheduledStepAction {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"StepNotification" object: self ];
+}
 
 @end
