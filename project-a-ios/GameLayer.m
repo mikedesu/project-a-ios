@@ -136,13 +136,17 @@
         MLOG( @"TestNotification1" );
     } else if ( [[ notification name ] isEqualToString: @"TestNotification2" ] ) {
         MLOG( @"TestNotification2" );
-    } else if ( [[ notification name ] isEqualToString: @"ShowHideEditorHUD" ] ) {
-        MLOG( @"ShowHideEditorHUD" );
-        if ( ! editorHUDIsVisible ) {
-            [ self addEditorHUD: editorHUD ];
+    } else if ( [[ notification name ] isEqualToString: @"MonitorNotification" ] ) {
+        MLOG( @"MonitorNotification" );
+        
+        if ( ! monitorIsVisible ) {
+            [ self addMonitor: monitor ];
+            monitorIsVisible = TRUE;
         } else {
-            [ self removeEditorHUD: editorHUD ];
+            [self removeMonitor: monitor];
+            monitorIsVisible = FALSE;
         }
+        
     } else if ( [[ notification name ] isEqualToString: @"MoveNotification" ] ) {
         MLOG( @"MoveNotification" );
         
@@ -314,7 +318,7 @@
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:150 height:250 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:150 height:100 ];
     playerMenu.position = ccp(  size.width - (playerMenu.contentSize.width) , size.height - (playerMenu.contentSize.height) );
 }
 
@@ -376,7 +380,8 @@
 -( void ) initMonitor {
     CGSize size = [[CCDirector sharedDirector] winSize];
     monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
-    monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
+    //monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
+    monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - 10 );
     [ self updateMonitorLabel ];
 }
 
@@ -1358,7 +1363,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
     
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"ShowHideEditorHUD" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MonitorNotification" object:nil];
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"StepNotification" object:nil];
 }
@@ -1375,7 +1380,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
-    [ self addEditorHUD: editorHUD ];
+    //[ self addEditorHUD: editorHUD ];
     
     monitorIsVisible = NO;
     [ self initMonitor ];

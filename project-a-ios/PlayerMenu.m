@@ -30,7 +30,7 @@
 #define MENUITEM_LABEL_FONTSIZE     16
 #define MENUITEM_LABEL_FONTCOLOR    white3
         
-#define MENUITEM0_LABEL_TEXT    @"EditorHUD"
+#define MENUITEM0_LABEL_TEXT    @"Monitor"
 #define MENUITEM1_LABEL_TEXT    @"Move"
 #define MENUITEM2_LABEL_TEXT    @"Attack"
 
@@ -46,20 +46,20 @@
         
 
         
-        
         CCLabelTTF *menuItemLabel0 = [[ CCLabelTTF alloc ] initWithString: MENUITEM0_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
         menuItemLabel0.color = MENUITEM_LABEL_FONTCOLOR;
         
-        CCLabelTTF *menuItemLabel1 = [[ CCLabelTTF alloc ] initWithString: MENUITEM1_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
+         CCLabelTTF *menuItemLabel1 = [[ CCLabelTTF alloc ] initWithString: MENUITEM1_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
         menuItemLabel1.color = MENUITEM_LABEL_FONTCOLOR;
         
-        CCLabelTTF *menuItemLabel2 = [[ CCLabelTTF alloc ] initWithString: MENUITEM2_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
+         CCLabelTTF *menuItemLabel2 = [[ CCLabelTTF alloc ] initWithString: MENUITEM2_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
         menuItemLabel2.color = MENUITEM_LABEL_FONTCOLOR;
  
         CCLabelTTF *menuItemLabel3 = [[ CCLabelTTF alloc ] initWithString: MENUITEM3_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
         menuItemLabel2.color = MENUITEM_LABEL_FONTCOLOR;
         
-        CCLabelTTF *menuItemLabel4 = [[ CCLabelTTF alloc ] initWithString: MENUITEM4_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
+        /*
+         CCLabelTTF *menuItemLabel4 = [[ CCLabelTTF alloc ] initWithString: MENUITEM4_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
         menuItemLabel2.color = MENUITEM_LABEL_FONTCOLOR;
         
         CCLabelTTF *menuItemLabel5 = [[ CCLabelTTF alloc ] initWithString: MENUITEM5_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
@@ -79,8 +79,7 @@
         
         CCLabelTTF *menuItemLabel10 = [[ CCLabelTTF alloc ] initWithString: MENUITEM10_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
         menuItemLabel2.color = MENUITEM_LABEL_FONTCOLOR;
-        
-        
+        */
         
         
         
@@ -91,17 +90,18 @@
         CCMenuItem *menuItem0 = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabel0 target:self selector:@selector(menuItem0Pressed) ];
         menuItem0.position = ccp( 0 + menuItemLabel0.contentSize.width/2 , label.position.y - (menuItemLabel0.contentSize.height/2) - pad );
         
-        CCMenuItem *menuItem1 = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabel1 target:self selector:@selector(menuItem1Pressed) ];
+         CCMenuItem *menuItem1 = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabel1 target:self selector:@selector(menuItem1Pressed) ];
         menuItem1.position = ccp( 0 + menuItemLabel1.contentSize.width/2 , label.position.y - (menuItemLabel0.contentSize.height/2) - pad - (menuItemLabel1.contentSize.height/2) - pad );
         
-        CCMenuItem *menuItem2 = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabel2 target:self selector:@selector(menuItem2Pressed) ];
+         CCMenuItem *menuItem2 = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabel2 target:self selector:@selector(menuItem2Pressed) ];
         menuItem2.position = ccp( 0 + menuItemLabel2.contentSize.width/2 , label.position.y - (menuItemLabel0.contentSize.height/2) - pad - (menuItemLabel1.contentSize.height/2) - pad - (menuItemLabel2.contentSize.height/2) - pad );
         
         CCMenuItem *menuItem3 = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabel3 target:self selector:@selector(menuItem3Pressed) ];
         menuItem3.position = ccp( 0 + menuItemLabel3.contentSize.width/2 , label.position.y - (menuItemLabel0.contentSize.height/2) - pad - (menuItemLabel1.contentSize.height/2) - pad - (menuItemLabel2.contentSize.height/2) - pad -
                                  (menuItemLabel3.contentSize.height/2) - pad );
         
-        CCMenuItem *menuItem4 = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabel4 target:self selector:@selector(menuItem4Pressed) ];
+        /*
+         CCMenuItem *menuItem4 = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabel4 target:self selector:@selector(menuItem4Pressed) ];
         menuItem4.position = ccp( 0 + menuItemLabel4.contentSize.width/2 , label.position.y - (menuItemLabel0.contentSize.height/2) - pad - (menuItemLabel1.contentSize.height/2) - pad - (menuItemLabel2.contentSize.height/2) - pad -
                                  (menuItemLabel3.contentSize.height/2) - pad -
                                  (menuItemLabel4.contentSize.height/2) - pad
@@ -163,38 +163,32 @@
                                   (menuItemLabel9.contentSize.height/2) - pad -
                                   (menuItemLabel10.contentSize.height/2) - pad
                                  );
-        
-        
-        
-        
-        
-        
-        
-        
+        */
         
         
         CCMenu *menu = [[ CCMenu alloc ] initWithArray: [NSArray arrayWithObjects:
-                                                         menuItem0,
+                                                         menuItem0 ,
                                                          menuItem1,
                                                          menuItem2,
-                                                         menuItem3,
+                                                         menuItem3,/*
                                                          menuItem4,
                                                          menuItem5,
                                                          menuItem6,
                                                          menuItem7,
                                                          menuItem8,
                                                          menuItem9,
-                                                         menuItem10,
+                                                         menuItem10,*/
                                                          nil] ];
         menu.position = ccp( 0, 0 );
         [ self addChild: menu ];
+        
         
     }
     return self;
 }
 
 
-#define MENUITEM0_NOTIFICATIONNAME      @"ShowHideEditorHUD"
+#define MENUITEM0_NOTIFICATIONNAME      @"MonitorNotification"
 -( void ) menuItem0Pressed {
     MLOG( @"menuItem0Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM0_NOTIFICATIONNAME object: self ];
