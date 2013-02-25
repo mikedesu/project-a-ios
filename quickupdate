@@ -10,5 +10,6 @@ git push origin dev-ui
 git push origin dev-dungeon
 #git push origin dev-entity
 git push origin dev-entity-movement
+git push origin dev-ai
 ./update_dropbox
 echo "quickupdate script successful :)"

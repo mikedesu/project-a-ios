@@ -130,6 +130,8 @@
  ====================
  */
 -( void ) receiveNotification: ( NSNotification * ) notification {
+    MLOG( @"received notification: %@", notification );
+    
     if ( [[ notification name ] isEqualToString: @"TestNotification1" ] ) {
         MLOG( @"TestNotification1" );
     } else if ( [[ notification name ] isEqualToString: @"TestNotification2" ] ) {
@@ -154,10 +156,76 @@
         gameState = GAMESTATE_T_GAME;
     }
     else if ( [[ notification name ] isEqualToString: @"StepNotification" ] ) {
-        MLOG( @"AttackNotification" );
+        MLOG( @"StepNotification" );
         
-        [ self removePlayerMenu: playerMenu ];
+        //[ self removePlayerMenu: playerMenu ];
+        gameState = GAMESTATE_T_GAME_PC_STEP;
+        
+        
+        //[ self addMessage: @"Stepping..." ];
+        // move pcEntity towards downstairsTile based on movement algorithm
+        
+        if ( pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_RANDOM )
+        {
+            NSUInteger roll = rollDiceOnce(8);
+            CGFloat x = -1;
+            CGFloat y = -1;
+            
+            MLOG( @"rolled %d", roll );
+            
+            // UDLR UL, UR, DL, DR
+            if ( roll == 1 ) {
+                x = 0;
+                y = -1;
+            }
+            else if ( roll == 2 ) {
+                x = 0;
+                y = 1;
+            }
+            else if ( roll == 3) {
+                x = -1;
+                y = 0;
+            }
+            else if ( roll == 4) {
+                x = 1;
+                y = 0;
+            }
+            else if ( roll == 5) {
+                x = -1;
+                y = -1;
+            }
+            else if ( roll == 6) {
+                x = 1;
+                y = -1;
+            }
+            else if ( roll == 7) {
+                x = -1;
+                y = 1;
+            }
+            else if ( roll == 8) {
+                x = 1;
+                y = 1;
+            }
+            
+            
+            
+            CGPoint newPosition;
+            newPosition.x = pcEntity.positionOnMap.x + x;
+            newPosition.y = pcEntity.positionOnMap.y + y;
+            
+            MLOG( @"(%.0f,%.0f)", pcEntity.positionOnMap.x, pcEntity.positionOnMap.y );
+            MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
+            
+            // try to move the entity to the new position
+            [ self moveEntity:pcEntity toPosition: newPosition ];
+        }
+        
+        
+        [ self resetCameraPosition ];
+        turnCounter++;
         gameState = GAMESTATE_T_GAME;
+        
+        
     }
     
     else {
@@ -541,7 +609,7 @@
                     
                     [ self moveEntity:pcEntity toPosition:mapPoint ];
                     [ self resetCameraPosition ];
-                    [ self addMessage: @"Going downstairs" ];
+                    //[ self addMessage: @"Going downstairs" ];
                     turnCounter++;
                     gameState = GAMESTATE_T_GAME;
                     
@@ -551,7 +619,7 @@
                 else if ( [self getTileForCGPoint:mapPoint].tileType == TILE_FLOOR_UPSTAIRS ) {
                     [ self moveEntity:pcEntity toPosition:mapPoint ];
                     [ self resetCameraPosition ];
-                    [ self addMessage: @"Going upstairs" ];
+                    //[ self addMessage: @"Going upstairs" ];
                     turnCounter++;
                     gameState = GAMESTATE_T_GAME;
                 }
@@ -564,8 +632,9 @@
                     gameState = GAMESTATE_T_GAME;
                 }
             }
-        } else {
-            
+        }
+        
+        else {
             if ( heroTouches > 0 ) {
                 heroTouches = 0;
             }
@@ -1072,12 +1141,25 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
     MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
+    
     [ self addMessage: [NSString stringWithFormat: @"%@ -> (%.0f,%.0f)", entity.name, position.x, position.y]];
+    
     Tile *tile = [ self getMapTileFromPoint: position ];
     if ( tile.tileType != TILE_FLOOR_VOID ) {
         Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
         [prevTile.contents removeObject: entity];
+        
         [ self setEntity: entity onTile: tile ];
+        
+        if ( entity == pcEntity ) {
+            if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
+                [ self addMessage: @"Going downstairs..." ];
+            }
+            else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
+                [ self addMessage: @"Going upstairs..." ];
+            }
+        }
+
     }
 }
 
@@ -1211,6 +1293,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"ShowHideEditorHUD" object:nil];
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"StepNotification" object:nil];
 }
 
 

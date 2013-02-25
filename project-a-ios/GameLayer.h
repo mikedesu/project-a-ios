@@ -10,6 +10,7 @@ typedef enum {
     GAMESTATE_T_MAINMENU=0,
     GAMESTATE_T_GAME,
     GAMESTATE_T_GAME_PC_SELECTMOVE,
+    GAMESTATE_T_GAME_PC_STEP,
 } GameState_t;
 
 @class DungeonFloor;
