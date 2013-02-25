@@ -89,4 +89,16 @@
 }
 
 
+/*
+ ====================
+ step
+ 
+ steps the entity's logic one turn
+ ====================
+ */
+-( void ) step {
+    //MLOG( @"Entity step" );
+}
+
+
 @end

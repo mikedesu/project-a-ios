@@ -49,7 +49,6 @@
         // set up our 'hero'
         [ self initializePCEntity ];
         
-       
  
         // set the camera anchor point
         cameraAnchorPoint = ccp( 7, 5 );
@@ -57,6 +56,7 @@
         // our list of entities
         entityArray = [ [ NSMutableArray alloc ] init ];
         [ entityArray addObject: pcEntity ];
+        
  
         // set the starting tile
         Tile *startTile = nil;
@@ -70,6 +70,39 @@
         // set the hero on the startTile and center the camera
         [ self setEntity:pcEntity onTile: startTile ];
         [ self resetCameraPosition ];
+        
+        
+        Entity *enemy0;
+        enemy0 = [[ Entity alloc ] init ];
+        enemy0.entityType = ENTITY_T_NPC;
+        [enemy0.name setString:@"Enemy0"];
+        enemy0.isPC = NO;
+        enemy0.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+        
+        Entity *enemy1;
+        enemy1 = [[ Entity alloc ] init ];
+        enemy1.entityType = ENTITY_T_NPC;
+        [enemy1.name setString:@"Enemy1"];
+        enemy1.isPC = NO;
+        enemy1.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+        /*
+         */
+        
+        
+        // find a tile to place enemy0 on
+        CGPoint enemyStartPos = startTile.position;
+        enemyStartPos.x += 1;
+        Tile *enemyStartTile = [ self getTileForCGPoint: enemyStartPos ];
+        [ self setEntity: enemy0 onTile:enemyStartTile ];
+        
+        enemyStartPos.x += 1;
+        enemyStartTile = [ self getTileForCGPoint: enemyStartPos ];
+        [ self setEntity: enemy1 onTile:enemyStartTile ];
+        /**/
+        
+        [entityArray addObject: enemy0 ];
+        [entityArray addObject: enemy1 ];
+        
         
         // set the selectedTilePoint to (-1,-1) (none)
         selectedTilePoint = ccp( -1, -1 );
@@ -222,7 +255,7 @@
             [ self moveEntity:pcEntity toPosition: newPosition ];
         }
         
-        else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_RANDOM2 )
+        else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM )
         {
             
             BOOL rollIsUnacceptable = YES;
@@ -288,6 +321,10 @@
             // try to move the entity to the new position
             [ self moveEntity:pcEntity toPosition: newPosition ];
  
+            // step game logic
+            [ self stepGameLogic ];
+            
+            
         }
         
         
@@ -1225,24 +1262,44 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
     MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
     
-    [ self addMessage: [NSString stringWithFormat: @"%@ -> (%.0f,%.0f)", entity.name, position.x, position.y]];
     
     Tile *tile = [ self getMapTileFromPoint: position ];
     if ( tile.tileType != TILE_FLOOR_VOID ) {
-        Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
-        [prevTile.contents removeObject: entity];
         
-        [ self setEntity: entity onTile: tile ];
+        BOOL isMoveValid = YES;
+        // check if there is an NPC...
         
-        if ( entity == pcEntity ) {
-            if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
-                [ self addMessage: @"Going downstairs..." ];
+        for ( Entity *e in tile.contents ) {
+            if ( e.entityType == ENTITY_T_NPC ) {
+                isMoveValid = NO;
+                break;
             }
-            else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
-                [ self addMessage: @"Going upstairs..." ];
+            else if ( e.entityType == ENTITY_T_PC ) {
+                isMoveValid = NO;
+                break;
             }
+            
         }
-
+        
+        if ( isMoveValid ) {
+            Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
+            [prevTile.contents removeObject: entity];
+            
+            [ self setEntity: entity onTile: tile ];
+            [ self addMessage: [NSString stringWithFormat: @"%@ -> (%.0f,%.0f)", entity.name, position.x, position.y]];
+            
+            if ( entity == pcEntity ) {
+                if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
+                    [ self addMessage: @"Going downstairs..." ];
+                }
+                else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
+                    [ self addMessage: @"Going upstairs..." ];
+                }
+            }
+        } else {
+            MLOG( @"Attempting to move into NPC." );
+            //[ self addMessage: @"Can't move there!" ];
+        }
     }
 }
 
@@ -1423,7 +1480,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ hero.name setString: @"Mike" ];
     hero.entityType = ENTITY_T_PC;
     hero.isPC = YES;
-    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM2;
+    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
     pcEntity = hero;
     //[ Entity drawTextureForEntity: hero ];
 }
@@ -1454,6 +1511,92 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     
     return retval;
+}
+
+
+/*
+ ====================
+ stepGameLogic
+ 
+ steps the game's logic forward
+ ====================
+ */
+-( void ) stepGameLogic {
+    for ( Entity *e in entityArray ) {
+        if ( e.entityType != ENTITY_T_PC )
+        {
+            [ e step ];
+            
+            if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM )
+            {
+                
+                BOOL rollIsUnacceptable = YES;
+                CGPoint newPosition;
+                
+                while ( rollIsUnacceptable )
+                {
+                    NSUInteger roll = rollDiceOnce(8);
+                    CGFloat x = -1;
+                    CGFloat y = -1;
+                    
+                    MLOG( @"rolled %d", roll );
+                    
+                    // UDLR UL, UR, DL, DR
+                    if ( roll == 1 ) {
+                        x = 0;
+                        y = -1;
+                    }
+                    else if ( roll == 2 ) {
+                        x = 0;
+                        y = 1;
+                    }
+                    else if ( roll == 3) {
+                        x = -1;
+                        y = 0;
+                    }
+                    else if ( roll == 4) {
+                        x = 1;
+                        y = 0;
+                    }
+                    else if ( roll == 5) {
+                        x = -1;
+                        y = -1;
+                    }
+                    else if ( roll == 6) {
+                        x = 1;
+                        y = -1;
+                    }
+                    else if ( roll == 7) {
+                        x = -1;
+                        y = 1;
+                    }
+                    else if ( roll == 8) {
+                        x = 1;
+                        y = 1;
+                    }
+                    
+                    newPosition.x = e.positionOnMap.x + x;
+                    newPosition.y = e.positionOnMap.y + y;
+                    
+                    Tile *tile = [ self getTileForCGPoint: newPosition ];
+                    if ( tile.tileType == TILE_FLOOR_VOID ) {
+                        rollIsUnacceptable = TRUE;
+                    } else {
+                        rollIsUnacceptable = FALSE;
+                    }
+                }
+                
+                
+                MLOG( @"(%.0f,%.0f)", e.positionOnMap.x, e.positionOnMap.y );
+                MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
+                
+                // try to move the entity to the new position
+                [ self moveEntity:e toPosition: newPosition ];
+            }
+            
+            //[ self addMessage: [NSString stringWithFormat:@"%@ stepped", e.name] ];
+        }
+    }
 }
 
 

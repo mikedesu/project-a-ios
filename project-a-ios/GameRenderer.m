@@ -68,7 +68,7 @@
     [ texture apply ];
     
     for (Entity *entity in data.contents) {
-        if ( [[entity name] isEqualToString: @"Mike" ] ) {
+        if ( entity.entityType == ENTITY_T_PC ) {
             // draw on the texture
             if ( data.isSelected ) {
                 [ texture fill: blue_alpha( 255 ) ];
@@ -89,7 +89,9 @@
                 //[texture apply ];
                 
             }
-        } else if ( [ [entity name] isEqualToString: @"Test1" ] ) {
+        }
+        
+        else if ( [ [entity name] isEqualToString: @"Test1" ] ) {
             // Test1 will get rendered as colorFuzz
             for ( int i = 0; i < 16; i++ ) {
                 for ( int j = 0; j < 16; j++ ) {
@@ -98,6 +100,20 @@
             }
             [ texture apply ];
         }
+        
+        else if ( entity.entityType == ENTITY_T_NPC ) {
+            if ( data.isSelected ) {
+                Color_t tmpColor = newColor( color.r + 0xAA , color.g + 0xAA , color.b + 0x00, color.a );
+                [ texture fill: tmpColor ];
+                
+            } else {
+                [ texture fill: red ];
+            }
+            
+            [ texture apply ];
+        }
+        
+        
     }
 }
 

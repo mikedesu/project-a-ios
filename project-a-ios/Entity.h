@@ -22,7 +22,7 @@ typedef struct {
 
 typedef enum {
     ENTITYPATHFINDINGALGORITHM_T_RANDOM=0,
-    ENTITYPATHFINDINGALGORITHM_T_RANDOM2,
+    ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM,
     ENTITYPATHFINDINGALGORITHM_T_SIMPLE
 } EntityPathFindingAlgorithm_t;
 
@@ -61,5 +61,7 @@ typedef enum {
 @property (atomic) NSMutableArray *inventoryArray;
 
 +( void ) drawTextureForEntity: ( Entity * ) entity;
+
+-( void ) step;
 
 @end
