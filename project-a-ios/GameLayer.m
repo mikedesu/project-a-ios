@@ -138,8 +138,17 @@
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              1
-        [ self schedule:@selector(scheduledStepAction) interval: MAX_SAFE_STEP_SPEED ];
+#define STEP_SPEED              0.1
+        
+        // turn on gameLogic & autostepping
+        gameLogicIsOn = NO;
+        autostepGameLogic = NO;
+        
+        // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
+        autostepGameLogic = autostepGameLogic && gameLogicIsOn;
+        if ( gameLogicIsOn && autostepGameLogic ) {
+            [ self schedule:@selector(scheduledStepAction) interval: STEP_SPEED ];
+        }
 	}
 	return self;
 }
@@ -330,7 +339,9 @@
             [ self moveEntity:pcEntity toPosition: newPosition ];
  
             // step game logic
-            [ self stepGameLogic ];
+            if ( gameLogicIsOn ) {
+                [ self stepGameLogic ];
+            }
             
             
         }
@@ -1530,14 +1541,13 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) stepGameLogic {
-    for ( Entity *e in entityArray ) {
-        if ( e.entityType != ENTITY_T_PC )
-        {
-            [ e step ];
-            
-            [ self handleEntityStep: e ];
-            
-            //[ self addMessage: [NSString stringWithFormat:@"%@ stepped", e.name] ];
+    if ( gameLogicIsOn ) {
+        for ( Entity *e in entityArray ) {
+            if ( e.entityType != ENTITY_T_PC ){
+                [ e step ];
+                [ self handleEntityStep: e ];
+                //[ self addMessage: [NSString stringWithFormat:@"%@ stepped", e.name] ];
+            }
         }
     }
 }

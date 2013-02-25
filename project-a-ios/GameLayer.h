@@ -59,7 +59,10 @@ typedef enum {
     
     CGPoint cameraAnchorPoint;
     
-    double touchBeganTime;    
+    double touchBeganTime;
+    
+    BOOL gameLogicIsOn;
+    BOOL autostepGameLogic;
 }
 
 +(CCScene *) scene;
