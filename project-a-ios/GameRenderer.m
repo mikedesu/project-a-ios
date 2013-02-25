@@ -388,7 +388,7 @@
                 [ self setTileAtPosition:point onFloor:floor toType:tileType ];
                 [ placedTilesArray addObject: v ];
                 [ triedTilesArray removeAllObjects ];
-                MLOG( @"tile placed at (%d,%d)", x+xo, y+yo );
+                //MLOG( @"tile placed at (%d,%d)", x+xo, y+yo );
                 numTilesPlaced++;
             }
         
@@ -436,7 +436,7 @@
                 NSUInteger percentage = 5;
                 if ( roll <= percentage ) {
                     [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_UPSTAIRS ];
-                    MLOG( @"Upstairs placed" );
+                    //MLOG( @"Upstairs placed" );
                     isUpstairsPlaced = YES;
                     break;
                 }
@@ -451,7 +451,7 @@
                 if ( roll <= percentage ) {
                     if ( ! CGPointEqualToPoint(upstairsPoint, p.CGPointValue) ) {
                         [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
-                        MLOG( @"Downstairs placed" );
+                        //MLOG( @"Downstairs placed" );
                         isDownstairsPlaced = YES;
                         break;
                     }

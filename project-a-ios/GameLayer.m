@@ -136,8 +136,16 @@
         
         // schedule our update method, tick
         [ self schedule:@selector(tick:)];
+        
+#define MAX_SAFE_STEP_SPEED     0.0001
+#define STEP_SPEED              1
+        [ self schedule:@selector(scheduledStepAction) interval: MAX_SAFE_STEP_SPEED ];
 	}
 	return self;
+}
+
+-( void ) scheduledStepAction {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"StepNotification" object: self ];
 }
 
 
@@ -166,11 +174,11 @@
     MLOG( @"received notification: %@", notification );
     
     if ( [[ notification name ] isEqualToString: @"TestNotification1" ] ) {
-        MLOG( @"TestNotification1" );
+        //MLOG( @"TestNotification1" );
     } else if ( [[ notification name ] isEqualToString: @"TestNotification2" ] ) {
-        MLOG( @"TestNotification2" );
+        //MLOG( @"TestNotification2" );
     } else if ( [[ notification name ] isEqualToString: @"MonitorNotification" ] ) {
-        MLOG( @"MonitorNotification" );
+        //MLOG( @"MonitorNotification" );
         
         if ( ! monitorIsVisible ) {
             [ self addMonitor: monitor ];
@@ -181,19 +189,19 @@
         }
         
     } else if ( [[ notification name ] isEqualToString: @"MoveNotification" ] ) {
-        MLOG( @"MoveNotification" );
+        //MLOG( @"MoveNotification" );
         
         [ self removePlayerMenu: playerMenu ];
         gameState = GAMESTATE_T_GAME_PC_SELECTMOVE;
         
     } else if ( [[ notification name ] isEqualToString: @"AttackNotification" ] ) {
-        MLOG( @"AttackNotification" );
+        //MLOG( @"AttackNotification" );
         
         [ self removePlayerMenu: playerMenu ];
         gameState = GAMESTATE_T_GAME;
     }
     else if ( [[ notification name ] isEqualToString: @"StepNotification" ] ) {
-        MLOG( @"StepNotification" );
+        //MLOG( @"StepNotification" );
         
         //[ self removePlayerMenu: playerMenu ];
         gameState = GAMESTATE_T_GAME_PC_STEP;
@@ -208,7 +216,7 @@
             CGFloat x = -1;
             CGFloat y = -1;
             
-            MLOG( @"rolled %d", roll );
+            //MLOG( @"rolled %d", roll );
             
             // UDLR UL, UR, DL, DR
             if ( roll == 1 ) {
@@ -248,8 +256,8 @@
             newPosition.x = pcEntity.positionOnMap.x + x;
             newPosition.y = pcEntity.positionOnMap.y + y;
             
-            MLOG( @"(%.0f,%.0f)", pcEntity.positionOnMap.x, pcEntity.positionOnMap.y );
-            MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
+            //MLOG( @"(%.0f,%.0f)", pcEntity.positionOnMap.x, pcEntity.positionOnMap.y );
+            //MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
             
             // try to move the entity to the new position
             [ self moveEntity:pcEntity toPosition: newPosition ];
@@ -267,7 +275,7 @@
                 CGFloat x = -1;
                 CGFloat y = -1;
             
-                MLOG( @"rolled %d", roll );
+                //MLOG( @"rolled %d", roll );
             
                 // UDLR UL, UR, DL, DR
                 if ( roll == 1 ) {
@@ -315,8 +323,8 @@
             }
             
             
-            MLOG( @"(%.0f,%.0f)", pcEntity.positionOnMap.x, pcEntity.positionOnMap.y );
-            MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
+            //MLOG( @"(%.0f,%.0f)", pcEntity.positionOnMap.x, pcEntity.positionOnMap.y );
+            //MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
             
             // try to move the entity to the new position
             [ self moveEntity:pcEntity toPosition: newPosition ];
@@ -655,7 +663,7 @@
  ====================
  */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    MLOG( @"ccTouchesBegan" );
+    //MLOG( @"ccTouchesBegan" );
 	UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = YES;
@@ -1211,7 +1219,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             break;
         }
     }
-    MLOG( @"Returning tile " );
+    //MLOG( @"Returning tile " );
     return tile;
 }
 
@@ -1260,7 +1268,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
-    MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
+    //MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
     
     
     Tile *tile = [ self getMapTileFromPoint: position ];
@@ -1297,7 +1305,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 }
             }
         } else {
-            MLOG( @"Attempting to move into NPC." );
+            //MLOG( @"Attempting to move into NPC." );
             //[ self addMessage: @"Can't move there!" ];
         }
     }
@@ -1347,7 +1355,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             }
         } else {
             // invalid point fed into selection
-            MLOG( @"Invalid point: (%.0f,%.0f)", position.x, position.y );
+            //MLOG( @"Invalid point: (%.0f,%.0f)", position.x, position.y );
         }
     } else {
         if ( position.x >= 0 && position.y >= 0 ) {
@@ -1359,7 +1367,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         } else {
             
             // invalid point fed into selection
-            MLOG( @"Invalid point: (%.0f,%.0f)", position.x, position.y );
+            //MLOG( @"Invalid point: (%.0f,%.0f)", position.x, position.y );
         }
  
     }
@@ -1390,7 +1398,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b {
-    MLOG( @"distanceFromTile: a toTile: b" );
+    //MLOG( @"distanceFromTile: a toTile: b" );
     NSInteger ax = (NSInteger)a.position.x;
     NSInteger bx = (NSInteger)b.position.x;
     NSInteger ay = (NSInteger)a.position.y;
@@ -1455,7 +1463,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
-    [ self addEditorHUD: editorHUD ];
+    //[ self addEditorHUD: editorHUD ];
     
     playerHUDIsVisible = NO;
     [ self initPlayerHUD ];
@@ -1527,75 +1535,87 @@ NSUInteger getMagicY( NSUInteger y ) {
         {
             [ e step ];
             
-            if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM )
-            {
-                
-                BOOL rollIsUnacceptable = YES;
-                CGPoint newPosition;
-                
-                while ( rollIsUnacceptable )
-                {
-                    NSUInteger roll = rollDiceOnce(8);
-                    CGFloat x = -1;
-                    CGFloat y = -1;
-                    
-                    MLOG( @"rolled %d", roll );
-                    
-                    // UDLR UL, UR, DL, DR
-                    if ( roll == 1 ) {
-                        x = 0;
-                        y = -1;
-                    }
-                    else if ( roll == 2 ) {
-                        x = 0;
-                        y = 1;
-                    }
-                    else if ( roll == 3) {
-                        x = -1;
-                        y = 0;
-                    }
-                    else if ( roll == 4) {
-                        x = 1;
-                        y = 0;
-                    }
-                    else if ( roll == 5) {
-                        x = -1;
-                        y = -1;
-                    }
-                    else if ( roll == 6) {
-                        x = 1;
-                        y = -1;
-                    }
-                    else if ( roll == 7) {
-                        x = -1;
-                        y = 1;
-                    }
-                    else if ( roll == 8) {
-                        x = 1;
-                        y = 1;
-                    }
-                    
-                    newPosition.x = e.positionOnMap.x + x;
-                    newPosition.y = e.positionOnMap.y + y;
-                    
-                    Tile *tile = [ self getTileForCGPoint: newPosition ];
-                    if ( tile.tileType == TILE_FLOOR_VOID ) {
-                        rollIsUnacceptable = TRUE;
-                    } else {
-                        rollIsUnacceptable = FALSE;
-                    }
-                }
-                
-                
-                MLOG( @"(%.0f,%.0f)", e.positionOnMap.x, e.positionOnMap.y );
-                MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
-                
-                // try to move the entity to the new position
-                [ self moveEntity:e toPosition: newPosition ];
-            }
+            [ self handleEntityStep: e ];
             
             //[ self addMessage: [NSString stringWithFormat:@"%@ stepped", e.name] ];
         }
+    }
+}
+
+
+/*
+ ====================
+ handleEntityStep: e
+ 
+ handle the step for entity e
+ ====================
+ */
+-( void ) handleEntityStep: ( Entity * ) e {
+    if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM )
+    {
+        
+        BOOL rollIsUnacceptable = YES;
+        CGPoint newPosition;
+        
+        while ( rollIsUnacceptable )
+        {
+            NSUInteger roll = rollDiceOnce(8);
+            CGFloat x = -1;
+            CGFloat y = -1;
+            
+            //MLOG( @"rolled %d", roll );
+            
+            // UDLR UL, UR, DL, DR
+            if ( roll == 1 ) {
+                x = 0;
+                y = -1;
+            }
+            else if ( roll == 2 ) {
+                x = 0;
+                y = 1;
+            }
+            else if ( roll == 3) {
+                x = -1;
+                y = 0;
+            }
+            else if ( roll == 4) {
+                x = 1;
+                y = 0;
+            }
+            else if ( roll == 5) {
+                x = -1;
+                y = -1;
+            }
+            else if ( roll == 6) {
+                x = 1;
+                y = -1;
+            }
+            else if ( roll == 7) {
+                x = -1;
+                y = 1;
+            }
+            else if ( roll == 8) {
+                x = 1;
+                y = 1;
+            }
+            
+            newPosition.x = e.positionOnMap.x + x;
+            newPosition.y = e.positionOnMap.y + y;
+            
+            Tile *tile = [ self getTileForCGPoint: newPosition ];
+            if ( tile.tileType == TILE_FLOOR_VOID ) {
+                rollIsUnacceptable = TRUE;
+            } else {
+                rollIsUnacceptable = FALSE;
+            }
+        }
+        
+        
+        //MLOG( @"(%.0f,%.0f)", e.positionOnMap.x, e.positionOnMap.y );
+        //MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
+        
+        // try to move the entity to the new position
+        [ self moveEntity:e toPosition: newPosition ];
     }
 }
 
