@@ -1,3 +1,4 @@
 #!/bin/bash
 
+echo "checking out UserInterfaceState.xcuserstate..."
 git checkout project-a-ios.xcodeproj/project.xcworkspace/xcuserdata/Mike.xcuserdatad/UserInterfaceState.xcuserstate
