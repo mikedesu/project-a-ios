@@ -132,4 +132,6 @@ typedef enum {
 -( void ) initializeHUDs;
 -( void ) initializePCEntity;
 
+-( NSString * ) getGameStateString: ( GameState_t ) state;
+
 @end

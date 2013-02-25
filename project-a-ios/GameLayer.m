@@ -427,9 +427,9 @@
 -(void) updateMonitorLabel {
     @try {
     [monitor.label setString:
-     [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d\n",
+     [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d\n",
       
-      gameState,
+      [self getGameStateString: gameState],
       selectedTilePoint.x,
       selectedTilePoint.y,
       pcEntity.positionOnMap.x,
@@ -445,9 +445,9 @@
     } @catch ( NSException *e ) {
         //MLOG( @"Exception caught: %@", e );
         [monitor.label setString:
-         [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d",
+         [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d",
           
-          gameState,
+          [self getGameStateString:gameState],
           selectedTilePoint.x,
           selectedTilePoint.y,
           pcEntity.positionOnMap.x,
@@ -1426,6 +1426,34 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM2;
     pcEntity = hero;
     //[ Entity drawTextureForEntity: hero ];
+}
+
+/*
+ ====================
+ getGameStateString: state
+ 
+ returns a string for the given state
+ ====================
+ */
+-( NSString * ) getGameStateString: ( GameState_t ) state {
+    NSString *retval = nil;
+    if ( state == GAMESTATE_T_GAME ) {
+        retval = @"GAMESTATE_T_GAME";
+    } else if ( state == GAMESTATE_T_GAME_PC_SELECTMOVE ) {
+       retval = @"GAMESTATE_T_GAME_PC_SELECTMOVE";
+    }
+    else if ( state == GAMESTATE_T_GAME_PC_STEP ) {
+       retval = @"GAMESTATE_T_GAME_PC_STEP";
+    }
+    else if ( state == GAMESTATE_T_MAINMENU ) {
+       retval = @"GAMESTATE_T_MAINMENU";
+    }
+    
+    else {
+        retval = [NSString stringWithFormat:@"%d", state];
+    }
+    
+    return retval;
 }
 
 
