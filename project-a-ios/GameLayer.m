@@ -72,6 +72,7 @@
         [ self resetCameraPosition ];
         
         
+        // set up some enemy entities
         Entity *enemy0;
         enemy0 = [[ Entity alloc ] init ];
         enemy0.entityType = ENTITY_T_NPC;
@@ -79,13 +80,13 @@
         enemy0.isPC = NO;
         enemy0.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
         
-        Entity *enemy1;
+        /*
+         Entity *enemy1;
         enemy1 = [[ Entity alloc ] init ];
         enemy1.entityType = ENTITY_T_NPC;
         [enemy1.name setString:@"Enemy1"];
         enemy1.isPC = NO;
         enemy1.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
-        /*
          */
         
         
@@ -94,14 +95,14 @@
         enemyStartPos.x += 1;
         Tile *enemyStartTile = [ self getTileForCGPoint: enemyStartPos ];
         [ self setEntity: enemy0 onTile:enemyStartTile ];
+        [entityArray addObject: enemy0 ];
         
+        /*
         enemyStartPos.x += 1;
         enemyStartTile = [ self getTileForCGPoint: enemyStartPos ];
         [ self setEntity: enemy1 onTile:enemyStartTile ];
-        /**/
-        
-        [entityArray addObject: enemy0 ];
         [entityArray addObject: enemy1 ];
+         */
         
         
         // set the selectedTilePoint to (-1,-1) (none)
@@ -138,11 +139,11 @@
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.1
+#define STEP_SPEED              0.25
         
         // turn on gameLogic & autostepping
-        gameLogicIsOn = NO;
-        autostepGameLogic = NO;
+        gameLogicIsOn = YES;
+        autostepGameLogic = YES;
         
         // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
         autostepGameLogic = autostepGameLogic && gameLogicIsOn;
@@ -1282,21 +1283,28 @@ NSUInteger getMagicY( NSUInteger y ) {
     if ( tile.tileType != TILE_FLOOR_VOID ) {
         
         BOOL isMoveValid = YES;
+        BOOL npcExists = NO;
+        BOOL pcExists = NO;
         // check if there is an NPC...
         
         for ( Entity *e in tile.contents ) {
             if ( e.entityType == ENTITY_T_NPC ) {
                 isMoveValid = NO;
+                npcExists = YES;
+                pcExists = NO;
                 break;
             }
             else if ( e.entityType == ENTITY_T_PC ) {
                 isMoveValid = NO;
+                npcExists = NO;
+                pcExists = YES;
                 break;
             }
             
         }
         
-        if ( isMoveValid ) {
+        if ( isMoveValid )
+        {
             Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
             [prevTile.contents removeObject: entity];
             
@@ -1311,7 +1319,26 @@ NSUInteger getMagicY( NSUInteger y ) {
                     [ self addMessage: @"Going upstairs..." ];
                 }
             }
-        } else {
+        }
+        
+        
+        else if ( npcExists )
+        {
+            // moving into npc
+            
+            [ self handleAttackForEntity:entity toPosition:position];
+        }
+        
+        else if ( pcExists )
+        {
+            // moving into pc
+            [ self handleAttackForEntity:entity toPosition:position];
+        }
+        
+        
+        
+        else
+        {
             //MLOG( @"Attempting to move into NPC." );
             //[ self addMessage: @"Can't move there!" ];
         }
@@ -1628,6 +1655,77 @@ NSUInteger getMagicY( NSUInteger y ) {
         [ self moveEntity:e toPosition: newPosition ];
     }
 }
+
+
+
+/*
+ ====================
+ npcEntityAtPosition: pos
+ 
+ returns the NPC entity at position pos
+ ====================
+ */
+-( Entity * ) npcEntityAtPosition: (CGPoint) pos {
+    MLOG( @"npcEntityAtPosition: (%.0f,%.0f)", pos.x, pos.y );
+    
+    Entity *e = nil;
+    Tile *t = [ self getTileForCGPoint:pos ];
+    for ( Entity *e0 in t.contents ) {
+        if ( e0.entityType == ENTITY_T_NPC ) {
+            e = e0;
+            break;
+        }
+    }
+    
+    return e;
+}
+
+
+
+/*
+ ====================
+ handleAttackForEntity: e toPosition: pos
+ 
+ handles attack logic between entities and positions
+ ====================
+ */
+-( void ) handleAttackForEntity: ( Entity * ) e toPosition: (CGPoint) pos {
+    MLOG( @"handleAttackForEntity: %@ toPosition: (%.0f,%.0f)", e, pos.x, pos.y );
+    
+    // get the tile we are attacking
+    
+    Tile *t = [ self getTileForCGPoint: pos ];
+    
+    if ( t.tileType == TILE_FLOOR_VOID ) {
+        // can't attack a void tile
+        MLOG( @"can't attack a void tile!" );
+        [ self addMessage: @"Can't attack that!" ];
+    }
+    
+    else {
+        // check if tile has entities
+        
+        BOOL tileHasEntities = (t.contents.count > 0);
+ 
+        if ( tileHasEntities ) {
+            // attacking an entity
+            
+            Entity *target = [ self npcEntityAtPosition: pos ];
+            
+            NSString *str = [ NSString stringWithFormat: @"You attack %@" , target.name ];
+            MLOG( str );
+            [ self addMessage: str ];
+            
+        } else {
+            // attacking thin air
+            NSString *str = [ NSString stringWithFormat: @"You attack the air..." ];
+            MLOG( str );
+            [ self addMessage: str ];
+        }
+    }
+    
+}
+
 
 
 /*
