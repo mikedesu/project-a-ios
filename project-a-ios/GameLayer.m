@@ -427,7 +427,7 @@
 -(void) updateMonitorLabel {
     @try {
     [monitor.label setString:
-     [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\n",
+     [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d\n",
       
       gameState,
       selectedTilePoint.x,
@@ -437,13 +437,15 @@
       cameraAnchorPoint.x,
       cameraAnchorPoint.y,
       [GameRenderer distanceFromTile:[GameRenderer getTileForFloor:floor forCGPoint:selectedTilePoint] toTile:[GameRenderer getTileForFloor:floor forCGPoint:pcEntity.positionOnMap
-        ]] ]
+        ]],
+      entityArray.count
+      ]
      ];
         
     } @catch ( NSException *e ) {
         //MLOG( @"Exception caught: %@", e );
         [monitor.label setString:
-         [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\n",
+         [NSString stringWithFormat: @"GameState: %d\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d",
           
           gameState,
           selectedTilePoint.x,
@@ -452,7 +454,8 @@
           pcEntity.positionOnMap.y,
           cameraAnchorPoint.x,
           cameraAnchorPoint.y,
-          0
+          0,
+          entityArray.count
           ]
          ];
         
