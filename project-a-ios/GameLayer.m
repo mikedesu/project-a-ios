@@ -32,6 +32,8 @@
  */
 -(id) init {
 	if ( ( self = [ super init ] ) ) {
+        
+        // setting up some basic variables
         self.isTouchEnabled = YES;
         selectedTile = -1;
         //prevSelectedTile = -1;
@@ -39,37 +41,24 @@
         isTouched = NO;
         
         // Dungeon initialization
-        NSMutableArray *dungeon = [[ NSMutableArray alloc ] init ];
-        for ( int i = 0; i < 5; i++ ) {
-            DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:10 andHeight:10 andFloorNumber: i ];
-            [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
-            [ dungeon addObject: newFloor ];
-        }
-        
-        floor = [ dungeon objectAtIndex:4 ];
-        
-        [ self initializeTiles ];
-        [ self drawDungeonFloor ];
+        [ self initializeDungeon ];
         
         CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: floor ];
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
         
-        //////////////////////
+        // set up our 'hero'
+        [ self initializePCEntity ];
         
-        Entity *hero = [ [ Entity alloc ] init ];
-        [ hero.name setString: @"Mike" ];
-        hero.entityType = ENTITY_T_PC;
-        hero.isPC = YES;
-        hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
-        
-        pcEntity = hero;
-        //[ Entity drawTextureForEntity: hero ];
-        
+       
+ 
+        // set the camera anchor point
         cameraAnchorPoint = ccp( 7, 5 );
         
+        // our list of entities
         entityArray = [ [ NSMutableArray alloc ] init ];
-        [ entityArray addObject: hero ];
+        [ entityArray addObject: pcEntity ];
  
+        // set the starting tile
         Tile *startTile = nil;
         for ( Tile *t in [ floor tileDataArray ] ) {
             if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
@@ -77,16 +66,19 @@
                 break;
             }
         }
-        [ self setEntity:hero onTile: startTile ];
+        
+        // set the hero on the startTile and center the camera
+        [ self setEntity:pcEntity onTile: startTile ];
         [ self resetCameraPosition ];
         
-        selectedTilePoint.x = -1;
-        selectedTilePoint.y = -1;
+        // set the selectedTilePoint to (-1,-1) (none)
+        selectedTilePoint = ccp( -1, -1 );
         
-        
+        // initialize our debug Log
         dLog = [ [ NSMutableArray alloc ] init ];
         dLogIndex = 0;
         
+        // add some test messages
         [ self addMessage: @"Testing" ];
         [ self addMessage: @"Editor" ];
         [ self addMessage: @"HUD" ];
@@ -95,32 +87,21 @@
         [ self addMessage: @"Let's roll" ];
         [ self addMessage: @"" ];
         
-        editorHUDIsVisible = NO;
-        [ self initEditorHUD ];
-        [ self addEditorHUD: editorHUD ];
         
-        monitorIsVisible = NO;
-        [ self initMonitor ];
-        [ self addMonitor: monitor ];
+        // initialize our various HUDs
+        [ self initializeHUDs ];
         
-         playerHUDIsVisible = NO;
-        [ self initPlayerHUD ];
-        [ self addPlayerHUD: playerHUD ];
         
-        playerMenuIsVisible = NO;
-        [ self initPlayerMenu ];
-        //[ self addPlayerMenu: playerMenu ];
-        
+        // haven't touched the hero yet
         heroTouches = 0;
         
+        // first turn
         turnCounter = 1;
         
-        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
-        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
+        // initialize our notifications
+        [ self initializeNotifications ];
         
-        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"ShowHideEditorHUD" object:nil];
-        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
-        
+        // schedule our update method, tick
         [ self schedule:@selector(tick:)];
 	}
 	return self;
@@ -1195,5 +1176,88 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
 }
+
+
+/*
+ ====================
+ initializeDungeon
+ ====================
+ */
+-( void ) initializeDungeon {
+    NSMutableArray *dungeon = [[ NSMutableArray alloc ] init ];
+    for ( int i = 0; i < 5; i++ ) {
+        DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:10 andHeight:10 andFloorNumber: i ];
+        [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
+        [ dungeon addObject: newFloor ];
+    }
+    
+    floor = [ dungeon objectAtIndex:4 ];
+    
+    [ self initializeTiles ];
+    [ self drawDungeonFloor ];
+}
+
+
+/*
+ ====================
+ initializeNotifications
+ 
+ initializes the various notifications used by the game's engine
+ ====================
+ */
+-( void ) initializeNotifications {
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
+    
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"ShowHideEditorHUD" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
+}
+
+
+/*
+ ====================
+ initializeHUDs
+ 
+ initializes the various HUDs used by the game
+ ====================
+ */
+-( void ) initializeHUDs {
+    
+    editorHUDIsVisible = NO;
+    [ self initEditorHUD ];
+    [ self addEditorHUD: editorHUD ];
+    
+    monitorIsVisible = NO;
+    [ self initMonitor ];
+    [ self addMonitor: monitor ];
+    
+    playerHUDIsVisible = NO;
+    [ self initPlayerHUD ];
+    [ self addPlayerHUD: playerHUD ];
+    
+    playerMenuIsVisible = NO;
+    [ self initPlayerMenu ];
+    //[ self addPlayerMenu: playerMenu ];
+    
+}
+
+
+/*
+ ====================
+ initializePCEntity
+ 
+ initializes the PC Entity
+ ====================
+ */
+-( void ) initializePCEntity {
+    Entity *hero = [ [ Entity alloc ] init ];
+    [ hero.name setString: @"Mike" ];
+    hero.entityType = ENTITY_T_PC;
+    hero.isPC = YES;
+    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
+    pcEntity = hero;
+    //[ Entity drawTextureForEntity: hero ];
+}
+
 
 @end
