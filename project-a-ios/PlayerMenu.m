@@ -22,7 +22,7 @@
 -( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h {
     if ( ( self = [ super initWithColor: color width: w height: h ] ) ) {
         label = [[ CCLabelTTF alloc ] initWithString:@"PlayerMenu" dimensions:CGSizeMake(w, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:12];
-        label.position = ccp( 0 + w/2, h - (label.contentSize.height/2) );
+        label.position = ccp( 0 + w/2 + 10, h - (label.contentSize.height/2) );
         label.color = white3;
         [self addChild: label];
         
@@ -45,6 +45,9 @@
 #define MENUITEM10_LABEL_TEXT   @"Label10"
         
 
+#define MENUITEMCLOSE_LABEL_TEXT  @"X"
+        CCLabelTTF *menuItemLabelClose = [[CCLabelTTF alloc] initWithString: MENUITEMCLOSE_LABEL_TEXT fontName:MENUITEM_LABEL_FONTNAME fontSize:MENUITEM_LABEL_FONTSIZE ];
+        menuItemLabelClose.color = MENUITEM_LABEL_FONTCOLOR;
         
         CCLabelTTF *menuItemLabel0 = [[ CCLabelTTF alloc ] initWithString: MENUITEM0_LABEL_TEXT fontName: MENUITEM_LABEL_FONTNAME fontSize: MENUITEM_LABEL_FONTSIZE ];
         menuItemLabel0.color = MENUITEM_LABEL_FONTCOLOR;
@@ -86,6 +89,9 @@
         
         
         int pad = 10;
+        
+        CCMenuItem *menuItemClose = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelClose target:self selector:@selector(menuItemClosePressed) ];
+        menuItemClose.position = ccp( 0 + menuItemLabelClose.contentSize.width/2, label.position.y );
         
         CCMenuItem *menuItem0 = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabel0 target:self selector:@selector(menuItem0Pressed) ];
         menuItem0.position = ccp( 0 + menuItemLabel0.contentSize.width/2 , label.position.y - (menuItemLabel0.contentSize.height/2) - pad );
@@ -167,6 +173,7 @@
         
         
         CCMenu *menu = [[ CCMenu alloc ] initWithArray: [NSArray arrayWithObjects:
+                                                         menuItemClose,
                                                          menuItem0 ,
                                                          menuItem1,
                                                          menuItem2,
@@ -185,6 +192,13 @@
         
     }
     return self;
+}
+
+
+#define MENUITEMCLOSE_NOTIFICATIONNAME @"PlayerMenuCloseNotification"
+-( void ) menuItemClosePressed {
+    MLOG( @"menuItemClosePressed" );
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEMCLOSE_NOTIFICATIONNAME  object:self];
 }
 
 

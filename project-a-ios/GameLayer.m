@@ -299,6 +299,13 @@
         
     }
     
+    
+    else if ( [notification.name isEqualToString: @"PlayerMenuCloseNotification" ])
+    {
+        [ self removePlayerMenu: playerMenu ];
+    }
+    
+    
     else {
         MLOG( @"Notification not handled: %@", notification.name );
     }
@@ -1367,6 +1374,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MonitorNotification" object:nil];
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"StepNotification" object:nil];
+    
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuCloseNotification" object:nil];
 }
 
 
