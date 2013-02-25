@@ -207,8 +207,6 @@
                 y = 1;
             }
             
-            
-            
             CGPoint newPosition;
             newPosition.x = pcEntity.positionOnMap.x + x;
             newPosition.y = pcEntity.positionOnMap.y + y;
@@ -219,6 +217,75 @@
             // try to move the entity to the new position
             [ self moveEntity:pcEntity toPosition: newPosition ];
         }
+        
+        else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_RANDOM2 )
+        {
+            
+            BOOL rollIsUnacceptable = YES;
+            CGPoint newPosition;
+            
+            while ( rollIsUnacceptable )
+            {
+                NSUInteger roll = rollDiceOnce(8);
+                CGFloat x = -1;
+                CGFloat y = -1;
+            
+                MLOG( @"rolled %d", roll );
+            
+                // UDLR UL, UR, DL, DR
+                if ( roll == 1 ) {
+                    x = 0;
+                    y = -1;
+                }
+                else if ( roll == 2 ) {
+                    x = 0;
+                    y = 1;
+                }
+                else if ( roll == 3) {
+                    x = -1;
+                    y = 0;
+                }
+                else if ( roll == 4) {
+                    x = 1;
+                    y = 0;
+                }
+                else if ( roll == 5) {
+                    x = -1;
+                    y = -1;
+                }
+                else if ( roll == 6) {
+                    x = 1;
+                    y = -1;
+                }
+                else if ( roll == 7) {
+                    x = -1;
+                    y = 1;
+                }
+                else if ( roll == 8) {
+                    x = 1;
+                    y = 1;
+                }
+                
+                newPosition.x = pcEntity.positionOnMap.x + x;
+                newPosition.y = pcEntity.positionOnMap.y + y;
+             
+                Tile *tile = [ self getTileForCGPoint: newPosition ];
+                if ( tile.tileType == TILE_FLOOR_VOID ) {
+                    rollIsUnacceptable = TRUE;
+                } else {
+                    rollIsUnacceptable = FALSE;
+                }
+            }
+            
+            
+            MLOG( @"(%.0f,%.0f)", pcEntity.positionOnMap.x, pcEntity.positionOnMap.y );
+            MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
+            
+            // try to move the entity to the new position
+            [ self moveEntity:pcEntity toPosition: newPosition ];
+ 
+        }
+        
         
         
         [ self resetCameraPosition ];
@@ -1337,7 +1404,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ hero.name setString: @"Mike" ];
     hero.entityType = ENTITY_T_PC;
     hero.isPC = YES;
-    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
+    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM2;
     pcEntity = hero;
     //[ Entity drawTextureForEntity: hero ];
 }
