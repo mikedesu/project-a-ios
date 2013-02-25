@@ -365,7 +365,7 @@
 -( void ) initEditorHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
     editorHUD = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
-    editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) );
+    editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - (monitor.contentSize.height) - 10 );
     [ self updateEditorHUDLabel ];
 }
 
@@ -381,7 +381,7 @@
     CGSize size = [[CCDirector sharedDirector] winSize];
     monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
     //monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
-    monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - 10 );
+    monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) );
     [ self updateMonitorLabel ];
 }
 
@@ -407,6 +407,7 @@
 -(void) removeMonitor: (EditorHUD *) monitor {
     if ( self->monitorIsVisible ) {
         [ self removeChild: monitor cleanup: NO ];
+        monitorIsVisible = NO;
     }
 }
 
@@ -1378,13 +1379,14 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) initializeHUDs {
     
-    editorHUDIsVisible = NO;
-    [ self initEditorHUD ];
-    //[ self addEditorHUD: editorHUD ];
     
     monitorIsVisible = NO;
     [ self initMonitor ];
     [ self addMonitor: monitor ];
+    
+    editorHUDIsVisible = NO;
+    [ self initEditorHUD ];
+    [ self addEditorHUD: editorHUD ];
     
     playerHUDIsVisible = NO;
     [ self initPlayerHUD ];
