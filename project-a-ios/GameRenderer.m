@@ -253,6 +253,7 @@
  ====================
 */
 +( void ) generateDungeonFloor:(DungeonFloor *)floor withAlgorithm: ( DungeonFloorAlgorithm_t ) algorithm {
+    MLOG(@"generateDungeonFloor");
     
     [ self setAllTilesInFloor: floor toTileType:TILE_FLOOR_VOID ];
     
@@ -271,7 +272,7 @@
         NSUInteger h = floor.height - floor.border;
         
         NSUInteger numTilesPlaced = 0;
-        NSUInteger numTiles = 40;
+        NSUInteger numTiles = 350;
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
@@ -281,7 +282,7 @@
         
         NSUInteger rerolls = 0;
         NSUInteger totalRerolls = 0;
-        NSUInteger rerollTolerance = 100;
+        NSUInteger rerollTolerance = 200;
         NSUInteger toleranceBreaks = 0;
         
         const NSUInteger MAX_REROLLS = 4;
@@ -409,11 +410,22 @@
                 
                 // check reroll tolerance
                 if ( totalRerolls >= rerollTolerance ) {
+                    MLOG( @"tolerance break %d", toleranceBreaks );
                     xo = 0;
                     yo = 0;
-                    i = 0;
+                    
                     [ placedTilesArray removeAllObjects ];
                     [ triedTilesArray removeAllObjects ];
+                    
+                    numTilesPlaced = 0;
+                    
+                    CGPoint point = ccp( x, y );
+                    [ self setTileAtPosition:point onFloor:floor toType:baseTileType ];
+                    [ placedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
+                    numTilesPlaced++;
+                    
+                    i = numTilesPlaced;
+                    
                     totalRerolls = 0;
                     toleranceBreaks++;
                 }

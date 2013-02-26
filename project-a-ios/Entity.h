@@ -37,8 +37,13 @@ typedef enum {
     
     NSMutableString *name;
     EntityTypes_t entityType;
+    
     NSUInteger level;
     EntityStats_t stats;
+    
+    NSInteger hp;
+    NSInteger maxhp;
+    
     NSUInteger money;
     
     EntityPathFindingAlgorithm_t pathFindingAlgorithm;
@@ -52,8 +57,12 @@ typedef enum {
 
 @property (atomic) NSMutableString *name;
 @property (atomic, assign) EntityTypes_t entityType;
+
 @property (atomic, assign) NSUInteger level;
 @property (atomic, assign) EntityStats_t stats;
+
+@property (atomic, assign) NSInteger hp;
+@property (atomic, assign) NSInteger maxhp;
 
 @property (atomic, assign) EntityPathFindingAlgorithm_t pathFindingAlgorithm;
 

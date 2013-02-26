@@ -29,6 +29,7 @@
         tileDataArray = [[ NSMutableArray alloc ] init ];
         floorNumber = 0;
     }
+    MLOG(@"end of init");
     return self;
 }
 
@@ -96,7 +97,7 @@
  ====================
  */
 +( DungeonFloor * ) newFloorWidth: (NSUInteger) w andHeight: (NSUInteger) h andFloorNumber:(NSUInteger)floorNumber {
-    //MLOG( @"newFloor" );
+    MLOG( @"newFloor" );
     NSAssert(w > 0 && h > 0, @"DungeonFloor Width and Height must be > 1" );
     NSUInteger dw = w; // true dungeon width
     NSUInteger dh = h; // true dungeon height
@@ -108,13 +109,16 @@
     floor.height = dungeonHeight;
     floor.border = border;
     floor.floorNumber = floorNumber;
+    MLOG(@"entering newFloor loop...");
     for ( int j = 0 ; j < dungeonHeight ; j++ ) {
+        MLOG(@"j = %d", j);
         for ( int i = 0; i < dungeonWidth; i++ ) {
+            //MLOG(@"i = %d", i);
             Tile *newTile = [ Tile newTileWithType: TILE_FLOOR_DEFAULT withPosition: ccp(i, j)];
             [ floor.tileDataArray addObject: newTile ];
         }
     }
-    //MLOG( @"end newFloor" );
+    MLOG( @"end newFloor" );
     return floor;
 }
 

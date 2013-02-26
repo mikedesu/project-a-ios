@@ -16,6 +16,10 @@
 @synthesize name;
 @synthesize level;
 @synthesize stats;
+
+@synthesize hp;
+@synthesize maxhp;
+
 @synthesize money;
 @synthesize inventoryArray;
 
@@ -45,6 +49,9 @@
         stats.intelligence = 1;
         stats.wisdom = 1;
         stats.charisma = 1;
+        
+        hp = 1;
+        maxhp = 1;
         
         money = 0;
         inventoryArray = [ [ NSMutableArray alloc ] init ];

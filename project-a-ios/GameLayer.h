@@ -142,4 +142,8 @@ typedef enum {
 -( void ) stepGameLogic;
 -( void ) handleEntityStep: ( Entity * ) e;
 
+-( void ) scheduledStepAction;
+-( void ) scheduleStepAction;
+-( void ) unscheduleStepAction;
+
 @end

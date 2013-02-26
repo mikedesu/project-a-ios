@@ -94,6 +94,7 @@
         CGPoint enemyStartPos = startTile.position;
         enemyStartPos.x += 1;
         Tile *enemyStartTile = [ self getTileForCGPoint: enemyStartPos ];
+        
         [ self setEntity: enemy0 onTile:enemyStartTile ];
         [entityArray addObject: enemy0 ];
         
@@ -139,7 +140,7 @@
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.25
+#define STEP_SPEED              0.001
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -177,7 +178,7 @@
  ====================
  */
 -( void ) receiveNotification: ( NSNotification * ) notification {
-    MLOG( @"received notification: %@", notification );
+    //MLOG( @"received notification: %@", notification );
     
     if ( [[ notification name ] isEqualToString: @"TestNotification1" ] ) {
         //MLOG( @"TestNotification1" );
@@ -1232,6 +1233,9 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
+#pragma mark - EntityHUD Message code
+
+
 /*
  ====================
  addMessage: message
@@ -1309,7 +1313,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             [prevTile.contents removeObject: entity];
             
             [ self setEntity: entity onTile: tile ];
-            [ self addMessage: [NSString stringWithFormat: @"%@ -> (%.0f,%.0f)", entity.name, position.x, position.y]];
+            //[ self addMessage: [NSString stringWithFormat: @"%@ -> (%.0f,%.0f)", entity.name, position.x, position.y]];
             
             if ( entity == pcEntity ) {
                 if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
@@ -1451,13 +1455,13 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) initializeDungeon {
     NSMutableArray *dungeon = [[ NSMutableArray alloc ] init ];
-    for ( int i = 0; i < 5; i++ ) {
-        DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:10 andHeight:10 andFloorNumber: i ];
+    for ( int i = 0; i < 1; i++ ) {
+        DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:200 andHeight:200 andFloorNumber: i ];
         [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
         [ dungeon addObject: newFloor ];
     }
     
-    floor = [ dungeon objectAtIndex:4 ];
+    floor = [ dungeon objectAtIndex:0 ];
     
     [ self initializeTiles ];
     [ self drawDungeonFloor ];
@@ -1499,7 +1503,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
-    //[ self addEditorHUD: editorHUD ];
+    [ self addEditorHUD: editorHUD ];
     
     playerHUDIsVisible = NO;
     [ self initPlayerHUD ];
@@ -1712,15 +1716,50 @@ NSUInteger getMagicY( NSUInteger y ) {
             
             Entity *target = [ self npcEntityAtPosition: pos ];
             
-            NSString *str = [ NSString stringWithFormat: @"You attack %@" , target.name ];
-            MLOG( str );
-            [ self addMessage: str ];
+            if ( target == nil ) {
+                return;
+            }
             
+            // e v.s. target setup section
+            // modifiers would go here
+            NSUInteger roll = rollDiceOnce(20);
+            
+            // attack condition section
+            // probably comparing attack roll vs armor class
+            
+            BOOL victory = FALSE;
+            if ( roll > 10 && target != pcEntity ) {
+                victory = TRUE;
+            }
+            // attack exchange
+            // cleanup
+            
+            MLOG( @"%@ attacks %@", e.name, target.name );
+            [ self addMessage: [NSString stringWithFormat: @"%@ attacks %@", e.name, target.name ]];
+            
+            if ( victory ) {
+                // kill target
+                // remove target from t.contents
+                
+                MLOG( @"%@ slayed %@", e.name, target.name );
+                [ self addMessage: [ NSString stringWithFormat:@"T%d. %@ slayed %@", turnCounter, e.name, target.name ] ];
+                [t.contents removeObject: target];
+                [entityArray removeObject: target];
+                
+                autostepGameLogic = FALSE;
+                [ self unscheduleStepAction ];
+            }
+            
+            else {
+                // target not killed
+                MLOG( @"%@ remains", target.name );
+                [ self addMessage: [NSString stringWithFormat: @"%@ remains", target.name] ];
+            }
+            
+        
         } else {
             // attacking thin air
-            NSString *str = [ NSString stringWithFormat: @"You attack the air..." ];
-            MLOG( str );
-            [ self addMessage: str ];
+            MLOG( @"You attack thin air..." );
         }
     }
     
@@ -1736,7 +1775,33 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) scheduledStepAction {
-    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"StepNotification" object: self ];
+    if ( autostepGameLogic ) {
+        [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"StepNotification" object: self ];
+    }
+}
+
+
+/*
+ ====================
+ scheduleStepAction
+ 
+ schedules the scheduledStepAction
+ ====================
+ */
+-( void ) scheduleStepAction {
+    [ self schedule:@selector(scheduledStepAction) interval: STEP_SPEED ];
+}
+
+
+/*
+ ====================
+ unscheduleStepAction
+ 
+ unschedules the scheduleStepAction
+ ====================
+ */
+-( void ) unscheduleStepAction {
+    [ self unschedule:@selector(scheduledStepAction)];
 }
 
 @end
