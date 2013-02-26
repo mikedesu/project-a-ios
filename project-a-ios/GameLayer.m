@@ -6,6 +6,49 @@
 #import "Dice.h"
 #import "GameLayer.h"
 
+#import <mach/mach.h> // for reporting memory info
+
+
+
+
+
+// used for reporting memory used in-game
+unsigned get_memory_bytes(void) {
+    struct task_basic_info info;
+    mach_msg_type_number_t size = sizeof(info);
+    kern_return_t kerr = task_info( mach_task_self(), TASK_BASIC_INFO, (task_info_t) &info, &size );
+    
+    unsigned retval = 0;
+    
+    if ( kerr == KERN_SUCCESS ) {
+        //MLOG( @"Memory in use (in bytes): %u", info.resident_size );
+        retval = info.resident_size;
+    } else {
+        //MLOG( @"Error with task_info(): %s", mach_error_string(kerr) );
+    }
+    
+    return retval;
+}
+
+unsigned get_memory_kb(void) {
+    return get_memory_bytes() / 1024;
+}
+
+unsigned get_memory_mb(void) {
+    return get_memory_kb() / 1024;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 @implementation GameLayer
 
 /*
@@ -483,7 +526,7 @@
 -(void) updateMonitorLabel {
     @try {
     [monitor.label setString:
-     [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d\n",
+     [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d\nMemory used: %u kb\n",
       
       [self getGameStateString: gameState],
       selectedTilePoint.x,
@@ -494,14 +537,15 @@
       cameraAnchorPoint.y,
       [GameRenderer distanceFromTile:[GameRenderer getTileForFloor:floor forCGPoint:selectedTilePoint] toTile:[GameRenderer getTileForFloor:floor forCGPoint:pcEntity.positionOnMap
         ]],
-      entityArray.count
+      entityArray.count,
+      get_memory_kb()
       ]
      ];
         
     } @catch ( NSException *e ) {
         //MLOG( @"Exception caught: %@", e );
         [monitor.label setString:
-         [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d",
+         [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d\nMemory used: %u kb\n",
           
           [self getGameStateString:gameState],
           selectedTilePoint.x,
@@ -511,7 +555,8 @@
           cameraAnchorPoint.x,
           cameraAnchorPoint.y,
           0,
-          entityArray.count
+          entityArray.count,
+          get_memory_kb()
           ]
          ];
         
