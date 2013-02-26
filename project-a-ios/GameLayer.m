@@ -41,7 +41,9 @@
         isTouched = NO;
         
         // Dungeon initialization
-        [ self initializeDungeon ];
+        //[ self initializeDungeon ];
+        [ self doTimer:@selector(initializeDungeon)];
+        
         
         CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: floor ];
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
@@ -140,7 +142,7 @@
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.001
+#define STEP_SPEED              1/60
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -1456,7 +1458,7 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( void ) initializeDungeon {
     NSMutableArray *dungeon = [[ NSMutableArray alloc ] init ];
     for ( int i = 0; i < 1; i++ ) {
-        DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:200 andHeight:200 andFloorNumber: i ];
+        DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:100 andHeight:100 andFloorNumber: i ];
         [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
         [ dungeon addObject: newFloor ];
     }
@@ -1728,9 +1730,9 @@ NSUInteger getMagicY( NSUInteger y ) {
             // probably comparing attack roll vs armor class
             
             BOOL victory = FALSE;
-            if ( roll > 10 && target != pcEntity ) {
-                victory = TRUE;
-            }
+            //if ( roll > 10 && target != pcEntity ) {
+            //    victory = TRUE;
+            //}
             // attack exchange
             // cleanup
             
@@ -1802,6 +1804,29 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) unscheduleStepAction {
     [ self unschedule:@selector(scheduledStepAction)];
+}
+
+
+/*
+ ====================
+ doTimer
+ 
+ times the method selector
+ ====================
+ */
+-( void ) doTimer: (SEL) selector {
+    
+    if ( selector != nil ) {
+        CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+        
+        [ self performSelector:selector ];
+        
+        CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
+        CFAbsoluteTime total = ( end - start );
+        
+        MLOG( @"method ran in %f s", total );
+    }
+    
 }
 
 @end

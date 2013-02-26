@@ -146,4 +146,6 @@ typedef enum {
 -( void ) scheduleStepAction;
 -( void ) unscheduleStepAction;
 
+-( void ) doTimer: (SEL) selector;
+
 @end

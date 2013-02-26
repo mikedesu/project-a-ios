@@ -264,6 +264,10 @@
     
     else if ( algorithm == DF_ALGORITHM_T_ALGORITHM0 ) {
         
+        // profiling
+        //CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+        
+        
         // calc the top-left editable tile
         NSUInteger x = floor.border/2;
         NSUInteger y = floor.border/2;
@@ -272,7 +276,7 @@
         NSUInteger h = floor.height - floor.border;
         
         NSUInteger numTilesPlaced = 0;
-        NSUInteger numTiles = 350;
+        NSUInteger numTiles = 100;
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
@@ -410,7 +414,7 @@
                 
                 // check reroll tolerance
                 if ( totalRerolls >= rerollTolerance ) {
-                    MLOG( @"tolerance break %d", toleranceBreaks );
+                    //MLOG( @"tolerance break %d", toleranceBreaks );
                     xo = 0;
                     yo = 0;
                     
@@ -436,6 +440,11 @@
         MLOG( @"total rolls: %d", totalRolls );
         MLOG( @"total rerolls: %d", totalRerolls );
         MLOG( @"total tolerance breaks: %d", toleranceBreaks );
+        
+        //CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
+        //CFAbsoluteTime totalTimeSpent = (end - start) * 1000;
+        //MLOG( @"method took %f ms", totalTimeSpent );
+        
         
         // place the upstairs/downstairs tiles
         BOOL isDownstairsPlaced = NO;
