@@ -81,6 +81,12 @@
     
     for (Entity *entity in [data contents]) {
         
+        
+        // Below, we define the draw routines for each entity-type
+        // We are starting with solid colors
+        // Next, we will upgrade to single-layer drawings
+        // Last, we will upgrade to multi-layer drawings
+        
         if ( entity.entityType == ENTITY_T_PC ) {
             // draw on the texture
             if ( data.isSelected ) {
@@ -109,17 +115,32 @@
         }
         
         else if ( entity.entityType == ENTITY_T_NPC ) {
+            color = red;
             if ( data.isSelected ) {
-                Color_t tmpColor = newColor( color.r + 0xAA , color.g + 0xAA , color.b + 0x00, color.a );
-                [ texture fill: tmpColor ];
+                color = newColor(color.r, color.g, color.b + 0xff, color.a);
+                [ texture fill: color ];
                 
             } else {
-                [ texture fill: red ];
+                [ texture fill: color ];
             }
             
             [ texture apply ];
         }
         
+        
+        else if ( entity.entityType == ENTITY_T_ITEM ) {
+             color = yellow;
+            if ( data.isSelected ) {
+                color = newColor(color.r, color.g, color.b + 0xff, color.a);
+                [ texture fill: color ];
+                
+            } else {
+                [ texture fill: color ];
+            }
+            
+            [ texture apply ];
+        }
+            
         
     }
 }

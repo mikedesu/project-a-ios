@@ -6,11 +6,8 @@
 #import "Dice.h"
 #import "GameLayer.h"
 
+
 #import <mach/mach.h> // for reporting memory info
-
-
-
-
 
 // used for reporting memory used in-game
 unsigned get_memory_bytes(void) {
@@ -31,20 +28,13 @@ unsigned get_memory_bytes(void) {
 }
 
 unsigned get_memory_kb(void) {
-    return get_memory_bytes() / 1024;
+    //return get_memory_bytes() / 1024;
+    return get_memory_bytes() >> 10;
 }
 
 unsigned get_memory_mb(void) {
-    return get_memory_kb() / 1024;
+    return get_memory_kb() >> 10;
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -95,12 +85,8 @@ unsigned get_memory_mb(void) {
         [ self initializePCEntity ];
         
         
- 
         // set the camera anchor point
         cameraAnchorPoint = ccp( 7, 5 );
-        
-        
-        
         
         
         // our list of entities
@@ -127,7 +113,6 @@ unsigned get_memory_mb(void) {
         [ self resetCameraPosition ];
         
         
-        
         // set up some enemy entities
         Entity *enemy0;
         enemy0 = [[ Entity alloc ] init ];
@@ -140,7 +125,21 @@ unsigned get_memory_mb(void) {
         [ self setEntity: enemy0 onTile:enemyStartTile ];
         [entityArray addObject: enemy0 ];
         
-       
+        
+        
+        // create an item and set it down
+        Entity *item = [[ Entity alloc] init];
+        item.entityType = ENTITY_T_ITEM;
+        [item.name setString:@"Item"];
+        item.isPC = NO;
+        item.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
+        
+        CGPoint itemStartPos = enemyStartPos;
+        itemStartPos.x += 1;
+        Tile *itemStartTile = [ self getTileForCGPoint: itemStartPos ];
+        
+        [ self setEntity:item onTile:itemStartTile];
+        [ entityArray addObject: item ];
         
         
         // set the selectedTilePoint to (-1,-1) (none)
@@ -178,11 +177,11 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.3
+#define STEP_SPEED              1
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
-        autostepGameLogic = YES;
+        autostepGameLogic = NO;
         
         // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
         autostepGameLogic = autostepGameLogic && gameLogicIsOn;
@@ -205,7 +204,6 @@ unsigned get_memory_mb(void) {
         
         MLOG(@"startTile.contents: %@", startTile.contents);
         MLOG(@"enemyStartTile.contents: %@", enemyStartTile.contents);
-        
         
         
 	}
@@ -1353,6 +1351,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         BOOL isMoveValid = YES;
         BOOL npcExists = NO;
         BOOL pcExists = NO;
+        BOOL itemExists = NO;
         // check if there is an NPC...
         
         for ( Entity *e in [tile contents] ) {
@@ -1367,6 +1366,10 @@ NSUInteger getMagicY( NSUInteger y ) {
                 npcExists = NO;
                 pcExists = YES;
                 break;
+            }
+            else if ( e.entityType == ENTITY_T_ITEM ) {
+                isMoveValid = YES;
+                itemExists = YES;
             }
             
         }
@@ -1386,6 +1389,20 @@ NSUInteger getMagicY( NSUInteger y ) {
                 }
                 else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
                     //[ self addMessage: @"Going upstairs..." ];
+                }
+                
+                else if ( itemExists ) {
+                    // list all items on the tile
+                    for ( Entity *e in [tile contents] ) {
+                        if ( e.entityType == ENTITY_T_ITEM ) {
+                            MLOG( @"There is a %@ here", e.name );
+                            [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                            
+                            // if ( entity.itempickupAuto ) {
+                            //     [ self handleItemPickup: item forEntity: entity ];
+                            // }
+                        }
+                    }
                 }
             }
         }
