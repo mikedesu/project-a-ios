@@ -197,84 +197,84 @@
 
 #define MENUITEMCLOSE_NOTIFICATIONNAME @"PlayerMenuCloseNotification"
 -( void ) menuItemClosePressed {
-    MLOG( @"menuItemClosePressed" );
+   // MLOG( @"menuItemClosePressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEMCLOSE_NOTIFICATIONNAME  object:self];
 }
 
 
 #define MENUITEM0_NOTIFICATIONNAME      @"MonitorNotification"
 -( void ) menuItem0Pressed {
-    MLOG( @"menuItem0Pressed" );
+   // MLOG( @"menuItem0Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM0_NOTIFICATIONNAME object: self ];
 }
 
 
 #define MENUITEM1_NOTIFICATIONNAME      @"MoveNotification"
 -( void ) menuItem1Pressed {
-    MLOG( @"menuItem1Pressed" );
+  //  MLOG( @"menuItem1Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM1_NOTIFICATIONNAME object: self ];
 }
 
 
 #define MENUITEM2_NOTIFICATIONNAME      @"AttackNotification"
 -( void ) menuItem2Pressed {
-    MLOG( @"menuItem2Pressed" );
+ //   MLOG( @"menuItem2Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM2_NOTIFICATIONNAME object: self ];
 }
 
 
 #define MENUITEM3_NOTIFICATIONNAME      @"StepNotification"
 -( void ) menuItem3Pressed {
-    MLOG( @"menuItem3Pressed" );
+  //  MLOG( @"menuItem3Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM3_NOTIFICATIONNAME object: self ];
 }
 
 
 #define MENUITEM4_NOTIFICATIONNAME      @"MENUITEM4_NOTIFICATIONNAME"
 -( void ) menuItem4Pressed {
-    MLOG( @"menuItem4Pressed" );
+   // MLOG( @"menuItem4Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM4_NOTIFICATIONNAME object: self ];
 }
 
 
 #define MENUITEM5_NOTIFICATIONNAME      @"MENUITEM5_NOTIFICATIONNAME"
 -( void ) menuItem5Pressed {
-    MLOG( @"menuItem5Pressed" );
+   // MLOG( @"menuItem5Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM5_NOTIFICATIONNAME object: self ];
 }
 
 
 #define MENUITEM6_NOTIFICATIONNAME      @"MENUITEM6_NOTIFICATIONNAME"
 -( void ) menuItem6Pressed {
-    MLOG( @"menuItem6Pressed" );
+  //  MLOG( @"menuItem6Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM6_NOTIFICATIONNAME object: self ];
 }
 
 
 #define MENUITEM7_NOTIFICATIONNAME      @"MENUITEM7_NOTIFICATIONNAME"
 -( void ) menuItem7Pressed {
-    MLOG( @"menuItem7Pressed" );
+  //  MLOG( @"menuItem7Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM7_NOTIFICATIONNAME object: self ];
 }
 
 
 #define MENUITEM8_NOTIFICATIONNAME      @"MENUITEM8_NOTIFICATIONNAME"
 -( void ) menuItem8Pressed {
-    MLOG( @"menuItem8Pressed" );
+  //  MLOG( @"menuItem8Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM8_NOTIFICATIONNAME object: self ];
 }
 
 
 #define MENUITEM9_NOTIFICATIONNAME      @"MENUITEM9_NOTIFICATIONNAME"
 -( void ) menuItem9Pressed {
-    MLOG( @"menuItem9Pressed" );
+  //  MLOG( @"menuItem9Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM9_NOTIFICATIONNAME object: self ];
 }
 
 
 #define MENUITEM10_NOTIFICATIONNAME      @"MENUITEM10_NOTIFICATIONNAME"
 -( void ) menuItem10Pressed {
-    MLOG( @"menuItem10Pressed" );
+ //   MLOG( @"menuItem10Pressed" );
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: MENUITEM10_NOTIFICATIONNAME object: self ];
 }
 

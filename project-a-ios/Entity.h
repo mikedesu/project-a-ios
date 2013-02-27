@@ -20,12 +20,20 @@ typedef struct {
     NSUInteger charisma;
 } EntityStats_t;
 
+
 typedef enum {
     ENTITYPATHFINDINGALGORITHM_T_NONE=0,
     ENTITYPATHFINDINGALGORITHM_T_RANDOM,
     ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM,
     ENTITYPATHFINDINGALGORITHM_T_SIMPLE
 } EntityPathFindingAlgorithm_t;
+
+
+typedef enum {
+    ENTITYITEMPICKUPALGORITHM_T_NONE=0,
+    ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE
+} EntityItemPickupAlgorithm_t;
+
 
 
 @class CCMutableTexture2D;
@@ -50,6 +58,8 @@ typedef enum {
     
     EntityPathFindingAlgorithm_t pathFindingAlgorithm;
     
+    EntityItemPickupAlgorithm_t itemPickupAlgorithm;
+    
     NSMutableArray *inventoryArray;
 }
 
@@ -67,6 +77,7 @@ typedef enum {
 @property (atomic, assign) NSInteger maxhp;
 
 @property (atomic, assign) EntityPathFindingAlgorithm_t pathFindingAlgorithm;
+@property (atomic, assign) EntityItemPickupAlgorithm_t itemPickupAlgorithm;
 
 @property (atomic, assign) NSUInteger money;
 @property (atomic) NSMutableArray *inventoryArray;

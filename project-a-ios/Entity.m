@@ -24,6 +24,7 @@
 @synthesize inventoryArray;
 
 @synthesize pathFindingAlgorithm;
+@synthesize itemPickupAlgorithm;
 
 @synthesize entityType;
 
@@ -59,6 +60,7 @@
         inventoryArray = [ [ NSMutableArray alloc ] init ];
         
         pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
+        itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     }
     return self;
 }

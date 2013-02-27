@@ -120,6 +120,7 @@ unsigned get_memory_mb(void) {
         [enemy0.name setString:@"Enemy0"];
         enemy0.isPC = NO;
         enemy0.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+        enemy0.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
         
         // place enemy0 on tile
         [ self setEntity: enemy0 onTile:enemyStartTile ];
@@ -133,6 +134,7 @@ unsigned get_memory_mb(void) {
         [item.name setString:@"Item"];
         item.isPC = NO;
         item.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
+        item.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
         
         CGPoint itemStartPos = enemyStartPos;
         itemStartPos.x += 1;
@@ -1393,15 +1395,31 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 else if ( itemExists ) {
                     // list all items on the tile
+                    Entity *item = nil;
                     for ( Entity *e in [tile contents] ) {
                         if ( e.entityType == ENTITY_T_ITEM ) {
                             MLOG( @"There is a %@ here", e.name );
                             [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                             
+                            if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
+                            
+                            }
+                            
+                            else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
+                                //[ self addMessage: [NSString stringWithFormat:@"You pick up the %@", e.name]];
+                                item = e;
+                                break;
+                            }
+                            
                             // if ( entity.itempickupAuto ) {
                             //     [ self handleItemPickup: item forEntity: entity ];
                             // }
                         }
+                    }
+                    
+                    if ( item != nil ) {
+                        // add the item to your inventory
+                        [ self handleItemPickup: item forEntity: entity ];
                     }
                 }
             }
@@ -1613,6 +1631,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.entityType = ENTITY_T_PC;
     hero.isPC = YES;
     hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+    hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE;
     pcEntity = hero;
     //[ Entity drawTextureForEntity: hero ];
 }
@@ -1848,6 +1867,57 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
     }
     
+}
+
+
+
+
+/*
+ ====================
+ handleItemPickup: item forEntity: entity
+ ====================
+ */
+-( void ) handleItemPickup: (Entity *) item forEntity: (Entity *) entity {
+    if ( item != nil && entity == pcEntity ) {
+        if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
+        } else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
+            // add the item to the entity's inventory
+            Tile *itemTile = [ self getTileForCGPoint:item.positionOnMap ];
+            if ( itemTile != nil ) {
+                
+                MLOG( @"%@ picks up a %@", entity.name, item.name );
+                [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                
+                [[ entity inventoryArray ] addObject: item ];
+                // remove the item from our entityArray and from it's tile's contents
+                [ entityArray removeObject: item];
+                [[ itemTile contents ] removeObject: item];
+            }
+        }
+    }
+}
+
+
+
+/*
+ ================
+ handleDropItem: item forEntity: entity
+ ================
+ */
+
+-( void ) handleDropItem: (Entity *) item forEntity: (Entity *) entity {
+    if ( item != nil && entity != nil ) {
+        // get the entity's tile
+        Tile *entityTile = [ self getTileForCGPoint: entity.positionOnMap ];
+        if ( entityTile != nil ) {
+            MLOG( @"%@ drops a %@", entity.name, item.name );
+            [ self addMessage: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
+            
+            [ self setEntity:item onTile:entityTile ];
+            // remove the item from the entity's inventory
+            [[entity inventoryArray] removeObject: item];
+        }
+    }
 }
 
 

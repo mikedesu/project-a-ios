@@ -137,7 +137,9 @@ typedef enum {
 
 -( Entity * ) npcEntityAtPosition: (CGPoint) pos;
 -( void ) handleAttackForEntity: ( Entity * ) e toPosition: (CGPoint) pos;
-
+-( void ) handleItemPickup: (Entity *) item forEntity: (Entity *) entity;
+-( void ) handleDropItem: (Entity *) item forEntity: (Entity *) entity;
+    
 -( NSString * ) getGameStateString: ( GameState_t ) state;
 -( void ) stepGameLogic;
 -( void ) handleEntityStep: ( Entity * ) e;
