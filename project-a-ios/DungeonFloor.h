@@ -9,6 +9,7 @@ typedef enum
     DF_ALGORITHM_T_SMALLROOM=0,
     DF_ALGORITHM_T_LARGEROOM,
     DF_ALGORITHM_T_ALGORITHM0,
+    DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR,
 } DungeonFloorAlgorithm_t;
 
 @interface DungeonFloor : NSObject {

@@ -26,7 +26,11 @@ typedef enum {
     CGPoint selectedTilePoint;
     
     Entity *pcEntity;
+    
+    NSUInteger floorNumber;
     DungeonFloor *floor;
+    
+    NSMutableArray *dungeon;
     
     NSMutableArray *tileArray;
     
@@ -130,8 +134,17 @@ typedef enum {
 
 -( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b;
 
-//-( void ) initializeDungeon;
--( void ) initializeNotifications;
+-( void ) initializeDungeon;
+-( void ) loadDungeonFloor: ( NSUInteger ) floorNumber;
+
+-( void ) goingUpstairs;
+-( void ) goingDownstairs;
+
+-( void ) setEntityOnUpstairs:(Entity *)entity;
+-( void ) setEntityOnDownstairs:(Entity *)entity;
+
+
+    -( void ) initializeNotifications;
 -( void ) initializeHUDs;
 -( void ) initializePCEntity;
 

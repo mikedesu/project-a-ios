@@ -290,7 +290,9 @@
         [ self setAllTilesInFloor:floor toTileType:TILE_FLOOR_GRASS ];
     }
     
-    else if ( algorithm == DF_ALGORITHM_T_ALGORITHM0 ) {
+    else if ( algorithm == DF_ALGORITHM_T_ALGORITHM0 ||
+              algorithm == DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR
+             ) {
         
         // profiling
         //CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
@@ -440,8 +442,8 @@
                     //MLOG( @"maxTilesPlaced: %d", maxTilesPlaced );
                 //    doPrintMaxTiles = NO;
                 //}
-                //}
             }
+            
         
             else if ( willReroll ) {
                 
@@ -510,21 +512,26 @@
         }
         
         CGPoint upstairsPoint = [ self getUpstairsTileForFloor: floor ];
-        while ( !isDownstairsPlaced ) {
-            for ( NSValue *p in placedTilesArray ) {
-                roll = rollDiceOnce(100);
-                NSUInteger percentage = 5;
-                if ( roll <= percentage ) {
-                    if ( ! CGPointEqualToPoint(upstairsPoint, p.CGPointValue) ) {
-                        [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
-                        //MLOG( @"Downstairs placed" );
-                        isDownstairsPlaced = YES;
-                        break;
+        
+        if ( algorithm != DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ) {
+            while ( !isDownstairsPlaced ) {
+                for ( NSValue *p in placedTilesArray ) {
+                    roll = rollDiceOnce(100);
+                    NSUInteger percentage = 5;
+                    if ( roll <= percentage ) {
+                        if ( ! CGPointEqualToPoint(upstairsPoint, p.CGPointValue) ) {
+                            [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
+                            //MLOG( @"Downstairs placed" );
+                            isDownstairsPlaced = YES;
+                            break;
+                        }
                     }
                 }
             }
         }
+ 
     }
+    
 }
 
 
@@ -535,7 +542,7 @@
  */
 +( CGPoint ) getUpstairsTileForFloor: ( DungeonFloor * ) floor {
     CGPoint p = { -1, -1 };
-    for ( Tile *t in floor.tileDataArray ) {
+    for ( Tile *t in [floor tileDataArray] ) {
         if ( t.tileType == TILE_FLOOR_UPSTAIRS ) {
             p = t.position;
             break;
@@ -543,6 +550,26 @@
     }
     return p;
 }
+
+
+/*
+ ====================
+ getDownstairsTileForFloor: floor
+ ====================
+ */
++( CGPoint ) getDownstairsTileForFloor: ( DungeonFloor * ) floor {
+    CGPoint p = { -1, -1 };
+    for ( Tile *t in [floor tileDataArray] ) {
+        if ( t.tileType == TILE_FLOOR_DOWNSTAIRS ) {
+            p = t.position;
+            break;
+        }
+    }
+    return p;
+}
+
+
+
 
 
 /*

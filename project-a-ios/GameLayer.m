@@ -1387,10 +1387,12 @@ NSUInteger getMagicY( NSUInteger y ) {
             
             if ( entity == pcEntity ) {
                 if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
-                    //[ self addMessage: @"Going downstairs..." ];
+                    [ self addMessage: @"Going downstairs..." ];
+                    [ self goingDownstairs ];
                 }
                 else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
-                    //[ self addMessage: @"Going upstairs..." ];
+                    [ self addMessage: @"Going upstairs..." ];
+                    [ self goingUpstairs ];
                 }
                 
                 else if ( itemExists ) {
@@ -1554,20 +1556,138 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) initializeDungeon {
-    NSUInteger numberOfFloors = 1; 
-    NSMutableArray *dungeon = [[ NSMutableArray alloc ] init ];
+    [ self initializeTiles ];
+    
+    NSUInteger numberOfFloors = 2;
+    dungeon = [[ NSMutableArray alloc ] init ];
     for ( int i = 0; i < numberOfFloors; i++ ) {
         DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:40 andHeight:40 andFloorNumber: i ];
-        [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
+        
+        if ( i != numberOfFloors - 1 ) {
+            [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
+        }
+        else {
+            [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ];
+        }
+        
         [ dungeon addObject: newFloor ];
     }
     
-    floor = [ dungeon objectAtIndex:0 ];
+    floorNumber = 0;
+    [ self loadDungeonFloor: floorNumber ];
     
-    [ self initializeTiles ];
-    
-    [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:floor withCamera:cameraAnchorPoint];
 }
+
+
+
+
+/*
+ ====================
+ loadDungeonFloor: floorNumber
+ ====================
+ */
+-( void ) loadDungeonFloor: ( NSUInteger ) floorNumber {
+    MLOG( @"loadDungeonFloor" );
+    floor = [ dungeon objectAtIndex: floorNumber ];
+    [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:floor withCamera:cameraAnchorPoint ];
+    [ self resetCameraPosition ];
+}
+
+
+
+/*
+ ====================
+ goingUpstairs
+ ====================
+ */
+-( void ) goingUpstairs {
+    if ( floorNumber == 0 ) {
+        // top floor
+    }
+    else {
+        floorNumber--;
+        [ self loadDungeonFloor: floorNumber ];
+        [ self setEntityOnDownstairs: pcEntity ];
+        [ self resetCameraPosition ];
+        [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:floor withCamera:cameraAnchorPoint ];
+    }
+}
+
+
+
+/*
+ ====================
+ goingDownstairs
+ ====================
+ */
+-( void ) goingDownstairs {
+    if ( floorNumber < [ dungeon count ] - 1 ) {
+        floorNumber++;
+        [ self loadDungeonFloor: floorNumber ];
+        [ self setEntityOnUpstairs: pcEntity ];
+        [ self resetCameraPosition ];
+        [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:floor withCamera:cameraAnchorPoint ];
+    }
+    else {
+        // bottom floor        
+    }
+}
+
+
+
+/*
+ ====================
+ setEntityOnUpstairs: entity
+ ====================
+ */
+-( void ) setEntityOnUpstairs:(Entity *)entity {
+    // find the upstairs tile
+    CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: floor ];
+    
+    // set the starting tile
+    Tile *tile = nil;
+    for ( Tile *t in [ floor tileDataArray ] ) {
+        if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
+            tile = t;
+            break;
+        }
+    }
+    [ self setEntity:entity onTile:tile];
+}
+
+
+
+/*
+ ====================
+ setEntityOnDownstairs: entity
+ ====================
+ */
+-( void ) setEntityOnDownstairs:(Entity *)entity {
+    // find the downstairs tile
+    
+    CGPoint startPoint = [ GameRenderer getDownstairsTileForFloor:floor ];
+    
+    // set the starting tile
+    Tile *tile = nil;
+    for ( Tile *t in [ floor tileDataArray ] ) {
+        if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
+            tile = t;
+            break;
+        }
+    }
+    [ self setEntity:entity onTile:tile];
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
