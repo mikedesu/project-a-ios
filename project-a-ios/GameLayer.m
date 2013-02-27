@@ -185,7 +185,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              1/60
+#define STEP_SPEED              1
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -196,6 +196,7 @@ unsigned get_memory_mb(void) {
         if ( gameLogicIsOn && autostepGameLogic ) {
             [ self schedule:@selector(scheduledStepAction) interval: STEP_SPEED ];
         }
+        
 	}
 	return self;
 }
@@ -1041,6 +1042,8 @@ unsigned get_memory_mb(void) {
 
 
 //-( void ) drawDungeonFloor: ( DungeonFloor * ) dungeonFloor toTileArray: ( NSArray * ) tileArray {
+
+/*
 -( void ) drawDungeonFloor {
     CGPoint c = cameraAnchorPoint;
     for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
@@ -1056,6 +1059,7 @@ unsigned get_memory_mb(void) {
         }
     }
 }
+ */
 
 
 -( Tile * ) getTileForCGPoint: ( CGPoint ) p  {
@@ -1246,7 +1250,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile {
     entity.positionOnMap = tile.position;
-    [ tile.contents addObject: entity ];
+    //[ tile.contents addObject: entity ];
+    [ tile addObjectToContents: entity ];
 }
 
 
@@ -1338,7 +1343,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         BOOL pcExists = NO;
         // check if there is an NPC...
         
-        for ( Entity *e in tile.contents ) {
+        for ( Entity *e in [tile contents] ) {
             if ( e.entityType == ENTITY_T_NPC ) {
                 isMoveValid = NO;
                 npcExists = YES;
@@ -1357,17 +1362,18 @@ NSUInteger getMagicY( NSUInteger y ) {
         if ( isMoveValid )
         {
             Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
-            [prevTile.contents removeObject: entity];
+//            [prevTile.contents removeObject: entity];
+            [prevTile removeObjectFromContents:entity];
             
             [ self setEntity: entity onTile: tile ];
             //[ self addMessage: [NSString stringWithFormat: @"%@ -> (%.0f,%.0f)", entity.name, position.x, position.y]];
             
             if ( entity == pcEntity ) {
                 if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
-                    [ self addMessage: @"Going downstairs..." ];
+                    //[ self addMessage: @"Going downstairs..." ];
                 }
                 else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
-                    [ self addMessage: @"Going upstairs..." ];
+                    //[ self addMessage: @"Going upstairs..." ];
                 }
             }
         }
@@ -1501,9 +1507,10 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) initializeDungeon {
+    NSUInteger numberOfFloors = 1; 
     NSMutableArray *dungeon = [[ NSMutableArray alloc ] init ];
-    for ( int i = 0; i < 1; i++ ) {
-        DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:100 andHeight:100 andFloorNumber: i ];
+    for ( int i = 0; i < numberOfFloors; i++ ) {
+        DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:40 andHeight:40 andFloorNumber: i ];
         [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
         [ dungeon addObject: newFloor ];
     }
@@ -1511,7 +1518,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     floor = [ dungeon objectAtIndex:0 ];
     
     [ self initializeTiles ];
-    [ self drawDungeonFloor ];
+    
+    [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:floor withCamera:cameraAnchorPoint];
 }
 
 
@@ -1721,7 +1729,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     Entity *e = nil;
     Tile *t = [ self getTileForCGPoint:pos ];
-    for ( Entity *e0 in t.contents ) {
+    for ( Entity *e0 in [t contents ] ) {
         if ( e0.entityType == ENTITY_T_NPC ) {
             e = e0;
             break;
@@ -1756,7 +1764,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     else {
         // check if tile has entities
         
-        BOOL tileHasEntities = (t.contents.count > 0);
+        BOOL tileHasEntities = ([t contents].count > 0);
  
         if ( tileHasEntities ) {
             // attacking an entity
@@ -1790,7 +1798,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 MLOG( @"%@ slayed %@", e.name, target.name );
                 [ self addMessage: [ NSString stringWithFormat:@"T%d. %@ slayed %@", turnCounter, e.name, target.name ] ];
-                [t.contents removeObject: target];
+                //[t.contents removeObject: target];
+                [t removeObjectFromContents: target];
                 [entityArray removeObject: target];
                 
                 autostepGameLogic = FALSE;

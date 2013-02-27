@@ -33,6 +33,7 @@ typedef enum {
 //@public
     BOOL isPC;
     CGPoint positionOnMap;
+    
     CCMutableTexture2D *texture;
     
     NSMutableString *name;
@@ -69,7 +70,6 @@ typedef enum {
 @property (atomic, assign) NSUInteger money;
 @property (atomic) NSMutableArray *inventoryArray;
 
-+( void ) drawTextureForEntity: ( Entity * ) entity;
 
 -( void ) step;
 

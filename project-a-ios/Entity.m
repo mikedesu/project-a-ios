@@ -25,6 +25,8 @@
 
 @synthesize pathFindingAlgorithm;
 
+@synthesize entityType;
+
 /*
  ====================
  init
@@ -59,40 +61,6 @@
         pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
     }
     return self;
-}
-
-
-/*
- ====================
- drawTextureForEntity: entity
- 
- draws a texture for the given entity
- ====================
- */
-+( void ) drawTextureForEntity: ( Entity * ) entity {
-    [entity->texture fill: ccc4(0,0,0,0)];
-    
-    [entity->texture setPixelAt:ccp(0,0) rgba:black];
-    [entity->texture setPixelAt:ccp(1,0) rgba:black];
-    [entity->texture setPixelAt:ccp(2,0) rgba:black];
-    [entity->texture setPixelAt:ccp(3,0) rgba:black];
-    
-    [entity->texture setPixelAt:ccp(0,1) rgba:black];
-    [entity->texture setPixelAt:ccp(1,1) rgba:black];
-    [entity->texture setPixelAt:ccp(2,1) rgba:black];
-    [entity->texture setPixelAt:ccp(3,1) rgba:black];
-    
-    [entity->texture setPixelAt:ccp(0,2) rgba:black];
-    [entity->texture setPixelAt:ccp(1,2) rgba:black];
-    [entity->texture setPixelAt:ccp(2,2) rgba:black];
-    [entity->texture setPixelAt:ccp(3,2) rgba:black];
-    
-    [entity->texture setPixelAt:ccp(0,3) rgba:black];
-    [entity->texture setPixelAt:ccp(1,3) rgba:black];
-    [entity->texture setPixelAt:ccp(2,3) rgba:black];
-    [entity->texture setPixelAt:ccp(3,3) rgba:black];
-    
-    [entity->texture apply];
 }
 
 

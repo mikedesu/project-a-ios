@@ -67,7 +67,7 @@
     [ texture fill: color ];
     [ texture apply ];
     
-    for (Entity *entity in data.contents) {
+    for (Entity *entity in [data contents]) {
         if ( entity.entityType == ENTITY_T_PC ) {
             // draw on the texture
             if ( data.isSelected ) {
@@ -276,7 +276,8 @@
         NSUInteger h = floor.height - floor.border;
         
         NSUInteger numTilesPlaced = 0;
-        NSUInteger numTiles = 100;
+        NSUInteger maxTilesPlaced = 0;
+        NSUInteger numTiles = 80;
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
@@ -286,7 +287,7 @@
         
         NSUInteger rerolls = 0;
         NSUInteger totalRerolls = 0;
-        NSUInteger rerollTolerance = 200;
+        NSUInteger rerollTolerance = 100;
         NSUInteger toleranceBreaks = 0;
         
         const NSUInteger MAX_REROLLS = 4;
@@ -295,6 +296,8 @@
         
         NSMutableArray *placedTilesArray = [[ NSMutableArray alloc ] init ];
         NSMutableArray *triedTilesArray = [[ NSMutableArray alloc ] init ];
+        
+        BOOL doPrintMaxTiles = NO;
         
         // determine a tile-type as the base tile type to use
         Tile_t baseTileType;
@@ -395,6 +398,21 @@
                 [ triedTilesArray removeAllObjects ];
                 //MLOG( @"tile placed at (%d,%d)", x+xo, y+yo );
                 numTilesPlaced++;
+                //maxTilesPlaced = ( maxTilesPlaced > numTilesPlaced ) ? maxTilesPlaced : numTilesPlaced;
+                if ( maxTilesPlaced > numTilesPlaced ) {
+                    maxTilesPlaced = maxTilesPlaced;
+                }
+                else {
+                    maxTilesPlaced = numTilesPlaced;
+                    doPrintMaxTiles = YES;
+                }
+                
+                //if ( maxTilesPlaced % 10 == 0 )
+                //if ( doPrintMaxTiles ) {
+                    //MLOG( @"maxTilesPlaced: %d", maxTilesPlaced );
+                //    doPrintMaxTiles = NO;
+                //}
+                //}
             }
         
             else if ( willReroll ) {
@@ -414,7 +432,7 @@
                 
                 // check reroll tolerance
                 if ( totalRerolls >= rerollTolerance ) {
-                    //MLOG( @"tolerance break %d", toleranceBreaks );
+                      //  MLOG( @"tolerance break %d", toleranceBreaks );
                     xo = 0;
                     yo = 0;
                     
@@ -444,7 +462,6 @@
         //CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
         //CFAbsoluteTime totalTimeSpent = (end - start) * 1000;
         //MLOG( @"method took %f ms", totalTimeSpent );
-        
         
         // place the upstairs/downstairs tiles
         BOOL isDownstairsPlaced = NO;

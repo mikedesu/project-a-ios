@@ -130,7 +130,7 @@ typedef enum {
 
 -( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b;
 
--( void ) initializeDungeon;
+//-( void ) initializeDungeon;
 -( void ) initializeNotifications;
 -( void ) initializeHUDs;
 -( void ) initializePCEntity;

@@ -109,16 +109,16 @@
     floor.height = dungeonHeight;
     floor.border = border;
     floor.floorNumber = floorNumber;
-    MLOG(@"entering newFloor loop...");
+    //MLOG(@"entering newFloor loop...");
     for ( int j = 0 ; j < dungeonHeight ; j++ ) {
-        MLOG(@"j = %d", j);
+        //MLOG(@"j = %d", j);
         for ( int i = 0; i < dungeonWidth; i++ ) {
             //MLOG(@"i = %d", i);
             Tile *newTile = [ Tile newTileWithType: TILE_FLOOR_DEFAULT withPosition: ccp(i, j)];
             [ floor.tileDataArray addObject: newTile ];
         }
     }
-    MLOG( @"end newFloor" );
+    //MLOG( @"end newFloor" );
     return floor;
 }
 

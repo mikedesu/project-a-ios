@@ -11,9 +11,9 @@
 @synthesize tileType;
 @synthesize isSelected;
 @synthesize needsRedraw;
-@synthesize texture;
+//@synthesize texture;
 @synthesize position;
-@synthesize contents;
+//@synthesize contents;
 
 /*
  ====================
@@ -26,9 +26,10 @@
         self->isSelected = NO;
         self->needsRedraw = YES;
         //self->tileSprite = nil;
-        self->texture = [[ CCMutableTexture2D alloc ] initWithSize:CGSizeMake(TILE_SIZE, TILE_SIZE) pixelFormat:kCCTexture2DPixelFormat_Default ];
+  //      self->texture = [[ CCMutableTexture2D alloc ] initWithSize:CGSizeMake(TILE_SIZE, TILE_SIZE) pixelFormat:kCCTexture2DPixelFormat_Default ];
         self->position = ccp( 0, 0 );
-        self->contents = [ [ NSMutableArray alloc ] init ];
+        self->contents = nil;
+        //self->contents = [ [ NSMutableArray alloc ] init ];
     }
     return self;
 }
@@ -45,9 +46,10 @@
         self->isSelected = NO;
         self->needsRedraw = YES;
         //self->tileSprite = nil;
-        self->texture = [[ CCMutableTexture2D alloc ] initWithSize:CGSizeMake(TILE_SIZE, TILE_SIZE) pixelFormat:kCCTexture2DPixelFormat_Default ];
+    //    self->texture = [[ CCMutableTexture2D alloc ] initWithSize:CGSizeMake(TILE_SIZE, TILE_SIZE) pixelFormat:kCCTexture2DPixelFormat_Default ];
         self->position = ccp( 0, 0 );
-        self->contents = [ [ NSMutableArray alloc ] init ];
+        self->contents = nil;
+        //self->contents = [ [ NSMutableArray alloc ] init ];
     }
     return self;
 }
@@ -68,54 +70,57 @@
 }
 
 
+//////////////////
+
+
 /*
  ====================
- renderSpriteForTile: tile
+ contents
+ 
+ returns content array, initializes if nil
  ====================
  */
-+( void ) renderTextureForTile: ( Tile * ) tile {
-    if ( tile->texture == nil ) {
-        [ tile->texture setAliasTexParameters ];
-        [ tile->texture fill: black ];
-        
-        Tile_t tileType = tile->tileType;
-        
-        // Select our primary working color based on tileType
-        Color_t color =
-        (tileType==TILE_FLOOR_VOID) ?  black :
-        (tileType==TILE_FLOOR_GRASS) ? green :
-        (tileType==TILE_FLOOR_STONE) ? gray :
-        blue ;
-        
-        if (  tile->isSelected ) {
-            Color_t tmpColor = newColor( color.r + 0xAA , color.g + 0xAA , color.b + 0x00, color.a );
-            color = tmpColor;
-        }
-        
-        // in most cases, we will fill our texture
-        [ tile->texture fill: color ];
-        [ tile->texture apply ];
-        
-        for (Entity *entity in tile->contents) {
-            if ( [[entity name] isEqualToString: @"Hero" ] ) {
-                // draw on the texture
-                if ( tile->isSelected ) {
-                    [ tile->texture fill: blue_alpha( 255 ) ];
-                    [ tile->texture apply ];
-                } else {
-                    [ tile->texture fill: white ];
-                    [ tile->texture apply ];
-                }
-            } else if ( [ [entity name] isEqualToString: @"Test1" ] ) {
-                // Test1 will get rendered as colorFuzz
-                for ( int i = 0; i < 16; i++ ) {
-                    for ( int j = 0; j < 16; j++ ) {
-                        [ tile->texture setPixelAt: ccp(i, j) rgba: random_color ];
-                    }
-                }
-                [ tile->texture apply ];
-            }
-        }
+-( NSMutableArray * ) contents {
+    if ( contents == nil ) {
+        contents = [[ NSMutableArray alloc ] init ];
     }
+    return contents;
 }
+
+
+/*
+ ====================
+ setContents
+ 
+ sets the contents pointer to c
+ ====================
+ */
+-( void ) setContents: ( NSMutableArray * ) c {
+    contents = c;
+}
+
+
+/*
+ ====================
+ addObjectToContents: obj
+ 
+ adds the object obj to contents
+ ====================
+ */
+-( void ) addObjectToContents: ( NSObject * ) obj {
+    [contents addObject: obj ];
+}
+
+
+/*
+ ====================
+ removeObjectFromContents: obj
+ 
+ removes the object obj from contents
+ ====================
+ */
+-( void ) removeObjectFromContents: (NSObject *) obj {
+    [contents removeObject:obj];
+}
+
 @end
