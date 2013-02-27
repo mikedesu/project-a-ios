@@ -89,14 +89,19 @@ unsigned get_memory_mb(void) {
         
         
         CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: floor ];
-        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
+        
         
         // set up our 'hero'
         [ self initializePCEntity ];
         
+        
  
         // set the camera anchor point
         cameraAnchorPoint = ccp( 7, 5 );
+        
+        
+        
+        
         
         // our list of entities
         entityArray = [ [ NSMutableArray alloc ] init ];
@@ -112,9 +117,15 @@ unsigned get_memory_mb(void) {
             }
         }
         
+        CGPoint enemyStartPos = startTile.position;
+        enemyStartPos.x += 1;
+        Tile *enemyStartTile = [ self getTileForCGPoint: enemyStartPos ];        
+        
+        
         // set the hero on the startTile and center the camera
         [ self setEntity:pcEntity onTile: startTile ];
         [ self resetCameraPosition ];
+        
         
         
         // set up some enemy entities
@@ -125,34 +136,16 @@ unsigned get_memory_mb(void) {
         enemy0.isPC = NO;
         enemy0.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
         
-        /*
-         Entity *enemy1;
-        enemy1 = [[ Entity alloc ] init ];
-        enemy1.entityType = ENTITY_T_NPC;
-        [enemy1.name setString:@"Enemy1"];
-        enemy1.isPC = NO;
-        enemy1.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
-         */
-        
-        
-        // find a tile to place enemy0 on
-        CGPoint enemyStartPos = startTile.position;
-        enemyStartPos.x += 1;
-        Tile *enemyStartTile = [ self getTileForCGPoint: enemyStartPos ];
-        
+        // place enemy0 on tile
         [ self setEntity: enemy0 onTile:enemyStartTile ];
         [entityArray addObject: enemy0 ];
         
-        /*
-        enemyStartPos.x += 1;
-        enemyStartTile = [ self getTileForCGPoint: enemyStartPos ];
-        [ self setEntity: enemy1 onTile:enemyStartTile ];
-        [entityArray addObject: enemy1 ];
-         */
+       
         
         
         // set the selectedTilePoint to (-1,-1) (none)
         selectedTilePoint = ccp( -1, -1 );
+        
         
         // initialize our debug Log
         dLog = [ [ NSMutableArray alloc ] init ];
@@ -185,7 +178,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              1
+#define STEP_SPEED              0.3
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -194,8 +187,26 @@ unsigned get_memory_mb(void) {
         // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
         autostepGameLogic = autostepGameLogic && gameLogicIsOn;
         if ( gameLogicIsOn && autostepGameLogic ) {
-            [ self schedule:@selector(scheduledStepAction) interval: STEP_SPEED ];
+            [ self scheduleStepAction ];
         }
+        
+        
+        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera:cameraAnchorPoint ];
+        
+        
+        MLOG(@"pcEntity.position (%.0f,%.0f)", pcEntity.positionOnMap.x, pcEntity.positionOnMap.y);
+        MLOG(@"Enemy.position (%.0f,%.0f)", enemy0.positionOnMap.x, enemy0.positionOnMap.y);
+        
+        Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
+        Tile *enemyTile = [self getTileForCGPoint: enemy0.positionOnMap ];
+        
+        MLOG(@"pcTile.contents: %@", pcTile.contents);
+        MLOG(@"enemyTile.contents: %@", enemyTile.contents);
+        
+        MLOG(@"startTile.contents: %@", startTile.contents);
+        MLOG(@"enemyStartTile.contents: %@", enemyStartTile.contents);
+        
+        
         
 	}
 	return self;
@@ -319,6 +330,7 @@ unsigned get_memory_mb(void) {
         else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM )
         {
             
+            //BOOL rollIsUnacceptable = NO;
             BOOL rollIsUnacceptable = YES;
             CGPoint newPosition;
             

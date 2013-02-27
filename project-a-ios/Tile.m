@@ -108,7 +108,7 @@
  ====================
  */
 -( void ) addObjectToContents: ( NSObject * ) obj {
-    [contents addObject: obj ];
+    [[ self contents] addObject: obj ];
 }
 
 
@@ -120,7 +120,7 @@
  ====================
  */
 -( void ) removeObjectFromContents: (NSObject *) obj {
-    [contents removeObject:obj];
+    [[self contents] removeObject:obj];
 }
 
 @end

@@ -67,7 +67,20 @@
     [ texture fill: color ];
     [ texture apply ];
     
+    
+    /*
+    if ( [[data contents] count] > 0 ) {
+        MLOG(@"Tile is not empty");
+        MLOG(@"Tile contents: %@", [data contents]);
+    }
+    else {
+    //    MLOG(@"Empty tile!");
+    }
+     */
+    
+    
     for (Entity *entity in [data contents]) {
+        
         if ( entity.entityType == ENTITY_T_PC ) {
             // draw on the texture
             if ( data.isSelected ) {
@@ -77,14 +90,8 @@
                 [ texture fill: white ];
                 [ texture apply ];
                 
-                /*
-                for ( int i = 0; i < 8; i++ ) {
-                    for ( int j = 0; j < 8; j++ ) {
-                        [ texture setPixelAt: ccp(i, j) rgba: random_color ];
-                        
-                    }
-                }
-                 */
+                //MLOG(@"PC Entity drawn");
+                
                 
                 //[texture apply ];
                 
@@ -277,7 +284,7 @@
         
         NSUInteger numTilesPlaced = 0;
         NSUInteger maxTilesPlaced = 0;
-        NSUInteger numTiles = 80;
+        NSUInteger numTiles = 40;
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
