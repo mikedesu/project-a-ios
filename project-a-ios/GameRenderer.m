@@ -657,7 +657,10 @@
     
     while ( ! locationIsAcceptable ) {
         for ( Tile *tile in [floor tileDataArray] ) {
-            if ( tile.tileType != TILE_FLOOR_VOID ) {
+            if ( tile.tileType != TILE_FLOOR_VOID &&
+                 tile.tileType != TILE_FLOOR_UPSTAIRS &&
+                 tile.tileType != TILE_FLOOR_DOWNSTAIRS
+                ) {
                 
                 
                 BOOL tileIsFree = YES;
@@ -686,6 +689,7 @@
     
     if ( spawnTile != nil ) {
         [ GameRenderer setEntity: entity onTile: spawnTile ];
+        [[ floor entityArray ] addObject: entity];
     }
 }
 

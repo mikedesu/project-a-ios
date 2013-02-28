@@ -183,7 +183,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.01
+#define STEP_SPEED              1
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -560,7 +560,7 @@ unsigned get_memory_mb(void) {
                           forCGPoint:selectedTilePoint]
                               toTile:[GameRenderer getTileForFloor:[dungeon objectAtIndex:floorNumber] forCGPoint:pcEntity.positionOnMap]
        ],*/
-      [[dungeon objectAtIndex:floorNumber] count],
+      [[[dungeon objectAtIndex:floorNumber] entityArray] count],
       //entityArray.count,
       get_memory_kb()
       ]
@@ -1821,6 +1821,10 @@ NSUInteger getMagicY( NSUInteger y ) {
                     //[ self addMessage: [NSString stringWithFormat:@"%@ stepped", e.name] ];
                 }
             }
+            
+            // spawn a new monster on the map
+            [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] ];
+            [ self addMessage:@"A new monster has spawned!" ];
             
         }
     }
