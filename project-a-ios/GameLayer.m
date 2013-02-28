@@ -90,8 +90,9 @@ unsigned get_memory_mb(void) {
         
         
         // our list of entities
-        entityArray = [ [ NSMutableArray alloc ] init ];
-        [ entityArray addObject: pcEntity ];
+        //entityArray = [ [ NSMutableArray alloc ] init ];
+        //[ entityArray addObject: pcEntity ];
+        [[[ dungeon objectAtIndex:floorNumber ] entityArray] addObject: pcEntity];
         
  
         // set the starting tile
@@ -109,7 +110,8 @@ unsigned get_memory_mb(void) {
         
         
         // set the hero on the startTile and center the camera
-        [ self setEntity:pcEntity onTile: startTile ];
+        //[ self setEntity:pcEntity onTile: startTile ];
+        [ GameRenderer setEntity:pcEntity onTile:startTile ];
         [ self resetCameraPosition ];
         
         
@@ -122,10 +124,10 @@ unsigned get_memory_mb(void) {
         enemy0.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
         enemy0.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
         
-        // place enemy0 on tile
-        [ self setEntity: enemy0 onTile:enemyStartTile ];
-        [entityArray addObject: enemy0 ];
         
+        // place enemy0 on tile
+        [ GameRenderer setEntity: enemy0 onTile: enemyStartTile ];
+        [[[ dungeon objectAtIndex:floorNumber ] entityArray] addObject: enemy0 ];
         
         
         // create an item and set it down
@@ -136,12 +138,14 @@ unsigned get_memory_mb(void) {
         item.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
         item.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
         
+        
         CGPoint itemStartPos = enemyStartPos;
         itemStartPos.x += 1;
         Tile *itemStartTile = [ self getTileForCGPoint: itemStartPos ];
         
-        [ self setEntity:item onTile:itemStartTile];
-        [ entityArray addObject: item ];
+ 
+        [ GameRenderer setEntity: item onTile:itemStartTile ];
+        [[[dungeon objectAtIndex:floorNumber] entityArray] addObject: item];
         
         
         // set the selectedTilePoint to (-1,-1) (none)
@@ -556,7 +560,8 @@ unsigned get_memory_mb(void) {
                           forCGPoint:selectedTilePoint]
                               toTile:[GameRenderer getTileForFloor:[dungeon objectAtIndex:floorNumber] forCGPoint:pcEntity.positionOnMap]
        ],*/
-      entityArray.count,
+      [[dungeon objectAtIndex:floorNumber] count],
+      //entityArray.count,
       get_memory_kb()
       ]
      ];
@@ -1334,7 +1339,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( Entity * ) getEntityForName: ( NSString * ) name {
     Entity *entity = nil;
-    for ( Entity *e in entityArray ) {
+    for ( Entity *e in [[dungeon objectAtIndex:floorNumber] entityArray] ) {
         if ( [e.name isEqualToString: name ] ) {
             entity = e;
             break;
@@ -1390,7 +1395,8 @@ NSUInteger getMagicY( NSUInteger y ) {
 //            [prevTile.contents removeObject: entity];
             [prevTile removeObjectFromContents:entity];
             
-            [ self setEntity: entity onTile: tile ];
+//            [ self setEntity: entity onTile: tile ];
+            [ GameRenderer setEntity: entity onTile:tile ];
             //[ self addMessage: [NSString stringWithFormat: @"%@ -> (%.0f,%.0f)", entity.name, position.x, position.y]];
             
             if ( entity == pcEntity ) {
@@ -1614,6 +1620,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     else {
         floorNumber--;
         [ self loadDungeonFloor: floorNumber ];
+        
+        // TODO: move setEntityOnDownstairs to GameRenderer (DungeonMaster)
         [ self setEntityOnDownstairs: pcEntity ];
         [ self resetCameraPosition ];
         [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
@@ -1631,6 +1639,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     if ( floorNumber < [ dungeon count ] - 1 ) {
         floorNumber++;
         [ self loadDungeonFloor: floorNumber ];
+        
+        // TODO: move setEntityOnUpstairs to GameRenderer (DungeonMaster)
         [ self setEntityOnUpstairs: pcEntity ];
         [ self resetCameraPosition ];
         [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[ dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
@@ -1659,7 +1669,9 @@ NSUInteger getMagicY( NSUInteger y ) {
             break;
         }
     }
-    [ self setEntity:entity onTile:tile];
+    //[ self setEntity:entity onTile:tile];
+    [ GameRenderer setEntity:entity onTile:tile];
+    
 }
 
 
@@ -1682,14 +1694,10 @@ NSUInteger getMagicY( NSUInteger y ) {
             break;
         }
     }
-    [ self setEntity:entity onTile:tile];
+    //[ self setEntity:entity onTile:tile];
+    [ GameRenderer setEntity:entity onTile:tile];
+    
 }
-
-
-
-
-
-
 
 
 
@@ -1806,7 +1814,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         if ( floorNumber == 0 ) {
         
-            for ( Entity *e in entityArray ) {
+            for ( Entity *e in [[dungeon objectAtIndex:floorNumber] entityArray] ) {
                 if ( e.entityType != ENTITY_T_PC ){
                     [ e step ];
                     [ self handleEntityStep: e ];
@@ -1891,6 +1899,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         //MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
         
         // try to move the entity to the new position
+        // TODO: move movEntity to GameRenderer
         [ self moveEntity:e toPosition: newPosition ];
     }
 }
@@ -1957,7 +1966,8 @@ NSUInteger getMagicY( NSUInteger y ) {
             
             // e v.s. target setup section
             // modifiers would go here
-            NSUInteger roll = rollDiceOnce(20);
+            
+            //NSUInteger roll = rollDiceOnce(20);
             
             // attack condition section
             // probably comparing attack roll vs armor class
@@ -1980,7 +1990,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                 [ self addMessage: [ NSString stringWithFormat:@"T%d. %@ slayed %@", turnCounter, e.name, target.name ] ];
                 //[t.contents removeObject: target];
                 [t removeObjectFromContents: target];
-                [entityArray removeObject: target];
+                //[entityArray removeObject: target];
+                [[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: target];
                 
                 autostepGameLogic = FALSE;
                 [ self unscheduleStepAction ];
@@ -2022,7 +2033,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 [[ entity inventoryArray ] addObject: item ];
                 // remove the item from our entityArray and from it's tile's contents
-                [ entityArray removeObject: item];
+                [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
                 [[ itemTile contents ] removeObject: item];
             }
         }
@@ -2045,7 +2056,8 @@ NSUInteger getMagicY( NSUInteger y ) {
             MLOG( @"%@ drops a %@", entity.name, item.name );
             [ self addMessage: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
             
-            [ self setEntity:item onTile:entityTile ];
+            //[ self setEntity:item onTile:entityTile ];
+            [ GameRenderer setEntity:item onTile:entityTile ];
             // remove the item from the entity's inventory
             [[entity inventoryArray] removeObject: item];
         }

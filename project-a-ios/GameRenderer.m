@@ -605,6 +605,122 @@
 
 
 
+#pragma mark - Entity-spawning code
+
++( Entity * ) randomEntity {
+    Entity *e = [[Entity alloc] init];
+    
+    [e.name setString:@"EntityName"];
+    e.entityType = ENTITY_T_VOID;
+    e.isPC = NO;
+    
+    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    
+    return e;
+}
+
+
++( Entity * ) randomItem {
+    Entity *e = [[Entity alloc] init];
+    
+    [e.name setString:@"EntityName"];
+    e.entityType = ENTITY_T_ITEM;
+    e.isPC = NO;
+    
+    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    
+    return e;
+}
+
+
++( Entity * ) randomMonster {
+    Entity *e = [[Entity alloc] init];
+    
+    [e.name setString:@"MonsterName"];
+    e.entityType = ENTITY_T_NPC;
+    e.isPC = NO;
+    
+    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    
+    return e;
+}
+
+
+
++( void ) spawnEntityAtRandomLocation: (Entity *) entity onFloor: (DungeonFloor *) floor {
+    
+    BOOL locationIsAcceptable = NO;
+    Tile *spawnTile = nil;
+    
+    while ( ! locationIsAcceptable ) {
+        for ( Tile *tile in [floor tileDataArray] ) {
+            if ( tile.tileType != TILE_FLOOR_VOID ) {
+                
+                
+                BOOL tileIsFree = YES;
+                
+                // check if a pc/npc occupies the tile contents
+                for ( Entity *e in tile.contents ) {
+                    
+                    if ( e.entityType == ENTITY_T_PC ||
+                        e.entityType == ENTITY_T_NPC ) {
+                        
+                        tileIsFree = NO;
+                        break;
+                    }
+                    
+                }
+                
+                
+                if ( tileIsFree ) {
+                    spawnTile = tile;
+                    locationIsAcceptable = YES;
+                    break;
+                }
+            }
+        }
+    }
+    
+    if ( spawnTile != nil ) {
+        [ GameRenderer setEntity: entity onTile: spawnTile ];
+    }
+}
+
+
+
++( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor {
+    Entity *e = [ GameRenderer randomMonster ];
+    [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
+}
+
+
+
++( void ) spawnRandomItemAtRandomLocationOnFloor: (DungeonFloor *) floor {
+    Entity *e = [ GameRenderer randomItem ];
+    [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
+}
+
+
+
+
+
+
+
+#pragma mark - Entity code
+
+/*
+ ====================
+ setEntity: entity onTile: tile
+ ====================
+ */
++( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile {
+    entity.positionOnMap = tile.position;
+    //[ tile.contents addObject: entity ];
+    [ tile addObjectToContents: entity ];
+}
 
 
 

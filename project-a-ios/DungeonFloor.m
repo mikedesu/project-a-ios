@@ -14,6 +14,7 @@
 @synthesize border;
 @synthesize tileDataArray;
 @synthesize floorNumber;
+@synthesize entityArray;
 
 /*
  ====================

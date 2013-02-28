@@ -37,4 +37,19 @@
 
 +( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b;
 
+
++( Entity * ) randomEntity;
++( Entity * ) randomItem;
++( Entity * ) randomMonster;
+
++( void ) spawnEntity: (Entity *) entity onFloor: (DungeonFloor *) floor atLocation: (CGPoint *) location;
+
++( void ) spawnEntityAtRandomLocation: (Entity *) entity onFloor: (DungeonFloor *) floor;
+
++( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile;
+
++( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor;
++( void ) spawnRandomItemAtRandomLocationOnFloor: (DungeonFloor *) floor;
+
+
 @end
