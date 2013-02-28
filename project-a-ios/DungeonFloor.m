@@ -28,6 +28,7 @@
         border = 0;
         tileDataArray = [[ NSMutableArray alloc ] init ];
         floorNumber = 0;
+        entityArray = [[ NSMutableArray alloc ] init ];
     }
     MLOG(@"end of init");
     return self;

@@ -168,6 +168,7 @@
     //MLOG( @"setAllVisibleTiles: withDungeonFloor:" );
     CGPoint c = camera;
     for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
+        //MLOG(@"j = %d", j);
         for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
             CCSprite *sprite = [ tileArray objectAtIndex: i+j*NUMBER_OF_TILES_ONSCREEN_X ];
             [ GameRenderer setTile: sprite withData: [ [floor tileDataArray] objectAtIndex: (i+c.x)+((j+c.y)*[floor width]) ] ];
@@ -600,5 +601,12 @@
     
     return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
 }
+
+
+
+
+
+
+
 
 @end
