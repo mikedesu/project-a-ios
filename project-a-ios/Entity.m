@@ -10,12 +10,15 @@
 @implementation Entity
 
 @synthesize isPC;
+@synthesize isAlive;
 @synthesize positionOnMap;
 @synthesize texture;
 
 @synthesize name;
 @synthesize level;
 @synthesize stats;
+
+@synthesize xp;
 
 @synthesize hp;
 @synthesize maxhp;
@@ -38,6 +41,7 @@
 -( id ) init {
     if ( ( self = [super init] ) ) {
         isPC = NO;
+        isAlive = YES;
         positionOnMap.x = 0;
         positionOnMap.y = 0;
         texture = nil;
@@ -52,6 +56,8 @@
         stats.intelligence = 1;
         stats.wisdom = 1;
         stats.charisma = 1;
+        
+        xp = 0;
         
         hp = 1;
         maxhp = 1;

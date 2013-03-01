@@ -143,6 +143,10 @@ typedef enum {
 -( void ) setEntityOnUpstairs:(Entity *)entity;
 -( void ) setEntityOnDownstairs:(Entity *)entity;
 
+-( void ) setEntityOnUpstairs:(Entity *)entity forFloor: (DungeonFloor *) floor;
+-( void ) setEntityOnDownstairs:(Entity *)entity forFloor: (DungeonFloor *) floor;
+
+
 
     -( void ) initializeNotifications;
 -( void ) initializeHUDs;

@@ -41,6 +41,7 @@ typedef enum {
 @interface Entity : NSObject {
 //@public
     BOOL isPC;
+    BOOL isAlive;
     CGPoint positionOnMap;
     
     CCMutableTexture2D *texture;
@@ -50,6 +51,8 @@ typedef enum {
     
     NSUInteger level;
     EntityStats_t stats;
+    
+    NSUInteger xp;
     
     NSInteger hp;
     NSInteger maxhp;
@@ -64,6 +67,7 @@ typedef enum {
 }
 
 @property (atomic, assign) BOOL isPC;
+@property (atomic, assign) BOOL isAlive;
 @property (atomic, assign) CGPoint positionOnMap;
 @property (atomic) CCMutableTexture2D *texture;
 
@@ -72,6 +76,8 @@ typedef enum {
 
 @property (atomic, assign) NSUInteger level;
 @property (atomic, assign) EntityStats_t stats;
+
+@property (atomic, assign) NSUInteger xp;
 
 @property (atomic, assign) NSInteger hp;
 @property (atomic, assign) NSInteger maxhp;
