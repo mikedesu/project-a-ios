@@ -617,9 +617,15 @@
     
     e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
     e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+     
+    e.maxhp = rollDiceOnce(10);
+    e.hp = e.maxhp;
+ 
+    e.alignment = ENTITYALIGNMENT_T_CHAOTIC_EVIL;
     
     return e;
 }
+
 
 
 +( Entity * ) randomItem {

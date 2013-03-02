@@ -35,6 +35,22 @@ typedef enum {
 } EntityItemPickupAlgorithm_t;
 
 
+typedef enum {
+    ENTITYALIGNMENT_T_LAWFUL_GOOD = 0,
+    ENTITYALIGNMENT_T_LAWFUL_NEUTRAL,
+    ENTITYALIGNMENT_T_LAWFUL_EVIL,
+    
+    ENTITYALIGNMENT_T_NEUTRAL_GOOD,
+    ENTITYALIGNMENT_T_NEUTRAL_NEUTRAL,
+    ENTITYALIGNMENT_T_NEUTRAL_EVIL,
+    
+    ENTITYALIGNMENT_T_CHAOTIC_GOOD,
+    ENTITYALIGNMENT_T_CHAOTIC_NEUTRAL,
+    ENTITYALIGNMENT_T_CHAOTIC_EVIL,
+    
+} EntityAlignment_t;
+
+
 
 @class CCMutableTexture2D;
 
@@ -50,7 +66,16 @@ typedef enum {
     EntityTypes_t entityType;
     
     NSUInteger level;
-    EntityStats_t stats;
+    //EntityStats_t *stats;
+    
+    NSUInteger strength;
+    NSUInteger dexterity;
+    NSUInteger constitution;
+    NSUInteger intelligence;
+    NSUInteger wisdom;
+    NSUInteger charisma;
+    
+    EntityAlignment_t alignment;
     
     NSUInteger xp;
     
@@ -75,7 +100,14 @@ typedef enum {
 @property (atomic, assign) EntityTypes_t entityType;
 
 @property (atomic, assign) NSUInteger level;
-@property (atomic, assign) EntityStats_t stats;
+//@property (atomic, assign) EntityStats_t *stats;
+@property (atomic, assign) NSUInteger strength;
+@property (atomic, assign) NSUInteger constitution;
+@property (atomic, assign) NSUInteger dexterity;
+@property (atomic, assign) NSUInteger intelligence;
+@property (atomic, assign) NSUInteger wisdom;
+@property (atomic, assign) NSUInteger charisma;
+@property (atomic, assign) EntityAlignment_t alignment;
 
 @property (atomic, assign) NSUInteger xp;
 

@@ -685,9 +685,29 @@ unsigned get_memory_mb(void) {
         gotItem = TRUE;
     }
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
-                                   [ NSString stringWithFormat: @"%@     T:%d", pcEntity.name, turnCounter ],
-                                   [ NSString stringWithFormat: @"St:0 Dx:0 Co:0 In:0 Wi:0 Ch:0 Align" ],
-                                   [ NSString stringWithFormat: @"Dlvl:%d $:0 HP:1/1 Pw: 0/0 AC:0 Xp:%u", floorNumber, pcEntity.xp]
+                                   [ NSString stringWithFormat: @"%@ - %@  T:%d", pcEntity.name,
+                                    
+                                    pcEntity.alignment == ENTITYALIGNMENT_T_LAWFUL_GOOD ?       @"Lawful Good" :
+                                    pcEntity.alignment == ENTITYALIGNMENT_T_LAWFUL_NEUTRAL ?    @"Lawful Neutral" :
+                                    pcEntity.alignment == ENTITYALIGNMENT_T_LAWFUL_EVIL ?       @"Lawful Evil" :
+                                    pcEntity.alignment == ENTITYALIGNMENT_T_NEUTRAL_GOOD ?      @"Neutral Good" :
+                                    pcEntity.alignment == ENTITYALIGNMENT_T_NEUTRAL_NEUTRAL ?   @"Neutral Neutral" :
+                                    pcEntity.alignment == ENTITYALIGNMENT_T_NEUTRAL_EVIL ?      @"Neutral Evil" :
+                                    pcEntity.alignment == ENTITYALIGNMENT_T_CHAOTIC_EVIL ?      @"Chaotic Evil" :
+                                    pcEntity.alignment == ENTITYALIGNMENT_T_CHAOTIC_GOOD ?      @"Chaotic Good" :
+                                    pcEntity.alignment == ENTITYALIGNMENT_T_CHAOTIC_NEUTRAL ?   @"Chaotic Neutral" : @"Unknown"
+                                    ,
+                                    
+                                    turnCounter ],
+                                   [ NSString stringWithFormat: @"St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d",
+                                    pcEntity.strength,
+                                    pcEntity.dexterity,
+                                    pcEntity.constitution,
+                                    pcEntity.intelligence,
+                                    pcEntity.wisdom,
+                                    pcEntity.charisma
+                                    ],
+                                   [ NSString stringWithFormat: @"Dlvl:%d $:0 HP:1/1 Pw: 0/0 AC:0 Lv:%u Xp:%u", floorNumber, pcEntity.level, pcEntity.xp]
                                    ]];
 }
 
@@ -1919,6 +1939,20 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.isPC = YES;
     hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
     hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE;
+    
+    hero.level = 1;
+    
+    hero.strength = rollDiceWithModifier(6, 0, 3);
+    hero.dexterity = rollDiceWithModifier(6, 0, 3);
+    hero.constitution = rollDiceWithModifier(6, 0, 3);
+    hero.intelligence = rollDiceWithModifier(6, 0, 3);
+    hero.wisdom = rollDiceWithModifier(6, 0, 3);
+    hero.charisma = rollDiceWithModifier(6, 0, 3);
+    
+    
+    hero.maxhp = rollDice(12, 1);
+    hero.hp = hero.maxhp;
+    
     pcEntity = hero;
     //[ Entity drawTextureForEntity: hero ];
 }
@@ -2190,8 +2224,21 @@ NSUInteger getMagicY( NSUInteger y ) {
             
             if ( victory && e.isPC ) {
                 // kill target
-                // remove target from t.contents
+                
+                // increase entity xp
                 e.xp++;
+                
+                // handle level up
+                /*
+                  experience scaling to be determined in the future
+                  this is just for experimental purposes
+                 */
+                if ( e.xp >= 100 ) {
+                    e.level++;
+                    e.xp = 0;
+                }
+                
+                // remove target from t.contents
                 
                 //MLOG( @"%@ slayed %@", e.name, target.name );
                 [ self addMessage: [ NSString stringWithFormat:@"T%d. %@ slayed %@", turnCounter, e.name, target.name ] ];
