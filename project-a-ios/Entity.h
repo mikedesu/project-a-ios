@@ -135,6 +135,8 @@ typedef enum {
 -( NSInteger ) totalac;
 -( NSInteger ) damageRoll;
 
+-( NSInteger ) movement;
+
 -( void ) gainXP: (NSInteger) exp;
 -( void ) handleLevelUp;
 -( void ) handleLevelDown;

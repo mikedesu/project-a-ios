@@ -35,6 +35,7 @@
 @synthesize ac;
 
 @synthesize money;
+
 @synthesize inventoryArray;
 
 @synthesize pathFindingAlgorithm;
@@ -91,6 +92,7 @@
         ac = 10; // the higher the better
         
         money = 0;
+        
         inventoryArray = [ [ NSMutableArray alloc ] init ];
         
         pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
@@ -219,6 +221,18 @@
     return ac + dexterityBonus;
 }
 
+
+
+/*
+ ====================
+ movement
+ 
+ returns the total allowed move speed per turn
+ ====================
+ */
+-( NSInteger ) movement {
+    return 1;
+}
 
 
 

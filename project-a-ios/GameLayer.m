@@ -188,7 +188,8 @@ unsigned get_memory_mb(void) {
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
-        autostepGameLogic = YES;
+        //autostepGameLogic = YES;
+        autostepGameLogic = NO;
         
         // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
         autostepGameLogic = autostepGameLogic && gameLogicIsOn;
@@ -828,7 +829,8 @@ unsigned get_memory_mb(void) {
             
             [ self selectTileAtPosition: selectedTilePoint ]; // de-selected the previously selected tile
             
-            BOOL checkPlayerMoveDistance = distance > 4;
+            //BOOL checkPlayerMoveDistance = distance > 1;
+            BOOL checkPlayerMoveDistance = distance > pcEntity.movement;
             if ( checkPlayerMoveDistance ) {
                 [ self addMessage: @"Cannot move that far in one turn!" ];
                 gameState = GAMESTATE_T_GAME;
@@ -1382,10 +1384,12 @@ NSUInteger getMagicY( NSUInteger y ) {
  moves the entity on the map to position
  ====================
  */
+//-( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) floor {
 -( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
     //MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
     
     
+    //Tile *tile = [ self getMapTileFromPoint: position forFloor: floor ];
     Tile *tile = [ self getMapTileFromPoint: position ];
     if ( tile.tileType != TILE_FLOOR_VOID ) {
         
@@ -1417,6 +1421,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         if ( isMoveValid )
         {
+            //Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap forFloor: floor ];
             Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
 //            [prevTile.contents removeObject: entity];
             [prevTile removeObjectFromContents:entity];
@@ -2075,7 +2080,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         // spawn a new monster on the current floor
         
-        NSUInteger spawnChancePercent = 2;
+        NSUInteger spawnChancePercent = 10;
         NSUInteger diceroll = rollDiceOnce(100);
         if ( diceroll <= spawnChancePercent ) {
             [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC: pcEntity];
@@ -2272,7 +2277,10 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 //else {
                     // deal damage to NPC
-                    target.hp -= e.damageRoll;
+                NSInteger totaldamage = e.damageRoll;
+                target.hp -= totaldamage;
+                
+                [ self addMessage: [ NSString stringWithFormat:@"%@ dealt %d damage to %@", e.name, totaldamage, target.name ]];
                 //}
                 
                 if (target.hp <= 0 ) {
@@ -2284,6 +2292,10 @@ NSUInteger getMagicY( NSUInteger y ) {
                     [t removeObjectFromContents: target];
                     target.isAlive = NO;
                 }
+            }
+            
+            else if ( !victory && e.isPC ) {
+                [ self addMessage: [ NSString stringWithFormat:@"%@ missed %@", e.name, target.name ]];
             }
             
             else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_NPC ) {
@@ -2320,7 +2332,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 //else {
                 NSInteger damage = e.damageRoll;
                     pcEntity.hp -= damage;
-                [ self addMessage: [ NSString stringWithFormat:@"%@ took %d damage", pcEntity.name, damage] ];
+                [ self addMessage: [ NSString stringWithFormat:@"%@ took %d damage from %@", pcEntity.name, damage, e.name ] ];
                 //}
                 
                 if ( pcEntity.hp <= 0 ) {
