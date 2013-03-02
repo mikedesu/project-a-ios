@@ -479,12 +479,12 @@ unsigned get_memory_mb(void) {
     CGSize size = [[CCDirector sharedDirector] winSize];
     editorHUD = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
     
-    if ( monitorIsVisible ) {
-        editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - (monitor.contentSize.height) - 10 );
-    }
-    else {
-        editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - 10 );
-    }
+    //if ( monitorIsVisible ) {
+      //  editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - (monitor.contentSize.height) - 10 );
+    //}
+    //else {
+    editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) );
+    //}
     [ self updateEditorHUDLabel ];
 }
 
@@ -498,9 +498,9 @@ unsigned get_memory_mb(void) {
  */
 -( void ) initMonitor {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:120 ];
+    monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
     //monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
-    monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) );
+    monitor.position = ccp(  0 , 0 + playerHUD.contentSize.height + monitor.contentSize.height );
     [ self updateMonitorLabel ];
 }
 
@@ -778,12 +778,21 @@ unsigned get_memory_mb(void) {
     
     // valid selected point
     BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
+    
     if ( validSelectedPoint ) {
         
         //[ self addMessage: @"Tile was previously selected" ];
         [ self selectTileAtPosition: mapPoint ];
         
-        if ( pcEntity.positionOnMap.x == mapPoint.x && pcEntity.positionOnMap.y == mapPoint.y ) {
+    }
+    
+    else {
+        //MLOG( @"Nothing previously selected" );
+        [ self selectTileAtPosition: mapPoint ];
+    }
+    
+    /*
+     if ( pcEntity.positionOnMap.x == mapPoint.x && pcEntity.positionOnMap.y == mapPoint.y ) {
             //[ self addMessage: @"Selected Player" ];
             heroTouches++;
             if ( heroTouches == 2) {
@@ -878,6 +887,7 @@ unsigned get_memory_mb(void) {
             }
         }
     }
+     */
     [ self updateMonitorLabel ];
 }
 
@@ -889,6 +899,38 @@ unsigned get_memory_mb(void) {
  */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches moved" );
+    
+    
+    UITouch *touch=[touches anyObject];
+    touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
+    isTouched = YES;
+    
+    CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
+    CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
+    
+    
+    // valid selected point
+    BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
+    
+    if ( validSelectedPoint ) {
+        
+        Tile *prevTouchedTile = [ self getTileForCGPoint: selectedTilePoint ];
+        Tile *touchedTile = [ self getTileForCGPoint: mapPoint ];
+        
+        BOOL touchingNewTile = ( prevTouchedTile != touchedTile );
+        
+        if ( touchingNewTile ) {
+            [ self selectTileAtPosition: mapPoint ];
+        }
+        
+    }
+    
+    else {
+        // shouldnt be possible
+    }
+    
+    [ self updateMonitorLabel ];
+    
 }
 
 
@@ -900,11 +942,26 @@ unsigned get_memory_mb(void) {
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches ended" );
     //UITouch *touch = [ touches anyObject ];
-        
-    isTouched = NO;
-    
     //double now = [ NSDate timeIntervalSinceReferenceDate ];
     //double timeElapsedSinceTouchBegan = now - touchBeganTime;
+    
+    UITouch *touch=[touches anyObject];
+    touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
+    isTouched = NO;
+    
+    CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
+    CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
+    
+    // valid selected point
+    BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
+    
+    if ( validSelectedPoint ) {
+    }
+    
+    else {
+    }
+    
+    [ self updateMonitorLabel ];
     
 }
 
@@ -1926,16 +1983,16 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) initializeHUDs {
-    
-    
-    monitorIsVisible = NO;
-    [ self initMonitor ];
-    //[ self addMonitor: monitor ];
-    
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
     [ self addEditorHUD: editorHUD ];
     
+    
+    monitorIsVisible = NO;
+    [ self initMonitor ];
+    [ self addMonitor: monitor ];
+    
+   
     playerHUDIsVisible = NO;
     [ self initPlayerHUD ];
     [ self addPlayerHUD: playerHUD ];
