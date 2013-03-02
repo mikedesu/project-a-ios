@@ -78,6 +78,8 @@ typedef enum {
     EntityAlignment_t alignment;
     
     NSUInteger xp;
+    NSUInteger totalxp;
+    NSUInteger nextLevelXP;
     
     NSInteger hp;
     NSInteger maxhp;
@@ -112,6 +114,8 @@ typedef enum {
 @property (atomic, assign) EntityAlignment_t alignment;
 
 @property (atomic, assign) NSUInteger xp;
+@property (atomic, assign) NSUInteger totalxp;
+@property (atomic, assign) NSUInteger nextLevelXP;
 
 @property (atomic, assign) NSInteger hp;
 @property (atomic, assign) NSInteger maxhp;
@@ -123,7 +127,19 @@ typedef enum {
 @property (atomic, assign) NSUInteger money;
 @property (atomic) NSMutableArray *inventoryArray;
 
+-(Entity *) init;
+-(Entity *) initWithLevel: (NSInteger) level;
 
+-( NSInteger ) attackBonus;
+-( NSInteger ) attackRoll;
+-( NSInteger ) totalac;
+-( NSInteger ) damageRoll;
+
+-( void ) gainXP: (NSInteger) exp;
+-( void ) handleLevelUp;
+-( void ) handleLevelDown;
+
+    
 -( void ) step;
 
 @end

@@ -477,7 +477,13 @@ unsigned get_memory_mb(void) {
 -( void ) initEditorHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
     editorHUD = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
-    editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - (monitor.contentSize.height) - 10 );
+    
+    if ( monitorIsVisible ) {
+        editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - (monitor.contentSize.height) - 10 );
+    }
+    else {
+        editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - 10 );
+    }
     [ self updateEditorHUDLabel ];
 }
 
@@ -707,7 +713,13 @@ unsigned get_memory_mb(void) {
                                     pcEntity.wisdom,
                                     pcEntity.charisma
                                     ],
-                                   [ NSString stringWithFormat: @"Dlvl:%d $:0 HP:1/1 Pw: 0/0 AC:0 Lv:%u Xp:%u", floorNumber, pcEntity.level, pcEntity.xp]
+                                   [ NSString stringWithFormat: @"Dlvl:%d $:0 HP:%d/%d AC:%d Lv:%u Xp:%u",
+                                    floorNumber,
+                                    pcEntity.hp,
+                                    pcEntity.maxhp,
+                                    pcEntity.ac,
+                                    pcEntity.level,
+                                    pcEntity.xp]
                                    ]];
 }
 
@@ -1459,7 +1471,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             else if ( entity.entityType == ENTITY_T_NPC ) {
                 
                 if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
-                    [ self addMessage: @"Entity Going downstairs..." ];
+                    //[ self addMessage: @"Entity Going downstairs..." ];
                     
                     //[ self goingDownstairs ];
                     [ self entityGoingDownstairs: entity ];
@@ -1625,7 +1637,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     [ self initializeTiles ];
     
-    NSUInteger numberOfFloors = 3;
+    NSUInteger numberOfFloors = 10;
     
     dungeon = [[ NSMutableArray alloc ] init ];
     for ( int i = 0; i < numberOfFloors; i++ ) {
@@ -1728,10 +1740,12 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) entityGoingUpstairs: (Entity *) entity {
+    /*
     if ( floorNumber == 0 ) {
         // top floor
     }
     else {
+    if ( floorNumber != 0 ) {
         // TODO: move setEntityOnDownstairs to GameRenderer (DungeonMaster)
         Tile *t = [ self getTileForCGPoint: entity.positionOnMap ];
         [t removeObjectFromContents: entity];
@@ -1742,6 +1756,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         [[[ dungeon objectAtIndex:floorNumber-1 ] entityArray ] addObject: entity];
         
     }
+    */
 }
     
     
@@ -1755,11 +1770,13 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) entityGoingDownstairs: (Entity *) entity {
+    /*
     if ( floorNumber == 0 ) {
         // top floor
     }
     else {        
-        // TODO: move setEntityOnDownstairs to GameRenderer (DungeonMaster)
+    // TODO: move setEntityOnDownstairs to GameRenderer (DungeonMaster)
+    if ( floorNumber != [dungeon count]-1 ) {
         Tile *t = [ self getTileForCGPoint: entity.positionOnMap ];
         [t removeObjectFromContents: entity];
         
@@ -1768,9 +1785,9 @@ NSUInteger getMagicY( NSUInteger y ) {
         [[[ dungeon objectAtIndex:floorNumber ] entityArray] removeObject: entity];
         [[[ dungeon objectAtIndex:floorNumber+1 ] entityArray ] addObject: entity];
         
-    }
+     }
+     */
 }
-
 
 
 
@@ -1912,7 +1929,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
-    //[ self addEditorHUD: editorHUD ];
+    [ self addEditorHUD: editorHUD ];
     
     playerHUDIsVisible = NO;
     [ self initPlayerHUD ];
@@ -1950,8 +1967,20 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.charisma = rollDiceWithModifier(6, 0, 3);
     
     
-    hero.maxhp = rollDice(12, 1);
+    NSInteger conMod =
+    hero.constitution <= 3 ? -4 :
+    hero.constitution <= 5 ? -3 :
+    hero.constitution <= 7 ? -2 :
+    hero.constitution <= 9 ? -1 :
+    hero.constitution <= 11 ? 0 :
+    hero.constitution <= 13 ? 1 :
+    hero.constitution <= 15 ? 2 :
+    hero.constitution <= 17 ? 3 : 4;
+    
+    hero.maxhp = rollDiceOnce(12) + conMod;
     hero.hp = hero.maxhp;
+    
+    hero.ac = 17;
     
     pcEntity = hero;
     //[ Entity drawTextureForEntity: hero ];
@@ -2026,6 +2055,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                 [ self handleEntityStep: e ];
             }
         }
+        
+        
  
         /*
         @try {
@@ -2044,10 +2075,10 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         // spawn a new monster on the current floor
         
-        NSUInteger spawnChancePercent = 10;
+        NSUInteger spawnChancePercent = 2;
         NSUInteger diceroll = rollDiceOnce(100);
         if ( diceroll <= spawnChancePercent ) {
-            [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] ];
+            [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC: pcEntity];
         }
  
         
@@ -2159,7 +2190,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     Entity *e = nil;
     Tile *t = [ self getTileForCGPoint:pos ];
     for ( Entity *e0 in [t contents ] ) {
-        if ( e0.entityType == ENTITY_T_NPC ) {
+        if ( e0.entityType == ENTITY_T_NPC || e0.isPC ) {
             e = e0;
             break;
         }
@@ -2207,62 +2238,99 @@ NSUInteger getMagicY( NSUInteger y ) {
             // e v.s. target setup section
             // modifiers would go here
             
-            //NSUInteger roll = rollDiceOnce(20);
+            NSInteger roll = rollDiceOnce(20);
+            NSInteger totalroll = roll + e.attackBonus;
+            
             
             // attack condition section
             // probably comparing attack roll vs armor class
             
-            BOOL victory = TRUE;
+            BOOL victory = NO;
+            
+            if ( totalroll >= target.totalac ) {
+                victory = YES;
+            }
+            
+            
             //if ( roll > 10 && target != pcEntity ) {
             //    victory = TRUE;
             //}
             // attack exchange
             // cleanup
-            
-            //MLOG( @"%@ attacks %@", e.name, target.name );
-            [ self addMessage: [NSString stringWithFormat: @"%@ attacks %@", e.name, target.name ]];
+            /*
+            if ( [target.name isEqualToString:@"Mike" ] ) {
+                MLOG( @"%@ attacks %@", e.name, target.name );
+                [ self addMessage: [NSString stringWithFormat: @"%@ attacks %@", e.name, target.name ]];
+            }
+             */
             
             if ( victory && e.isPC ) {
-                // kill target
+                //if ( roll == 20 ) { // critical roll!
+                //    target.hp -= e.damageRoll + e.damageRoll;
+                //    MLOG(@"Critical!");
+                //}
                 
-                // increase entity xp
-                e.xp++;
+                //else {
+                    // deal damage to NPC
+                    target.hp -= e.damageRoll;
+                //}
                 
-                // handle level up
-                /*
-                  experience scaling to be determined in the future
-                  this is just for experimental purposes
-                 */
-                if ( e.xp >= 100 ) {
-                    e.level++;
-                    e.xp = 0;
+                if (target.hp <= 0 ) {
+                    // increase entity xp
+                    [ e gainXP: target.level ];
+                        
+                    // remove target from t.contents
+                    [ self addMessage: [ NSString stringWithFormat:@"%@ slayed %@", e.name, target.name ] ];
+                    [t removeObjectFromContents: target];
+                    target.isAlive = NO;
+                }
+            }
+            
+            else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_NPC ) {
+                //if ( roll == 20 ) { // critical
+                  //  target.hp -= e.damageRoll + e.damageRoll;
+                  //  MLOG(@"Critical!");
+                //}
+                
+                //else {
+                    // deal damage to NPC
+                    target.hp -= e.damageRoll;
+                //}
+                
+                if (target.hp <= 0 ) {
+                    // increase entity xp
+                    [ e gainXP: target.level ];
+                    
+                    // remove target from t.contents
+                  //  [ self addMessage: [ NSString stringWithFormat:@"%@ slayed %@", e.name, target.name ] ];
+                    [t removeObjectFromContents: target];
+                    target.isAlive = NO;
                 }
                 
-                // remove target from t.contents
-                
-                //MLOG( @"%@ slayed %@", e.name, target.name );
-                [ self addMessage: [ NSString stringWithFormat:@"T%d. %@ slayed %@", turnCounter, e.name, target.name ] ];
-                [t removeObjectFromContents: target];
-                target.isAlive = NO;
-                [[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: target];
-                
-                //autostepGameLogic = FALSE;
-                //[ self unscheduleStepAction ];
             }
             
             
-            else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_NPC ) {
-                // kill target
-                // remove target from t.contents
+            else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_PC ) {
+                // deal damage to PC
+                //pcEntity.hp--;
+                //if ( roll == 20 ) {// critical
+                //    pcEntity.hp -= e.damageRoll + e.damageRoll;
+                 //   MLOG(@"Critical!");
+                //}
+                //else {
+                NSInteger damage = e.damageRoll;
+                    pcEntity.hp -= damage;
+                [ self addMessage: [ NSString stringWithFormat:@"%@ took %d damage", pcEntity.name, damage] ];
+                //}
                 
-                //MLOG( @"%@ slayed %@", e.name, target.name );
-                [ self addMessage: [ NSString stringWithFormat:@"T%d. %@ slayed %@", turnCounter, e.name, target.name ] ];
-                [t removeObjectFromContents: target];
-                target.isAlive = NO;
-                //[[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: target];
-                
-                //autostepGameLogic = FALSE;
-                //[ self unscheduleStepAction ];
+                if ( pcEntity.hp <= 0 ) {
+                    MLOG(@"You died...");
+                    [ self addMessage: @"You died..." ];
+                    pcEntity.isAlive = NO;
+                    gameLogicIsOn = NO;
+                    autostepGameLogic = NO;
+                    [ self unscheduleStepAction ];
+                }
                 
             }
             
@@ -2270,7 +2338,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             else {
                 // target not killed
                 //MLOG( @"%@ remains", target.name );
-                [ self addMessage: [NSString stringWithFormat: @"%@ remains", target.name] ];
+                //[ self addMessage: [NSString stringWithFormat: @"%@ remains", target.name] ];
             }
             
         

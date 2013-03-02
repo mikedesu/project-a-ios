@@ -40,7 +40,7 @@
 
 +( Entity * ) randomEntity;
 +( Entity * ) randomItem;
-+( Entity * ) randomMonster;
++( Entity * ) randomMonsterForPC: (Entity *) pc;
 
 +( void ) spawnEntity: (Entity *) entity onFloor: (DungeonFloor *) floor atLocation: (CGPoint *) location;
 
@@ -48,8 +48,8 @@
 
 +( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile;
 
-+( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor;
-+( void ) spawnRandomItemAtRandomLocationOnFloor: (DungeonFloor *) floor;
++( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc;
+    +( void ) spawnRandomItemAtRandomLocationOnFloor: (DungeonFloor *) floor;
 
 
 @end

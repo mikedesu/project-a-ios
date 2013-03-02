@@ -308,7 +308,7 @@
         
         NSUInteger numTilesPlaced = 0;
         NSUInteger maxTilesPlaced = 0;
-        NSUInteger numTiles = rollDice(10, 10);
+        NSUInteger numTiles = rollDice(10, 10) + 10;
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
@@ -645,7 +645,14 @@
 +( Entity * ) randomMonster {
     Entity *e = [[Entity alloc] init];
     
-    [e.name setString:@"MonsterName"];
+    NSInteger nameLen = 8;
+    NSString *alphanumeric = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    NSMutableString *randomString = [ NSMutableString stringWithString:@"" ];
+    for ( int i = 0; i < nameLen ; i++ ) {
+        [ randomString appendString: [alphanumeric substringWithRange:NSMakeRange(rollDiceOnce([alphanumeric length])-1, 1)] ];
+    }
+    
+    [e.name setString: randomString ];
     e.entityType = ENTITY_T_NPC;
     e.isPC = NO;
     
@@ -654,6 +661,37 @@
     
     return e;
 }
+
+
++( Entity * ) randomMonsterForPC: (Entity *) pc {
+    Entity *e = [[Entity alloc] initWithLevel: pc.level];
+    
+    NSInteger nameLen = 8;
+    NSString *alphanumeric = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    NSMutableString *randomString = [ NSMutableString stringWithString:@"" ];
+    for ( int i = 0; i < nameLen ; i++ ) {
+        [ randomString appendString: [alphanumeric substringWithRange:NSMakeRange(rollDiceOnce([alphanumeric length])-1, 1)] ];
+    }
+    
+    [e.name setString: randomString ];
+    e.entityType = ENTITY_T_NPC;
+    e.isPC = NO;
+    
+    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    
+    return e;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -704,8 +742,8 @@
 
 
 
-+( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor {
-    Entity *e = [ GameRenderer randomMonster ];
++( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc {
+    Entity *e = [ GameRenderer randomMonsterForPC: pc ];
     [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
 }
 
