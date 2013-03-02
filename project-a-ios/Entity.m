@@ -30,6 +30,7 @@
 
 @synthesize hp;
 @synthesize maxhp;
+@synthesize ac;
 
 @synthesize money;
 @synthesize inventoryArray;
@@ -80,6 +81,8 @@
         
         hp = 1;
         maxhp = 1;
+        
+        ac = 10; // the higher the better
         
         money = 0;
         inventoryArray = [ [ NSMutableArray alloc ] init ];

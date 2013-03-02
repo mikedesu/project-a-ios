@@ -82,6 +82,8 @@ typedef enum {
     NSInteger hp;
     NSInteger maxhp;
     
+    NSInteger ac; //armor class
+    
     NSUInteger money;
     
     EntityPathFindingAlgorithm_t pathFindingAlgorithm;
@@ -113,6 +115,7 @@ typedef enum {
 
 @property (atomic, assign) NSInteger hp;
 @property (atomic, assign) NSInteger maxhp;
+@property (atomic, assign) NSInteger ac;
 
 @property (atomic, assign) EntityPathFindingAlgorithm_t pathFindingAlgorithm;
 @property (atomic, assign) EntityItemPickupAlgorithm_t itemPickupAlgorithm;
