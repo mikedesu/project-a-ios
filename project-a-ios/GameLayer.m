@@ -188,7 +188,7 @@ unsigned get_memory_mb(void) {
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
-        autostepGameLogic = NO;
+        autostepGameLogic = YES;
         
         // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
         autostepGameLogic = autostepGameLogic && gameLogicIsOn;
@@ -678,6 +678,12 @@ unsigned get_memory_mb(void) {
  ====================
  */
 -( void ) updatePlayerHUDLabel {
+    
+    static BOOL gotItem = FALSE;
+    if ( [[pcEntity inventoryArray] count] > 0 && !gotItem ) {
+        [ pcEntity setName: [NSString stringWithFormat:@"%@ the Great", pcEntity.name]];
+        gotItem = TRUE;
+    }
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
                                    [ NSString stringWithFormat: @"%@     T:%d", pcEntity.name, turnCounter ],
                                    [ NSString stringWithFormat: @"St:0 Dx:0 Co:0 In:0 Wi:0 Ch:0 Align" ],
@@ -1599,7 +1605,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     [ self initializeTiles ];
     
-    NSUInteger numberOfFloors = 10;
+    NSUInteger numberOfFloors = 3;
     
     dungeon = [[ NSMutableArray alloc ] init ];
     for ( int i = 0; i < numberOfFloors; i++ ) {
