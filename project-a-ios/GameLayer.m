@@ -188,7 +188,7 @@ unsigned get_memory_mb(void) {
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
-        autostepGameLogic = YES;
+        autostepGameLogic = NO;
         
         // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
         autostepGameLogic = autostepGameLogic && gameLogicIsOn;
@@ -412,7 +412,7 @@ unsigned get_memory_mb(void) {
     
     
     else {
-        MLOG( @"Notification not handled: %@", notification.name );
+        //MLOG( @"Notification not handled: %@", notification.name );
     }
     
     
@@ -491,7 +491,7 @@ unsigned get_memory_mb(void) {
  */
 -( void ) initMonitor {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
+    monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:120 ];
     //monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
     monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) );
     [ self updateMonitorLabel ];
@@ -533,7 +533,7 @@ unsigned get_memory_mb(void) {
     @try {
     [monitor.label setString:
      //[NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d\nMemory used: %u kb\n",
-     [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nFloor #: %d\nEntities: %d\nInventory: %d\nMemory used: %u kb\n",
+     [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nEntities: %d\nInventory: %d\nMemory used: %u kb\n",
       
       [self getGameStateString: gameState],
       selectedTilePoint.x,
@@ -542,7 +542,7 @@ unsigned get_memory_mb(void) {
       pcEntity.positionOnMap.y,
       cameraAnchorPoint.x,
       cameraAnchorPoint.y,
-      floorNumber,
+      //floorNumber,
       [[[dungeon objectAtIndex:floorNumber] entityArray] count],
       [[pcEntity inventoryArray] count],
       //entityArray.count,
@@ -554,7 +554,7 @@ unsigned get_memory_mb(void) {
         //MLOG( @"Exception caught: %@", e );
         [monitor.label setString:
          //[NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nDistance: %d\nEntities: %d\nMemory used: %u kb\n",
-         [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nFloor: %d\nEntities: %d\nInventory: %d\nMemory used: %u kb\n",
+         [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nEntities: %d\nInventory: %d\nMemory used: %u kb\n",
           
           [self getGameStateString:gameState],
           selectedTilePoint.x,
@@ -563,7 +563,7 @@ unsigned get_memory_mb(void) {
           pcEntity.positionOnMap.y,
           cameraAnchorPoint.x,
           cameraAnchorPoint.y,
-          floorNumber,
+          //floorNumber,
           entityArray.count,
           [[ pcEntity inventoryArray ] count],
           get_memory_kb()
@@ -681,7 +681,7 @@ unsigned get_memory_mb(void) {
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
                                    [ NSString stringWithFormat: @"%@     T:%d", pcEntity.name, turnCounter ],
                                    [ NSString stringWithFormat: @"St:0 Dx:0 Co:0 In:0 Wi:0 Ch:0 Align" ],
-                                   [ NSString stringWithFormat: @"Dlvl:1 $:0 HP:1/1 Pw: 0/0 AC:0 Xp:%u", pcEntity.xp]
+                                   [ NSString stringWithFormat: @"Dlvl:%d $:0 HP:1/1 Pw: 0/0 AC:0 Xp:%u", floorNumber, pcEntity.xp]
                                    ]];
 }
 
@@ -821,6 +821,10 @@ unsigned get_memory_mb(void) {
                 // just a normal tile...
                 else {
                     [ self moveEntity:pcEntity toPosition:mapPoint ];
+                    
+                    // handle entity step
+                    [ self stepGameLogic ];
+                    
                     [ self resetCameraPosition ];
                     turnCounter++;
                     gameState = GAMESTATE_T_GAME;
@@ -1386,12 +1390,14 @@ NSUInteger getMagicY( NSUInteger y ) {
             if ( entity == pcEntity ) {
                 if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
                     [ self addMessage: @"Going downstairs..." ];
-                    MLOG(@"Going downstairs...");
+                    //MLOG(@"Going downstairs...");
                     [ self goingDownstairs ];
                 }
                 else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
-                    [ self addMessage: @"Going upstairs..." ];
-                    MLOG(@"Going upstairs...");
+                    if ( floorNumber != 0 ) {
+                        [ self addMessage: @"Going upstairs..." ];
+                        //MLOG(@"Going upstairs...");
+                    }
                     [ self goingUpstairs ];
                 }
                 
@@ -1434,7 +1440,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     
                 }
                 else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
-                    [ self addMessage: @"Entity Going upstairs..." ];
+                    
                     
                     //[ self goingUpstairs ];
                     [ self entityGoingUpstairs: entity ];
@@ -1574,9 +1580,26 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) initializeDungeon {
+    
+    /*
+     random-walk of 10-floor dungeon w/ 10-100 tiles each
+     
+     ipad test runs
+     28680
+     35594
+     56391
+     
+     macbook test runs
+     29739
+     42096
+     52222
+     78244
+     */
+    
+    
     [ self initializeTiles ];
     
-    NSUInteger numberOfFloors = 3;
+    NSUInteger numberOfFloors = 10;
     
     dungeon = [[ NSMutableArray alloc ] init ];
     for ( int i = 0; i < numberOfFloors; i++ ) {
@@ -1606,12 +1629,12 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) loadDungeonFloor: ( NSUInteger ) floorNumber {
-    MLOG( @"loadDungeonFloor" );
+    //MLOG( @"loadDungeonFloor" );
     //floor = [ dungeon objectAtIndex: floorNumber ];
     //[ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:floor withCamera:cameraAnchorPoint ];
     [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[dungeon objectAtIndex: floorNumber] withCamera:cameraAnchorPoint ];
     [ self resetCameraPosition ];
-    MLOG( @"end loadDungeonFloor" );
+    //MLOG( @"end loadDungeonFloor" );
 }
 
 
@@ -1622,20 +1645,24 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) goingUpstairs {
-    MLOG(@"goingUpstairs...");
+    //MLOG(@"goingUpstairs...");
     if ( floorNumber == 0 ) {
         // top floor
     }
     else {
         floorNumber--;
         [ self loadDungeonFloor: floorNumber ];
+        [[[ dungeon objectAtIndex:floorNumber+1 ] entityArray ] removeObject: pcEntity ];
         
         // TODO: move setEntityOnDownstairs to GameRenderer (DungeonMaster)
         [ self setEntityOnDownstairs: pcEntity ];
+        
+        [[[ dungeon objectAtIndex:floorNumber ] entityArray ] addObject: pcEntity ];
+        
         [ self resetCameraPosition ];
         [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
     }
-    MLOG(@"end goingUpstairs...");
+    //MLOG(@"end goingUpstairs...");
 }
 
 
@@ -1646,20 +1673,26 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) goingDownstairs {
-    MLOG(@"goingDownstairs...");
+    //MLOG(@"goingDownstairs...");
     if ( floorNumber < [ dungeon count ] - 1 ) {
         floorNumber++;
         [ self loadDungeonFloor: floorNumber ];
         
         // TODO: move setEntityOnUpstairs to GameRenderer (DungeonMaster)
+        
+        [[[ dungeon objectAtIndex:floorNumber-1 ] entityArray ] removeObject: pcEntity ];
+        
         [ self setEntityOnUpstairs: pcEntity ];
+        
+        [[[ dungeon objectAtIndex:floorNumber ] entityArray ] addObject: pcEntity ];
+        
         [ self resetCameraPosition ];
         [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[ dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
     }
     else {
         // bottom floor        
     }
-    MLOG(@"end goingDownstairs...");
+    //MLOG(@"end goingDownstairs...");
 }
 
 
@@ -1849,11 +1882,11 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     monitorIsVisible = NO;
     [ self initMonitor ];
-    [ self addMonitor: monitor ];
+    //[ self addMonitor: monitor ];
     
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
-    [ self addEditorHUD: editorHUD ];
+    //[ self addEditorHUD: editorHUD ];
     
     playerHUDIsVisible = NO;
     [ self initPlayerHUD ];
@@ -1944,24 +1977,39 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         
         // have all entities on this floor act
-        /*
-        for ( Entity *e in [[dungeon objectAtIndex:floorNumber] entityArray] ) {
+ 
+        
+        for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] entityArray] count]; i++ ) {
+            Entity *e = [[[dungeon objectAtIndex:floorNumber] entityArray] objectAtIndex: i];
             if ( e.entityType != ENTITY_T_PC ){
                 [ e step ];
                 [ self handleEntityStep: e ];
             }
         }
-         */
-        
+ 
+        /*
+        @try {
+        NSArray *tmpEntityArray = [NSArray arrayWithObjects: [[dungeon objectAtIndex:floorNumber] entityArray];
+        for ( Entity *e in tmpEntityArray ) {
+            if ( e.entityType != ENTITY_T_PC ){
+                [ e step ];
+                [ self handleEntityStep: e ];
+            }
+        }
+        }
+        @catch (NSException *e) {
+            MLOG(@"Exception caught in stepping: %@", e);
+        }
+        */
         
         // spawn a new monster on the current floor
-        //if ( turnCounter % 100 == 0 ) {
-            //[ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] ];
-            //[ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] ];
-            //            [ self addMessage:@"Monster has spawned on this floor" ];
-            //MLOG(@"Monster has spawned on this floor");
-           // MLOG(@"Item has spawned on this floor");
-        // }
+        
+        NSUInteger spawnChancePercent = 10;
+        NSUInteger diceroll = rollDiceOnce(100);
+        if ( diceroll <= spawnChancePercent ) {
+            [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] ];
+        }
+ 
         
         Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
         if ( floorNumber == 0 &&
@@ -2066,7 +2114,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( Entity * ) npcEntityAtPosition: (CGPoint) pos {
-    MLOG( @"npcEntityAtPosition: (%.0f,%.0f)", pos.x, pos.y );
+    //MLOG( @"npcEntityAtPosition: (%.0f,%.0f)", pos.x, pos.y );
     
     Entity *e = nil;
     Tile *t = [ self getTileForCGPoint:pos ];
@@ -2090,7 +2138,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) handleAttackForEntity: ( Entity * ) e toPosition: (CGPoint) pos {
-    MLOG( @"handleAttackForEntity: %@ toPosition: (%.0f,%.0f)", e, pos.x, pos.y );
+    //MLOG( @"handleAttackForEntity: %@ toPosition: (%.0f,%.0f)", e, pos.x, pos.y );
     
     // get the tile we are attacking
     
@@ -2131,7 +2179,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             // attack exchange
             // cleanup
             
-            MLOG( @"%@ attacks %@", e.name, target.name );
+            //MLOG( @"%@ attacks %@", e.name, target.name );
             [ self addMessage: [NSString stringWithFormat: @"%@ attacks %@", e.name, target.name ]];
             
             if ( victory && e.isPC ) {
@@ -2139,7 +2187,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 // remove target from t.contents
                 e.xp++;
                 
-                MLOG( @"%@ slayed %@", e.name, target.name );
+                //MLOG( @"%@ slayed %@", e.name, target.name );
                 [ self addMessage: [ NSString stringWithFormat:@"T%d. %@ slayed %@", turnCounter, e.name, target.name ] ];
                 [t removeObjectFromContents: target];
                 target.isAlive = NO;
@@ -2149,33 +2197,33 @@ NSUInteger getMagicY( NSUInteger y ) {
                 //[ self unscheduleStepAction ];
             }
             
-            /*
-            else if ( victory && e.entityType == ENTITY_T_NPC ) {
+            
+            else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_NPC ) {
                 // kill target
                 // remove target from t.contents
                 
-                MLOG( @"%@ slayed %@", e.name, target.name );
+                //MLOG( @"%@ slayed %@", e.name, target.name );
                 [ self addMessage: [ NSString stringWithFormat:@"T%d. %@ slayed %@", turnCounter, e.name, target.name ] ];
                 [t removeObjectFromContents: target];
                 target.isAlive = NO;
                 //[[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: target];
                 
-                autostepGameLogic = FALSE;
-                [ self unscheduleStepAction ];
+                //autostepGameLogic = FALSE;
+                //[ self unscheduleStepAction ];
                 
             }
-             */
+            
             
             else {
                 // target not killed
-                MLOG( @"%@ remains", target.name );
+                //MLOG( @"%@ remains", target.name );
                 [ self addMessage: [NSString stringWithFormat: @"%@ remains", target.name] ];
             }
             
         
         } else {
             // attacking thin air
-            MLOG( @"You attack thin air..." );
+            //MLOG( @"%@ attacks thin air...", e.name );
         }
     }
     
@@ -2198,7 +2246,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             Tile *itemTile = [ self getTileForCGPoint:item.positionOnMap ];
             if ( itemTile != nil ) {
                 
-                MLOG( @"%@ picks up a %@", entity.name, item.name );
+                //MLOG( @"%@ picks up a %@", entity.name, item.name );
                 [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
                 
                 [[ entity inventoryArray ] addObject: item ];
@@ -2223,7 +2271,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         // get the entity's tile
         Tile *entityTile = [ self getTileForCGPoint: entity.positionOnMap ];
         if ( entityTile != nil ) {
-            MLOG( @"%@ drops a %@", entity.name, item.name );
+            //MLOG( @"%@ drops a %@", entity.name, item.name );
             [ self addMessage: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
             
             //[ self setEntity:item onTile:entityTile ];

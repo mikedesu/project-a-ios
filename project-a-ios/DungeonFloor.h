@@ -26,7 +26,7 @@ typedef enum
 @property (atomic, assign) NSUInteger border;
 @property (atomic) NSMutableArray *tileDataArray;
 @property (atomic, assign) NSUInteger floorNumber;
-@property (atomic) NSMutableArray *entityArray;
+@property (nonatomic) NSMutableArray *entityArray;
 
 +( DungeonFloor * ) newFloor;
 +( DungeonFloor * ) newFloorWidth: (NSUInteger) w andHeight: (NSUInteger) h;

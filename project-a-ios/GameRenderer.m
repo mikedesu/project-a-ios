@@ -308,7 +308,7 @@
         
         NSUInteger numTilesPlaced = 0;
         NSUInteger maxTilesPlaced = 0;
-        NSUInteger numTiles = 40;
+        NSUInteger numTiles = rollDice(10, 10);
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
@@ -657,8 +657,10 @@
     Tile *spawnTile = nil;
     
     while ( ! locationIsAcceptable ) {
-        for ( Tile *tile in [floor tileDataArray] ) {
-            if ( tile.tileType != TILE_FLOOR_VOID &&
+        
+        NSUInteger diceroll = rollDiceOnce( [[floor tileDataArray] count] ) - 1;
+        Tile *tile = [[ floor tileDataArray ] objectAtIndex: diceroll ];
+        if ( tile.tileType != TILE_FLOOR_VOID &&
                  tile.tileType != TILE_FLOOR_UPSTAIRS &&
                  tile.tileType != TILE_FLOOR_DOWNSTAIRS
                 ) {
@@ -684,8 +686,8 @@
                     locationIsAcceptable = YES;
                     break;
                 }
-            }
         }
+        
     }
     
     if ( spawnTile != nil ) {
