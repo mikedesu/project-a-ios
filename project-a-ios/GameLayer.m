@@ -184,7 +184,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.01
+#define STEP_SPEED              0.1
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -270,7 +270,7 @@ unsigned get_memory_mb(void) {
         
         if ( pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_RANDOM )
         {
-            NSUInteger roll = [Dice roll:8];
+            NSUInteger roll = [Dice roll:9];
             CGFloat x = -1;
             CGFloat y = -1;
             
@@ -309,6 +309,10 @@ unsigned get_memory_mb(void) {
                 x = 1;
                 y = 1;
             }
+            else if ( roll == 9 ) {
+                x = 0;
+                y = 0;
+            }
             
             CGPoint newPosition;
             newPosition.x = pcEntity.positionOnMap.x + x;
@@ -318,7 +322,15 @@ unsigned get_memory_mb(void) {
             //MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
             
             // try to move the entity to the new position
-            [ self moveEntity:pcEntity toPosition: newPosition ];
+            if ( roll != 9 ) {
+                [ self moveEntity:pcEntity toPosition: newPosition ];
+            } else {
+                // heal the pcEntity a bit
+                pcEntity.hp++;
+                if (pcEntity.hp > pcEntity.maxhp ) {
+                    pcEntity.hp = pcEntity.maxhp;
+                }
+            }
         }
         
         else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM )
@@ -328,9 +340,9 @@ unsigned get_memory_mb(void) {
             BOOL rollIsUnacceptable = YES;
             CGPoint newPosition;
             
-            while ( rollIsUnacceptable )
-            {
-                NSUInteger roll = [Dice roll:8];
+            NSUInteger roll = [Dice roll:9];
+            while ( rollIsUnacceptable ) {
+                roll = [Dice roll:9];
                 CGFloat x = -1;
                 CGFloat y = -1;
             
@@ -345,6 +357,7 @@ unsigned get_memory_mb(void) {
                 else if ( roll == 6 ) { x =  1;      y = -1;  }
                 else if ( roll == 7 ) { x = -1;      y =  1;  }
                 else if ( roll == 8 ) { x =  1;      y =  1;  }
+                else if ( roll == 9 ) { x =  0;      y =  0;  }
                 
                 newPosition.x = pcEntity.positionOnMap.x + x;
                 newPosition.y = pcEntity.positionOnMap.y + y;
@@ -357,8 +370,15 @@ unsigned get_memory_mb(void) {
                 }
             }
             
-            // try to move the entity to the new position
-            [ self moveEntity:pcEntity toPosition: newPosition ];
+            if ( roll != 9 ) {
+                [ self moveEntity:pcEntity toPosition: newPosition ];
+            } else {
+                // heal the pcEntity a bit
+                if ( pcEntity.hp < pcEntity.maxhp ) {
+                    pcEntity.hp++;
+                    [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+                }
+            }
  
             // step game logic
             if ( gameLogicIsOn ) {
@@ -366,6 +386,131 @@ unsigned get_memory_mb(void) {
             }
             [ self resetCameraPosition ];
         }
+        
+        else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SIMPLE )
+        {
+ 
+            // get all 8 tiles around the pcEntity
+            CGPoint ulpt = ccp( pcEntity.positionOnMap.x - 1 , pcEntity.positionOnMap.y - 1 );
+            CGPoint upt =  ccp( pcEntity.positionOnMap.x ,     pcEntity.positionOnMap.y - 1);
+            CGPoint urpt = ccp( pcEntity.positionOnMap.x + 1 , pcEntity.positionOnMap.y - 1 );
+            CGPoint lpt =  ccp( pcEntity.positionOnMap.x - 1 , pcEntity.positionOnMap.y );
+            CGPoint rpt =  ccp( pcEntity.positionOnMap.x + 1 , pcEntity.positionOnMap.y );
+            CGPoint dlpt = ccp( pcEntity.positionOnMap.x - 1,  pcEntity.positionOnMap.y + 1 );
+            CGPoint dpt =  ccp( pcEntity.positionOnMap.x ,     pcEntity.positionOnMap.y + 1 );
+            CGPoint drpt = ccp( pcEntity.positionOnMap.x + 1 , pcEntity.positionOnMap.y + 1 );
+ 
+            Tile *ult = [ self getTileForCGPoint: ulpt ];
+            Tile *ut =  [ self getTileForCGPoint: upt ];
+            Tile *urt = [ self getTileForCGPoint: urpt ];
+            
+            Tile *lt =  [ self getTileForCGPoint: lpt ];
+            Tile *rt =  [ self getTileForCGPoint: rpt ];
+            
+            Tile *dlt = [ self getTileForCGPoint: dlpt ];
+            Tile *dt =  [ self getTileForCGPoint: dpt ];
+            Tile *drt = [ self getTileForCGPoint: drpt ];
+            
+            
+            BOOL hasTheItem = pcEntity.inventoryArray.count > 0;
+            BOOL isBottomFloor = floorNumber == dungeon.count - 1;
+            
+            // calculate distances to downstairs/upstairs tile
+            Tile *downstairsTile = nil;
+            Tile *upstairsTile = nil;
+            Tile *itemTile = nil;
+            
+            for ( Tile *tile in [[dungeon objectAtIndex:floorNumber] tileDataArray] ) {
+                if ( ! hasTheItem && ! isBottomFloor ) {
+                    if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
+                        downstairsTile = tile;
+                        break;
+                    }
+                }
+                
+                else if ( ! hasTheItem && isBottomFloor ) {
+                    // check if the tile has an item
+                    if ( tile.contents.count > 0 ) {
+                        itemTile = tile;
+                        break;
+                    }
+                }
+                
+                else {
+                    if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
+                        upstairsTile = tile;
+                        break;
+                    }
+                }
+            }
+            
+            Tile *bestTile = nil;
+            NSMutableArray *tiles = [ NSMutableArray arrayWithObjects:
+                              ult,
+                              ut,
+                              urt,
+                              lt,
+                              rt,
+                              dlt,
+                              dt,
+                              drt,
+                              nil];
+            NSInteger minDist = 999;
+            NSInteger dist;
+            
+            // prune out previously-traveled tiles if we don't have the item
+            
+            if ( ! hasTheItem ) {
+                for ( int i = 0; i < [tiles count]; i++ ) {
+                    Tile *t = [tiles objectAtIndex:i];
+                    for ( Tile * t2 in pcEntity.pathTaken ) {
+                        if ( t == t2 ) {
+                            // taken tile before, don't use
+                            [ tiles removeObject: t ];
+                        }
+                    }
+                }
+            }
+            
+            if ( tiles.count > 0 ) {
+                // from remaining tiles, select best tile
+                for ( Tile *t in tiles ) {
+                    if ( t.tileType != TILE_FLOOR_VOID ) {
+                        if ( !hasTheItem && !isBottomFloor )     { dist = [ self distanceFromTile:downstairsTile toTile: t ]; }
+                        else if ( !hasTheItem && isBottomFloor ) { dist = [ self distanceFromTile:itemTile       toTile: t ]; }
+                        else                                     { dist = [ self distanceFromTile:upstairsTile   toTile: t ]; }
+                        
+                        if ( dist <= minDist ) {
+                            minDist = dist;
+                            bestTile = t;
+                        }
+                    }
+                }
+                
+                // presumably we've found the best tile to move to
+                [pcEntity.pathTaken addObject:bestTile];
+                [ self moveEntity:pcEntity toPosition: bestTile.position ];
+            }
+            
+            else
+            {
+                // pop the last tile taken
+                Tile *lastTileTaken = [pcEntity.pathTaken lastObject];
+                [pcEntity.pathTaken removeLastObject];
+                [ self moveEntity:pcEntity toPosition:lastTileTaken.position ];
+            }
+            
+           
+            
+            // step game logic
+            if ( gameLogicIsOn ) {
+                [ self stepGameLogic ];
+            }
+            [ self resetCameraPosition ];
+ 
+        }
+        
+            
         [ self resetCameraPosition ];
         //turnCounter++;
         gameState = GAMESTATE_T_GAME;
@@ -2099,7 +2244,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ hero.name setString: @"Mike" ];
     hero.entityType = ENTITY_T_PC;
     hero.isPC = YES;
-    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+    //hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
     hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE;
     
     hero.level = 1;
@@ -2249,7 +2395,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             tile.tileType == TILE_FLOOR_UPSTAIRS &&
             [[pcEntity inventoryArray] count] > 0 ) {
          
-            [ self addMessage:@"You win!" ];
+            [ self addMessage:[NSString stringWithFormat: @"You win!\nYou killed %d monsters\n", pcEntity.totalKills ] ];
             gameLogicIsOn = NO;
             autostepGameLogic = NO;
             [ self unscheduleStepAction ];
@@ -2438,6 +2584,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 //else {
                     // deal damage to NPC
                 NSInteger totaldamage = e.damageRoll;
+                totaldamage = (totaldamage > 0) ? totaldamage : 0;
                 target.hp -= totaldamage;
                 
                 [ self addMessage: [ NSString stringWithFormat:@"%@ dealt %d damage to Lv%d %@", e.name, totaldamage, target.level, target.name ]];
@@ -2467,7 +2614,10 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 //else {
                     // deal damage to NPC
-                    target.hp -= e.damageRoll;
+                NSInteger totaldamage = e.damageRoll;
+                totaldamage = (totaldamage > 0) ? totaldamage : 0;
+                target.hp -= totaldamage;
+                
                 //}
                 
                 if (target.hp <= 0 ) {
@@ -2492,9 +2642,12 @@ NSUInteger getMagicY( NSUInteger y ) {
                  //   MLOG(@"Critical!");
                 //}
                 //else {
-                NSInteger damage = e.damageRoll;
-                pcEntity.hp -= damage;
-                [ self addMessage: [ NSString stringWithFormat:@"%@ took %d damage from Lv%d %@", pcEntity.name, damage, e.level, e.name ] ];
+                
+                NSInteger totaldamage = e.damageRoll;
+                totaldamage = (totaldamage > 0) ? totaldamage : 0;
+                target.hp -= totaldamage;
+                
+                [ self addMessage: [ NSString stringWithFormat:@"%@ took %d damage from Lv%d %@", pcEntity.name, totaldamage, e.level, e.name ] ];
                 //}
                 
                 if ( pcEntity.hp <= 0 ) {

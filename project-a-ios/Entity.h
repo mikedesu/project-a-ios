@@ -25,7 +25,8 @@ typedef enum {
     ENTITYPATHFINDINGALGORITHM_T_NONE=0,
     ENTITYPATHFINDINGALGORITHM_T_RANDOM,
     ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM,
-    ENTITYPATHFINDINGALGORITHM_T_SIMPLE
+    ENTITYPATHFINDINGALGORITHM_T_SIMPLE,
+    ENTITYPATHFINDINGALGORITHM_T_SIMPLE_LEFT,
 } EntityPathFindingAlgorithm_t;
 
 
@@ -95,6 +96,12 @@ typedef enum {
     EntityItemPickupAlgorithm_t itemPickupAlgorithm;
     
     NSMutableArray *inventoryArray;
+    
+    NSMutableArray *pathTaken;
+    
+    
+    // Feats sieve:
+    // 0000 0000 0001 0011
 }
 
 @property (atomic, assign) BOOL isPC;
@@ -129,6 +136,8 @@ typedef enum {
 
 @property (atomic, assign) NSUInteger money;
 @property (atomic) NSMutableArray *inventoryArray;
+
+@property (atomic) NSMutableArray *pathTaken;
 
 -(Entity *) init;
 -(Entity *) initWithLevel: (NSInteger) level;

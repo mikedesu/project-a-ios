@@ -43,6 +43,8 @@
 @synthesize pathFindingAlgorithm;
 @synthesize itemPickupAlgorithm;
 
+@synthesize pathTaken;
+
 @synthesize entityType;
 
 /*
@@ -108,6 +110,8 @@
         money = 0;
         
         inventoryArray = [ [ NSMutableArray alloc ] init ];
+        
+        pathTaken = [ [ NSMutableArray alloc ] init ];
         
         pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
         itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
