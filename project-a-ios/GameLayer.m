@@ -184,7 +184,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.1
+#define STEP_SPEED              0.01
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -621,13 +621,15 @@ unsigned get_memory_mb(void) {
         BOOL selectedPointIsValid = (selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0 );
         if ( selectedPointIsValid ) {
             Tile *t = [ self getTileForCGPoint: selectedTilePoint ];
-            Entity *e = [[ t contents ] objectAtIndex: 0];
+            if ( [[t contents] count] > 0 ) {
+                Entity *e = [[ t contents ] objectAtIndex: 0];
             
-            [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Lv: %d  Name: %@\nKills: %d\nLine3\nLine4\n",
-                                            e.level,
-                                            e.name,
-                                            e.totalKills
-                                            ] ];
+                [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Lv: %d  Name: %@\nKills: %d\nLine3\nLine4\n",
+                                                e.level,
+                                                e.name,
+                                                e.totalKills
+                                                ] ];
+            }
         }
         else {
             [entityInfoHUD.label setString:@"..." ];
@@ -975,9 +977,7 @@ unsigned get_memory_mb(void) {
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"ccTouchesBegan" );
     
-    if ( gameState == GAMESTATE_T_GAME_PC_DEAD ) {
-        return;
-    }
+    //if ( gameState == GAMESTATE_T_GAME_PC_DEAD ) { return; }
     
     
 	UITouch *touch=[touches anyObject];
@@ -1110,9 +1110,7 @@ unsigned get_memory_mb(void) {
  */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches moved" );
-    if ( gameState == GAMESTATE_T_GAME_PC_DEAD ) {
-        return;
-    }
+//    if ( gameState == GAMESTATE_T_GAME_PC_DEAD ) { return; }
     
     
     UITouch *touch=[touches anyObject];
@@ -1158,9 +1156,9 @@ unsigned get_memory_mb(void) {
     //UITouch *touch = [ touches anyObject ];
     //double now = [ NSDate timeIntervalSinceReferenceDate ];
     //double timeElapsedSinceTouchBegan = now - touchBeganTime;
-    if ( gameState == GAMESTATE_T_GAME_PC_DEAD ) {
-        return;
-    }
+    
+    
+//    if ( gameState == GAMESTATE_T_GAME_PC_DEAD ) { return; }
     
     UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
