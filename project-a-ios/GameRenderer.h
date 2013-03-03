@@ -51,7 +51,8 @@
 +( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile;
 
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc;
-    +( void ) spawnRandomItemAtRandomLocationOnFloor: (DungeonFloor *) floor;
++( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc withChanceDie: (NSInteger) chanceDie ;
++( void ) spawnRandomItemAtRandomLocationOnFloor: (DungeonFloor *) floor;
 
 
 @end

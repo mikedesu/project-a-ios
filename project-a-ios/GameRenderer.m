@@ -867,10 +867,40 @@ NSInteger getMod( NSInteger n ) {
  ====================
  */
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc {
-    //Entity *e = [ GameRenderer randomMonsterForPC: pc ];
-    Entity *e = [ GameRenderer randomMonsterForFloor:floor ];
-    [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
+    
+    [ self spawnRandomMonsterAtRandomLocationOnFloor:floor withPC:pc withChanceDie: 100 ];
+    
+    /*
+    NSUInteger spawnChancePercent = 1;
+    NSUInteger diceroll = [Dice roll:100];
+    
+    if ( diceroll <= spawnChancePercent ) {
+        
+        //Entity *e = [ GameRenderer randomMonsterForPC: pc ];
+        Entity *e = [ GameRenderer randomMonsterForFloor:floor ];
+        [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
+        
+    }
+     */
 }
+
++( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc withChanceDie: (NSInteger) chanceDie {
+    
+    NSUInteger spawnChancePercent = 1;
+    NSUInteger diceroll = [Dice roll:chanceDie];
+    
+    if ( diceroll <= spawnChancePercent ) {
+        
+        //Entity *e = [ GameRenderer randomMonsterForPC: pc ];
+        Entity *e = [ GameRenderer randomMonsterForFloor:floor ];
+        [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
+        
+    }
+}
+
+
+
+
 
 
 /*
