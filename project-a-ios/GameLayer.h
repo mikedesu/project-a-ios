@@ -72,6 +72,8 @@ typedef enum {
     
     BOOL gameLogicIsOn;
     BOOL autostepGameLogic;
+    
+    BOOL needsRedraw;
 }
 
 +(CCScene *) scene;

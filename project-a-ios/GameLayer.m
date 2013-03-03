@@ -197,8 +197,10 @@ unsigned get_memory_mb(void) {
             [ self scheduleStepAction ];
         }
  
+        needsRedraw = YES;
+        
         // draw the screen (kind of)
-        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
+        //[ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
         
         [ GameRenderer spawnRandomItemAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1] ];
         
@@ -496,7 +498,7 @@ unsigned get_memory_mb(void) {
             {
                 // pop the last tile taken
                 Tile *lastTileTaken = [pcEntity.pathTaken lastObject];
-                [pcEntity.pathTaken removeLastObject];
+                //[pcEntity.pathTaken removeLastObject];
                 [ self moveEntity:pcEntity toPosition:lastTileTaken.position ];
             }
             
@@ -933,27 +935,30 @@ unsigned get_memory_mb(void) {
     //double before = [NSDate timeIntervalSinceReferenceDate];
 
     // only if we need redraw, really...
-    [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
-    
-    if ( editorHUDIsVisible ) {
-        [ self updateEditorHUDLabel ];
+    if ( needsRedraw )
+    {
+        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
+        if ( editorHUDIsVisible ) {
+            [ self updateEditorHUDLabel ];
+        }
+        if ( monitorIsVisible ) {
+            [self updateMonitorLabel];
+        }
+        
+        if ( playerHUDIsVisible ) {
+            [ self updatePlayerHUDLabel ];
+        }
+        
+        if ( entityInfoHUDIsVisible ) {
+            [ self updateEntityInfoHUDLabel ];
+        }
+        
+        [ self resetCameraPosition ];
+        
+        needsRedraw = NO;
     }
-    if ( monitorIsVisible ) {
-        [self updateMonitorLabel];
-    }
-    
-    if ( playerHUDIsVisible ) {
-        [ self updatePlayerHUDLabel ];
-    }
-    
-    if ( entityInfoHUDIsVisible ) {
-        [ self updateEntityInfoHUDLabel ];
-    }
-    
-    
     
     //double after = [NSDate timeIntervalSinceReferenceDate] - before;
-    
     //MLOG( @"tick time: %f", after );
     
 }
@@ -2002,8 +2007,11 @@ NSUInteger getMagicY( NSUInteger y ) {
     //MLOG( @"loadDungeonFloor" );
     //floor = [ dungeon objectAtIndex: floorNumber ];
     //[ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:floor withCamera:cameraAnchorPoint ];
-    [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[dungeon objectAtIndex: floorNumber] withCamera:cameraAnchorPoint ];
-    [ self resetCameraPosition ];
+    
+    
+    needsRedraw = YES;
+ //   [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[dungeon objectAtIndex: floorNumber] withCamera:cameraAnchorPoint ];
+   // [ self resetCameraPosition ];
     //MLOG( @"end loadDungeonFloor" );
 }
 
@@ -2028,8 +2036,9 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         [[[ dungeon objectAtIndex:floorNumber ] entityArray ] addObject: pcEntity ];
         
-        [ self resetCameraPosition ];
-        [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
+        needsRedraw = YES;
+        //[ self resetCameraPosition ];
+        //[ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
     }
     //MLOG(@"end goingUpstairs...");
 }
@@ -2054,8 +2063,9 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         [[[ dungeon objectAtIndex:floorNumber ] entityArray ] addObject: pcEntity ];
         
-        [ self resetCameraPosition ];
-        [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[ dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
+        needsRedraw = YES;
+        //[ self resetCameraPosition ];
+        //[ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[ dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
     }
     else {
         // bottom floor        
@@ -2244,8 +2254,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ hero.name setString: @"Mike" ];
     hero.entityType = ENTITY_T_PC;
     hero.isPC = YES;
-    //hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
-    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
+    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+    //hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
     hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE;
     
     hero.level = 1;
@@ -2404,7 +2414,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         // increase turn counter
         turnCounter++;
-            
+        
+        needsRedraw = YES;
     }
 }
 
