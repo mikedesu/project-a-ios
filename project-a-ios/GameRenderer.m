@@ -9,7 +9,37 @@
 @implementation GameRenderer
 
 
+static BOOL modTableInitialized = NO;
+
+static const NSInteger modTableSize = 50;
+static NSInteger modTable[ modTableSize ];
+
+void initModTable() {
+    if ( ! modTableInitialized ) {
+        NSInteger mod = -5;
+        modTable[ 0 ] = mod;
+        for (int i=1; i < modTableSize; i++) {
+            if ( i % 2 == 0 ) {
+                mod++;
+            }
+            modTable[ i ] = mod;
+        }
+        modTableInitialized = YES;
+    }
+}
+
+
+NSInteger getMod( NSInteger n ) {
+    if ( ! modTableInitialized ) {
+        initModTable();
+    }
+    return modTable[ n ];
+}
+
+
+
 +( NSInteger ) modifierForNumber: (NSInteger) n {
+    /*
     NSInteger mod =
     n <= 1 ? -5 :
     n <= 3 ? -4 :
@@ -34,8 +64,11 @@
     n <= 41 ? 15 :
     16
     ;
+     */
     
-    return mod;
+    //return mod;
+    
+    return getMod( n );
 }
 
 
