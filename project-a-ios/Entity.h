@@ -65,7 +65,7 @@ typedef enum {
     NSMutableString *name;
     EntityTypes_t entityType;
     
-    NSUInteger level;
+    NSInteger level;
     //EntityStats_t *stats;
     
     NSUInteger strength;
@@ -103,7 +103,7 @@ typedef enum {
 @property (atomic) NSMutableString *name;
 @property (atomic, assign) EntityTypes_t entityType;
 
-@property (atomic, assign) NSUInteger level;
+@property (atomic, assign) NSInteger level;
 //@property (atomic, assign) EntityStats_t *stats;
 @property (atomic, assign) NSUInteger strength;
 @property (atomic, assign) NSUInteger constitution;

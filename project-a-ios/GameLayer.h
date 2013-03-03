@@ -16,6 +16,7 @@ typedef enum {
 
 @class DungeonFloor;
 @class EditorHUD;
+@class EntityInfoHUD;
 @class PlayerHUD;
 @class PlayerMenu;
 @class Tile;
@@ -55,6 +56,9 @@ typedef enum {
     EditorHUD *editorHUD;
     EditorHUD *monitor;
     
+    BOOL entityInfoHUDIsVisible;
+    EntityInfoHUD *entityInfoHUD;
+    
     
     BOOL playerHUDIsVisible;
     PlayerHUD *playerHUD;
@@ -93,7 +97,11 @@ typedef enum {
 
 -( void ) drawDungeonFloor;
 
-
+-( void ) initEntityInfoHUD;
+-( void ) addEntityInfoHUD: (EntityInfoHUD *) entityInfoHUD ;
+-( void ) updateEntityInfoHUDLabel ;
+-( void ) removeEntityInfoHUD: (EntityInfoHUD *) entityInfoHUD ;
+    
 
 -( void ) initPlayerHUD;
 -( void ) addPlayerHUD: ( PlayerHUD * ) hud;

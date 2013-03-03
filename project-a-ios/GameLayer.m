@@ -469,6 +469,96 @@ unsigned get_memory_mb(void) {
 }
 
 
+
+
+
+/*
+ ====================
+ initEntityInfoHUD
+ 
+ initializes the Entity Info HUD
+ ====================
+ */
+-( void ) initEntityInfoHUD {
+    CGSize size = [[CCDirector sharedDirector] winSize];
+    entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
+    entityInfoHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - (entityInfoHUD.contentSize.height) - 10 );
+    [ self updateEntityInfoHUDLabel ];
+}
+
+
+/*
+ ====================
+ initEntityInfoHUD
+ 
+ initializes the Entity Info HUD
+ ====================
+ */
+
+-( void ) addEntityInfoHUD: (EntityInfoHUD *) entityInfoHUD {
+    if ( ! self->entityInfoHUDIsVisible ) {
+        [ self addChild: entityInfoHUD ];
+        entityInfoHUDIsVisible = YES;
+    }
+}
+
+
+/*
+ ====================
+ updateEntityInfoHUDLabel
+ 
+ updates the entity info hud label
+ ====================
+ */
+
+-( void ) updateEntityInfoHUDLabel {
+
+    @try {
+        
+        BOOL selectedPointIsValid = (selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0 );
+        if ( selectedPointIsValid ) {
+            Tile *t = [ self getTileForCGPoint: selectedTilePoint ];
+            Entity *e = [[ t contents ] objectAtIndex: 0];
+            
+            [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Lv: %d  Name: %@\nLine2\nLine3\nLine4\n", e.level, e.name ] ];
+        }
+        else {
+            [entityInfoHUD.label setString:@"..." ];
+        }
+    }
+    @catch (NSException *exception) {
+        [entityInfoHUD.label setString:@"..." ];
+        MLOG(@"exception caught: %@", exception);
+    }
+    @finally {
+        
+    }
+}
+
+
+/*
+ ====================
+ removeEntityInfoHUD: entityInfoHUD
+ 
+ removes the entity info hud
+ ====================
+ */
+
+-( void ) removeEntityInfoHUD: (EntityInfoHUD *) entityInfoHUD {
+    if ( self->entityInfoHUDIsVisible ) {
+        [ self removeChild: monitor cleanup: NO ];
+        entityInfoHUDIsVisible = NO;
+    }
+}
+
+
+
+
+
+
+
+
+
 /*
  ====================
  initEditorHUD
@@ -715,7 +805,7 @@ unsigned get_memory_mb(void) {
                                     pcEntity.wisdom,
                                     pcEntity.charisma
                                     ],
-                                   [ NSString stringWithFormat: @"Dlvl:%d $:0 HP:%d/%d AC:%d Lv:%u Xp:%u",
+                                   [ NSString stringWithFormat: @"Dlvl:%d $:0 HP:%d/%d AC:%d Lv:%d Xp:%u",
                                     floorNumber,
                                     pcEntity.hp,
                                     pcEntity.maxhp,
@@ -751,6 +841,10 @@ unsigned get_memory_mb(void) {
     
     if ( playerHUDIsVisible ) {
         [ self updatePlayerHUDLabel ];
+    }
+    
+    if ( entityInfoHUDIsVisible ) {
+        [ self updateEntityInfoHUDLabel ];
     }
     
     
@@ -2069,6 +2163,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ self initPlayerMenu ];
     //[ self addPlayerMenu: playerMenu ];
     
+    entityInfoHUDIsVisible = NO;
+    [ self initEntityInfoHUD ];
+    [ self addEntityInfoHUD: entityInfoHUD ];
+    
 }
 
 
@@ -2135,6 +2233,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     else if ( state == GAMESTATE_T_MAINMENU ) {
        retval = @"GAMESTATE_T_MAINMENU";
+    }
+    
+    else if ( state == GAMESTATE_T_GAME_PC_DEAD ) {
+        retval =@"GAMESTATE_T_GAME_PC_DEAD";
     }
     
     else {
@@ -2408,7 +2510,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 NSInteger totaldamage = e.damageRoll;
                 target.hp -= totaldamage;
                 
-                [ self addMessage: [ NSString stringWithFormat:@"%@ dealt %d damage to %@", e.name, totaldamage, target.name ]];
+                [ self addMessage: [ NSString stringWithFormat:@"%@ dealt %d damage to Lv%d %@", e.name, totaldamage, target.level, target.name ]];
                 //}
                 
                 if (target.hp <= 0 ) {
@@ -2416,14 +2518,14 @@ NSUInteger getMagicY( NSUInteger y ) {
                     [ e gainXP: target.level ];
                         
                     // remove target from t.contents
-                    [ self addMessage: [ NSString stringWithFormat:@"%@ slayed %@", e.name, target.name ] ];
+                    [ self addMessage: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
                     [t removeObjectFromContents: target];
                     target.isAlive = NO;
                 }
             }
             
             else if ( !victory && e.isPC ) {
-                [ self addMessage: [ NSString stringWithFormat:@"%@ missed %@", e.name, target.name ]];
+                [ self addMessage: [ NSString stringWithFormat:@"%@ missed Lv%d %@", e.name, target.level, target.name ]];
             }
             
             else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_NPC ) {
@@ -2460,7 +2562,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 //else {
                 NSInteger damage = e.damageRoll;
                 pcEntity.hp -= damage;
-                [ self addMessage: [ NSString stringWithFormat:@"%@ took %d damage from Lv%u %@", pcEntity.name, damage, e.level, e.name ] ];
+                [ self addMessage: [ NSString stringWithFormat:@"%@ took %d damage from Lv%d %@", pcEntity.name, damage, e.level, e.name ] ];
                 //}
                 
                 if ( pcEntity.hp <= 0 ) {

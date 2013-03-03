@@ -14,6 +14,7 @@
 #import "DungeonFloor.h"
 #import "EditorHUD.h"
 #import "Entity.h"
+#import "EntityInfoHUD.h"
 #import "GameLayer.h"
 #import "GameRenderer.h"
 #import "MLog.h"

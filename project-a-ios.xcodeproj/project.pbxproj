@@ -143,6 +143,7 @@
 		27C4145516C804E400BE09F9 /* Tile.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C4145416C804E300BE09F9 /* Tile.m */; };
 		27C88FE016C57607004AB4D8 /* ground_vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 27C88FDF16C57607004AB4D8 /* ground_vertical.png */; };
 		27DCE96016E2EA5000109F88 /* Dice.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DCE95F16E2EA5000109F88 /* Dice.m */; };
+		27DCE96316E2FB3900109F88 /* EntityInfoHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -432,6 +433,8 @@
 		27C88FDE16C573D4004AB4D8 /* MLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLog.h; sourceTree = "<group>"; };
 		27C88FDF16C57607004AB4D8 /* ground_vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_vertical.png; sourceTree = "<group>"; };
 		27DCE95F16E2EA5000109F88 /* Dice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dice.m; sourceTree = "<group>"; };
+		27DCE96116E2FB3900109F88 /* EntityInfoHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityInfoHUD.h; sourceTree = "<group>"; };
+		27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityInfoHUD.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -511,6 +514,8 @@
 				2773F29116C85469001C3E83 /* EditorHUD.m */,
 				2773F28D16C8447D001C3E83 /* Entity.h */,
 				2773F28E16C8447D001C3E83 /* Entity.m */,
+				27DCE96116E2FB3900109F88 /* EntityInfoHUD.h */,
+				27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */,
 				27C4145216C7FB9E00BE09F9 /* GameConfig.h */,
 				272EF64F16C5695F005DF231 /* GameLayer.h */,
 				272EF65016C5695F005DF231 /* GameLayer.m */,
@@ -1077,6 +1082,7 @@
 				27506B7816D7FF0200245F72 /* CCMutableTexture2D.m in Sources */,
 				27506B7B16D801FF00245F72 /* AsyncObject.m in Sources */,
 				27DCE96016E2EA5000109F88 /* Dice.m in Sources */,
+				27DCE96316E2FB3900109F88 /* EntityInfoHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
