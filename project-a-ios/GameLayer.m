@@ -1345,6 +1345,16 @@ unsigned get_memory_mb(void) {
 }
 
 
+-( Tile * ) getTileForCGPoint: ( CGPoint ) p forFloor: (DungeonFloor *) floor {
+    Tile *tile = nil;
+    tile = [[floor tileDataArray] objectAtIndex: p.x + ( p.y * floor.width ) ];
+    return tile;
+}
+
+
+
+
+
 -( CCSprite * ) getTileSpriteForCGPoint: ( CGPoint ) p {
     CCSprite *sprite = nil;
     sprite = [ tileArray objectAtIndex: p.x + p.y * NUMBER_OF_TILES_ONSCREEN_X ];
@@ -1561,6 +1571,24 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
+
+-( Tile * ) getMapTileFromPoint: (CGPoint) p forFloor: (DungeonFloor *) floor {
+    Tile *tile = nil;
+    for ( Tile *t in [floor tileDataArray ] ) {
+        if ( t.position.x == p.x && t.position.y == p.y ) {
+            tile = t;
+            break;
+        }
+    }
+    //MLOG( @"Returning tile " );
+    return tile;
+}
+
+
+
+
+
+
 #pragma mark - EntityHUD Message code
 
 
@@ -1606,14 +1634,24 @@ NSUInteger getMagicY( NSUInteger y ) {
  
  moves the entity on the map to position
  ====================
+
+
+}
+
  */
-//-( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) floor {
--( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
+
+-( void ) moveEntity:(Entity *)entity toPosition:(CGPoint)position {
+    [ self moveEntity: entity toPosition:position onFloor:[dungeon objectAtIndex:floorNumber ] ];
+}
+
+
+
+-( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) floor {
+//-( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
     //MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
     
-    
-    //Tile *tile = [ self getMapTileFromPoint: position forFloor: floor ];
-    Tile *tile = [ self getMapTileFromPoint: position ];
+    Tile *tile = [ self getMapTileFromPoint: position forFloor: floor ];
+    //Tile *tile = [ self getMapTileFromPoint: position ];
     if ( tile.tileType != TILE_FLOOR_VOID ) {
         
         BOOL isMoveValid = YES;
