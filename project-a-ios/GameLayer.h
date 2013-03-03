@@ -11,6 +11,7 @@ typedef enum {
     GAMESTATE_T_GAME,
     GAMESTATE_T_GAME_PC_SELECTMOVE,
     GAMESTATE_T_GAME_PC_STEP,
+    GAMESTATE_T_GAME_PC_DEAD,
 } GameState_t;
 
 @class DungeonFloor;

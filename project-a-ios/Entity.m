@@ -70,13 +70,23 @@
          stats.wisdom = 8;
          stats.charisma = 8;
          */
-        
+    
+        /*
         strength = rollDice(6, 3);
         dexterity = rollDice(6, 3);
         constitution = rollDice(6, 3);
         intelligence = rollDice(6, 3);
         wisdom = rollDice(6, 3);
         charisma = rollDice(6, 3);
+        
+        */
+        
+        strength = [Dice roll:6 nTimes:3];
+        dexterity = [Dice roll:6 nTimes:3];
+        constitution = [Dice roll:6 nTimes:3];
+        intelligence = [Dice roll:6 nTimes:3];
+        wisdom = [Dice roll:6 nTimes:3];
+        charisma = [Dice roll:6 nTimes:3];
         
         alignment = ENTITYALIGNMENT_T_NEUTRAL_NEUTRAL;
         
@@ -86,7 +96,7 @@
 #define DEFAULT_LVL1_NEXT_LEVEL_XP      10
         nextLevelXP = DEFAULT_LVL1_NEXT_LEVEL_XP;
         
-        maxhp = rollDice(12, 1);
+        maxhp = [Dice roll:12];
         hp = maxhp;
         
         ac = 10; // the higher the better
@@ -112,12 +122,23 @@
     e.level = level;
     e.entityType = ENTITY_T_NPC;
     
+    /*
     e.strength = rollDice(6, 3);
     e.dexterity = rollDice(6, 3);
     e.constitution = rollDice(6, 3);
     e.intelligence = rollDice(6, 3);
     e.wisdom = rollDice(6, 3);
     e.charisma = rollDice(6, 3);
+    */
+    
+    e.strength = [Dice roll:6 nTimes:3];
+    e.dexterity = [Dice roll:6 nTimes:3];
+    e.constitution = [Dice roll:6 nTimes:3];
+    e.intelligence = [Dice roll:6 nTimes:3];
+    e.wisdom = [Dice roll:6 nTimes:3];
+    e.charisma = [Dice roll:6 nTimes:3];
+    
+    
     
     for ( int i = 0; i < level; i++ ) {
         [ e handleLevelUp ];
@@ -157,16 +178,7 @@
      20+   : 5
      */
     
-    NSInteger strengthBonus =
-    strength <= 3 ? -4 :
-    strength <= 5 ? -3 :
-    strength <= 7 ? -2 :
-    strength <= 9 ? -1 :
-    strength <= 11 ? 0 :
-    strength <= 13 ? 1 :
-    strength <= 15 ? 2 :
-    strength <= 17 ? 3 : 4;
-    
+    NSInteger strengthBonus = [ GameRenderer modifierForNumber: strength ];
     
     // [ GameRenderer getModifierForStat: self.strength ] ;
     
@@ -184,7 +196,8 @@
  ====================
  */
 -( NSInteger ) attackRoll {
-    return rollDiceOnceWithModifier(20, self.attackBonus );
+    //return rollDiceOnceWithModifier(20, self.attackBonus );
+    return [Dice roll: 20] + self.attackBonus;
 }
 
 
@@ -196,7 +209,8 @@
  ====================
  */
 -( NSInteger ) damageRoll {
-    return rollDiceOnce(6) + self.attackBonus;
+    //return rollDiceOnce(6) + self.attackBonus;
+    return [Dice roll:6] + self.attackBonus;
 }
 
 
@@ -208,16 +222,7 @@
  ====================
  */
 -( NSInteger ) totalac {
-    NSInteger dexterityBonus =
-    dexterity <= 3 ? -4 :
-    dexterity <= 5 ? -3 :
-    dexterity <= 7 ? -2 :
-    dexterity <= 9 ? -1 :
-    dexterity <= 11 ? 0 :
-    dexterity <= 13 ? 1 :
-    dexterity <= 15 ? 2 :
-    dexterity <= 17 ? 3 : 4;
-    
+    NSInteger dexterityBonus = [ GameRenderer modifierForNumber: dexterity ];
     return ac + dexterityBonus;
 }
 
@@ -268,17 +273,10 @@
     
 
     // lets up our hp
-    NSInteger conMod =
-    constitution <= 3 ? -4 :
-    constitution <= 5 ? -3 :
-    constitution <= 7 ? -2 :
-    constitution <= 9 ? -1 :
-    constitution <= 11 ? 0 :
-    constitution <= 13 ? 1 :
-    constitution <= 15 ? 2 :
-    constitution <= 17 ? 3 : 4;
+    NSInteger conMod = [ GameRenderer modifierForNumber: constitution ];
     
-    maxhp = maxhp + rollDiceOnce(12) + conMod;
+    //maxhp = maxhp + rollDiceOnce(12) + conMod;
+    maxhp = maxhp + [Dice roll:12] + conMod;
     hp = maxhp;
     
     // lets up our strength/ac

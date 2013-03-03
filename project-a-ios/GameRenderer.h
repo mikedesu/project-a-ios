@@ -13,6 +13,8 @@
 
 }
 
++( NSInteger ) modifierForNumber: (NSInteger) n;
+
 +( void ) colorScrambleTile: ( CCSprite * ) tileSprite;
 +( void ) colorScrambleAllTiles: ( NSArray * ) tileArray;
 +( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data;
@@ -40,7 +42,7 @@
 
 +( Entity * ) randomEntity;
 +( Entity * ) randomItem;
-+( Entity * ) randomMonsterForPC: (Entity *) pc;
++( Entity * ) randomMonsterForFloor: (DungeonFloor *) floor;
 
 +( void ) spawnEntity: (Entity *) entity onFloor: (DungeonFloor *) floor atLocation: (CGPoint *) location;
 

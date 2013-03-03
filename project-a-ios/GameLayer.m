@@ -188,8 +188,8 @@ unsigned get_memory_mb(void) {
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
-        //autostepGameLogic = YES;
-        autostepGameLogic = NO;
+        autostepGameLogic = YES;
+        //autostepGameLogic = NO;
         
         // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
         autostepGameLogic = autostepGameLogic && gameLogicIsOn;
@@ -270,7 +270,7 @@ unsigned get_memory_mb(void) {
         
         if ( pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_RANDOM )
         {
-            NSUInteger roll = rollDiceOnce(8);
+            NSUInteger roll = [Dice roll:8];
             CGFloat x = -1;
             CGFloat y = -1;
             
@@ -330,7 +330,7 @@ unsigned get_memory_mb(void) {
             
             while ( rollIsUnacceptable )
             {
-                NSUInteger roll = rollDiceOnce(8);
+                NSUInteger roll = [Dice roll:8];
                 CGFloat x = -1;
                 CGFloat y = -1;
             
@@ -772,6 +772,12 @@ unsigned get_memory_mb(void) {
  */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"ccTouchesBegan" );
+    
+    if ( gameState == GAMESTATE_T_GAME_PC_DEAD ) {
+        return;
+    }
+    
+    
 	UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = YES;
@@ -902,6 +908,9 @@ unsigned get_memory_mb(void) {
  */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     //MLOG( @"touches moved" );
+    if ( gameState == GAMESTATE_T_GAME_PC_DEAD ) {
+        return;
+    }
     
     
     UITouch *touch=[touches anyObject];
@@ -947,6 +956,9 @@ unsigned get_memory_mb(void) {
     //UITouch *touch = [ touches anyObject ];
     //double now = [ NSDate timeIntervalSinceReferenceDate ];
     //double timeElapsedSinceTouchBegan = now - touchBeganTime;
+    if ( gameState == GAMESTATE_T_GAME_PC_DEAD ) {
+        return;
+    }
     
     UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
@@ -2077,12 +2089,12 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     hero.level = 1;
     
-    hero.strength = rollDiceWithModifier(6, 0, 3);
-    hero.dexterity = rollDiceWithModifier(6, 0, 3);
-    hero.constitution = rollDiceWithModifier(6, 0, 3);
-    hero.intelligence = rollDiceWithModifier(6, 0, 3);
-    hero.wisdom = rollDiceWithModifier(6, 0, 3);
-    hero.charisma = rollDiceWithModifier(6, 0, 3);
+    hero.strength = [Dice roll:6 nTimes:3];
+    hero.dexterity = [Dice roll:6 nTimes:3];
+    hero.constitution = [Dice roll:6 nTimes:3];
+    hero.intelligence = [Dice roll:6 nTimes:3];
+    hero.wisdom = [Dice roll:6 nTimes:3];
+    hero.charisma = [Dice roll:6 nTimes:3];
     
     
     NSInteger conMod =
@@ -2095,10 +2107,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.constitution <= 15 ? 2 :
     hero.constitution <= 17 ? 3 : 4;
     
-    hero.maxhp = rollDiceOnce(12) + conMod;
+    hero.maxhp = [Dice roll:12] + conMod;
     hero.hp = hero.maxhp;
     
-    hero.ac = 17;
+    hero.ac = 20;
     
     pcEntity = hero;
     //[ Entity drawTextureForEntity: hero ];
@@ -2193,8 +2205,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         // spawn a new monster on the current floor
         
-        NSUInteger spawnChancePercent = 10;
-        NSUInteger diceroll = rollDiceOnce(100);
+        NSUInteger spawnChancePercent = 1;
+        NSUInteger diceroll = [Dice roll:100];
         if ( diceroll <= spawnChancePercent ) {
             [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC: pcEntity];
         }
@@ -2235,7 +2247,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         while ( rollIsUnacceptable )
         {
-            NSUInteger roll = rollDiceOnce(8);
+            NSUInteger roll = [Dice roll:8];
             CGFloat x = -1;
             CGFloat y = -1;
             
@@ -2359,7 +2371,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             // e v.s. target setup section
             // modifiers would go here
             
-            NSInteger roll = rollDiceOnce(20);
+            NSInteger roll = [Dice roll:20];
             NSInteger totalroll = roll + e.attackBonus;
             
             
@@ -2447,8 +2459,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                 //}
                 //else {
                 NSInteger damage = e.damageRoll;
-                    pcEntity.hp -= damage;
-                [ self addMessage: [ NSString stringWithFormat:@"%@ took %d damage from %@", pcEntity.name, damage, e.name ] ];
+                pcEntity.hp -= damage;
+                [ self addMessage: [ NSString stringWithFormat:@"%@ took %d damage from Lv%u %@", pcEntity.name, damage, e.level, e.name ] ];
                 //}
                 
                 if ( pcEntity.hp <= 0 ) {
@@ -2457,6 +2469,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     pcEntity.isAlive = NO;
                     gameLogicIsOn = NO;
                     autostepGameLogic = NO;
+                    gameState = GAMESTATE_T_GAME_PC_DEAD;
                     [ self unscheduleStepAction ];
                 }
                 

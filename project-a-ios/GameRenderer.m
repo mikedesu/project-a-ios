@@ -8,6 +8,37 @@
 
 @implementation GameRenderer
 
+
++( NSInteger ) modifierForNumber: (NSInteger) n {
+    NSInteger mod =
+    n <= 1 ? -5 :
+    n <= 3 ? -4 :
+    n <= 5 ? -3 :
+    n <= 7 ? -2 :
+    n <= 9 ? -1 :
+    n <= 11 ? 0 :
+    n <= 13 ? 1 :
+    n <= 15 ? 2 :
+    n <= 17 ? 3 :
+    n <= 19 ? 4 :
+    n <= 21 ? 5 :
+    n <= 23 ? 6 :
+    n <= 25 ? 7 :
+    n <= 27 ? 8 :
+    n <= 29 ? 9 :
+    n <= 31 ? 10 :
+    n <= 33 ? 11 :
+    n <= 35 ? 12 :
+    n <= 37 ? 13 :
+    n <= 39 ? 14 :
+    n <= 41 ? 15 :
+    16
+    ;
+    
+    return mod;
+}
+
+
 /*
  ====================
  colorScrambleTile
@@ -308,7 +339,8 @@
         
         NSUInteger numTilesPlaced = 0;
         NSUInteger maxTilesPlaced = 0;
-        NSUInteger numTiles = rollDice(10, 10) + 10;
+        //NSUInteger numTiles = rollDice(10, 10) + 10;
+        NSUInteger numTiles = [Dice roll:10 nTimes:10] + 10;
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
@@ -334,7 +366,8 @@
         Tile_t baseTileType;
         
         // roll a d4
-        roll = rollDiceOnce(4);
+        //roll = rollDiceOnce(4);
+        roll = [Dice roll:4];
         
         // determine tiletype based on roll
         if ( roll == 1 ) {
@@ -359,7 +392,8 @@
             BOOL willReroll = NO;
             
             // roll a d4
-            roll = rollDiceOnce(4);
+            //roll = rollDiceOnce(4);
+            roll = [Dice roll:4];
             totalRolls++;
             
             // handle the roll
@@ -407,12 +441,14 @@
             if ( ! willReroll ) {
                 
                 Tile_t tileType = baseTileType;
-                NSUInteger roll2 = rollDiceOnce(100);
-                    
+                //NSUInteger roll2 = rollDiceOnce(100);
+                NSUInteger roll2 = [Dice roll:100];
+                
                 if ( roll2 <= 5 ) {
                     // change the tileType
-                    roll2 = rollDiceOnce(4);
-                        
+                    //roll2 = rollDiceOnce(4);
+                    roll2 = [Dice roll:4];
+                    
                     if ( roll2 == 1 ) {
                         tileType = TILE_FLOOR_GRASS;
                     } else if ( roll2 == 2 ) {
@@ -501,7 +537,8 @@
         while ( !isUpstairsPlaced ) {
             for ( NSValue *p in placedTilesArray ) {
                 // roll dice
-                roll = rollDiceOnce(100);
+                //roll = rollDiceOnce(100);
+                roll = [Dice roll:100];
                 NSUInteger percentage = 5;
                 if ( roll <= percentage ) {
                     [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_UPSTAIRS ];
@@ -517,7 +554,8 @@
         if ( algorithm != DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ) {
             while ( !isDownstairsPlaced ) {
                 for ( NSValue *p in placedTilesArray ) {
-                    roll = rollDiceOnce(100);
+                    //roll = rollDiceOnce(100);
+                    roll = [Dice roll:100];
                     NSUInteger percentage = 5;
                     if ( roll <= percentage ) {
                         if ( ! CGPointEqualToPoint(upstairsPoint, p.CGPointValue) ) {
@@ -607,7 +645,11 @@
 
 #pragma mark - Entity-spawning code
 
-
+/*
+ ====================
+ 
+ ====================
+ */
 +( Entity * ) randomEntity {
     Entity *e = [[Entity alloc] init];
     
@@ -618,7 +660,8 @@
     e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
     e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
      
-    e.maxhp = rollDiceOnce(10);
+    //e.maxhp = rollDiceOnce(10);
+    e.maxhp = [Dice roll:10];
     e.hp = e.maxhp;
  
     e.alignment = ENTITYALIGNMENT_T_CHAOTIC_EVIL;
@@ -627,13 +670,17 @@
 }
 
 
-
+/*
+ ====================
+ 
+ ====================
+ */
 +( Entity * ) randomItem {
     Entity *e = [[Entity alloc] init];
     
-    [e.name setString:@"EntityName"];
     e.entityType = ENTITY_T_ITEM;
     e.isPC = NO;
+    [e.name setString: [self generateNameForEntityType: e.entityType ] ];
     
     e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
     e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
@@ -642,17 +689,22 @@
 }
 
 
+
+
+
+/*
+ ====================
+ 
+ ====================
+ */
 +( Entity * ) randomMonster {
     Entity *e = [[Entity alloc] init];
     
-    NSInteger nameLen = 8;
-    NSString *alphanumeric = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     NSMutableString *randomString = [ NSMutableString stringWithString:@"" ];
-    for ( int i = 0; i < nameLen ; i++ ) {
-        [ randomString appendString: [alphanumeric substringWithRange:NSMakeRange(rollDiceOnce([alphanumeric length])-1, 1)] ];
-    }
     
-    [e.name setString: randomString ];
+    [e.name setString: [self generateNameForEntityType:e.entityType]];
+ //   [e.name setString: randomString ];
+    
     e.entityType = ENTITY_T_NPC;
     e.isPC = NO;
     
@@ -662,24 +714,51 @@
     return e;
 }
 
-
-+( Entity * ) randomMonsterForPC: (Entity *) pc {
-    Entity *e = [[Entity alloc] initWithLevel: pc.level];
+/*
+ ====================
+ 
+ ====================
+ */
++( Entity * ) randomMonsterForFloor: (DungeonFloor *) floor {
     
-    NSInteger nameLen = 8;
-    NSString *alphanumeric = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    NSMutableString *randomString = [ NSMutableString stringWithString:@"" ];
-    for ( int i = 0; i < nameLen ; i++ ) {
-        [ randomString appendString: [alphanumeric substringWithRange:NSMakeRange(rollDiceOnce([alphanumeric length])-1, 1)] ];
-    }
+    // calc a level in range of floorNumber
+    //NSUInteger randomLevel = rollDiceOnce( floor.floorNumber );
+    NSUInteger randomLevel = [Dice roll: floor.floorNumber];
+    NSUInteger mod =
+    floor.floorNumber <= 4 ?  0 :
+    floor.floorNumber <= 8 ?  1 :
+    floor.floorNumber <= 12 ? 2 :
+    floor.floorNumber <= 16 ? 3 :
+    floor.floorNumber <= 20 ? 4 :
+    5;
+ 
+    NSUInteger calculatedLevel = randomLevel + mod;
     
-    [e.name setString: randomString ];
+    Entity *e = [[Entity alloc] initWithLevel: calculatedLevel ];
+    
     e.entityType = ENTITY_T_NPC;
     e.isPC = NO;
+    
+    NSMutableString *randomString = [ NSMutableString stringWithString:@"" ];
+    
+    //NSUInteger roll = rollDiceOnce(4);
+    NSUInteger roll = [Dice roll:4];
+    if ( roll == 1 ) {
+        [randomString setString:@"Goblin"];
+    } else if ( roll == 2 ) {
+        [randomString setString:@"Dwarf"];
+    } else if ( roll == 3 ) {
+        [randomString setString:@"Kobold"];
+    } else if ( roll == 4 ) {
+        [randomString setString:@"Imp"];
+    }
+    //[e.name setString: [self generateNameForEntityType: e.entityType ] ];
+    [e.name setString: randomString ];
     
     e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
     e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
+    MLOG(@"spawned %@ with level %u", e.name, calculatedLevel );
     return e;
 }
 
@@ -694,7 +773,11 @@
 
 
 
-
+/*
+ ====================
+ 
+ ====================
+ */
 +( void ) spawnEntityAtRandomLocation: (Entity *) entity onFloor: (DungeonFloor *) floor {
     
     BOOL locationIsAcceptable = NO;
@@ -702,7 +785,11 @@
     
     while ( ! locationIsAcceptable ) {
         
-        NSUInteger diceroll = rollDiceOnce( [[floor tileDataArray] count] ) - 1;
+        //NSUInteger diceroll = rollDiceOnce( [[floor tileDataArray] count] ) - 1;
+        NSUInteger diceroll = [Dice roll: [[floor tileDataArray] count]] - 1;
+        
+        
+        
         Tile *tile = [[ floor tileDataArray ] objectAtIndex: diceroll ];
         if ( tile.tileType != TILE_FLOOR_VOID &&
                  tile.tileType != TILE_FLOOR_UPSTAIRS &&
@@ -741,14 +828,23 @@
 }
 
 
-
+/*
+ ====================
+ 
+ ====================
+ */
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc {
-    Entity *e = [ GameRenderer randomMonsterForPC: pc ];
+    //Entity *e = [ GameRenderer randomMonsterForPC: pc ];
+    Entity *e = [ GameRenderer randomMonsterForFloor:floor ];
     [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
 }
 
 
-
+/*
+ ====================
+ 
+ ====================
+ */
 +( void ) spawnRandomItemAtRandomLocationOnFloor: (DungeonFloor *) floor {
     Entity *e = [ GameRenderer randomItem ];
     [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
@@ -774,6 +870,34 @@
 }
 
 
+
+
+/*
+ ====================
+ generateName
+ 
+ returns a name
+ ====================
+ */
++( NSString * ) generateNameForEntityType: (EntityTypes_t) type {
+    
+    NSMutableString *randomString = [ NSMutableString stringWithString:@"" ];
+    
+    if (type == ENTITY_T_NPC) {
+        
+        NSInteger nameLen = 8;
+        NSString *alphanumeric = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        for ( int i = 0; i < nameLen ; i++ ) {
+            //[ randomString appendString: [alphanumeric substringWithRange:NSMakeRange(rollDiceOnce([alphanumeric length])-1, 1)] ];
+            [ randomString appendString: [alphanumeric substringWithRange:NSMakeRange([Dice roll:[alphanumeric length]]-1, 1)] ];
+        }
+    }
+    else if ( type == ENTITY_T_ITEM ) {
+        [randomString setString:@"Book of All-Knowing" ];
+    }
+    
+    return [ NSString stringWithString: randomString ];
+}
 
 
 @end
