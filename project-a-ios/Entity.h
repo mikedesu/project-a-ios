@@ -88,6 +88,8 @@ typedef enum {
     
     NSUInteger money;
     
+    NSInteger totalKills;
+    
     EntityPathFindingAlgorithm_t pathFindingAlgorithm;
     
     EntityItemPickupAlgorithm_t itemPickupAlgorithm;
@@ -104,6 +106,7 @@ typedef enum {
 @property (atomic, assign) EntityTypes_t entityType;
 
 @property (atomic, assign) NSInteger level;
+@property (atomic, assign) NSInteger totalKills;
 //@property (atomic, assign) EntityStats_t *stats;
 @property (atomic, assign) NSUInteger strength;
 @property (atomic, assign) NSUInteger constitution;

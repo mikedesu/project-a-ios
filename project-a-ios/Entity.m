@@ -36,6 +36,8 @@
 
 @synthesize money;
 
+@synthesize totalKills;
+
 @synthesize inventoryArray;
 
 @synthesize pathFindingAlgorithm;
@@ -61,6 +63,8 @@
         name = [ [ NSMutableString alloc ] init ];
         level = 1;
         entityType = ENTITY_T_VOID;
+        
+        totalKills = 0;
         
         /*
          stats.strength = 8;

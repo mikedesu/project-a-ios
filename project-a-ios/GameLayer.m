@@ -520,7 +520,11 @@ unsigned get_memory_mb(void) {
             Tile *t = [ self getTileForCGPoint: selectedTilePoint ];
             Entity *e = [[ t contents ] objectAtIndex: 0];
             
-            [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Lv: %d  Name: %@\nLine2\nLine3\nLine4\n", e.level, e.name ] ];
+            [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Lv: %d  Name: %@\nKills: %d\nLine3\nLine4\n",
+                                            e.level,
+                                            e.name,
+                                            e.totalKills
+                                            ] ];
         }
         else {
             [entityInfoHUD.label setString:@"..." ];
@@ -2288,6 +2292,15 @@ NSUInteger getMagicY( NSUInteger y ) {
             }
         }
         
+        // cleanup entityArray
+        for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] entityArray] count]; i++ ) {
+            Entity *e = [[[dungeon objectAtIndex:floorNumber] entityArray] objectAtIndex: i];
+            if ( e.isAlive == NO ) {
+                [[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: e ];
+                i = 0;
+            }
+        }
+        
         
  
         /*
@@ -2516,7 +2529,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                 if (target.hp <= 0 ) {
                     // increase entity xp
                     [ e gainXP: target.level ];
-                        
+                    
+                    pcEntity.totalKills++;
                     // remove target from t.contents
                     [ self addMessage: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
                     [t removeObjectFromContents: target];
@@ -2542,6 +2556,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 if (target.hp <= 0 ) {
                     // increase entity xp
                     [ e gainXP: target.level ];
+                    e.totalKills++;
                     
                     // remove target from t.contents
                   //  [ self addMessage: [ NSString stringWithFormat:@"%@ slayed %@", e.name, target.name ] ];
