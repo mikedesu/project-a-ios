@@ -393,13 +393,14 @@ unsigned get_memory_mb(void) {
                 [ self stepGameLogic ];
             }
             
+            [ self resetCameraPosition ];
             
         }
         
         
         
         [ self resetCameraPosition ];
-        turnCounter++;
+        //turnCounter++;
         gameState = GAMESTATE_T_GAME;
         
         
@@ -752,6 +753,8 @@ unsigned get_memory_mb(void) {
         [ self updatePlayerHUDLabel ];
     }
     
+    
+    
     //double after = [NSDate timeIntervalSinceReferenceDate] - before;
     
     //MLOG( @"tick time: %f", after );
@@ -782,13 +785,13 @@ unsigned get_memory_mb(void) {
     if ( validSelectedPoint ) {
         
         //[ self addMessage: @"Tile was previously selected" ];
-        [ self selectTileAtPosition: mapPoint ];
+        //[ self selectTileAtPosition: mapPoint ];
         
     }
     
     else {
         //MLOG( @"Nothing previously selected" );
-        [ self selectTileAtPosition: mapPoint ];
+        //[ self selectTileAtPosition: mapPoint ];
     }
     
     /*
@@ -955,11 +958,64 @@ unsigned get_memory_mb(void) {
     // valid selected point
     BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
     
+    
+    // something was previously selected
     if ( validSelectedPoint ) {
+        
+        // check if we hit the same tile again
+        
+        Tile *a = [ self getTileForCGPoint: mapPoint ];
+        Tile *b = [ self getTileForCGPoint: selectedTilePoint ];
+        
+        if ( a==b ) {
+            
+            // check distance from pcEntity
+            Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
+            
+            NSInteger distance = [ self distanceFromTile:a toTile: pcTile ];
+            
+            if ( distance <= pcEntity.movement ) {
+                // valid quick-move
+                MLOG(@"valid quick-move");
+                
+                // deselect the tile
+                [ self selectTileAtPosition: mapPoint ];
+                
+                // move the pcEntity to the tile
+                [ self moveEntity:pcEntity toPosition:mapPoint ];
+                
+                // step game logic
+                if ( gameLogicIsOn ) {
+                    [ self stepGameLogic ];
+                }
+                
+                [ self resetCameraPosition ];
+                
+            }
+            else {
+                // invalid quick-move
+                // possibly other quick-action
+                MLOG(@"invalid quick-move");
+                
+                // deselect the tile
+                [ self selectTileAtPosition: mapPoint ];
+            }
+        }
+        
+        else {
+            [ self selectTileAtPosition: mapPoint ];
+        }
+        
+        
     }
     
+    // something was not prev. selected
     else {
+  
+        [ self selectTileAtPosition: mapPoint ];
+        
     }
+    
     
     [ self updateMonitorLabel ];
     
@@ -2155,6 +2211,9 @@ NSUInteger getMagicY( NSUInteger y ) {
             [ self unscheduleStepAction ];
             
         }
+        
+        // increase turn counter
+        turnCounter++;
             
     }
 }
