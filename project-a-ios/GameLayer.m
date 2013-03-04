@@ -188,8 +188,8 @@ unsigned get_memory_mb(void) {
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
-        autostepGameLogic = YES;
-        //autostepGameLogic = NO;
+ //       autostepGameLogic = YES;
+        autostepGameLogic = NO;
         
         // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
         autostepGameLogic = autostepGameLogic && gameLogicIsOn;
@@ -619,13 +619,30 @@ unsigned get_memory_mb(void) {
         BOOL selectedPointIsValid = (selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0 );
         if ( selectedPointIsValid ) {
             Tile *t = [ self getTileForCGPoint: selectedTilePoint ];
-            Entity *e = [[ t contents ] objectAtIndex: 0];
-            
-            [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Lv: %d  Name: %@\nKills: %d\nLine3\nLine4\n",
+
+            if ( [[ t contents] count] > 0 ) {
+                // display entity info
+                Entity *e = [[ t contents ] objectAtIndex: 0];
+                [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Lv: %d  Name: %@\nKills: %d\nLine3\nLine4\n",
                                             e.level,
                                             e.name,
                                             e.totalKills
-                                            ] ];
+                                            ]];
+            }
+            else {
+                // empty tile contents
+                // display tile info
+                [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Tile Type: %@\n@\n@\n@\n",
+                                                t.tileType == TILE_FLOOR_DOWNSTAIRS ?   @"Downstairs" :
+                                                t.tileType == TILE_FLOOR_UPSTAIRS ?     @"Upstairs" :
+                                                t.tileType == TILE_FLOOR_GRASS ?        @"Grass" :
+                                                t.tileType == TILE_FLOOR_STONE ?        @"Stone" :
+                                                t.tileType == TILE_FLOOR_VOID ?         @"Void" :
+                                                t.tileType == TILE_FLOOR_ICE ?          @"Ice" :
+                                                                                        @"Unknown"
+                                                ]];
+            }
+            
         }
         else {
             [entityInfoHUD.label setString:@"..." ];
