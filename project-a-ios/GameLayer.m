@@ -1007,12 +1007,13 @@ unsigned get_memory_mb(void) {
         
         //[ self addMessage: @"Tile was previously selected" ];
         //[ self selectTileAtPosition: mapPoint ];
+       // MLOG( @"ccTouchBegan: valid point selected" );
         
     }
     
     else {
-        //MLOG( @"Nothing previously selected" );
-        //[ self selectTileAtPosition: mapPoint ];
+       // MLOG( @"ccTouchBegan: Nothing previously selected" );
+       // [ self selectTileAtPosition: mapPoint ];
     }
     
     /*
@@ -1112,7 +1113,8 @@ unsigned get_memory_mb(void) {
         }
     }
      */
-    [ self updateMonitorLabel ];
+    needsRedraw = YES;
+    //[ self updateMonitorLabel ];
 }
 
 
@@ -1145,7 +1147,7 @@ unsigned get_memory_mb(void) {
         BOOL touchingNewTile = ( prevTouchedTile != touchedTile );
         
         if ( touchingNewTile ) {
-            [ self selectTileAtPosition: mapPoint ];
+            //[ self selectTileAtPosition: mapPoint ];
         }
         
     }
@@ -1154,7 +1156,8 @@ unsigned get_memory_mb(void) {
         // shouldnt be possible
     }
     
-    [ self updateMonitorLabel ];
+    needsRedraw = YES;
+    //[ self updateMonitorLabel ];
     
 }
 
@@ -1187,6 +1190,7 @@ unsigned get_memory_mb(void) {
     // something was previously selected
     if ( validSelectedPoint ) {
         
+        MLOG( @"ccTouchEnded: valid point selected" );
         // check if we hit the same tile again
         
         Tile *a = [ self getTileForCGPoint: mapPoint ];
@@ -1231,18 +1235,19 @@ unsigned get_memory_mb(void) {
             [ self selectTileAtPosition: mapPoint ];
         }
         
-        
+       // [ self selectTileAtPosition: mapPoint ];
     }
     
     // something was not prev. selected
     else {
   
+        MLOG( @"ccTouchEnded: not prev. selected" );
         [ self selectTileAtPosition: mapPoint ];
         
     }
     
-    
-    [ self updateMonitorLabel ];
+    needsRedraw = YES;
+    //[ self updateMonitorLabel ];
     
 }
 
@@ -1561,17 +1566,17 @@ NSUInteger getMagicX( NSUInteger x ) {
     
     /*
     return
-        ( x < 32 ) ? 0 :        // 32 =     0x020 = 0b0 0010 0000
-        ( x < 64 ) ? 1 :        // 64 =     0x040 = 0b0 0100 0000
-        ( x < 96 ) ? 2 :        // 96 =     0x060 = 0b0 0110 0000
-        ( x < 128 ) ? 3 :       // 128 =    0x080 = 0b0 1000 0000
-        ( x < 150 ) ? 4 :       // 150 =    0x0a0 = 0b0 1010 0000
-        ( x < 192 ) ? 5 :       // 192 =    0x0c0 = 0b0 1100 0000
-        ( x < 224 ) ? 6 :       // 224 =    0x0e0 = 0b0 1110 0000
-        ( x < 256 ) ? 7 :       // 256 =    0x100 = 0b1 0000 0000
-        ( x < 288 ) ? 8 :       // 288 =    0x120 = 0b1 0010 0000
-        ( x < 320 ) ? 9 :       // 320 =    0x140 = 0b1 0100 0000
-        ( x < 352 ) ? 10 : -1 ; // 352 =    0x160 = 0b1 0110 0000
+        ( x < 32 ) ? 0 :        // 32 =     0x020 = 0b0 0010 0000    1 << 5
+        ( x < 64 ) ? 1 :        // 64 =     0x040 = 0b0 0100 0000    2 << 5
+        ( x < 96 ) ? 2 :        // 96 =     0x060 = 0b0 0110 0000    3 << 5
+        ( x < 128 ) ? 3 :       // 128 =    0x080 = 0b0 1000 0000    4 << 5
+        ( x < 150 ) ? 4 :       // 150 =    0x0a0 = 0b0 1010 0000    5 << 5
+        ( x < 192 ) ? 5 :       // 192 =    0x0c0 = 0b0 1100 0000    6 << 5
+        ( x < 224 ) ? 6 :       // 224 =    0x0e0 = 0b0 1110 0000    7 << 5
+        ( x < 256 ) ? 7 :       // 256 =    0x100 = 0b1 0000 0000    8 << 5
+        ( x < 288 ) ? 8 :       // 288 =    0x120 = 0b1 0010 0000    9 << 5
+        ( x < 320 ) ? 9 :       // 320 =    0x140 = 0b1 0100 0000   10 << 5
+        ( x < 352 ) ? 10 : -1 ; // 352 =    0x160 = 0b1 0110 0000   11 << 5
      */
 }
 
