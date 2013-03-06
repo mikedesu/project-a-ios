@@ -531,6 +531,7 @@ unsigned get_memory_mb(void) {
             
             // check if monsters are around you
             // regardless of floor
+            BOOL monsterNear = NO;
             CGPoint ul, u, ur, l, r, dl, d, dr;
             CGPoint a = pcEntity.positionOnMap;
             ul = ccp( a.x-1, a.y-1 );
@@ -549,8 +550,27 @@ unsigned get_memory_mb(void) {
                     Entity *e = [t.contents objectAtIndex:0];
                     MLOG(@"e.name = %@", e.name);
                     nearest = surroundingPoints[i];
+                    monsterNear = YES;
+                    break;
                 }
             }
+            
+            /*
+            // prioritize offense
+            if ( monsterNear ) {
+                [ self moveEntity:pcEntity toPosition:nearest ];
+            }
+            
+            // prioritize healing
+            else if ( pcEntity.hp < pcEntity.maxhp ) {
+                pcEntity.hp++;
+                [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+            }
+
+            else {
+                
+            }
+             */
             
             static CGPoint lastPosition;
             static NSInteger moveTolerance = 0;
