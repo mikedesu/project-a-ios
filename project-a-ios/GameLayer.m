@@ -184,12 +184,12 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.01
+#define STEP_SPEED              1
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
- //       autostepGameLogic = YES;
-        autostepGameLogic = NO;
+        autostepGameLogic = YES;
+        //autostepGameLogic = NO;
         
         // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
         autostepGameLogic = autostepGameLogic && gameLogicIsOn;
@@ -391,125 +391,19 @@ unsigned get_memory_mb(void) {
         
         else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SIMPLE )
         {
+            //CGPoint nearest = [ self nearestCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber]] ];
+            CGPoint nearest = [ self nearestNonVoidCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber]] ];
+            
+            
+            [ self moveEntity: pcEntity toPosition: nearest ];
  
-            // get all 8 tiles around the pcEntity
-            CGPoint ulpt = ccp( pcEntity.positionOnMap.x - 1 , pcEntity.positionOnMap.y - 1 );
-            CGPoint upt =  ccp( pcEntity.positionOnMap.x ,     pcEntity.positionOnMap.y - 1);
-            CGPoint urpt = ccp( pcEntity.positionOnMap.x + 1 , pcEntity.positionOnMap.y - 1 );
-            CGPoint lpt =  ccp( pcEntity.positionOnMap.x - 1 , pcEntity.positionOnMap.y );
-            CGPoint rpt =  ccp( pcEntity.positionOnMap.x + 1 , pcEntity.positionOnMap.y );
-            CGPoint dlpt = ccp( pcEntity.positionOnMap.x - 1,  pcEntity.positionOnMap.y + 1 );
-            CGPoint dpt =  ccp( pcEntity.positionOnMap.x ,     pcEntity.positionOnMap.y + 1 );
-            CGPoint drpt = ccp( pcEntity.positionOnMap.x + 1 , pcEntity.positionOnMap.y + 1 );
- 
-            Tile *ult = [ self getTileForCGPoint: ulpt ];
-            Tile *ut =  [ self getTileForCGPoint: upt ];
-            Tile *urt = [ self getTileForCGPoint: urpt ];
             
-            Tile *lt =  [ self getTileForCGPoint: lpt ];
-            Tile *rt =  [ self getTileForCGPoint: rpt ];
-            
-            Tile *dlt = [ self getTileForCGPoint: dlpt ];
-            Tile *dt =  [ self getTileForCGPoint: dpt ];
-            Tile *drt = [ self getTileForCGPoint: drpt ];
-            
-            
-            BOOL hasTheItem = pcEntity.inventoryArray.count > 0;
-            BOOL isBottomFloor = floorNumber == dungeon.count - 1;
-            
-            // calculate distances to downstairs/upstairs tile
-            Tile *downstairsTile = nil;
-            Tile *upstairsTile = nil;
-            Tile *itemTile = nil;
-            
-            for ( Tile *tile in [[dungeon objectAtIndex:floorNumber] tileDataArray] ) {
-                if ( ! hasTheItem && ! isBottomFloor ) {
-                    if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
-                        downstairsTile = tile;
-                        break;
-                    }
-                }
-                
-                else if ( ! hasTheItem && isBottomFloor ) {
-                    // check if the tile has an item
-                    if ( tile.contents.count > 0 ) {
-                        itemTile = tile;
-                        break;
-                    }
-                }
-                
-                else {
-                    if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
-                        upstairsTile = tile;
-                        break;
-                    }
-                }
-            }
-            
-            Tile *bestTile = nil;
-            NSMutableArray *tiles = [ NSMutableArray arrayWithObjects:
-                              ult,
-                              ut,
-                              urt,
-                              lt,
-                              rt,
-                              dlt,
-                              dt,
-                              drt,
-                              nil];
-            NSInteger minDist = 999;
-            NSInteger dist;
-            
-            // prune out previously-traveled tiles if we don't have the item
-            
-            if ( ! hasTheItem ) {
-                for ( int i = 0; i < [tiles count]; i++ ) {
-                    Tile *t = [tiles objectAtIndex:i];
-                    for ( Tile * t2 in pcEntity.pathTaken ) {
-                        if ( t == t2 ) {
-                            // taken tile before, don't use
-                            [ tiles removeObject: t ];
-                        }
-                    }
-                }
-            }
-            
-            if ( tiles.count > 0 ) {
-                // from remaining tiles, select best tile
-                for ( Tile *t in tiles ) {
-                    if ( t.tileType != TILE_FLOOR_VOID ) {
-                        if ( !hasTheItem && !isBottomFloor )     { dist = [ self distanceFromTile:downstairsTile toTile: t ]; }
-                        else if ( !hasTheItem && isBottomFloor ) { dist = [ self distanceFromTile:itemTile       toTile: t ]; }
-                        else                                     { dist = [ self distanceFromTile:upstairsTile   toTile: t ]; }
-                        
-                        if ( dist <= minDist ) {
-                            minDist = dist;
-                            bestTile = t;
-                        }
-                    }
-                }
-                
-                // presumably we've found the best tile to move to
-                [pcEntity.pathTaken addObject:bestTile];
-                [ self moveEntity:pcEntity toPosition: bestTile.position ];
-            }
-            
-            else
-            {
-                // pop the last tile taken
-                Tile *lastTileTaken = [pcEntity.pathTaken lastObject];
-                //[pcEntity.pathTaken removeLastObject];
-                [ self moveEntity:pcEntity toPosition:lastTileTaken.position ];
-            }
-            
-           
             
             // step game logic
             if ( gameLogicIsOn ) {
                 [ self stepGameLogic ];
             }
             [ self resetCameraPosition ];
- 
         }
         
             
@@ -1969,6 +1863,147 @@ NSUInteger getMagicY( NSUInteger y ) {
     return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
 }
 
+/*
+ ====================
+ distanceFromCGPoint: toCGPoint:
+ 
+ returns distance from a cgpoint to another
+ ====================
+ */
+-( NSInteger ) distanceFromCGPoint: (CGPoint) a toCGPoint: (CGPoint) b {
+    //MLOG( @"distanceFromTile: a toTile: b" );
+    NSInteger ax = (NSInteger)a.x;
+    NSInteger bx = (NSInteger)b.x;
+    NSInteger ay = (NSInteger)a.y;
+    NSInteger by = (NSInteger)b.y;
+    
+    return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
+}
+
+
+/*
+ ====================
+ nearestCGPointFromCGPoint: a toCGPoint: b
+ 
+ returns the nearest cgpoint surrounding a to b
+ ====================
+ */
+-( CGPoint ) nearestCGPointFromCGPoint: (CGPoint) a toCGPoint: (CGPoint) b {
+    
+    CGPoint nearest = { 0, 0 };
+    
+    // check that a!=b
+    
+    if ( a.x == b.x && a.y == b.y ) {
+        nearest.x = a.x;
+        nearest.y = a.y;
+    }
+    
+    else {
+        
+        CGPoint ul, u, ur, l, r, dl, d, dr;
+        ul = ccp( a.x-1, a.y-1 );
+        u  = ccp( a.x+0, a.y-1 );
+        ur = ccp( a.x+1, a.y-1 );
+        l  = ccp( a.x-1, a.y+0 );
+        r  = ccp( a.x+1, a.y+0 );
+        dl = ccp( a.x-1, a.y+1 );
+        d  = ccp( a.x+0, a.y+1 );
+        dr = ccp( a.x+1, a.y+1 );
+        
+        NSInteger uld = [ self distanceFromCGPoint:ul toCGPoint:b ];
+        NSInteger ud  = [ self distanceFromCGPoint:u  toCGPoint:b ];
+        NSInteger urd = [ self distanceFromCGPoint:ur toCGPoint:b ];
+        NSInteger ld  = [ self distanceFromCGPoint:l  toCGPoint:b ];
+        NSInteger rd  = [ self distanceFromCGPoint:r  toCGPoint:b ];
+        NSInteger dld = [ self distanceFromCGPoint:dl toCGPoint:b ];
+        NSInteger dd  = [ self distanceFromCGPoint:d  toCGPoint:b ];
+        NSInteger drd = [ self distanceFromCGPoint:dr toCGPoint:b ];
+        
+        NSInteger min = NSIntegerMax;
+        
+        if ( uld <= min ) { min = uld; nearest = ul; }
+        if ( ud  <= min ) { min = ud;  nearest = u;  }
+        if ( urd <= min ) { min = urd; nearest = ur; }
+        if ( ld  <= min ) { min = ld;  nearest = l;  }
+        if ( rd  <= min ) { min = rd;  nearest = r;  }
+        if ( dld <= min ) { min = dld; nearest = dl; }
+        if ( dd  <= min ) { min = dd;  nearest = d;  }
+        if ( drd <= min ) { min = drd; nearest = dr; }
+        
+    }
+    
+    return nearest;
+    
+}
+
+
+
+
+/*
+ ====================
+ nearestNonVoidCGPointFromCGPoint: a toCGPoint: b
+ 
+ returns nearest non-void cgpoint surrounding a to b
+ ====================
+ */
+-( CGPoint ) nearestNonVoidCGPointFromCGPoint: (CGPoint) a toCGPoint: (CGPoint) b {
+    CGPoint nearest = { 0, 0 };
+    if ( a.x == b.x && a.y == b.y ) {
+        nearest.x = a.x;
+        nearest.y = a.y;
+    } else {
+        CGPoint ul, u, ur, l, r, dl, d, dr;
+        ul = ccp( a.x-1, a.y-1 );
+        u  = ccp( a.x+0, a.y-1 );
+        ur = ccp( a.x+1, a.y-1 );
+        l  = ccp( a.x-1, a.y+0 );
+        r  = ccp( a.x+1, a.y+0 );
+        dl = ccp( a.x-1, a.y+1 );
+        d  = ccp( a.x+0, a.y+1 );
+        dr = ccp( a.x+1, a.y+1 );
+        
+        NSInteger uld = [ self distanceFromCGPoint:ul toCGPoint:b ];
+        NSInteger ud  = [ self distanceFromCGPoint:u  toCGPoint:b ];
+        NSInteger urd = [ self distanceFromCGPoint:ur toCGPoint:b ];
+        NSInteger ld  = [ self distanceFromCGPoint:l  toCGPoint:b ];
+        NSInteger rd  = [ self distanceFromCGPoint:r  toCGPoint:b ];
+        NSInteger dld = [ self distanceFromCGPoint:dl toCGPoint:b ];
+        NSInteger dd  = [ self distanceFromCGPoint:d  toCGPoint:b ];
+        NSInteger drd = [ self distanceFromCGPoint:dr toCGPoint:b ];
+        
+        NSInteger min = NSIntegerMax;
+        
+        CGPoint points[ 8 ] = { ul, u, ur, l, r, dl, d, dr };
+        NSInteger distances[ 8 ] = { uld, ud, urd, ld, rd, dld, dd, drd };
+        
+        for ( int i = 0; i < 8; i++ ) {
+            if ( distances[i] <= min && ((Tile *)[self getTileForCGPoint:points[i] forFloor:[dungeon objectAtIndex:floorNumber]]).tileType != TILE_FLOOR_VOID ) {
+                min = distances[i];
+                nearest = points[i];
+            }
+        }
+        /*
+        if ( uld <= min ) { min = uld; nearest = ul; }
+        if ( ud  <= min ) { min = ud;  nearest = u;  }
+        if ( urd <= min ) { min = urd; nearest = ur; }
+        if ( ld  <= min ) { min = ld;  nearest = l;  }
+        if ( rd  <= min ) { min = rd;  nearest = r;  }
+        if ( dld <= min ) { min = dld; nearest = dl; }
+        if ( dd  <= min ) { min = dd;  nearest = d;  }
+        if ( drd <= min ) { min = drd; nearest = dr; }
+        */
+    }
+    
+    return nearest;
+
+}
+
+
+
+
+
+
 
 #pragma mark - Initialization helper code
 
@@ -2270,8 +2305,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ hero.name setString: @"Mike" ];
     hero.entityType = ENTITY_T_PC;
     hero.isPC = YES;
-    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
-    //hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
+    //hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+    hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
     hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE;
     
     hero.level = 1;
