@@ -83,6 +83,8 @@ typedef enum {
     NSUInteger totalxp;
     NSUInteger nextLevelXP;
     
+    NSInteger hitDie;
+    
     NSInteger hp;
     NSInteger maxhp;
     
@@ -128,6 +130,7 @@ typedef enum {
 @property (atomic, assign) NSUInteger totalxp;
 @property (atomic, assign) NSUInteger nextLevelXP;
 
+@property (atomic, assign) NSInteger hitDie;
 @property (atomic, assign) NSInteger hp;
 @property (atomic, assign) NSInteger maxhp;
 @property (atomic, assign) NSInteger ac;
@@ -141,7 +144,9 @@ typedef enum {
 @property (atomic) NSMutableArray *pathTaken;
 
 -(Entity *) init;
--(Entity *) initWithLevel: (NSInteger) level;
+-(Entity *) initWithLevel: (NSInteger) _level;
+-(Entity *) initWithHitDie: (NSInteger) hd ;
+-(Entity *) initWithLevel:(NSInteger)_level withHitDie: (NSInteger) hd ;
 
 -( NSInteger ) attackBonus;
 -( NSInteger ) attackRoll;

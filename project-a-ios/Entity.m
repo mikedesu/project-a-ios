@@ -30,6 +30,7 @@
 @synthesize totalxp;
 @synthesize nextLevelXP;
 
+@synthesize hitDie;
 @synthesize hp;
 @synthesize maxhp;
 @synthesize ac;
@@ -102,8 +103,15 @@
 #define DEFAULT_LVL1_NEXT_LEVEL_XP      10
         nextLevelXP = DEFAULT_LVL1_NEXT_LEVEL_XP;
         
-        maxhp = [Dice roll:12];
-        hp = maxhp;
+        maxhp = 0;
+        
+        hitDie = 12;
+        
+        while ( maxhp == 0 ) {
+            NSInteger conMod = [ GameRenderer modifierForNumber: constitution ];
+            maxhp = [Dice roll:hitDie] + conMod;
+            hp = maxhp;
+        }
         
         ac = 10; // the higher the better
         
@@ -121,37 +129,42 @@
 
 
 
+-(Entity *) initWithHitDie: (NSInteger) hd {
+    Entity *e = [[Entity alloc] init];
+    maxhp = 0;
+    hitDie = hd;
+    while ( maxhp == 0 ) {
+        NSInteger conMod = [ GameRenderer modifierForNumber: e.constitution ];
+        maxhp = [Dice roll:hitDie] + conMod;
+        hp = maxhp;
+    }
+    return e;
+}
 
 
 
--(Entity *) initWithLevel: (NSInteger) level {
-    Entity *e = [[ Entity alloc ] init];
-    
-    e.level = level;
+
+
+-(Entity *) initWithLevel:(NSInteger)_level withHitDie: (NSInteger) hd {
+    Entity *e = [[ Entity alloc ] initWithHitDie: hd];
     e.entityType = ENTITY_T_NPC;
-    
-    /*
-    e.strength = rollDice(6, 3);
-    e.dexterity = rollDice(6, 3);
-    e.constitution = rollDice(6, 3);
-    e.intelligence = rollDice(6, 3);
-    e.wisdom = rollDice(6, 3);
-    e.charisma = rollDice(6, 3);
-    */
-    
-    e.strength = [Dice roll:6 nTimes:3];
-    e.dexterity = [Dice roll:6 nTimes:3];
-    e.constitution = [Dice roll:6 nTimes:3];
-    e.intelligence = [Dice roll:6 nTimes:3];
-    e.wisdom = [Dice roll:6 nTimes:3];
-    e.charisma = [Dice roll:6 nTimes:3];
-    
-    
-    
-    for ( int i = 0; i < level; i++ ) {
+    for ( int i = e.level; i < _level; i++ ) {
         [ e handleLevelUp ];
     }
-    
+    return e;
+}
+
+
+
+
+
+
+-(Entity *) initWithLevel: (NSInteger) _level {
+    Entity *e = [[ Entity alloc ] init];
+    e.entityType = ENTITY_T_NPC;
+    for ( int i = e.level; i < _level; i++ ) {
+        [ e handleLevelUp ];
+    }
     return e;
 }
 

@@ -2749,37 +2749,8 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( void ) stepGameLogic {
     if ( gameLogicIsOn ) {
         
-        //if ( floorNumber == 0 ) {
-        
-        /*
-        for ( int i = 0; i < [dungeon count]; i++ ) {
-            DungeonFloor *f = [dungeon objectAtIndex:i];
-            for ( int j = 0; j < [[f entityArray] count]; j++ ) {
-                Entity *e = [[ f entityArray ] objectAtIndex: j];
-                if ( e.entityType != ENTITY_T_PC ){
-                    if ( e.isAlive ) {
-                        [ e step ];
-                        [ self handleEntityStep: e ];
-                    }
-                }
-            }
-        }
-        */
-        
-        
         // have all entities on this floor act
- 
         [ self haveAllEntitiesActOnThisFloor ];
-        
-        /*
-        for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] entityArray] count]; i++ ) {
-            Entity *e = [[[dungeon objectAtIndex:floorNumber] entityArray] objectAtIndex: i];
-            if ( e.entityType != ENTITY_T_PC ){
-                [ e step ];
-                [ self handleEntityStep: e ];
-            }
-        }
-         */
         
         // cleanup entityArray
         for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] entityArray] count]; i++ ) {
@@ -2791,15 +2762,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
  
         // spawn a new monster on the current floor
-       /*
-        NSUInteger spawnChancePercent = 1;
-        NSUInteger diceroll = [Dice roll:100];
-        if ( diceroll <= spawnChancePercent ) {
-        */
-//        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC: pcEntity];
-        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 100 ];
-        //}
- 
+        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
         
         Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
         if ( floorNumber == 0 &&

@@ -767,7 +767,10 @@ NSInteger getMod( NSInteger n ) {
  
     NSUInteger calculatedLevel = randomLevel + mod;
     
-    Entity *e = [[Entity alloc] initWithLevel: calculatedLevel ];
+    NSInteger randomHitDie = [Dice roll:12] + mod;
+    
+    
+    Entity *e = [[Entity alloc] initWithLevel: calculatedLevel withHitDie:randomHitDie ];
     
     e.entityType = ENTITY_T_NPC;
     e.isPC = NO;
