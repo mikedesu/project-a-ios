@@ -184,7 +184,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.1
+#define STEP_SPEED              0.01
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -2383,24 +2383,10 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) initializeDungeon {
-    /*
-     random-walk of 10-floor dungeon w/ 10-100 tiles each
-     
-     ipad test runs
-     28680
-     35594
-     56391
-     
-     macbook test runs
-     29739
-     42096
-     52222
-     78244
-     */
     
     [ self initializeTiles ];
     
-    NSUInteger numberOfFloors = 10;
+    NSUInteger numberOfFloors = 1000;
     
     dungeon = [[ NSMutableArray alloc ] init ];
     for ( int i = 0; i < numberOfFloors; i++ ) {
@@ -2782,7 +2768,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
  
         // spawn a new monster on the current floor
-        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
+       // [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1000 ];
         
         Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
         if ( floorNumber == 0 &&

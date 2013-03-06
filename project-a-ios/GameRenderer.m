@@ -374,6 +374,7 @@ NSInteger getMod( NSInteger n ) {
         NSUInteger maxTilesPlaced = 0;
         //NSUInteger numTiles = rollDice(10, 10) + 10;
         NSUInteger numTiles = [Dice roll:10 nTimes:10] + 10;
+        //NSUInteger numTiles = [Dice roll:10 nTimes: floor.floorNumber ] + floor.floorNumber + 10;
         
         NSUInteger xo = 0;
         NSUInteger yo = 0;
@@ -755,7 +756,7 @@ NSInteger getMod( NSInteger n ) {
 +( Entity * ) randomMonsterForFloor: (DungeonFloor *) floor {
     
     // calc a level in range of floorNumber
-    //NSUInteger randomLevel = rollDiceOnce( floor.floorNumber );
+    //NSUInteger randomLevel = floor.floorNumber;
     NSUInteger randomLevel = [Dice roll: floor.floorNumber];
     NSUInteger mod =
     floor.floorNumber <= 4 ?  0 :
