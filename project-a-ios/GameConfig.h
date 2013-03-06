@@ -22,6 +22,13 @@
 #import "PlayerMenu.h"
 #import "Tile.h"
 
+
+typedef struct {
+    CGFloat x, y;
+    NSInteger weight;
+} WeightedPoint;
+
+
 // Defines the width x length of tiles in pixels
 #define TILE_SIZE                   16
 

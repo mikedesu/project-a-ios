@@ -184,7 +184,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              1
+#define STEP_SPEED              0.1
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -337,17 +337,14 @@ unsigned get_memory_mb(void) {
         
         else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM )
         {
-            
             //BOOL rollIsUnacceptable = NO;
             BOOL rollIsUnacceptable = YES;
             CGPoint newPosition;
-            
             NSUInteger roll = [Dice roll:9];
             while ( rollIsUnacceptable ) {
                 roll = [Dice roll:9];
                 CGFloat x = -1;
                 CGFloat y = -1;
-            
                 //MLOG( @"rolled %d", roll );
             
                 // UDLR UL, UR, DL, DR
@@ -389,14 +386,198 @@ unsigned get_memory_mb(void) {
             [ self resetCameraPosition ];
         }
         
+        
+        else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_TEMP_RANDOM )
+        {
+            
+            static NSInteger randomMoves = 0;
+            const NSInteger movesBeforeSwitch = 50;
+            
+            if ( randomMoves > movesBeforeSwitch ) {
+                MLOG(@"switching to SIMPLE");
+                randomMoves = 0;
+                pcEntity.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
+            }
+            
+            randomMoves++;
+            
+            
+            //BOOL rollIsUnacceptable = NO;
+            BOOL rollIsUnacceptable = YES;
+            CGPoint newPosition;
+            NSUInteger roll = [Dice roll:8];
+            while ( rollIsUnacceptable ) {
+                roll = [Dice roll:8];
+                CGFloat x = -1;
+                CGFloat y = -1;
+                //MLOG( @"rolled %d", roll );
+                
+                // UDLR UL, UR, DL, DR
+                if      ( roll == 1 ) { x =  0;      y = -1;  }
+                else if ( roll == 2 ) { x =  0;      y =  1;  }
+                else if ( roll == 3 ) { x = -1;      y =  0;  }
+                else if ( roll == 4 ) { x =  1;      y =  0;  }
+                else if ( roll == 5 ) { x = -1;      y = -1;  }
+                else if ( roll == 6 ) { x =  1;      y = -1;  }
+                else if ( roll == 7 ) { x = -1;      y =  1;  }
+                else if ( roll == 8 ) { x =  1;      y =  1;  }
+                else if ( roll == 9 ) { x =  0;      y =  0;  }
+                
+                newPosition.x = pcEntity.positionOnMap.x + x;
+                newPosition.y = pcEntity.positionOnMap.y + y;
+                
+                Tile *tile = [ self getTileForCGPoint: newPosition ];
+                if ( tile.tileType == TILE_FLOOR_VOID ) {
+                    rollIsUnacceptable = TRUE;
+                } else {
+                    rollIsUnacceptable = FALSE;
+                }
+            }
+            
+            
+            // check if monsters are around you
+            BOOL monsterNear = NO;
+            CGPoint nearest;
+            CGPoint ul, u, ur, l, r, dl, d, dr;
+            CGPoint a = pcEntity.positionOnMap;
+            ul = ccp( a.x-1, a.y-1 );
+            u  = ccp( a.x+0, a.y-1 );
+            ur = ccp( a.x+1, a.y-1 );
+            l  = ccp( a.x-1, a.y+0 );
+            r  = ccp( a.x+1, a.y+0 );
+            dl = ccp( a.x-1, a.y+1 );
+            d  = ccp( a.x+0, a.y+1 );
+            dr = ccp( a.x+1, a.y+1 );
+            CGPoint surroundingPoints[ 8 ] = { ul, u, ur, l, r, dl, d, dr };
+            for ( int i = 0; i < 8; i++ ) {
+                Tile *t = [self getTileForCGPoint:surroundingPoints[i] forFloor:[dungeon objectAtIndex:floorNumber]];
+                //MLOG(@"");
+                if ( [[t contents] count] > 0 ) {
+                    Entity *e = [t.contents objectAtIndex:0];
+                    MLOG(@"e.name = %@", e.name);
+                    nearest = surroundingPoints[i];
+                    monsterNear = YES;
+                    break;
+                }
+            }
+            
+            // prioritize offense
+            if ( monsterNear ) {
+                [ self moveEntity:pcEntity toPosition:nearest ];
+            }
+            
+            // prioritize healing
+            else if ( pcEntity.hp < pcEntity.maxhp ) {
+                pcEntity.hp++;
+                [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+            }
+ 
+            // prioritize the roll
+            else {
+                if ( roll != 9 ) {
+                    [ self moveEntity:pcEntity toPosition: newPosition ];
+                } else {
+                    // heal the pcEntity a bit
+                    if ( pcEntity.hp < pcEntity.maxhp ) {
+                        pcEntity.hp++;
+                        [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+                    }
+                }
+            }
+            
+            // step game logic
+            if ( gameLogicIsOn ) {
+                [ self stepGameLogic ];
+            }
+            [ self resetCameraPosition ];
+        }
+        
+        
+        
+        
         else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SIMPLE )
         {
-            //CGPoint nearest = [ self nearestCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber]] ];
-            CGPoint nearest = [ self nearestNonVoidCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber]] ];
+            BOOL hasItem = pcEntity.inventoryArray.count > 0;
+            BOOL isBottomFloor = floorNumber == dungeon.count - 1;
+            
+            CGPoint nearest;
+            
+            if ( ! isBottomFloor && ! hasItem ) {
+                nearest = [ self nearestNonVoidCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber]] ];
+                //MLOG(@"!isBottomFloor && !hasItem: nearest: (%.0f,%.0f)", nearest.x, nearest.y);
+            }
+            else if ( isBottomFloor && ! hasItem ) {
+                
+                CGPoint itemPoint;
+                for ( Tile *t in [[dungeon objectAtIndex:floorNumber] tileDataArray] ) {
+                    if ( t.contents.count > 0 ) {
+                        for ( Entity *e in t.contents ) {
+                            // just for the book of all knowing
+                            if ( e.entityType == ENTITY_T_ITEM ) {
+                                itemPoint = t.position;
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                nearest = itemPoint;
+                
+            }
+            else if ( hasItem ) {
+                nearest = [ self nearestNonVoidCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getUpstairsTileForFloor:[dungeon objectAtIndex:floorNumber]] ];
+            }
             
             
-            [ self moveEntity: pcEntity toPosition: nearest ];
- 
+            // check if monsters are around you
+            // regardless of floor
+            CGPoint ul, u, ur, l, r, dl, d, dr;
+            CGPoint a = pcEntity.positionOnMap;
+            ul = ccp( a.x-1, a.y-1 );
+            u  = ccp( a.x+0, a.y-1 );
+            ur = ccp( a.x+1, a.y-1 );
+            l  = ccp( a.x-1, a.y+0 );
+            r  = ccp( a.x+1, a.y+0 );
+            dl = ccp( a.x-1, a.y+1 );
+            d  = ccp( a.x+0, a.y+1 );
+            dr = ccp( a.x+1, a.y+1 );
+            CGPoint surroundingPoints[ 8 ] = { ul, u, ur, l, r, dl, d, dr };
+            for ( int i = 0; i < 8; i++ ) {
+                Tile *t = [self getTileForCGPoint:surroundingPoints[i] forFloor:[dungeon objectAtIndex:floorNumber]];
+                //MLOG(@"");
+                if ( [[t contents] count] > 0 ) {
+                    Entity *e = [t.contents objectAtIndex:0];
+                    MLOG(@"e.name = %@", e.name);
+                    nearest = surroundingPoints[i];
+                }
+            }
+            
+            static CGPoint lastPosition;
+            static NSInteger moveTolerance = 0;
+            
+            if ( ccpFuzzyEqual(nearest, lastPosition, 0) ) {
+                moveTolerance++;
+            }
+            
+            if ( moveTolerance > 10 ) {
+                MLOG(@"switching to TEMP_RANDOM");
+                pcEntity.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_TEMP_RANDOM;
+                moveTolerance = 0;
+            }
+            
+            lastPosition.x = pcEntity.positionOnMap.x;
+            lastPosition.y = pcEntity.positionOnMap.y;
+            
+            //MLOG(@"nearest: (%.0f,%.0f)", nearest.x, nearest.y);
+            if ( ccpFuzzyEqual(nearest, pcEntity.positionOnMap, 0) ) {
+                pcEntity.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_TEMP_RANDOM;
+                moveTolerance = 0;
+            }
+            else {
+                [ self moveEntity: pcEntity toPosition: nearest ];
+            }
+            
+        
             
             
             // step game logic
@@ -1950,6 +2131,7 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( CGPoint ) nearestNonVoidCGPointFromCGPoint: (CGPoint) a toCGPoint: (CGPoint) b {
     CGPoint nearest = { 0, 0 };
     if ( a.x == b.x && a.y == b.y ) {
+        MLOG(@"a==b!");
         nearest.x = a.x;
         nearest.y = a.y;
     } else {
@@ -1996,7 +2178,175 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     
     return nearest;
+}
 
+
+
+-( NSArray * ) nearestNonVoidCGPointsForCGPoint: (CGPoint) a toCGPoint: (CGPoint) b {
+    
+    CGPoint ul, u, ur, l, r, dl, d, dr;
+    ul = ccp( a.x-1, a.y-1 );
+    u  = ccp( a.x+0, a.y-1 );
+    ur = ccp( a.x+1, a.y-1 );
+    l  = ccp( a.x-1, a.y+0 );
+    r  = ccp( a.x+1, a.y+0 );
+    dl = ccp( a.x-1, a.y+1 );
+    d  = ccp( a.x+0, a.y+1 );
+    dr = ccp( a.x+1, a.y+1 );
+    
+    NSMutableArray *array = [ NSMutableArray array ];
+    [array addObject: [NSValue valueWithCGPoint:ul]];
+    [array addObject: [NSValue valueWithCGPoint:u ]];
+    [array addObject: [NSValue valueWithCGPoint:ur]];
+    [array addObject: [NSValue valueWithCGPoint:l ]];
+    [array addObject: [NSValue valueWithCGPoint:r ]];
+    [array addObject: [NSValue valueWithCGPoint:dl]];
+    [array addObject: [NSValue valueWithCGPoint:d ]];
+    [array addObject: [NSValue valueWithCGPoint:dr]];
+    
+    for ( int i = 0; i < array.count; i++ ) {
+        CGPoint p = ((NSValue *)[ array objectAtIndex: i ]).CGPointValue;
+        if ( ((Tile *)[self getTileForCGPoint:p forFloor:[dungeon objectAtIndex:floorNumber]]).tileType == TILE_FLOOR_VOID ) {
+            [ array removeObjectAtIndex: i ];
+            i = 0;
+        }
+    }
+    
+    return array;
+}
+
+
+-( NSArray * ) nearestNonVoidWeightedPointsForCGPoint: (CGPoint) a toCGPoint: (CGPoint) b withWeight: (NSInteger) weight {
+    NSMutableArray *array = nil;
+    if ( ccpFuzzyEqual(a, b, 0) ) {
+        array = nil;
+    }
+    
+    else {
+        array = [ NSMutableArray array ];
+            
+        CGPoint ul, u, ur, l, r, dl, d, dr;
+        ul = ccp( a.x-1, a.y-1 );
+        u  = ccp( a.x+0, a.y-1 );
+        ur = ccp( a.x+1, a.y-1 );
+        l  = ccp( a.x-1, a.y+0 );
+        r  = ccp( a.x+1, a.y+0 );
+        dl = ccp( a.x-1, a.y+1 );
+        d  = ccp( a.x+0, a.y+1 );
+        dr = ccp( a.x+1, a.y+1 );
+        
+        NSInteger uld = [ self distanceFromCGPoint:ul toCGPoint:b ];
+        NSInteger ud  = [ self distanceFromCGPoint:u  toCGPoint:b ];
+        NSInteger urd = [ self distanceFromCGPoint:ur toCGPoint:b ];
+        NSInteger ld  = [ self distanceFromCGPoint:l  toCGPoint:b ];
+        NSInteger rd  = [ self distanceFromCGPoint:r  toCGPoint:b ];
+        NSInteger dld = [ self distanceFromCGPoint:dl toCGPoint:b ];
+        NSInteger dd  = [ self distanceFromCGPoint:d  toCGPoint:b ];
+        NSInteger drd = [ self distanceFromCGPoint:dr toCGPoint:b ];
+        
+        
+        WeightedPoint wul, wu, wur, wl, wr, wdl, wd, wdr;
+        wul.x = ul.x; wul.y = ul.y; wul.weight = weight;
+        wu.x  = u.x;  wu.y  = u.y;  wu.weight  = weight;
+        wur.x = ur.x; wur.y = ur.y; wur.weight = weight;
+        wl.x  = l.x;  wl.y  = l.y;  wl.weight  = weight;
+        wr.x  = r.x;  wr.y  = r.y;  wr.weight  = weight;
+        wdl.x = dl.x; wdl.y = dl.y; wdl.weight = weight;
+        wd.x  = d.x;  wd.y  = d.y;  wd.weight  = weight;
+        wdr.x = dr.x; wdr.y = dr.y; wdr.weight = weight;
+        
+        
+        [array addObject: [NSValue valueWithBytes:&wul objCType:@encode(WeightedPoint)]];
+        [array addObject: [NSValue valueWithBytes:&wu  objCType:@encode(WeightedPoint)]];
+        [array addObject: [NSValue valueWithBytes:&wur objCType:@encode(WeightedPoint)]];
+        [array addObject: [NSValue valueWithBytes:&wl  objCType:@encode(WeightedPoint)]];
+        [array addObject: [NSValue valueWithBytes:&wr  objCType:@encode(WeightedPoint)]];
+        [array addObject: [NSValue valueWithBytes:&wdl objCType:@encode(WeightedPoint)]];
+        [array addObject: [NSValue valueWithBytes:&wd  objCType:@encode(WeightedPoint)]];
+        [array addObject: [NSValue valueWithBytes:&wdr objCType:@encode(WeightedPoint)]];
+        
+        for ( int i = 0; i < array.count; i++ ) {
+            WeightedPoint p;
+            [((NSValue *)[ array objectAtIndex: i ]) getValue: &p ];
+            CGPoint cgp = ccp( p.x, p.y );
+            if ( ((Tile *)[self getTileForCGPoint:cgp forFloor:[dungeon objectAtIndex:floorNumber]]).tileType == TILE_FLOOR_VOID ) {
+                [ array removeObjectAtIndex: i ];
+                i = 0;
+            }
+        }
+        
+    }
+    
+    return array;
+}
+
+
+
+// craft a path from the endpoint to the pcEntity
+-( NSArray * ) doAlgorithm {
+    MLOG(@"Do algorithm");
+    
+    NSMutableArray *pathArray = [ NSMutableArray array ];
+    
+    CGPoint e = [ GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber]];
+    CGPoint s = pcEntity.positionOnMap;
+    
+    NSInteger w = 0;
+    
+    WeightedPoint end;  end.x = e.x;  end.y = e.y;  end.weight = w;
+    
+    w++;
+    
+    [pathArray addObject: [NSValue valueWithBytes:&end objCType:@encode(WeightedPoint)]];
+    
+    
+    for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] tileDataArray] count]; i++ ) {
+    //for ( int i = 0; i < pathArray.count; i++ ) {
+        MLOG(@"i=%d/%d", i, pathArray.count);
+        
+        WeightedPoint tmp;  [(NSValue *)[pathArray objectAtIndex:i] getValue:&tmp];
+        
+        MLOG(@"tmp=(%.0f,%.0f)  s=(%.0f,%.0f)", tmp.x, tmp.y, s.x, s.y );
+        if ( tmp.x == s.x && tmp.y == s.y ) {
+            // hit the pcEntity! we have our path!
+            MLOG(@"path found!");
+            break;
+        }
+        else {
+            MLOG(@"path not found yet...");
+        }
+        
+        NSArray *list = [ self nearestNonVoidWeightedPointsForCGPoint:ccp(tmp.x, tmp.y) toCGPoint:s withWeight: tmp.weight+1 ];
+        NSMutableArray *mutableList = [ NSMutableArray arrayWithArray: list ];
+        
+ 
+        for ( int j = 0; j < mutableList.count; j++ ) {
+            WeightedPoint p0; [(NSValue *)[mutableList objectAtIndex:j] getValue:&p0];
+            
+            for ( int k = 0; k < pathArray.count; k++ ) {
+                WeightedPoint p1; [(NSValue *)[mutableList objectAtIndex:j] getValue:&p1];
+                
+                if ( p0.x == p1.x && p0.y == p1.y && p1.weight <= p0.weight ) {
+                    [ mutableList removeObjectAtIndex: j ];
+                    j = 0;
+                    break;
+                }
+                
+            }
+            
+        }
+        
+        // mutableList is ready - add the items to pathArray
+        for ( NSValue *v in mutableList ) {
+            WeightedPoint p0; [v getValue:&p0];
+            [pathArray addObject: [NSValue valueWithBytes:&p0 objCType:@encode(WeightedPoint)]];
+        }
+        
+        MLOG(@"%d. Path array = %@", i, pathArray );
+        
+    }
+
+    return pathArray;
 }
 
 
