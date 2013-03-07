@@ -133,6 +133,7 @@
 		27506B7516D759E900245F72 /* DungeonTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7416D759E900245F72 /* DungeonTreeNode.m */; };
 		27506B7816D7FF0200245F72 /* CCMutableTexture2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		27506B7B16D801FF00245F72 /* AsyncObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7A16D801FE00245F72 /* AsyncObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		2767E0CB16E83FA500013CBE /* Items.m in Sources */ = {isa = PBXBuildFile; fileRef = 2767E0CA16E83FA500013CBE /* Items.m */; };
 		2773F28F16C8447D001C3E83 /* Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F28E16C8447D001C3E83 /* Entity.m */; };
 		2773F29216C85469001C3E83 /* EditorHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29116C85469001C3E83 /* EditorHUD.m */; };
 		2773F29516C949C4001C3E83 /* PlayerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29416C949C4001C3E83 /* PlayerHUD.m */; };
@@ -411,6 +412,8 @@
 		27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCMutableTexture2D.m; sourceTree = "<group>"; };
 		27506B7916D801FE00245F72 /* AsyncObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncObject.h; sourceTree = "<group>"; };
 		27506B7A16D801FE00245F72 /* AsyncObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncObject.m; sourceTree = "<group>"; };
+		2767E0C916E83FA500013CBE /* Items.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Items.h; sourceTree = "<group>"; };
+		2767E0CA16E83FA500013CBE /* Items.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Items.m; sourceTree = "<group>"; };
 		2773F28D16C8447D001C3E83 /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		2773F28E16C8447D001C3E83 /* Entity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entity.m; sourceTree = "<group>"; };
 		2773F29016C85469001C3E83 /* EditorHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorHUD.h; sourceTree = "<group>"; };
@@ -514,6 +517,8 @@
 				2773F29116C85469001C3E83 /* EditorHUD.m */,
 				2773F28D16C8447D001C3E83 /* Entity.h */,
 				2773F28E16C8447D001C3E83 /* Entity.m */,
+				2767E0C916E83FA500013CBE /* Items.h */,
+				2767E0CA16E83FA500013CBE /* Items.m */,
 				27DCE96116E2FB3900109F88 /* EntityInfoHUD.h */,
 				27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */,
 				27C4145216C7FB9E00BE09F9 /* GameConfig.h */,
@@ -1083,6 +1088,7 @@
 				27506B7B16D801FF00245F72 /* AsyncObject.m in Sources */,
 				27DCE96016E2EA5000109F88 /* Dice.m in Sources */,
 				27DCE96316E2FB3900109F88 /* EntityInfoHUD.m in Sources */,
+				2767E0CB16E83FA500013CBE /* Items.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

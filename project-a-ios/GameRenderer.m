@@ -825,8 +825,6 @@ NSInteger getMod( NSInteger n ) {
         //NSUInteger diceroll = rollDiceOnce( [[floor tileDataArray] count] ) - 1;
         NSUInteger diceroll = [Dice roll: [[floor tileDataArray] count]] - 1;
         
-        
-        
         Tile *tile = [[ floor tileDataArray ] objectAtIndex: diceroll ];
         if ( tile.tileType != TILE_FLOOR_VOID &&
                  tile.tileType != TILE_FLOOR_UPSTAIRS &&
@@ -903,22 +901,26 @@ NSInteger getMod( NSInteger n ) {
 }
 
 
-
-
-
-
 /*
  ====================
- 
+ spawnRandomItemAtRandomLocationOnFloor: floor
  ====================
  */
 +( void ) spawnRandomItemAtRandomLocationOnFloor: (DungeonFloor *) floor {
-    Entity *e = [ GameRenderer randomItem ];
+    Entity *e = [ Items randomItem ];
     [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
 }
 
 
-
+/*
+ ====================
+ spawnBookOfAllKnowingAtRandomLocationOnFloor: floor
+ ====================
+ */
++( void ) spawnBookOfAllKnowingAtRandomLocationOnFloor: (DungeonFloor *) floor {
+    Entity *e = [ Items bookOfAllKnowing ];
+    [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];    
+}
 
 
 

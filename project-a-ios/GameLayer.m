@@ -114,41 +114,7 @@ unsigned get_memory_mb(void) {
         [ GameRenderer setEntity:pcEntity onTile:startTile ];
         [ self resetCameraPosition ];
         
-        
-        // set up some enemy entities
-        /*
-        Entity *enemy0;
-        enemy0 = [[ Entity alloc ] init ];
-        enemy0.entityType = ENTITY_T_NPC;
-        [enemy0.name setString:@"Enemy0"];
-        enemy0.isPC = NO;
-        enemy0.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
-        enemy0.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
-        
-        
-        // place enemy0 on tile
-        [ GameRenderer setEntity: enemy0 onTile: enemyStartTile ];
-        [[[ dungeon objectAtIndex:floorNumber ] entityArray] addObject: enemy0 ];
-        
-        
-        // create an item and set it down
-        Entity *item = [[ Entity alloc] init];
-        item.entityType = ENTITY_T_ITEM;
-        [item.name setString:@"Item"];
-        item.isPC = NO;
-        item.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
-        item.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
-        
-        
-        CGPoint itemStartPos = enemyStartPos;
-        itemStartPos.x += 1;
-        Tile *itemStartTile = [ self getTileForCGPoint: itemStartPos ];
-        
  
-        [ GameRenderer setEntity: item onTile:itemStartTile ];
-        [[[dungeon objectAtIndex:floorNumber] entityArray] addObject: item];
-        */
-        
         // set the selectedTilePoint to (-1,-1) (none)
         selectedTilePoint = ccp( -1, -1 );
         
@@ -201,8 +167,9 @@ unsigned get_memory_mb(void) {
         
         // draw the screen (kind of)
         //[ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
+        //[ GameRenderer spawnRandomItemAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1] ];
         
-        [ GameRenderer spawnRandomItemAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1] ];
+        [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
         
 	}
 	return self;

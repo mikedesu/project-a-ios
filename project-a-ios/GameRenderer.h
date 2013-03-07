@@ -53,6 +53,7 @@
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc;
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc withChanceDie: (NSInteger) chanceDie ;
 +( void ) spawnRandomItemAtRandomLocationOnFloor: (DungeonFloor *) floor;
-
++( void ) spawnBookOfAllKnowingAtRandomLocationOnFloor: (DungeonFloor *) floor;
+    
 
 @end
