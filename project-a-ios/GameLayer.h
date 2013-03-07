@@ -63,6 +63,9 @@ typedef enum {
     BOOL playerHUDIsVisible;
     PlayerHUD *playerHUD;
     
+    BOOL gearHUDIsVisible;
+    PlayerHUD *gearHUD;
+    
     BOOL playerMenuIsVisible;
     PlayerMenu *playerMenu;
     
@@ -109,6 +112,15 @@ typedef enum {
 -( void ) addPlayerHUD: ( PlayerHUD * ) hud;
 -( void ) removePlayerHUD: ( PlayerHUD * ) hud;
 -( void ) updatePlayerHUDLabel;
+
+
+-( void ) initGearHUD;
+-( void ) addGearHUD: ( PlayerHUD * ) hud;
+-( void ) removeGearHUD: ( PlayerHUD * ) hud;
+-( void ) updateGearHUDLabel;
+
+
+
 
 -( void ) appendNewTile;
 -( void ) appendNewColorTestTile;

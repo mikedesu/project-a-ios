@@ -150,7 +150,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              1
+#define STEP_SPEED              0.2
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -1086,6 +1086,67 @@ unsigned get_memory_mb(void) {
 }
 
 
+
+/*
+ ====================
+ initGearHUD
+ 
+ initializes the Gear HUD
+ ====================
+ */
+-( void ) initGearHUD {
+    CGSize size = [[CCDirector sharedDirector] winSize];
+    gearHUD = [[ PlayerHUD alloc ] initWithColor:black_alpha(150) width: 100 height:100 ];
+    gearHUD.position = ccp(  size.width - gearHUD.contentSize.width , playerHUD.contentSize.height );
+    [ self updateGearHUDLabel ];
+}
+
+
+/*
+ ====================
+ addGearHUD: hud
+ 
+ adds the Gear HUD to the visible screen
+ ====================
+ */
+-( void ) addGearHUD: ( PlayerHUD * ) hud {
+    if ( ! gearHUDIsVisible ) {
+        [ self addChild: hud ];
+        gearHUDIsVisible = YES;
+    }
+}
+
+
+
+
+/*
+ ====================
+ removeGearHUD: hud
+ 
+ removes the Gear HUD from the visible screen
+ ====================
+ */
+-( void ) removeGearHUD: ( PlayerHUD * ) hud {
+    if ( gearHUDIsVisible ) {
+        [ self removeChild: hud cleanup: NO ];
+        gearHUDIsVisible = NO;
+    }
+}
+
+
+/*
+ ====================
+ updateGearHUDLabel
+ 
+ updates the Gear HUD Label
+ ====================
+ */
+-( void ) updateGearHUDLabel {
+    [ [gearHUD label] setString: @"GEARHUD" ];
+}
+
+
+
 #pragma mark - Update code
 
 /*
@@ -1100,23 +1161,19 @@ unsigned get_memory_mb(void) {
     //double before = [NSDate timeIntervalSinceReferenceDate];
 
     // only if we need redraw, really...
-    if ( needsRedraw )
-    {
+    if ( needsRedraw ) {
         [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
-        if ( editorHUDIsVisible ) {
+        
+        if ( editorHUDIsVisible )
             [ self updateEditorHUDLabel ];
-        }
-        if ( monitorIsVisible ) {
+        if ( monitorIsVisible )
             [self updateMonitorLabel];
-        }
-        
-        if ( playerHUDIsVisible ) {
+        if ( playerHUDIsVisible )
             [ self updatePlayerHUDLabel ];
-        }
-        
-        if ( entityInfoHUDIsVisible ) {
+        if ( entityInfoHUDIsVisible )
             [ self updateEntityInfoHUDLabel ];
-        }
+        if ( gearHUDIsVisible )
+            [ self updateGearHUDLabel ];
         
         [ self resetCameraPosition ];
         
@@ -2701,6 +2758,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ self initEntityInfoHUD ];
     [ self addEntityInfoHUD: entityInfoHUD ];
     
+    gearHUDIsVisible = NO;
+    [ self initGearHUD ];
+    [ self addGearHUD: gearHUD ];
+    
 }
 
 
@@ -2743,7 +2804,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.maxhp = [Dice roll:12] + conMod;
     hero.hp = hero.maxhp;
     
-    hero.ac = 10;
+    hero.ac = 15;
     
     pcEntity = hero;
     //[ Entity drawTextureForEntity: hero ];
@@ -3094,10 +3155,20 @@ NSUInteger getMagicY( NSUInteger y ) {
                 //}
                 
                 if ( pcEntity.hp <= 0 ) {
+                    
+                    // check if they got the book of all-knowing
+                    BOOL hasBook = NO;
+                    for ( Entity *e in pcEntity.inventoryArray ) {
+                        if ( e.itemType == E_ITEM_T_BOOK ) {
+                            hasBook = YES;
+                            break;
+                        }
+                    }
+                    
                     MLOG(@"You died...");
                     [ self addMessage: [NSString stringWithFormat:@"You died.\nYou killed %d monsters.\nYou %@ the Book of All-Knowing.\n",
                                         pcEntity.totalKills,
-                                        pcEntity.inventoryArray.count > 0 ? @"got" : @"did not get" ] ];
+                                        hasBook ? @"got" : @"did not get" ] ];
                     pcEntity.isAlive = NO;
                     gameLogicIsOn = NO;
                     autostepGameLogic = NO;
@@ -3279,38 +3350,13 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) doTimer: (SEL) selector {
-    
     if ( selector != nil ) {
         CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-        
         [ self performSelector:selector ];
-        
         CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
         CFAbsoluteTime total = ( end - start );
-        
         MLOG( @"method ran in %f s", total );
     }
-    
 }
-
-
-/*
- ====================
- floor
- ====================
--( DungeonFloor * ) floor {
-    return floor;
-}
- */
-
-/*
- ====================
- setFloor: f
- ====================
--( void ) setFloor: (DungeonFloor *) f {
-    floor = f;
-}
- */
-
 
 @end
