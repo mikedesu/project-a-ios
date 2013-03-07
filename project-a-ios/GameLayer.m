@@ -150,7 +150,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.01
+#define STEP_SPEED              1
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -168,6 +168,48 @@ unsigned get_memory_mb(void) {
         // draw the screen (kind of)
         //[ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
         //[ GameRenderer spawnRandomItemAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1] ];
+        
+        /*
+        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1 ];
+         [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1 ];
+        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1 ];
+        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1 ];
+        */
+        
+        // spawn a short sword
+        /*
+        [ GameRenderer spawnEntityAtRandomLocation:[Weapons bastardSword:0] onFloor:[dungeon objectAtIndex:0]];
+        [ GameRenderer spawnEntityAtRandomLocation:[Weapons bastardSword:10] onFloor:[dungeon objectAtIndex:0]];
+        */
+        
+        //[ GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: 0] onFloor:[dungeon objectAtIndex:0]];
+        
+        
+        // generate and scatter some treasure
+        for ( int i = 0; i < [dungeon count]; i++ ) {
+            NSInteger treasureCount = [Dice roll:6] + 1;
+            for ( int j = 0; j < treasureCount; j++ ) {
+                NSInteger roll = [Dice roll:2];
+                if ( roll == 1 ) {
+                    [ GameRenderer spawnEntityAtRandomLocation:[Weapons shortSword: i] onFloor:[dungeon objectAtIndex:i]];
+                }
+                else if ( roll == 2 ) {
+                    [ GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: i] onFloor:[dungeon objectAtIndex:i]];
+                }
+            }
+        }
+        
+        
+        // spawn our enemies beforehand
+        for ( int i = 0; i < [dungeon count]; i++ ) {
+            MLOG(@"i=%d", i);
+            NSInteger numMonsters = [Dice roll: 10] + 1;
+            for ( int j = 0; j < numMonsters; j++ ) {
+                //MLOG(@"i=%d j=%d", i, j);
+                [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:i] withPC:pcEntity withChanceDie: 1 ];
+            }
+        }
+        
         
         [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
         
@@ -431,6 +473,7 @@ unsigned get_memory_mb(void) {
             // prioritize offense
             if ( monsterNear ) {
                 [ self moveEntity:pcEntity toPosition:nearest ];
+                pcEntity.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
             }
             
             // prioritize healing
@@ -464,8 +507,16 @@ unsigned get_memory_mb(void) {
         
         else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SIMPLE )
         {
-            BOOL hasItem = pcEntity.inventoryArray.count > 0;
+            BOOL hasItem = NO;
             BOOL isBottomFloor = floorNumber == dungeon.count - 1;
+            
+            for ( Entity *e in pcEntity.inventoryArray ) {
+                if ( e.itemType == E_ITEM_T_BOOK ) {
+                    MLOG(@"gotTheItem");
+                    hasItem = YES;
+                    break;
+                }
+            }
             
             CGPoint nearest;
             
@@ -480,7 +531,7 @@ unsigned get_memory_mb(void) {
                     if ( t.contents.count > 0 ) {
                         for ( Entity *e in t.contents ) {
                             // just for the book of all knowing
-                            if ( e.entityType == ENTITY_T_ITEM ) {
+                            if ( e.itemType == E_ITEM_T_BOOK ) {
                                 itemPoint = t.position;
                                 break;
                             }
@@ -515,7 +566,7 @@ unsigned get_memory_mb(void) {
                 //MLOG(@"");
                 if ( [[t contents] count] > 0 ) {
                     Entity *e = [t.contents objectAtIndex:0];
-                    MLOG(@"e.name = %@", e.name);
+                    //MLOG(@"e.name = %@", e.name);
                     nearest = surroundingPoints[i];
                     monsterNear = YES;
                     break;
@@ -526,7 +577,7 @@ unsigned get_memory_mb(void) {
             // prioritize offense
             if ( monsterNear ) {
                 [ self moveEntity:pcEntity toPosition:nearest ];
-            }
+             }
             
             // prioritize healing
             else if ( pcEntity.hp < pcEntity.maxhp ) {
@@ -557,14 +608,24 @@ unsigned get_memory_mb(void) {
             
             //MLOG(@"nearest: (%.0f,%.0f)", nearest.x, nearest.y);
             if ( ccpFuzzyEqual(nearest, pcEntity.positionOnMap, 0) ) {
+                MLOG(@"switching to TEMP_RANDOM");
                 pcEntity.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_TEMP_RANDOM;
                 moveTolerance = 0;
             }
             else {
-                [ self moveEntity: pcEntity toPosition: nearest ];
-            }
             
+                if ( monsterNear ) {
+                    [ self moveEntity:pcEntity toPosition:nearest ];
+                }
+                else if ( pcEntity.hp < pcEntity.maxhp ) {
+                    pcEntity.hp++;
+                    [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+                }
+                else {
+                    [ self moveEntity: pcEntity toPosition: nearest ];
+                }
         
+            }
             
             
             // step game logic
@@ -686,11 +747,43 @@ unsigned get_memory_mb(void) {
             if ( [[ t contents] count] > 0 ) {
                 // display entity info
                 Entity *e = [[ t contents ] objectAtIndex: 0];
-                [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Lv: %d  Name: %@\nKills: %d\nLine3\nLine4\n",
-                                            e.level,
-                                            e.name,
-                                            e.totalKills
-                                            ]];
+                NSString *str = @"";
+                if ( e.entityType == ENTITY_T_NPC || e.entityType == ENTITY_T_PC ) {
+                    str = [ NSString stringWithFormat: @"Lv: %d  Name: %@\nHP: %d/%d  Kills: %d\n",
+                           e.level,
+                           e.name,
+                           e.hp,
+                           e.maxhp,
+                           e.totalKills
+                           ];
+                }
+                else if ( e.entityType == ENTITY_T_ITEM ) {
+                    
+                    if ( e.itemType == E_ITEM_T_WEAPON ) {
+                        str = [ NSString stringWithFormat: @"Item Name: %@\nType: %@\nDamage: 1d%d+%d\nDurability: %d/%d\n",
+                               e.name,
+                               @"Weapon",
+                               e.damageRollBase, e.damageBonus,
+                               e.durability,
+                               e.totalDurability
+                               ];
+                    }
+                    
+                    else if ( e.itemType == E_ITEM_T_ARMOR ) {
+                        str = [ NSString stringWithFormat: @"Item Name: %@\nType: %@\nAC: %d\nDurability: %d/%d\n",
+                               e.name,
+                               @"Armor",
+                               e.ac,
+                               e.durability,
+                               e.totalDurability
+                               ];
+                    }
+                    
+                    
+                }
+                
+                [entityInfoHUD.label setString: str ];
+                
             }
             else {
                 // empty tile contents
@@ -959,11 +1052,6 @@ unsigned get_memory_mb(void) {
  */
 -( void ) updatePlayerHUDLabel {
     
-    static BOOL gotItem = FALSE;
-    if ( [[pcEntity inventoryArray] count] > 0 && !gotItem ) {
-        [ pcEntity setName: [NSString stringWithFormat:@"%@ the Great", pcEntity.name]];
-        gotItem = TRUE;
-    }
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
                                    [ NSString stringWithFormat: @"%@ - %@  T:%d", pcEntity.name,
                                     
@@ -991,7 +1079,7 @@ unsigned get_memory_mb(void) {
                                     floorNumber,
                                     pcEntity.hp,
                                     pcEntity.maxhp,
-                                    pcEntity.ac,
+                                    pcEntity.totalac,
                                     pcEntity.level,
                                     pcEntity.xp]
                                    ]];
@@ -2353,7 +2441,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     [ self initializeTiles ];
     
-    NSUInteger numberOfFloors = 1000;
+    NSUInteger numberOfFloors = 100;
     
     dungeon = [[ NSMutableArray alloc ] init ];
     for ( int i = 0; i < numberOfFloors; i++ ) {
@@ -2655,7 +2743,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.maxhp = [Dice roll:12] + conMod;
     hero.hp = hero.maxhp;
     
-    hero.ac = 20;
+    hero.ac = 10;
     
     pcEntity = hero;
     //[ Entity drawTextureForEntity: hero ];
@@ -2704,7 +2792,7 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( void ) haveAllEntitiesActOnFloor:(DungeonFloor *) floor {
     for ( int i = 0; i < [[floor entityArray] count]; i++ ) {
         Entity *e = [[floor entityArray] objectAtIndex: i];
-        if ( e.entityType != ENTITY_T_PC ){
+        if ( e.entityType != ENTITY_T_PC && e.isAlive ){
             [ e step ];
             [ self handleEntityStep: e ];
         }
@@ -2736,16 +2824,23 @@ NSUInteger getMagicY( NSUInteger y ) {
  
         // spawn a new monster on the current floor
        // [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1000 ];
-        
         Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
-        if ( floorNumber == 0 &&
-            tile.tileType == TILE_FLOOR_UPSTAIRS &&
-            [[pcEntity inventoryArray] count] > 0 ) {
-         
+        
+        // check if we've obtained the Book of All-Knowing
+        BOOL hasTheBook = NO;
+        for(Entity*e in pcEntity.inventoryArray){if(e.itemType==E_ITEM_T_BOOK&&[e.name isEqualToString:@"Book of All-Knowing"]){hasTheBook=YES;break;}}
+        
+        // check if we've won
+        if ( floorNumber == 0 &&    tile.tileType == TILE_FLOOR_UPSTAIRS &&     hasTheBook ) {
             [ self addMessage:[NSString stringWithFormat: @"You win!\nYou killed %d monsters\n", pcEntity.totalKills ] ];
             gameLogicIsOn = NO;
             autostepGameLogic = NO;
             [ self unscheduleStepAction ];
+            
+            for ( int i = 0; i < dLog.count; i++ ) {
+                MLOG(@"%d. %@", i, [dLog objectAtIndex:i]);
+            }
+            
             
         }
         
@@ -3008,6 +3103,10 @@ NSUInteger getMagicY( NSUInteger y ) {
                     autostepGameLogic = NO;
                     gameState = GAMESTATE_T_GAME_PC_DEAD;
                     [ self unscheduleStepAction ];
+                    
+                    for ( int i = 0; i < dLog.count; i++ ) {
+                        MLOG(@"%d. %@", i, [dLog objectAtIndex:i]);
+                    }
                 }
                 
             }
@@ -3045,10 +3144,61 @@ NSUInteger getMagicY( NSUInteger y ) {
             Tile *itemTile = [ self getTileForCGPoint:item.positionOnMap ];
             if ( itemTile != nil ) {
                 
-                //MLOG( @"%@ picks up a %@", entity.name, item.name );
-                [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                if ( item.itemType == E_ITEM_T_WEAPON ) {
+                    // equip the weapon
+                    if ( entity.equippedArmsLeft == nil ) {
+                        entity.equippedArmsLeft = item;
+                        [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                    } else {
+                        if ( entity.equippedArmsLeft.damageRollBase < item.damageRollBase ||
+                             entity.equippedArmsLeft.damageBonus < item.damageBonus ) {
+                            [[ entity inventoryArray ] addObject: entity.equippedArmsLeft ];
+                            // entity puts his weapon into his inventory
+                            entity.equippedArmsLeft = item;
+                            [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                        }
+                        // else - we don't equip the new item, just store it
+                        else {
+                            [[entity inventoryArray] addObject:item];
+                            [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                        }
+                    }
+            
+                }
                 
-                [[ entity inventoryArray ] addObject: item ];
+                else if ( item.itemType == E_ITEM_T_ARMOR ) {
+                    // equip the weapon
+                    if ( entity.equippedArmorChest == nil ) {
+                        entity.equippedArmorChest = item;
+                        [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                        MLOG(@"ac=%d", [pcEntity totalac]);
+                    } else {
+                        
+                        if ( entity.equippedArmorChest.ac < item.ac ) {
+                        
+                            [[ entity inventoryArray ] addObject: entity.equippedArmorChest ];
+                            // entity puts his weapon into his inventory
+                            entity.equippedArmorChest = item;
+                            [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                            MLOG(@"ac=%d", [pcEntity totalac]);
+                        }
+                        
+                        // else - we don't equip the new item, just store it
+                        else {
+                            [[entity inventoryArray] addObject:item];
+                            [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                        }
+                    }
+        
+                }
+                
+                
+                else {
+                    [[ entity inventoryArray ] addObject: item ];
+                    [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                }
+                
+                
                 // remove the item from our entityArray and from it's tile's contents
                 [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
                 [[ itemTile contents ] removeObject: item];

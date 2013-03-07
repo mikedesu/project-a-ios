@@ -7,5 +7,7 @@
 #import "GameConfig.h"
 @interface Items : NSObject { }
 +(Entity *) randomItem;
+
++(Entity *) shortSword;
 +(Entity *) bookOfAllKnowing;
 @end

@@ -23,22 +23,13 @@
 }
 
 
-+( Entity * ) shortSword {
-    Entity *e = [[Entity alloc] init];
-    e.entityType = ENTITY_T_ITEM;
-    e.isPC = NO;
-    [e.name setString: @"Short Sword" ];
-    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
-    return e;
-}
-
 
 +( Entity * ) bookOfAllKnowing {
     Entity *e = [[Entity alloc] init];
     e.entityType = ENTITY_T_ITEM;
     e.isPC = NO;
     [e.name setString: @"Book of All-Knowing" ];
+    e.itemType = E_ITEM_T_BOOK;
     e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
     e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     return e;

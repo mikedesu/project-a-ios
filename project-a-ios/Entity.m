@@ -37,9 +37,19 @@
 
 @synthesize money;
 
+@synthesize itemType;
+@synthesize damageBonus;
+@synthesize damageRollBase;
+@synthesize weight;
+@synthesize durability;
+@synthesize totalDurability;
+
 @synthesize totalKills;
 
 @synthesize inventoryArray;
+@synthesize equippedArmsLeft;
+@synthesize equippedArmsRight;
+@synthesize equippedArmorChest;
 
 @synthesize pathFindingAlgorithm;
 @synthesize itemPickupAlgorithm;
@@ -57,6 +67,7 @@
  */
 -( id ) init {
     if ( ( self = [super init] ) ) {
+        //MLOG(@"init");
         isPC = NO;
         isAlive = YES;
         positionOnMap.x = 0;
@@ -68,6 +79,13 @@
         entityType = ENTITY_T_VOID;
         
         totalKills = 0;
+        
+        itemType = E_ITEM_T_NONE;
+        damageRollBase = 4;
+        damageBonus = 0;
+        weight = 0;
+        durability = 0;
+        totalDurability = 0;
         
         /*
          stats.strength = 8;
@@ -111,6 +129,7 @@
             NSInteger conMod = [ GameRenderer modifierForNumber: constitution ];
             maxhp = [Dice roll:hitDie] + conMod;
             hp = maxhp;
+            //MLOG(@"conMod = %d,  maxhp = %d", conMod, maxhp);
         }
         
         ac = 10; // the higher the better
@@ -118,11 +137,16 @@
         money = 0;
         
         inventoryArray = [ [ NSMutableArray alloc ] init ];
+        equippedArmsLeft = nil;
+        equippedArmsRight = nil;
+        equippedArmorChest = nil;
         
         pathTaken = [ [ NSMutableArray alloc ] init ];
         
         pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
         itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+        
+        //MLOG(@"end init");
     }
     return self;
 }
@@ -231,7 +255,15 @@
  */
 -( NSInteger ) damageRoll {
     //return rollDiceOnce(6) + self.attackBonus;
-    return [Dice roll:6] + self.attackBonus;
+    NSInteger roll = 0;
+    if ( equippedArmsLeft == nil && equippedArmsRight == nil ) {
+        roll = [Dice roll: damageRollBase] + self.attackBonus;
+    }
+    else {
+        // weapon in left for now
+        roll = [ Dice roll: equippedArmsLeft.damageRollBase ] + self.attackBonus;
+    }
+    return roll;
 }
 
 
@@ -244,7 +276,12 @@
  */
 -( NSInteger ) totalac {
     NSInteger dexterityBonus = [ GameRenderer modifierForNumber: dexterity ];
-    return ac + dexterityBonus;
+    NSInteger armorBonus = 0;
+    if ( equippedArmorChest != nil ) {
+        armorBonus = equippedArmorChest.ac;
+    }
+    NSInteger total = ac + dexterityBonus + armorBonus;
+    return total ;
 }
 
 
@@ -259,6 +296,9 @@
 -( NSInteger ) movement {
     return 1;
 }
+
+
+
 
 
 

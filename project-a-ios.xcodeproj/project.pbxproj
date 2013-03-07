@@ -134,6 +134,8 @@
 		27506B7816D7FF0200245F72 /* CCMutableTexture2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		27506B7B16D801FF00245F72 /* AsyncObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7A16D801FE00245F72 /* AsyncObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2767E0CB16E83FA500013CBE /* Items.m in Sources */ = {isa = PBXBuildFile; fileRef = 2767E0CA16E83FA500013CBE /* Items.m */; };
+		2767E0CE16E8596900013CBE /* Weapons.m in Sources */ = {isa = PBXBuildFile; fileRef = 2767E0CD16E8596900013CBE /* Weapons.m */; };
+		2767E0D116E85F1900013CBE /* Armor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2767E0D016E85F1900013CBE /* Armor.m */; };
 		2773F28F16C8447D001C3E83 /* Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F28E16C8447D001C3E83 /* Entity.m */; };
 		2773F29216C85469001C3E83 /* EditorHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29116C85469001C3E83 /* EditorHUD.m */; };
 		2773F29516C949C4001C3E83 /* PlayerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29416C949C4001C3E83 /* PlayerHUD.m */; };
@@ -414,6 +416,10 @@
 		27506B7A16D801FE00245F72 /* AsyncObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncObject.m; sourceTree = "<group>"; };
 		2767E0C916E83FA500013CBE /* Items.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Items.h; sourceTree = "<group>"; };
 		2767E0CA16E83FA500013CBE /* Items.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Items.m; sourceTree = "<group>"; };
+		2767E0CC16E8596900013CBE /* Weapons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Weapons.h; sourceTree = "<group>"; };
+		2767E0CD16E8596900013CBE /* Weapons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Weapons.m; sourceTree = "<group>"; };
+		2767E0CF16E85F1900013CBE /* Armor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Armor.h; sourceTree = "<group>"; };
+		2767E0D016E85F1900013CBE /* Armor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Armor.m; sourceTree = "<group>"; };
 		2773F28D16C8447D001C3E83 /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		2773F28E16C8447D001C3E83 /* Entity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entity.m; sourceTree = "<group>"; };
 		2773F29016C85469001C3E83 /* EditorHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorHUD.h; sourceTree = "<group>"; };
@@ -500,6 +506,8 @@
 				272EF64D16C5695F005DF231 /* AppDelegate.m */,
 				27506B7916D801FE00245F72 /* AsyncObject.h */,
 				27506B7A16D801FE00245F72 /* AsyncObject.m */,
+				2767E0CF16E85F1900013CBE /* Armor.h */,
+				2767E0D016E85F1900013CBE /* Armor.m */,
 				27506B7616D7FF0200245F72 /* CCMutableTexture2D.h */,
 				27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */,
 				27C4144E16C7D32400BE09F9 /* Colors.h */,
@@ -533,6 +541,8 @@
 				2773F29716C94DA3001C3E83 /* PlayerMenu.m */,
 				27C4145316C804E300BE09F9 /* Tile.h */,
 				27C4145416C804E300BE09F9 /* Tile.m */,
+				2767E0CC16E8596900013CBE /* Weapons.h */,
+				2767E0CD16E8596900013CBE /* Weapons.m */,
 				272EF4DC16C5695D005DF231 /* Resources */,
 				272EF4F416C5695D005DF231 /* libs */,
 				272EF64816C5695F005DF231 /* Supporting Files */,
@@ -1089,6 +1099,8 @@
 				27DCE96016E2EA5000109F88 /* Dice.m in Sources */,
 				27DCE96316E2FB3900109F88 /* EntityInfoHUD.m in Sources */,
 				2767E0CB16E83FA500013CBE /* Items.m in Sources */,
+				2767E0CE16E8596900013CBE /* Weapons.m in Sources */,
+				2767E0D116E85F1900013CBE /* Armor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

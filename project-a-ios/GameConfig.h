@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "CCMutableTexture2D.h"
+
+#import "Armor.h"
 #import "Colors.h"
 #import "Dice.h"
 #import "Dungeon.h"
@@ -22,6 +24,7 @@
 #import "PlayerHUD.h"
 #import "PlayerMenu.h"
 #import "Tile.h"
+#import "Weapons.h"
 
 
 typedef struct {

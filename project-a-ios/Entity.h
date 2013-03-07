@@ -11,6 +11,18 @@ typedef enum {
     ENTITY_T_ITEM
 } EntityTypes_t;
 
+
+// Items
+typedef enum {
+    E_ITEM_T_NONE,
+    E_ITEM_T_WEAPON,
+    E_ITEM_T_ARMOR,
+    E_ITEM_T_POTION,
+    E_ITEM_T_BOOK,
+} EntityItemTypes_t;
+
+
+
 typedef struct {
     NSUInteger strength;
     NSUInteger dexterity;
@@ -92,13 +104,28 @@ typedef enum {
     
     NSUInteger money;
     
+    EntityItemTypes_t itemType;
+    
+    NSInteger damageRollBase; // x, where 1dx = damage roll
+    NSInteger damageBonus; // weapon roll bonus, if any
+    
+    NSInteger weight;
+    NSInteger durability; // mainly for items
+    NSInteger totalDurability; // mainly for items
+    
     NSInteger totalKills;
     
     EntityPathFindingAlgorithm_t pathFindingAlgorithm;
     
     EntityItemPickupAlgorithm_t itemPickupAlgorithm;
     
+    
+    // PC/NPC inventory/equipment
     NSMutableArray *inventoryArray;
+    Entity *equippedArmsLeft;
+    Entity *equippedArmsRight;
+    Entity *equippedArmorChest;
+    
     
     NSMutableArray *pathTaken;
     
@@ -135,11 +162,23 @@ typedef enum {
 @property (atomic, assign) NSInteger maxhp;
 @property (atomic, assign) NSInteger ac;
 
+@property (atomic, assign) EntityItemTypes_t itemType;
+@property (atomic, assign) NSInteger damageRollBase;
+@property (atomic, assign) NSInteger damageBonus;
+@property (atomic, assign) NSInteger weight;
+@property (atomic, assign) NSInteger durability;
+@property (atomic, assign) NSInteger totalDurability;
+
 @property (atomic, assign) EntityPathFindingAlgorithm_t pathFindingAlgorithm;
 @property (atomic, assign) EntityItemPickupAlgorithm_t itemPickupAlgorithm;
 
 @property (atomic, assign) NSUInteger money;
 @property (atomic) NSMutableArray *inventoryArray;
+
+@property (atomic) Entity *equippedArmsLeft;
+@property (atomic) Entity *equippedArmsRight;
+@property (atomic) Entity *equippedArmorChest;
+
 
 @property (atomic) NSMutableArray *pathTaken;
 

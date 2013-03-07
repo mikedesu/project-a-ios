@@ -732,6 +732,7 @@ NSInteger getMod( NSInteger n ) {
  ====================
  */
 +( Entity * ) randomMonster {
+    MLOG(@"randomMonster");
     Entity *e = [[Entity alloc] init];
     
     NSMutableString *randomString = [ NSMutableString stringWithString:@"" ];
@@ -754,7 +755,7 @@ NSInteger getMod( NSInteger n ) {
  ====================
  */
 +( Entity * ) randomMonsterForFloor: (DungeonFloor *) floor {
-    
+    //MLOG(@"randomMonsterForFloor");
     // calc a level in range of floorNumber
     //NSUInteger randomLevel = floor.floorNumber;
     NSUInteger randomLevel = [Dice roll: floor.floorNumber];
@@ -772,6 +773,8 @@ NSInteger getMod( NSInteger n ) {
     
     
     Entity *e = [[Entity alloc] initWithLevel: calculatedLevel withHitDie:randomHitDie ];
+    
+    //MLOG(@"continuing to spawn...");
     
     e.entityType = ENTITY_T_NPC;
     e.isPC = NO;
@@ -795,7 +798,7 @@ NSInteger getMod( NSInteger n ) {
     e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
     e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
-    MLOG(@"spawned %@ with level %u", e.name, calculatedLevel );
+    //MLOG(@"spawned %@ with level %u", e.name, calculatedLevel );
     return e;
 }
 
@@ -816,11 +819,12 @@ NSInteger getMod( NSInteger n ) {
  ====================
  */
 +( void ) spawnEntityAtRandomLocation: (Entity *) entity onFloor: (DungeonFloor *) floor {
-    
+    //MLOG(@"spawnEntityAtRandomLocation");
     BOOL locationIsAcceptable = NO;
     Tile *spawnTile = nil;
     
     while ( ! locationIsAcceptable ) {
+        //MLOG(@"Location Is Unacceptable");
         
         //NSUInteger diceroll = rollDiceOnce( [[floor tileDataArray] count] ) - 1;
         NSUInteger diceroll = [Dice roll: [[floor tileDataArray] count]] - 1;
@@ -870,7 +874,7 @@ NSInteger getMod( NSInteger n ) {
  */
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc {
     
-    [ self spawnRandomMonsterAtRandomLocationOnFloor:floor withPC:pc withChanceDie: 100 ];
+    [ self spawnRandomMonsterAtRandomLocationOnFloor:floor withPC:pc withChanceDie: 1 ];
     
     /*
     NSUInteger spawnChancePercent = 1;
@@ -889,7 +893,7 @@ NSInteger getMod( NSInteger n ) {
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc withChanceDie: (NSInteger) chanceDie {
     
     NSUInteger spawnChancePercent = 1;
-    NSUInteger diceroll = [Dice roll:chanceDie];
+    NSUInteger diceroll = chanceDie == 1 ? 1 : [Dice roll:chanceDie];
     
     if ( diceroll <= spawnChancePercent ) {
         
