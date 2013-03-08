@@ -2756,7 +2756,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     playerMenuIsVisible = NO;
     [ self initPlayerMenu ];
-    //[ self addPlayerMenu: playerMenu ];
+    [ self addPlayerMenu: playerMenu ];
     
     entityInfoHUDIsVisible = NO;
     [ self initEntityInfoHUD ];

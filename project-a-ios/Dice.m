@@ -10,9 +10,26 @@
 #import "GameConfig.h"
 
 
+
+#include <stdint.h>
+uint32_t xor128(void) {
+    static uint32_t x = 123456789;
+    static uint32_t y = 362436069;
+    static uint32_t z = 521288629;
+    static uint32_t w = 88675123;
+    uint32_t t;
+    
+    t = x ^ (x << 11);
+    x = y; y = z; z = w;
+    return w = w ^ (w >> 19) ^ (t ^ (t >> 8));
+}
+
+
 @implementation Dice
 
+
 static BOOL isSeeded = NO;
+
 
 +( NSUInteger ) roll: ( NSUInteger ) sides {
     if ( ! isSeeded ) {
@@ -24,6 +41,8 @@ static BOOL isSeeded = NO;
     
     @try {
         roll = arc4random_uniform(sides) + 1;
+        //roll = (NSUInteger) xor128() % sides + 1;  // simple 'repeatable' random
+        //MLOG(@"roll=%d", roll);
     }
     @catch (NSException *e) {
         MLOG(@"DiceRollException: %@", e);
