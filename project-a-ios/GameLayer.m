@@ -150,8 +150,8 @@ unsigned get_memory_mb(void) {
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
-        autostepGameLogic = YES;
-        //autostepGameLogic = NO;
+        //autostepGameLogic = YES;
+        autostepGameLogic = NO;
         
         // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
         autostepGameLogic = autostepGameLogic && gameLogicIsOn;
@@ -663,8 +663,8 @@ unsigned get_memory_mb(void) {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:150 height:100 ];
-    playerMenu.position = ccp(  size.width - (playerMenu.contentSize.width) , size.height - (playerMenu.contentSize.height) );
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:50 height:100 ];
+    playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
 
@@ -709,8 +709,8 @@ unsigned get_memory_mb(void) {
  */
 -( void ) initEntityInfoHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
-    entityInfoHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - (entityInfoHUD.contentSize.height) );
+    entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:black_alpha(150) width:200 height:100 ];
+    entityInfoHUD.position = ccp(  0 , size.height - playerMenu.contentSize.height - entityInfoHUD.contentSize.height );
     entityInfoHUD.label.fontSize = 12;
     [ self updateEntityInfoHUDLabel ];
 }
@@ -841,11 +841,11 @@ unsigned get_memory_mb(void) {
  ====================
  */
 -( void ) initMonitor {
-    //CGSize size = [[CCDirector sharedDirector] winSize];
+    CGSize size = [[CCDirector sharedDirector] winSize];
     monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
     //monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
     monitor.label.fontSize = 12;
-    monitor.position = ccp(  0 , 0 + playerHUD.contentSize.height + monitor.contentSize.height );
+    monitor.position = ccp(  size.width - monitor.contentSize.width , 0 + playerHUD.contentSize.height + monitor.contentSize.height );
     [ self updateMonitorLabel ];
 }
 
@@ -936,7 +936,7 @@ unsigned get_memory_mb(void) {
 -( void ) initEditorHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
     editorHUD = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:80 ];
-    editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - 5 );
+    editorHUD.position = ccp(  size.width - editorHUD.contentSize.width , size.height - (editorHUD.contentSize.height) - 5 );
     editorHUD.label.fontSize = 12;
     [ self updateEditorHUDLabel ];
 }
@@ -1097,7 +1097,7 @@ unsigned get_memory_mb(void) {
 -( void ) initGearHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
     gearHUD = [[ PlayerHUD alloc ] initWithColor:black_alpha(150) width: 100 height:100 ];
-    gearHUD.position = ccp(  size.width - gearHUD.contentSize.width , playerHUD.contentSize.height );
+    gearHUD.position = ccp(  size.width - gearHUD.contentSize.width , playerHUD.contentSize.height + monitor.contentSize.height );
     [ self updateGearHUDLabel ];
 }
 
