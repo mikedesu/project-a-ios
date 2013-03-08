@@ -401,6 +401,7 @@ NSInteger getMod( NSInteger n ) {
         
         // roll a d4
         //roll = rollDiceOnce(4);
+        /*
         roll = [Dice roll:4];
         
         // determine tiletype based on roll
@@ -413,6 +414,9 @@ NSInteger getMod( NSInteger n ) {
         } else if ( roll == 4) {
             baseTileType = TILE_FLOOR_STONE;
         }
+         */
+        
+        baseTileType = TILE_FLOOR_STONE;
         
         
         CGPoint point = ccp( x, y );
@@ -481,6 +485,7 @@ NSInteger getMod( NSInteger n ) {
                 if ( roll2 <= 5 ) {
                     // change the tileType
                     //roll2 = rollDiceOnce(4);
+                    /*
                     roll2 = [Dice roll:4];
                     
                     if ( roll2 == 1 ) {
@@ -492,6 +497,9 @@ NSInteger getMod( NSInteger n ) {
                     } else if ( roll2 == 4 ) {
                         tileType = TILE_FLOOR_STONE;
                     }
+                     */
+                    
+                    tileType = TILE_FLOOR_STONE;
                 }
                     
                 [ self setTileAtPosition:point onFloor:floor toType:tileType ];

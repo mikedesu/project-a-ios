@@ -146,7 +146,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.2
+#define STEP_SPEED              0.01
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -514,7 +514,7 @@ unsigned get_memory_mb(void) {
             
             for ( Entity *e in pcEntity.inventoryArray ) {
                 if ( e.itemType == E_ITEM_T_BOOK ) {
-                    MLOG(@"gotTheItem");
+                    //MLOG(@"gotTheItem");
                     hasItem = YES;
                     break;
                 }
@@ -711,6 +711,7 @@ unsigned get_memory_mb(void) {
     CGSize size = [[CCDirector sharedDirector] winSize];
     entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
     entityInfoHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - (entityInfoHUD.contentSize.height) );
+    entityInfoHUD.label.fontSize = 12;
     [ self updateEntityInfoHUDLabel ];
 }
 
@@ -751,11 +752,12 @@ unsigned get_memory_mb(void) {
                 Entity *e = [[ t contents ] objectAtIndex: 0];
                 NSString *str = @"";
                 if ( e.entityType == ENTITY_T_NPC || e.entityType == ENTITY_T_PC ) {
-                    str = [ NSString stringWithFormat: @"Lv: %d  Name: %@\nHP: %d/%d  Kills: %d\n",
+                    str = [ NSString stringWithFormat: @"Lv: %d  Name: %@\nHP: %d/%d  AC: %d\nKills: %d\n",
                            e.level,
                            e.name,
                            e.hp,
                            e.maxhp,
+                           e.ac,
                            e.totalKills
                            ];
                 }
@@ -842,6 +844,7 @@ unsigned get_memory_mb(void) {
     //CGSize size = [[CCDirector sharedDirector] winSize];
     monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
     //monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
+    monitor.label.fontSize = 12;
     monitor.position = ccp(  0 , 0 + playerHUD.contentSize.height + monitor.contentSize.height );
     [ self updateMonitorLabel ];
 }
@@ -934,6 +937,7 @@ unsigned get_memory_mb(void) {
     CGSize size = [[CCDirector sharedDirector] winSize];
     editorHUD = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:80 ];
     editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - 5 );
+    editorHUD.label.fontSize = 12;
     [ self updateEditorHUDLabel ];
 }
 
@@ -1047,7 +1051,7 @@ unsigned get_memory_mb(void) {
  ====================
  */
 -( void ) updatePlayerHUDLabel {
-    
+    playerHUD.label.fontSize = 12;
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
                                    [ NSString stringWithFormat: @"%@ - %@  T:%d", pcEntity.name,
                                     
@@ -3096,7 +3100,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 if (target.hp <= 0 ) {
                     // increase entity xp
-                    [ e gainXP: target.level ];
+                    [ e gainXP: target.level*2 + e.level ];
                     
                     pcEntity.totalKills++;
                     // remove target from t.contents
@@ -3126,7 +3130,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 if (target.hp <= 0 ) {
                     // increase entity xp
-                    [ e gainXP: target.level ];
+                    [ e gainXP: target.level*2 + e.level ];
                     e.totalKills++;
                     
                     // remove target from t.contents

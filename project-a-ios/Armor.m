@@ -14,7 +14,11 @@
 
 +( Entity * ) leatherArmor: (NSInteger) bonus {
     Entity *e = [[Entity alloc] init];
-    [e.name setString: @"Leather Armor" ];
+    if ( bonus == 0 )
+        [e.name setString: @"Leather Armor" ];
+    else
+        [e.name setString: [NSString stringWithFormat:@"Leather Armor +%d", bonus ]];
+    
     
     e.entityType = ENTITY_T_ITEM;
     e.itemType = E_ITEM_T_ARMOR;

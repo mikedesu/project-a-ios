@@ -229,7 +229,12 @@
     
     // any items / equipped gear would be counted here
     
-    return strengthBonus;
+    NSInteger gearBonus = 0;
+    
+    if ( self.equippedArmsLeft != nil )
+        gearBonus += self.equippedArmsLeft.damageBonus;
+    
+    return strengthBonus + gearBonus;
 }
 
 
@@ -261,7 +266,8 @@
     }
     else {
         // weapon in left for now
-        roll = [ Dice roll: equippedArmsLeft.damageRollBase ] + self.attackBonus;
+        if ( equippedArmsLeft != nil )
+            roll = [ Dice roll: equippedArmsLeft.damageRollBase ] + self.attackBonus;
     }
     return roll;
 }
@@ -277,9 +283,8 @@
 -( NSInteger ) totalac {
     NSInteger dexterityBonus = [ GameRenderer modifierForNumber: dexterity ];
     NSInteger armorBonus = 0;
-    if ( equippedArmorChest != nil ) {
+    if ( equippedArmorChest != nil )
         armorBonus = equippedArmorChest.ac;
-    }
     NSInteger total = ac + dexterityBonus + armorBonus;
     return total ;
 }
