@@ -656,6 +656,23 @@ unsigned get_memory_mb(void) {
             
         }
     }
+    
+    else if ( [notification.name isEqualToString: @"PlayerMenuTogglePositionNotification" ]) {
+    
+        static BOOL left = YES;
+        
+        CGSize size = [[CCDirector sharedDirector] winSize];
+        if ( left ) {
+            playerMenu.position = ccp( size.width - playerMenu.contentSize.width , size.height - (playerMenu.contentSize.height) );
+            left = NO;
+            
+        } else {
+            playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
+            left = YES;
+        }
+
+    }
+    
     else {
         //MLOG( @"Notification not handled: %@", notification.name );
     }
@@ -2792,6 +2809,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"StepNotification" object:nil];
     
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuCloseNotification" object:nil];
+    
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuTogglePositionNotification" object:nil];
 }
 
 
@@ -2828,7 +2847,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     entityInfoHUDIsVisible = NO;
     [ self initEntityInfoHUD ];
-    [ self addEntityInfoHUD: entityInfoHUD ];
+    //[ self addEntityInfoHUD: entityInfoHUD ];
     
     gearHUDIsVisible = NO;
     [ self initGearHUD ];

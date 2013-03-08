@@ -42,13 +42,31 @@
         
         // move button
         CCMutableTexture2D *texture1 = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
-        [ texture1 fill: gray ];
+        [ texture1 fill: black_alpha(128) ];
+        
+        Color_t shoeColor = blue;
+        
+        for ( int j = 2; j < 14; j++ ) {
+            for ( int i = 0; i < 8; i++ ) {
+                [ texture1 setPixelAt:ccp(2 + i, j) rgba:shoeColor ];
+            }
+        }
+        
+        for ( int j = 9; j < 14; j++ ) {
+            for ( int i = 4; i < 12; i++ ) {
+                [ texture1 setPixelAt:ccp(2 + i, j) rgba:shoeColor ];
+            }
+        }
+        
+        
+        
+        
         [ texture1 apply ];
         
         // attack button
         CCMutableTexture2D *texture2 = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
-        [ texture2 fill: black ];
- 
+        [ texture2 fill: black_alpha(128) ];
+        
         Color_t bladeColor = gray;
         Color_t handleColor = blue;
         
@@ -147,8 +165,22 @@
         
         // step button
         CCMutableTexture2D *texture3 = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
-        [ texture3 fill: blue ];
+        [ texture3 fill: black_alpha(128) ];
+        
+        for ( int i = 4; i < 12; i++ ) {
+            for ( int j = 4; j < 12; j++ ) {
+                [texture3 setPixelAt:ccp( j, i ) rgba:white ];
+            }
+        }
+        
         [ texture3 apply ];
+        
+        // toggle menu position button
+        CCMutableTexture2D *texture4 = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+        [ texture4 fill: green ];
+        [ texture4 apply ];
+        
+        
         
         
         
@@ -157,19 +189,30 @@
         
         //CCMenuItem *menuItemClose = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelClose target:self selector:@selector(menuItemClosePressed) ];
         CCMenuItem *menuItemClose = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture0] selectedSprite:[CCSprite spriteWithTexture:texture0] disabledSprite:[CCSprite spriteWithTexture:texture0] target:self selector:@selector(menuItemClosePressed)];
-        menuItemClose.position = ccp( 0 + menuItemLabelClose.contentSize.width/2, h - (menuItemLabelClose.contentSize.height/2) );
+        menuItemClose.scale = 2;
+        menuItemClose.position = ccp( 0 + menuItemClose.contentSize.width, h - 32 - 5 );
         
         //CCMenuItem *menuItemMove = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelMove target:self selector:@selector(menuItemMovePressed) ];
         CCMenuItem *menuItemMove = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture1] selectedSprite:[CCSprite spriteWithTexture:texture1] disabledSprite:[CCSprite spriteWithTexture:texture1] target:self selector:@selector(menuItemMovePressed)];
-        menuItemMove.position = ccp( 0 + menuItemLabelMove.contentSize.width/2, h - menuItemLabelClose.contentSize.height - (menuItemLabelMove.contentSize.height/2) );
+        menuItemMove.scale = 2;
+        menuItemMove.position = ccp( 0 + menuItemMove.contentSize.width, h - 32-32 - 5*2);
         
         //CCMenuItem *menuItemAttack = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelAttack target:self selector:@selector(menuItemAttackPressed) ];
         CCMenuItem *menuItemAttack = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture2] selectedSprite:[CCSprite spriteWithTexture:texture2] disabledSprite:[CCSprite spriteWithTexture:texture2] target:self selector:@selector(menuItemAttackPressed)];
-        menuItemAttack.position = ccp( 0 + menuItemLabelAttack.contentSize.width/2, h - menuItemLabelClose.contentSize.height - menuItemLabelMove.contentSize.height - (menuItemLabelAttack.contentSize.height/2) );
+        menuItemAttack.scale = 2;
+        menuItemAttack.position = ccp( 0 + menuItemAttack.contentSize.width, h - 32-32-32 - 5*3 );
         
         //CCMenuItem *menuItemStep = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelStep target:self selector:@selector(menuItemStepPressed) ];
         CCMenuItem *menuItemStep = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture3] selectedSprite:[CCSprite spriteWithTexture:texture3] disabledSprite:[CCSprite spriteWithTexture:texture3] target:self selector:@selector(menuItemStepPressed)];
-        menuItemStep.position = ccp( 0 + menuItemLabelStep.contentSize.width/2, h - menuItemLabelClose.contentSize.height - menuItemLabelMove.contentSize.height - (menuItemLabelAttack.contentSize.height) - menuItemLabelStep.contentSize.height/2 );
+        menuItemStep.scale = 2;
+        menuItemStep.position = ccp( 0 + menuItemStep.contentSize.width, h - 32*4 - 5*4 );
+        
+        //CCMenuItem *menuItemStep = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelStep target:self selector:@selector(menuItemStepPressed) ];
+        CCMenuItem *menuItemTogglePosition = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture4] selectedSprite:[CCSprite spriteWithTexture:texture4] disabledSprite:[CCSprite spriteWithTexture:texture4] target:self selector:@selector(menuItemTogglePositionPressed)];
+        menuItemTogglePosition.scale = 2;
+        menuItemTogglePosition.position = ccp( 0 + menuItemStep.contentSize.width, h - 32*5 - 5*5 );
+        
+        
         
         
         
@@ -179,6 +222,7 @@
                                                          menuItemMove,
                                                          menuItemAttack,
                                                          menuItemStep,
+                                                         menuItemTogglePosition,
                                                          nil] ];
         menu.position = ccp( 0, 0 );
         [ self addChild: menu ];
@@ -252,6 +296,11 @@
 -( void ) menuItemStepPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"StepNotification"  object:self];
 }
+
+-( void ) menuItemTogglePositionPressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuTogglePositionNotification"  object:self];
+}
+
 
 
 
