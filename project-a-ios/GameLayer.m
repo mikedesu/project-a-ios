@@ -256,10 +256,10 @@ unsigned get_memory_mb(void) {
         }
         
     } else if ( [[ notification name ] isEqualToString: @"PlayerMenuMoveNotification" ] ) {
-        //MLOG( @"MoveNotification" );
+        MLOG( @"MoveNotification" );
         
         //[ self removePlayerMenu: playerMenu ];
-        gameState = GAMESTATE_T_GAME_PC_SELECTMOVE;
+        //gameState = GAMESTATE_T_GAME_PC_SELECTMOVE;
         
     } else if ( [[ notification name ] isEqualToString: @"PlayerMenuAttackNotification" ] ) {
         //MLOG( @"AttackNotification" );
@@ -2805,12 +2805,12 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( void ) initializeHUDs {
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
-    //[ self addEditorHUD: editorHUD ];
+    [ self addEditorHUD: editorHUD ];
     
     
     monitorIsVisible = NO;
     [ self initMonitor ];
-    //[ self addMonitor: monitor ];
+    [ self addMonitor: monitor ];
     
    
     playerHUDIsVisible = NO;
@@ -2828,11 +2828,11 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     entityInfoHUDIsVisible = NO;
     [ self initEntityInfoHUD ];
-    //[ self addEntityInfoHUD: entityInfoHUD ];
+    [ self addEntityInfoHUD: entityInfoHUD ];
     
     gearHUDIsVisible = NO;
     [ self initGearHUD ];
-    //[ self addGearHUD: gearHUD ];
+    [ self addGearHUD: gearHUD ];
     
 }
 
