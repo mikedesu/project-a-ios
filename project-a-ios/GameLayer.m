@@ -2502,7 +2502,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     [ self initializeTiles ];
     
-    NSUInteger numberOfFloors = 100;
+    NSUInteger numberOfFloors = 20;
     
     dungeon = [[ NSMutableArray alloc ] init ];
     for ( int i = 0; i < numberOfFloors; i++ ) {
