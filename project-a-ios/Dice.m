@@ -24,6 +24,13 @@ uint32_t xor128(void) {
     return w = w ^ (w >> 19) ^ (t ^ (t >> 8));
 }
 
+void xor_srand( uint32_t seed ) {
+    for ( int i = 0; i < seed; i++ ) {
+        uint32_t tmp = xor128();
+        tmp = tmp; // make sure compiler doesn't optimize-away the tmp
+    }
+}
+
 
 @implementation Dice
 
@@ -34,6 +41,7 @@ static BOOL isSeeded = NO;
 +( NSUInteger ) roll: ( NSUInteger ) sides {
     if ( ! isSeeded ) {
         srand( time (NULL )) ;
+        //xor_srand( 301 );
         isSeeded = YES;
     }
     
