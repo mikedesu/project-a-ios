@@ -104,10 +104,6 @@ unsigned get_memory_mb(void) {
             }
         }
         
-        CGPoint enemyStartPos = startTile.position;
-        enemyStartPos.x += 1;
-        Tile *enemyStartTile = [ self getTileForCGPoint: enemyStartPos ];        
-        
         
         // set the hero on the startTile and center the camera
         //[ self setEntity:pcEntity onTile: startTile ];
@@ -201,6 +197,7 @@ unsigned get_memory_mb(void) {
         
         
         // spawn our enemies beforehand
+        /*
         for ( int i = 0; i < [dungeon count]; i++ ) {
             MLOG(@"i=%d", i);
             NSInteger numMonsters = [Dice roll: 10] + 1;
@@ -209,6 +206,7 @@ unsigned get_memory_mb(void) {
                 [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:i] withPC:pcEntity withChanceDie: 1 ];
             }
         }
+         */
         
         
         [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
@@ -403,7 +401,7 @@ unsigned get_memory_mb(void) {
             const NSInteger movesBeforeSwitch = 50;
             
             if ( randomMoves > movesBeforeSwitch ) {
-                MLOG(@"switching to SIMPLE");
+             //   MLOG(@"switching to SIMPLE");
                 randomMoves = 0;
                 pcEntity.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
             }
@@ -463,10 +461,14 @@ unsigned get_memory_mb(void) {
                 //MLOG(@"");
                 if ( [[t contents] count] > 0 ) {
                     Entity *e = [t.contents objectAtIndex:0];
-                    MLOG(@"e.name = %@", e.name);
-                    nearest = surroundingPoints[i];
-                    monsterNear = YES;
-                    break;
+                    if ( e.entityType == ENTITY_T_NPC ||
+                         e.entityType == ENTITY_T_ITEM  // also grab items, why not?
+                        ) {
+                        //MLOG(@"e.name = %@", e.name);
+                        nearest = surroundingPoints[i];
+                        monsterNear = YES;
+                        break;
+                    }
                 }
             }
             
@@ -565,7 +567,7 @@ unsigned get_memory_mb(void) {
                 Tile *t = [self getTileForCGPoint:surroundingPoints[i] forFloor:[dungeon objectAtIndex:floorNumber]];
                 //MLOG(@"");
                 if ( [[t contents] count] > 0 ) {
-                    Entity *e = [t.contents objectAtIndex:0];
+                    //Entity *e = [t.contents objectAtIndex:0];
                     //MLOG(@"e.name = %@", e.name);
                     nearest = surroundingPoints[i];
                     monsterNear = YES;
@@ -598,7 +600,7 @@ unsigned get_memory_mb(void) {
             }
             
             if ( moveTolerance > 10 ) {
-                MLOG(@"switching to TEMP_RANDOM");
+               // MLOG(@"switching to TEMP_RANDOM");
                 pcEntity.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_TEMP_RANDOM;
                 moveTolerance = 0;
             }
@@ -608,7 +610,7 @@ unsigned get_memory_mb(void) {
             
             //MLOG(@"nearest: (%.0f,%.0f)", nearest.x, nearest.y);
             if ( ccpFuzzyEqual(nearest, pcEntity.positionOnMap, 0) ) {
-                MLOG(@"switching to TEMP_RANDOM");
+             //   MLOG(@"switching to TEMP_RANDOM");
                 pcEntity.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_TEMP_RANDOM;
                 moveTolerance = 0;
             }
@@ -673,9 +675,9 @@ unsigned get_memory_mb(void) {
  adds the Player menu to the visible screen
  ====================
  */
--( void ) addPlayerMenu: ( PlayerMenu * ) menu {
+-( void ) addPlayerMenu: ( PlayerMenu * ) _menu {
     if ( ! playerMenuIsVisible ) {
-        [ self addChild: menu ];
+        [ self addChild: _menu ];
         playerMenuIsVisible = YES;
         //[ self addMessage: @"Opened Player Menu" ];
     }
@@ -689,9 +691,9 @@ unsigned get_memory_mb(void) {
  removes the Player menu from the visible screen
  ====================
  */
--( void ) removePlayerMenu: ( PlayerMenu * ) menu {
+-( void ) removePlayerMenu: ( PlayerMenu * ) _menu {
     if ( playerMenuIsVisible ) {
-        [ self removeChild: menu cleanup: NO ];
+        [ self removeChild: _menu cleanup: NO ];
         playerMenuIsVisible = NO;
         //[ self addMessage: @"Closed Player Menu" ];
     }
@@ -721,9 +723,9 @@ unsigned get_memory_mb(void) {
  ====================
  */
 
--( void ) addEntityInfoHUD: (EntityInfoHUD *) entityInfoHUD {
+-( void ) addEntityInfoHUD: (EntityInfoHUD *) _entityInfoHUD {
     if ( ! self->entityInfoHUDIsVisible ) {
-        [ self addChild: entityInfoHUD ];
+        [ self addChild: _entityInfoHUD ];
         entityInfoHUDIsVisible = YES;
     }
 }
@@ -821,9 +823,9 @@ unsigned get_memory_mb(void) {
  ====================
  */
 
--( void ) removeEntityInfoHUD: (EntityInfoHUD *) entityInfoHUD {
+-( void ) removeEntityInfoHUD: (EntityInfoHUD *) _entityInfoHUD {
     if ( self->entityInfoHUDIsVisible ) {
-        [ self removeChild: monitor cleanup: NO ];
+        [ self removeChild: _entityInfoHUD cleanup: NO ];
         entityInfoHUDIsVisible = NO;
     }
 }
@@ -837,7 +839,7 @@ unsigned get_memory_mb(void) {
  ====================
  */
 -( void ) initMonitor {
-    CGSize size = [[CCDirector sharedDirector] winSize];
+    //CGSize size = [[CCDirector sharedDirector] winSize];
     monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
     //monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
     monitor.position = ccp(  0 , 0 + playerHUD.contentSize.height + monitor.contentSize.height );
@@ -850,9 +852,9 @@ unsigned get_memory_mb(void) {
  addMonitor: monitor
  ====================
  */
--(void) addMonitor: (EditorHUD *) monitor {
+-(void) addMonitor: (EditorHUD *) _monitor {
     if ( ! self->monitorIsVisible ) {
-        [ self addChild: monitor ];
+        [ self addChild: _monitor ];
         monitorIsVisible = YES;
     }
 }
@@ -863,9 +865,9 @@ unsigned get_memory_mb(void) {
  removeMonitor: monitor
  ====================
  */
--(void) removeMonitor: (EditorHUD *) monitor {
+-(void) removeMonitor: (EditorHUD *) _monitor {
     if ( self->monitorIsVisible ) {
-        [ self removeChild: monitor cleanup: NO ];
+        [ self removeChild: _monitor cleanup: NO ];
         monitorIsVisible = NO;
     }
 }
@@ -931,13 +933,7 @@ unsigned get_memory_mb(void) {
 -( void ) initEditorHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
     editorHUD = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:80 ];
-    
-    //if ( monitorIsVisible ) {
-    //  editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - (monitor.contentSize.height) - 10 );
-    //}
-    //else {
     editorHUD.position = ccp(  0 , size.height - (editorHUD.contentSize.height) - 5 );
-    //}
     [ self updateEditorHUDLabel ];
 }
 
@@ -975,9 +971,9 @@ unsigned get_memory_mb(void) {
  adds the Editor HUD to the visible screen
  ====================
  */
--( void ) addEditorHUD: ( EditorHUD * ) hud {
+-( void ) addEditorHUD: ( EditorHUD * ) _hud {
     if ( ! editorHUDIsVisible ) {
-        [ self addChild: hud ];
+        [ self addChild: _hud ];
         editorHUDIsVisible = YES;
     }
 }
@@ -990,9 +986,9 @@ unsigned get_memory_mb(void) {
  removes the Editor HUD from the visible screen
  ====================
  */
--( void ) removeEditorHUD: ( EditorHUD * ) hud {
+-( void ) removeEditorHUD: ( EditorHUD * ) _hud {
     if ( editorHUDIsVisible ) {
-        [ self removeChild: hud cleanup: NO ];
+        [ self removeChild: _hud cleanup: NO ];
         editorHUDIsVisible = NO;
     }
 }
@@ -1020,9 +1016,9 @@ unsigned get_memory_mb(void) {
  adds the Player HUD to the visible screen
  ====================
  */
--( void ) addPlayerHUD: ( PlayerHUD * ) hud {
+-( void ) addPlayerHUD: ( PlayerHUD * ) _hud {
     if ( ! playerHUDIsVisible ) {
-        [ self addChild: hud ];
+        [ self addChild: _hud ];
         playerHUDIsVisible = YES;
     }
 }
@@ -1035,9 +1031,9 @@ unsigned get_memory_mb(void) {
  removes the Player HUD from the visible screen
  ====================
  */
--( void ) removePlayerHUD: ( PlayerHUD * ) hud {
+-( void ) removePlayerHUD: ( PlayerHUD * ) _hud {
     if ( playerHUDIsVisible ) {
-        [ self removeChild: hud cleanup: NO ];
+        [ self removeChild: _hud cleanup: NO ];
         playerHUDIsVisible = NO;
     }
 }
@@ -1109,14 +1105,12 @@ unsigned get_memory_mb(void) {
  adds the Gear HUD to the visible screen
  ====================
  */
--( void ) addGearHUD: ( PlayerHUD * ) hud {
+-( void ) addGearHUD: ( PlayerHUD * ) _hud {
     if ( ! gearHUDIsVisible ) {
-        [ self addChild: hud ];
+        [ self addChild: _hud ];
         gearHUDIsVisible = YES;
     }
 }
-
-
 
 
 /*
@@ -1126,9 +1120,9 @@ unsigned get_memory_mb(void) {
  removes the Gear HUD from the visible screen
  ====================
  */
--( void ) removeGearHUD: ( PlayerHUD * ) hud {
+-( void ) removeGearHUD: ( PlayerHUD * ) _hud {
     if ( gearHUDIsVisible ) {
-        [ self removeChild: hud cleanup: NO ];
+        [ self removeChild: _hud cleanup: NO ];
         gearHUDIsVisible = NO;
     }
 }
@@ -1142,9 +1136,14 @@ unsigned get_memory_mb(void) {
  ====================
  */
 -( void ) updateGearHUDLabel {
-    [ [gearHUD label] setString: @"GEARHUD" ];
+    gearHUD.label.fontSize = 10;
+    NSString *str = [NSString stringWithFormat:@"Equipment:\n%@\n%@\n%@\n" ,
+                         pcEntity.equippedArmsLeft.name,
+                         pcEntity.equippedArmorChest.name,
+                         @"none"
+                         ];
+    [ [gearHUD label] setString: str ];
 }
-
 
 
 #pragma mark - Update code
@@ -1672,9 +1671,9 @@ unsigned get_memory_mb(void) {
 }
 
 
--( Tile * ) getTileForCGPoint: ( CGPoint ) p forFloor: (DungeonFloor *) floor {
+-( Tile * ) getTileForCGPoint: ( CGPoint ) p forFloor: (DungeonFloor *) _floor {
     Tile *tile = nil;
-    tile = [[floor tileDataArray] objectAtIndex: p.x + ( p.y * floor.width ) ];
+    tile = [[_floor tileDataArray] objectAtIndex: p.x + ( p.y * _floor.width ) ];
     return tile;
 }
 
@@ -1899,9 +1898,9 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 
 
--( Tile * ) getMapTileFromPoint: (CGPoint) p forFloor: (DungeonFloor *) floor {
+-( Tile * ) getMapTileFromPoint: (CGPoint) p forFloor: (DungeonFloor *) _floor {
     Tile *tile = nil;
-    for ( Tile *t in [floor tileDataArray ] ) {
+    for ( Tile *t in [_floor tileDataArray ] ) {
         if ( t.position.x == p.x && t.position.y == p.y ) {
             tile = t;
             break;
@@ -1977,11 +1976,11 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 
--( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) floor {
+-( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) _floor {
 //-( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
     //MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
     
-    Tile *tile = [ self getMapTileFromPoint: position forFloor: floor ];
+    Tile *tile = [ self getMapTileFromPoint: position forFloor: _floor ];
     if ( tile.tileType != TILE_FLOOR_VOID ) {
         
         BOOL isMoveValid = YES;
@@ -2367,6 +2366,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         d  = ccp( a.x+0, a.y+1 );
         dr = ccp( a.x+1, a.y+1 );
         
+        /*
         NSInteger uld = [ self distanceFromCGPoint:ul toCGPoint:b ];
         NSInteger ud  = [ self distanceFromCGPoint:u  toCGPoint:b ];
         NSInteger urd = [ self distanceFromCGPoint:ur toCGPoint:b ];
@@ -2375,7 +2375,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         NSInteger dld = [ self distanceFromCGPoint:dl toCGPoint:b ];
         NSInteger dd  = [ self distanceFromCGPoint:d  toCGPoint:b ];
         NSInteger drd = [ self distanceFromCGPoint:dr toCGPoint:b ];
-        
+        */
         
         WeightedPoint wul, wu, wur, wl, wr, wdl, wd, wdr;
         wul.x = ul.x; wul.y = ul.y; wul.weight = weight;
@@ -2650,13 +2650,13 @@ NSUInteger getMagicY( NSUInteger y ) {
  setEntityOnUpstairs: entity forFloor: floor
  ====================
  */
--( void ) setEntityOnUpstairs:(Entity *)entity forFloor: (DungeonFloor *) floor {
+-( void ) setEntityOnUpstairs:(Entity *)entity forFloor: (DungeonFloor *) _floor {
     // find the upstairs tile
-    CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: floor ];
+    CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: _floor ];
     
     // set the starting tile
     Tile *tile = nil;
-    for ( Tile *t in [ floor tileDataArray ] ) {
+    for ( Tile *t in [ _floor tileDataArray ] ) {
         if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
             tile = t;
             break;
@@ -2671,13 +2671,13 @@ NSUInteger getMagicY( NSUInteger y ) {
  setEntityOnDownstairs: entity forFloor: floor
  ====================
  */
--( void ) setEntityOnDownstairs:(Entity *)entity forFloor: (DungeonFloor *) floor {
+-( void ) setEntityOnDownstairs:(Entity *)entity forFloor: (DungeonFloor *) _floor {
     // find the upstairs tile
     CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: floor ];
     
     // set the starting tile
     Tile *tile = nil;
-    for ( Tile *t in [ floor tileDataArray ] ) {
+    for ( Tile *t in [ _floor tileDataArray ] ) {
         if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
             tile = t;
             break;
@@ -2850,9 +2850,9 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
--( void ) haveAllEntitiesActOnFloor:(DungeonFloor *) floor {
-    for ( int i = 0; i < [[floor entityArray] count]; i++ ) {
-        Entity *e = [[floor entityArray] objectAtIndex: i];
+-( void ) haveAllEntitiesActOnFloor:(DungeonFloor *) _floor {
+    for ( int i = 0; i < [[_floor entityArray] count]; i++ ) {
+        Entity *e = [[_floor entityArray] objectAtIndex: i];
         if ( e.entityType != ENTITY_T_PC && e.isAlive ){
             [ e step ];
             [ self handleEntityStep: e ];
@@ -2884,7 +2884,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
  
         // spawn a new monster on the current floor
-       // [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1000 ];
+        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 100 ];
         Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
         
         // check if we've obtained the Book of All-Knowing

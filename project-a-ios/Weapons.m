@@ -15,7 +15,11 @@
 
 +( Entity * ) shortSword: (NSInteger) bonus {
     Entity *e = [[Entity alloc] init];
-    [e.name setString: @"Short Sword" ];
+    
+    if ( bonus == 0 )
+        [e.name setString: @"Short Sword"];
+    else
+        [e.name setString: [NSString stringWithFormat:@"Short Sword +%d", bonus ]];
     
     e.entityType = ENTITY_T_ITEM;
     e.itemType = E_ITEM_T_WEAPON;
@@ -35,7 +39,11 @@
 
 +( Entity * ) longSword: (NSInteger) bonus {
     Entity *e = [[Entity alloc] init];
-    [e.name setString: @"Long Sword" ];
+    
+    if ( bonus == 0 )
+        [e.name setString: @"Long Sword" ];
+    else
+        [e.name setString: [NSString stringWithFormat:@"Long Sword +%d", bonus ]];
     
     e.entityType = ENTITY_T_ITEM;
     e.itemType = E_ITEM_T_WEAPON;

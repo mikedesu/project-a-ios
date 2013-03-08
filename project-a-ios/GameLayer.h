@@ -87,36 +87,36 @@ typedef enum {
 -( void ) receiveNotification: ( NSNotification * ) notification;
 
 -( void ) initPlayerMenu;
--( void ) addPlayerMenu: ( PlayerMenu * ) menu;
--( void ) removePlayerMenu: ( PlayerMenu * ) menu;
+-( void ) addPlayerMenu: ( PlayerMenu * ) _menu;
+-( void ) removePlayerMenu: ( PlayerMenu * ) _menu;
 
 -( void ) initEditorHUD;
--( void ) addEditorHUD: ( EditorHUD * ) hud;
--( void ) removeEditorHUD: ( EditorHUD * ) hud;
+-( void ) addEditorHUD: ( EditorHUD * ) _hud;
+-( void ) removeEditorHUD: ( EditorHUD * ) _hud;
 -( void ) updateEditorHUDLabel;
 
 -( void ) initMonitor;
--( void ) addMonitor: ( EditorHUD * ) monitor;
--( void ) removeMonitor: ( EditorHUD * ) monitor;
+-( void ) addMonitor: ( EditorHUD * ) _monitor;
+-( void ) removeMonitor: ( EditorHUD * ) _monitor;
 -( void ) updateMonitorLabel;
 
 -( void ) drawDungeonFloor;
 
 -( void ) initEntityInfoHUD;
--( void ) addEntityInfoHUD: (EntityInfoHUD *) entityInfoHUD ;
+-( void ) addEntityInfoHUD: (EntityInfoHUD *) _entityInfoHUD ;
 -( void ) updateEntityInfoHUDLabel ;
--( void ) removeEntityInfoHUD: (EntityInfoHUD *) entityInfoHUD ;
+-( void ) removeEntityInfoHUD: (EntityInfoHUD *) _entityInfoHUD ;
     
 
 -( void ) initPlayerHUD;
--( void ) addPlayerHUD: ( PlayerHUD * ) hud;
--( void ) removePlayerHUD: ( PlayerHUD * ) hud;
+-( void ) addPlayerHUD: ( PlayerHUD * ) _hud;
+-( void ) removePlayerHUD: ( PlayerHUD * ) _hud;
 -( void ) updatePlayerHUDLabel;
 
 
 -( void ) initGearHUD;
--( void ) addGearHUD: ( PlayerHUD * ) hud;
--( void ) removeGearHUD: ( PlayerHUD * ) hud;
+-( void ) addGearHUD: ( PlayerHUD * ) _hud;
+-( void ) removeGearHUD: ( PlayerHUD * ) _hud;
 -( void ) updateGearHUDLabel;
 
 

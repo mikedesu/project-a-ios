@@ -735,10 +735,7 @@ NSInteger getMod( NSInteger n ) {
     MLOG(@"randomMonster");
     Entity *e = [[Entity alloc] init];
     
-    NSMutableString *randomString = [ NSMutableString stringWithString:@"" ];
-    
     [e.name setString: [self generateNameForEntityType:e.entityType]];
- //   [e.name setString: randomString ];
     
     e.entityType = ENTITY_T_NPC;
     e.isPC = NO;
