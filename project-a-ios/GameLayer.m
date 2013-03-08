@@ -255,17 +255,17 @@ unsigned get_memory_mb(void) {
             monitorIsVisible = FALSE;
         }
         
-    } else if ( [[ notification name ] isEqualToString: @"MoveNotification" ] ) {
+    } else if ( [[ notification name ] isEqualToString: @"PlayerMenuMoveNotification" ] ) {
         //MLOG( @"MoveNotification" );
         
-        [ self removePlayerMenu: playerMenu ];
+        //[ self removePlayerMenu: playerMenu ];
         gameState = GAMESTATE_T_GAME_PC_SELECTMOVE;
         
-    } else if ( [[ notification name ] isEqualToString: @"AttackNotification" ] ) {
+    } else if ( [[ notification name ] isEqualToString: @"PlayerMenuAttackNotification" ] ) {
         //MLOG( @"AttackNotification" );
         
-        [ self removePlayerMenu: playerMenu ];
-        gameState = GAMESTATE_T_GAME;
+        //[ self removePlayerMenu: playerMenu ];
+        //gameState = GAMESTATE_T_GAME;
     }
     else if ( [[ notification name ] isEqualToString: @"StepNotification" ] ) {
         //MLOG( @"StepNotification" );
@@ -644,7 +644,17 @@ unsigned get_memory_mb(void) {
     }
     
     else if ( [notification.name isEqualToString: @"PlayerMenuCloseNotification" ]) {
-        [ self removePlayerMenu: playerMenu ];
+        static BOOL isMinimized = NO;
+        if ( ! isMinimized ) {
+            isMinimized = YES;
+            [ self removePlayerMenu: playerMenu ];
+            [ self addPlayerMenuMin: playerMenuMin ];
+        } else {
+            isMinimized = NO;
+            [ self removePlayerMenuMin: playerMenuMin ];
+            [ self addPlayerMenu: playerMenu ];
+            
+        }
     }
     else {
         //MLOG( @"Notification not handled: %@", notification.name );
@@ -663,7 +673,7 @@ unsigned get_memory_mb(void) {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:50 height:100 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:40 height:150 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
@@ -698,6 +708,59 @@ unsigned get_memory_mb(void) {
         //[ self addMessage: @"Closed Player Menu" ];
     }
 }
+
+
+
+
+
+/*
+ ====================
+ initPlayerMenuMin
+ 
+ initializes the Player menu minimized
+ ====================
+ */
+-( void ) initPlayerMenuMin {
+    CGSize size = [[CCDirector sharedDirector] winSize];
+    playerMenuMin = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:40 height:30 isMinimized:YES];
+    playerMenuMin.position = ccp( 0 , size.height - (playerMenuMin.contentSize.height) );
+}
+
+
+/*
+ ====================
+ addPlayerMenuMin: menu
+ 
+ adds the Player menu to the visible screen minimized
+ ====================
+ */
+-( void ) addPlayerMenuMin: ( PlayerMenu * ) _menu {
+    if ( ! playerMenuIsMin ) {
+        [ self addChild: _menu ];
+        playerMenuIsMin = YES;
+        //[ self addMessage: @"Opened Player Menu" ];
+    }
+}
+
+
+/*
+ ====================
+ removePlayerMenuMin: menu
+ 
+ removes the Player menu from the visible screen minimized
+ ====================
+ */
+-( void ) removePlayerMenuMin: ( PlayerMenu * ) _menu {
+    if ( playerMenuIsMin ) {
+        [ self removeChild: _menu cleanup: NO ];
+        playerMenuIsMin = NO;
+        //[ self addMessage: @"Closed Player Menu" ];
+    }
+}
+
+
+
+
 
 
 /*
@@ -2742,12 +2805,12 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( void ) initializeHUDs {
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
-    [ self addEditorHUD: editorHUD ];
+    //[ self addEditorHUD: editorHUD ];
     
     
     monitorIsVisible = NO;
     [ self initMonitor ];
-    [ self addMonitor: monitor ];
+    //[ self addMonitor: monitor ];
     
    
     playerHUDIsVisible = NO;
@@ -2758,13 +2821,18 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ self initPlayerMenu ];
     [ self addPlayerMenu: playerMenu ];
     
+    playerMenuMin = NO;
+    [ self initPlayerMenuMin ];
+    // [ self addPlayerMenuMin: playerMenuMin ];
+    
+    
     entityInfoHUDIsVisible = NO;
     [ self initEntityInfoHUD ];
-    [ self addEntityInfoHUD: entityInfoHUD ];
+    //[ self addEntityInfoHUD: entityInfoHUD ];
     
     gearHUDIsVisible = NO;
     [ self initGearHUD ];
-    [ self addGearHUD: gearHUD ];
+    //[ self addGearHUD: gearHUD ];
     
 }
 

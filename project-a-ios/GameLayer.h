@@ -69,6 +69,9 @@ typedef enum {
     BOOL playerMenuIsVisible;
     PlayerMenu *playerMenu;
     
+    BOOL playerMenuIsMin;
+    PlayerMenu *playerMenuMin;
+    
     CGPoint cameraAnchorPoint;
     
     double touchBeganTime;
@@ -89,6 +92,11 @@ typedef enum {
 -( void ) initPlayerMenu;
 -( void ) addPlayerMenu: ( PlayerMenu * ) _menu;
 -( void ) removePlayerMenu: ( PlayerMenu * ) _menu;
+
+-( void ) initPlayerMenuMin;
+-( void ) addPlayerMenuMin: ( PlayerMenu * ) _menu;
+-( void ) removePlayerMenuMin: ( PlayerMenu * ) _menu;
+
 
 -( void ) initEditorHUD;
 -( void ) addEditorHUD: ( EditorHUD * ) _hud;

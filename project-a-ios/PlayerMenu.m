@@ -22,11 +22,11 @@
 -( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h {
     if ( ( self = [ super initWithColor: color width: w height: h ] ) ) {
         /*
-        label = [[ CCLabelTTF alloc ] initWithString:@"PlayerMenu" dimensions:CGSizeMake(w, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:12];
-        label.position = ccp( 0 + w/2 + 10, h - (label.contentSize.height/2) );
-        label.color = white3;
-        [self addChild: label];
-        */
+         label = [[ CCLabelTTF alloc ] initWithString:@"PlayerMenu" dimensions:CGSizeMake(w, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:12];
+         label.position = ccp( 0 + w/2 + 10, h - (label.contentSize.height/2) );
+         label.color = white3;
+         [self addChild: label];
+         */
         
         CCLabelTTF *menuItemLabelClose = [[CCLabelTTF alloc] initWithString: @"X" fontName:@"Courier New" fontSize:30 ];
         menuItemLabelClose.color = white3;
@@ -36,6 +36,11 @@
         
         CCLabelTTF *menuItemLabelAttack = [[CCLabelTTF alloc] initWithString: @"A" fontName:@"Courier New" fontSize:30 ];
         menuItemLabelClose.color = white3;
+        
+        CCLabelTTF *menuItemLabelStep = [[CCLabelTTF alloc] initWithString: @"S" fontName:@"Courier New" fontSize:30 ];
+        menuItemLabelClose.color = white3;
+        
+        
         
         
         
@@ -50,12 +55,17 @@
         CCMenuItem *menuItemAttack = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelAttack target:self selector:@selector(menuItemAttackPressed) ];
         menuItemAttack.position = ccp( 0 + menuItemLabelAttack.contentSize.width/2, h - menuItemLabelClose.contentSize.height - menuItemLabelMove.contentSize.height - (menuItemLabelAttack.contentSize.height/2) );
         
+        CCMenuItem *menuItemStep = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelStep target:self selector:@selector(menuItemStepPressed) ];
+        menuItemStep.position = ccp( 0 + menuItemLabelStep.contentSize.width/2, h - menuItemLabelClose.contentSize.height - menuItemLabelMove.contentSize.height - (menuItemLabelAttack.contentSize.height) - menuItemLabelStep.contentSize.height );
+        
+        
         
         
         CCMenu *menu = [[ CCMenu alloc ] initWithArray: [NSArray arrayWithObjects:
                                                          menuItemClose,
                                                          menuItemMove,
                                                          menuItemAttack,
+                                                         menuItemStep,
                                                          nil] ];
         menu.position = ccp( 0, 0 );
         [ self addChild: menu ];
@@ -64,6 +74,46 @@
     }
     return self;
 }
+
+-( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h isMinimized:(BOOL)isMin {
+    if ( ( self = [ super initWithColor: color width: w height: h ] ) ) {
+        /*
+         label = [[ CCLabelTTF alloc ] initWithString:@"PlayerMenu" dimensions:CGSizeMake(w, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:12];
+         label.position = ccp( 0 + w/2 + 10, h - (label.contentSize.height/2) );
+         label.color = white3;
+         [self addChild: label];
+         */
+        
+        if ( isMin ) {
+        
+            CCLabelTTF *menuItemLabelClose = [[CCLabelTTF alloc] initWithString: @"X" fontName:@"Courier New" fontSize:30 ];
+            menuItemLabelClose.color = white3;
+ 
+            CCMenuItem *menuItemClose = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelClose target:self selector:@selector(menuItemClosePressed) ];
+            menuItemClose.position = ccp( 0 + menuItemLabelClose.contentSize.width/2, h - (menuItemLabelClose.contentSize.height/2) );
+            
+            CCMenu *menu = [[ CCMenu alloc ] initWithArray: [NSArray arrayWithObjects:
+                                                             menuItemClose,
+                                                             nil] ];
+            menu.position = ccp( 0, 0 );
+            [ self addChild: menu ];
+            
+        } else {
+            
+            self = [ self initWithColor:color width:w height:h];
+        
+        }
+        
+       
+        
+    }
+    return self;
+}
+
+
+
+
+
 
 
 #define MENUITEMCLOSE_NOTIFICATIONNAME @"PlayerMenuCloseNotification"
@@ -77,6 +127,10 @@
 
 -( void ) menuItemAttackPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuAttackNotification"  object:self];
+}
+
+-( void ) menuItemStepPressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"StepNotification"  object:self];
 }
 
 
