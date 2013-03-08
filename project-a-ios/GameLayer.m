@@ -232,6 +232,35 @@ unsigned get_memory_mb(void) {
 #pragma mark - Notification code
 
 
+
+/*
+ ====================
+ initializeNotifications
+ 
+ initializes the various notifications used by the game's engine
+ ====================
+ */
+-( void ) initializeNotifications {
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
+    
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MonitorNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"StepNotification" object:nil];
+    
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuCloseNotification" object:nil];
+    
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuTogglePositionNotification" object:nil];
+    
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuToggleHUDsNotification" object:nil];
+    
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuEditorHUDCloseNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMonitorCloseNotification" object:nil];
+    
+}
+
+
+
 /*
  ====================
  receiveNotification: notification
@@ -658,7 +687,7 @@ unsigned get_memory_mb(void) {
     }
     
     else if ( [notification.name isEqualToString: @"PlayerMenuTogglePositionNotification" ]) {
-    
+        
         static BOOL left = YES;
         
         CGSize size = [[CCDirector sharedDirector] winSize];
@@ -670,8 +699,43 @@ unsigned get_memory_mb(void) {
             playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
             left = YES;
         }
-
+        
     }
+    
+    else if ( [notification.name isEqualToString: @"PlayerMenuToggleHUDsNotification" ]) {
+        if (! hudMenuIsVisible ) {
+            [self addHUDMenu:hudMenu];
+            hudMenuIsVisible = YES;
+        } else {
+            [self removeHUDMenu:hudMenu];
+            hudMenuIsVisible = NO;
+        }
+    }
+    
+    else if ( [notification.name isEqualToString: @"HUDMenuEditorHUDCloseNotification" ]) {
+        if (! editorHUDIsVisible ) {
+            [self addEditorHUD:editorHUD];
+            editorHUDIsVisible = YES;
+        } else {
+            [self removeEditorHUD:editorHUD];
+            editorHUDIsVisible = NO;
+        }
+        
+    }
+    
+    else if ( [notification.name isEqualToString: @"HUDMonitorCloseNotification" ]) {
+        if (! monitorIsVisible ) {
+            [self addMonitor:monitor];
+            monitorIsVisible = YES;
+        } else {
+            [self removeMonitor:monitor];
+            monitorIsVisible = NO;
+        }
+        
+    }
+    
+    
+    
     
     else {
         //MLOG( @"Notification not handled: %@", notification.name );
@@ -1228,6 +1292,37 @@ unsigned get_memory_mb(void) {
                          ];
     [ [gearHUD label] setString: str ];
 }
+
+
+
+-( void ) initHUDMenu {
+    CGSize size = [[CCDirector sharedDirector] winSize];
+    hudMenu = [[ HUDMenu alloc ] init];
+    hudMenu.position = ccp( playerMenu.contentSize.width , size.height - playerMenu.contentSize.height - 80 );
+}
+
+-( void ) addHUDMenu: (HUDMenu *) _hudMenu {
+    if ( ! hudMenuIsVisible ) {
+        [self addChild:_hudMenu];
+        hudMenuIsVisible = YES;
+    }
+}
+
+-( void ) removeHUDMenu: (HUDMenu *) _hudMenu {
+    if ( hudMenuIsVisible ) {
+        [self removeChild:_hudMenu cleanup:NO];
+        hudMenuIsVisible = NO;
+    }
+}
+
+
+
+
+
+
+
+
+
 
 
 #pragma mark - Update code
@@ -2793,25 +2888,7 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
-/*
- ====================
- initializeNotifications
- 
- initializes the various notifications used by the game's engine
- ====================
- */
--( void ) initializeNotifications {
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
-    
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MonitorNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"StepNotification" object:nil];
-    
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuCloseNotification" object:nil];
-    
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuTogglePositionNotification" object:nil];
-}
+
 
 
 /*
@@ -2829,7 +2906,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     monitorIsVisible = NO;
     [ self initMonitor ];
-    [ self addMonitor: monitor ];
+  //  [ self addMonitor: monitor ];
     
    
     playerHUDIsVisible = NO;
@@ -2851,7 +2928,12 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     gearHUDIsVisible = NO;
     [ self initGearHUD ];
-    [ self addGearHUD: gearHUD ];
+   // [ self addGearHUD: gearHUD ];
+    
+    
+    hudMenuIsVisible = NO;
+    [ self initHUDMenu ];
+    // [ self addHUDMenu: hudMenu ];
     
 }
 

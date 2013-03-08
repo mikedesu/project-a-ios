@@ -19,6 +19,7 @@
 #import "EntityInfoHUD.h"
 #import "GameLayer.h"
 #import "GameRenderer.h"
+#import "HUDMenu.h"
 #import "Items.h"
 #import "MLog.h"
 #import "PlayerHUD.h"

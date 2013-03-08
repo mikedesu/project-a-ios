@@ -17,6 +17,7 @@ typedef enum {
 @class DungeonFloor;
 @class EditorHUD;
 @class EntityInfoHUD;
+@class HUDMenu;
 @class PlayerHUD;
 @class PlayerMenu;
 @class Tile;
@@ -71,6 +72,9 @@ typedef enum {
     
     BOOL playerMenuIsMin;
     PlayerMenu *playerMenuMin;
+    
+    BOOL hudMenuIsVisible;
+    HUDMenu *hudMenu;
     
     CGPoint cameraAnchorPoint;
     

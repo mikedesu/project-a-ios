@@ -22,17 +22,17 @@
 -( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h {
     if ( ( self = [ super initWithColor: color width: w height: h ] ) ) {
         
-        CCLabelTTF *menuItemLabelClose = [[CCLabelTTF alloc] initWithString: @"X" fontName:@"Courier New" fontSize:30 ];
-        menuItemLabelClose.color = white3;
+     //   CCLabelTTF *menuItemLabelClose = [[CCLabelTTF alloc] initWithString: @"X" fontName:@"Courier New" fontSize:30 ];
+    //    menuItemLabelClose.color = white3;
         
-        CCLabelTTF *menuItemLabelMove = [[CCLabelTTF alloc] initWithString: @"M" fontName:@"Courier New" fontSize:30 ];
-        menuItemLabelClose.color = white3;
+       // CCLabelTTF *menuItemLabelMove = [[CCLabelTTF alloc] initWithString: @"M" fontName:@"Courier New" fontSize:30 ];
+      //  menuItemLabelClose.color = white3;
         
-        CCLabelTTF *menuItemLabelAttack = [[CCLabelTTF alloc] initWithString: @"A" fontName:@"Courier New" fontSize:30 ];
-        menuItemLabelClose.color = white3;
+      //  CCLabelTTF *menuItemLabelAttack = [[CCLabelTTF alloc] initWithString: @"A" fontName:@"Courier New" fontSize:30 ];
+     //   menuItemLabelClose.color = white3;
         
-        CCLabelTTF *menuItemLabelStep = [[CCLabelTTF alloc] initWithString: @"S" fontName:@"Courier New" fontSize:30 ];
-        menuItemLabelClose.color = white3;
+     //   CCLabelTTF *menuItemLabelStep = [[CCLabelTTF alloc] initWithString: @"S" fontName:@"Courier New" fontSize:30 ];
+     //   menuItemLabelClose.color = white3;
         
  
         // close button
@@ -175,6 +175,8 @@
         
         [ texture3 apply ];
         
+        
+        
         // toggle menu position button
         CCMutableTexture2D *texture4 = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
         [ texture4 fill: green ];
@@ -182,7 +184,17 @@
         
         
         
+        // toggle HUDs button
+        CCMutableTexture2D *texture5 = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+        //[ texture5 fill: green ];
+        [ texture5 fill: black_alpha(128) ];
         
+        for ( int i = 4; i < 12; i++ ) {
+            for ( int j = 4; j < 12; j++ ) {
+                [texture5 setPixelAt:ccp( j, i ) rgba:white ];
+            }
+        }
+        [ texture5 apply ];
         
         
         
@@ -213,6 +225,12 @@
         menuItemTogglePosition.position = ccp( 0 + menuItemStep.contentSize.width, h - 32*5 - 5*5 );
         
         
+        CCMenuItem *menuItemToggleHUDs = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture5] selectedSprite:[CCSprite spriteWithTexture:texture5] disabledSprite:[CCSprite spriteWithTexture:texture5] target:self selector:@selector(menuItemToggleHUDsPressed)];
+        menuItemToggleHUDs.scale = 2;
+        menuItemToggleHUDs.position = ccp( 0 + menuItemStep.contentSize.width, h - 32*6 - 5*6 );
+        
+        
+        
         
         
         
@@ -223,6 +241,7 @@
                                                          menuItemAttack,
                                                          menuItemStep,
                                                          menuItemTogglePosition,
+                                                         menuItemToggleHUDs,
                                                          nil] ];
         menu.position = ccp( 0, 0 );
         [ self addChild: menu ];
@@ -300,6 +319,12 @@
 -( void ) menuItemTogglePositionPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuTogglePositionNotification"  object:self];
 }
+
+-( void ) menuItemToggleHUDsPressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuToggleHUDsNotification"  object:self];
+}
+
+
 
 
 
