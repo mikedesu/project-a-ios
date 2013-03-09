@@ -13,6 +13,7 @@
 
 +(CCMutableTexture2D *) stoneTile;
 +(CCMutableTexture2D *) voidTile;
-
++(CCMutableTexture2D *) upstairsTile;
++(CCMutableTexture2D *) downstairsTile;
 
 @end

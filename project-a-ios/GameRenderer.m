@@ -127,8 +127,10 @@ NSInteger getMod( NSInteger n ) {
     }
  
     CCMutableTexture2D *tileTexture =
-    tileType==TILE_FLOOR_STONE ? [Drawer stoneTile] :
-    tileType==TILE_FLOOR_VOID ?  [Drawer voidTile] :
+    tileType==TILE_FLOOR_STONE ?        [Drawer stoneTile] :
+    tileType==TILE_FLOOR_VOID ?         [Drawer voidTile] :
+    tileType==TILE_FLOOR_UPSTAIRS ?     [Drawer upstairsTile] :
+    tileType==TILE_FLOOR_DOWNSTAIRS ?   [Drawer downstairsTile] :
     nil;
     
     // in most cases, we will fill our texture
@@ -144,31 +146,11 @@ NSInteger getMod( NSInteger n ) {
     [ texture apply ];
     
     
-    if ( data.isSelected ) {
-        for ( int i = 0; i < 16; i++ )
-            for ( int j = 0; j < 16; j++ ) {
-                Color_t px = [texture pixelAt:ccp(i,j)];
-                px.a = 128;
-                [texture setPixelAt:ccp(i,j) rgba:px];
-            }
-    }
-    [texture apply];
+
     
-    
-    
-    /*
-    if ( [[data contents] count] > 0 ) {
-        MLOG(@"Tile is not empty");
-        MLOG(@"Tile contents: %@", [data contents]);
-    }
-    else {
-    //    MLOG(@"Empty tile!");
-    }
-     */
     
     
     for (Entity *entity in [data contents]) {
-        
         
         // Below, we define the draw routines for each entity-type
         // We are starting with solid colors
@@ -243,6 +225,19 @@ NSInteger getMod( NSInteger n ) {
             
         
     }
+    
+    
+    
+    // handle selected tiles
+    if ( data.isSelected && tileTexture != nil ) {
+        for ( int i = 0; i < 16; i++ )
+            for ( int j = 0; j < 16; j++ ) {
+                Color_t px = [texture pixelAt:ccp(i,j)];
+                px.a = 128;
+                [texture setPixelAt:ccp(i,j) rgba:px];
+            }
+    }
+    [texture apply];
 }
 
 

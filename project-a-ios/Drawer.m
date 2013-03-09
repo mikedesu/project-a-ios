@@ -72,6 +72,27 @@
 }
 
 
++(CCMutableTexture2D *) upstairsTile {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    [t fill:cyan];
+    [ t apply ];
+    return t;
+}
+
+
++(CCMutableTexture2D *) downstairsTile {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    [t fill:purple];
+    [ t apply ];
+    return t;
+}
+
+
+
+
+
 
 
 
