@@ -18,6 +18,9 @@
 
 +(CCMutableTexture2D *) bookOfAllKnowing;
 
+//+(CCMutableTexture2D *) mario;
++(CCMutableTexture2D *) marioWithSuitColor: (Color_t) suitColor skinColor: (Color_t) skinColor;
+
 +(CCMutableTexture2D *) hero;
 +(CCMutableTexture2D *) monster;
 

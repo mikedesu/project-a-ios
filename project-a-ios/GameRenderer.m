@@ -119,6 +119,8 @@ NSInteger getMod( NSInteger n ) {
     tileType==TILE_FLOOR_DOWNSTAIRS ?   [Drawer downstairsTile] :
     nil;
     
+    //tileTexture = [Drawer hero];
+    
     // in most cases, we will fill our texture
     CCMutableTexture2D *texture = ( CCMutableTexture2D * ) tileSprite.texture;
     

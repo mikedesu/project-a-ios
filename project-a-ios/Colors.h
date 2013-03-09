@@ -7,8 +7,6 @@
 #define project_a_macosx_Colors_h
 
 
-//#define CC4B_  ccc4( 0x00, 0x00, 0x00, 0xFF )
-
 #import "cocos2d.h"
 
 #define CC4B_BLACK_ALPHA(a)  ccc4( 0x00, 0x00, 0x00, a )
@@ -24,6 +22,23 @@
 #define CC4B_YELLOW_ALPHA(a)  ccc4( 0xff, 0xff, 0x00, a )
 #define CC4B_CYAN_ALPHA(a)    ccc4( 0x00, 0xff, 0xff, a )
 #define CC4B_PURPLE_ALPHA(a)  ccc4( 0xff, 0x00, 0xff, a )
+
+
+
+
+
+#define CC4B_ORANGE0    ccc4( 255, 165, 0, 255 )
+#define CC4B_ORANGE1    ccc4( 238, 154, 0, 255 )
+#define CC4B_ORANGE2    ccc4( 205, 133, 0, 255 )
+#define CC4B_ORANGE3    ccc4( 139,  90, 0, 255 )
+
+
+
+#define CC4B_SKIN0  ccc4( 255, 220, 177, 255 )
+#define CC4B_SKIN1  ccc4( 229, 194, 152, 255 )
+#define CC4B_SKIN2  ccc4( 228, 185, 142, 255 )
+#define CC4B_SKIN3  ccc4( 226, 185, 143, 255 )
+#define CC4B_SKIN4  ccc4( 227, 161, 115, 255 )
 
 
 
@@ -108,6 +123,30 @@
 #define green_alpha(a) CC4B_GREEN_ALPHA(a)
 #define blue_alpha(a)  CC4B_BLUE_ALPHA(a)
 #define random_alpha(a) CC4B_RANDOM_ALPHA(a)
+
+
+
+#define orange0 CC4B_ORANGE0
+#define orange1 CC4B_ORANGE1
+#define orange2 CC4B_ORANGE2
+#define orange3 CC4B_ORANGE3
+
+#define orange orange0
+
+
+
+#define skincolor0  CC4B_SKIN0
+#define skincolor1  CC4B_SKIN1
+#define skincolor2  CC4B_SKIN2
+#define skincolor3  CC4B_SKIN3
+#define skincolor4  CC4B_SKIN4
+
+#define skincolor(n) (n==0 ? skincolor0 : \
+n==1 ? skincolor1 : \
+n==2 ? skincolor2 : \
+n==3 ? skincolor3 : \
+skincolor4 )
+
 
 #define newColor(r,g,b,a) ccc4(r,g,b,a)
 #define newColor3(r,g,b) ccc3(r,g,b)

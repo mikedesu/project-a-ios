@@ -99,21 +99,173 @@
 }
 
 
-+(CCMutableTexture2D *) hero {
++(CCMutableTexture2D *) marioWithSuitColor: (Color_t) suitColor skinColor: (Color_t) skinColor {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
-    [t fill:white];
+    int v = 0; // pixel offset
+    
+    // mario's hat
+    //Color_t hatColor = red;
+    Color_t hatColor = suitColor;
+    v = 3;
+    for ( int i=0; i < 5; i++)
+        [t setPixelAt:ccp(i+v,0) rgba:hatColor];
+    v = 2;
+    for ( int i=0; i < 9; i++)
+        [t setPixelAt:ccp(i+v,1) rgba:hatColor];
+    
+    
+    // mario's head
+    // hair
+    Color_t hairColor = black;
+    v = 2;
+    for ( int i = 0; i < 3; i++ )
+        [ t setPixelAt:ccp(0+v+i,2) rgba:hairColor];
+    [ t setPixelAt:ccp(5+v,2) rgba:hairColor];
+    v = 1;
+    [ t setPixelAt:ccp(0+v,3) rgba:hairColor];
+    [ t setPixelAt:ccp(2+v,3) rgba:hairColor];
+    [ t setPixelAt:ccp(6+v,3) rgba:hairColor];
+    [ t setPixelAt:ccp(0+v,4) rgba:hairColor];
+    [ t setPixelAt:ccp(2+v,4) rgba:hairColor];
+    [ t setPixelAt:ccp(3+v,4) rgba:hairColor];
+    [ t setPixelAt:ccp(7+v,4) rgba:hairColor];
+    [ t setPixelAt:ccp(0+v,5) rgba:hairColor];
+    [ t setPixelAt:ccp(1+v,5) rgba:hairColor];
+    for (int i=0; i<4; i++)
+        [ t setPixelAt:ccp(6+v+i,5) rgba:hairColor];
+ 
+    
+    // face
+    //Color_t skinColor = skincolor0;
+    
+    v = 5;
+    [ t setPixelAt:ccp(0+v,2) rgba:skinColor];
+    [ t setPixelAt:ccp(1+v,2) rgba:skinColor];
+    [ t setPixelAt:ccp(3+v,2) rgba:skinColor];
+    v = 2;
+    [ t setPixelAt:ccp(0+v,3) rgba:skinColor];
+    for (int i=0; i<3; i++)
+        [ t setPixelAt:ccp(2+v+i,3) rgba:skinColor];
+    for (int i=0; i<3; i++)
+        [ t setPixelAt:ccp(6+v+i,3) rgba:skinColor];
+    [ t setPixelAt:ccp(0+v,4) rgba:skinColor];
+    for (int i=0; i<3; i++)
+        [ t setPixelAt:ccp(3+v+i,4) rgba:skinColor];
+    for (int i=0; i<3; i++)
+        [ t setPixelAt:ccp(7+v+i,4) rgba:skinColor];
+    v = 3;
+    for (int i=0; i<4; i++)
+        [ t setPixelAt:ccp(0+v+i,5) rgba:skinColor];
+    for (int i=0; i<7; i++)
+        [ t setPixelAt:ccp(0+v+i,6) rgba:skinColor];
+    
+    
+    // shirt
+    Color_t shirtColor = red;
+    v = 2;
+    [ t setPixelAt:ccp(0+v,7) rgba:shirtColor];
+    [ t setPixelAt:ccp(1+v,7) rgba:shirtColor];
+    for (int i=0; i<3; i++)
+        [ t setPixelAt:ccp(3+v+i,7) rgba:shirtColor];
+    v = 1;
+    for (int i=0; i<3; i++)
+        [ t setPixelAt:ccp(0+v+i,8) rgba:shirtColor];
+    [ t setPixelAt:ccp(4+v,8) rgba:shirtColor];
+    [ t setPixelAt:ccp(5+v,8) rgba:shirtColor];
+    for (int i=0; i<3; i++)
+        [ t setPixelAt:ccp(7+v+i,8) rgba:shirtColor];
+    v = 0;
+    for (int i=0; i<4; i++)
+        [ t setPixelAt:ccp(0+v+i,9) rgba:shirtColor];
+    for (int i=0; i<4; i++)
+        [ t setPixelAt:ccp(8+v+i,9) rgba:shirtColor];
+    v = 2;
+    [ t setPixelAt:ccp(0+v,10) rgba:shirtColor];
+    [ t setPixelAt:ccp(7+v,10) rgba:shirtColor];
+ 
+    
+    // overalls
+    Color_t overallsColor = suitColor;
+    v = 4;
+    [ t setPixelAt:ccp(0+v,7) rgba:overallsColor];
+    [ t setPixelAt:ccp(0+v,8) rgba:overallsColor];
+    [ t setPixelAt:ccp(3+v,8) rgba:overallsColor];
+    for (int i=0; i<4; i++)
+        [ t setPixelAt:ccp(0+v+i,9) rgba:overallsColor];
+    v = 3;
+    [ t setPixelAt:ccp(0+v,10) rgba:overallsColor];
+    [ t setPixelAt:ccp(2+v,10) rgba:overallsColor];
+    [ t setPixelAt:ccp(3+v,10) rgba:overallsColor];
+    [ t setPixelAt:ccp(5+v,10) rgba:overallsColor];
+    for (int i=0; i<6; i++)
+        [ t setPixelAt:ccp(0+v+i,11) rgba:overallsColor];
+    v = 2;
+    for (int i=0; i<8; i++)
+        [ t setPixelAt:ccp(0+v+i,12) rgba:overallsColor];
+    for (int i=0; i<3; i++)
+        [ t setPixelAt:ccp(0+v+i,13) rgba:overallsColor];
+    for (int i=0; i<3; i++)
+        [ t setPixelAt:ccp(5+v+i,13) rgba:overallsColor];
+    
+    
+    // buttons
+    Color_t buttonsColor = yellow;
+    v = 4;
+    [ t setPixelAt:ccp(0+v,10) rgba:buttonsColor];
+    [ t setPixelAt:ccp(3+v,10) rgba:buttonsColor];
+ 
+    
+    // gloves
+    Color_t glovesColor = white;
+    v = 0;
+    for ( int i = 0; i < 2; i++ ) {
+        [ t setPixelAt:ccp( 0+v+i,10) rgba:glovesColor];
+        [ t setPixelAt:ccp(10+v+i,10) rgba:glovesColor];
+    }
+    for (int i=0; i<2; i++) {
+        [ t setPixelAt:ccp( 0+v+i,11) rgba:glovesColor];
+        [ t setPixelAt:ccp( 10+v+i,11) rgba:glovesColor];
+    }
+    for ( int i = 0; i < 2; i++ ) {
+        [ t setPixelAt:ccp( 0+v+i,12) rgba:glovesColor];
+        [ t setPixelAt:ccp(10+v+i,12) rgba:glovesColor];
+    }
+    
+    
+    // shoes
+    Color_t shoesColor = black;
+    v = 1;
+    for ( int i = 0; i < 3; i++ ) {
+        [ t setPixelAt:ccp(0+v+i,14) rgba:shoesColor];
+        [ t setPixelAt:ccp(7+v+i,14) rgba:shoesColor];
+    }
+    v = 0;
+    for ( int i = 0; i < 4; i++) {
+        [ t setPixelAt:ccp( 0+v+i,15) rgba:shoesColor];
+        [ t setPixelAt:ccp( 8+v+i,15) rgba:shoesColor];
+    }
     [ t apply ];
     return t;
 }
 
 
+
+
+
++(CCMutableTexture2D *) hero {
+    return [Drawer marioWithSuitColor:blue skinColor:skincolor0];
+}
+
+
+
 +(CCMutableTexture2D *) monster {
-    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
-    [t fill:black_alpha(0)];
-    [t fill:red];
-    [ t apply ];
-    return t;
+    //CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    //[t fill:black_alpha(0)];
+    //[t fill:red];
+    //[ t apply ];
+    //return t;
+    return [Drawer marioWithSuitColor:green skinColor:skincolor3];
 }
 
 
