@@ -47,12 +47,15 @@
         miMonitorClose.scale = 2;
         miMonitorClose.position = ccp( 0 + miMonitorClose.contentSize.width, 50 - 32 - 32 - 5 );
         
-        
+        CCMenuItem *miGearHUDClose = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture1] selectedSprite:[CCSprite spriteWithTexture:texture1] disabledSprite:[CCSprite spriteWithTexture:texture1] target:self selector:@selector(miGearHUDClosePressed)];
+        miGearHUDClose.scale = 2;
+        miGearHUDClose.position = ccp( 0 + miMonitorClose.contentSize.width, 50 - 32 - 32 - 32 - 5 - 5 );
         
         
         
         CCMenu *menu = [[ CCMenu alloc ] initWithArray: [NSArray arrayWithObjects:
                                                          miEditorHUDClose,
+                                                         miGearHUDClose,
                                                          miMonitorClose,
                                                          nil] ];
         menu.position = ccp( 0, 0 );
@@ -67,8 +70,14 @@
 }
 
 -( void ) miMonitorClosePressed {
-    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"HUDMonitorCloseNotification"  object:self];
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"HUDMenuMonitorCloseNotification"  object:self];
 }
+
+-( void ) miGearHUDClosePressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"HUDMenuGearHUDCloseNotification"  object:self];
+}
+
+
 
 
 

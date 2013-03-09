@@ -255,7 +255,8 @@ unsigned get_memory_mb(void) {
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuToggleHUDsNotification" object:nil];
     
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuEditorHUDCloseNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMonitorCloseNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuMonitorCloseNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuGearHUDCloseNotification" object:nil];
     
 }
 
@@ -723,7 +724,7 @@ unsigned get_memory_mb(void) {
         
     }
     
-    else if ( [notification.name isEqualToString: @"HUDMonitorCloseNotification" ]) {
+    else if ( [notification.name isEqualToString: @"HUDMenuMonitorCloseNotification" ]) {
         if (! monitorIsVisible ) {
             [self addMonitor:monitor];
             monitorIsVisible = YES;
@@ -733,6 +734,19 @@ unsigned get_memory_mb(void) {
         }
         
     }
+    
+    else if ( [notification.name isEqualToString: @"HUDMenuGearHUDCloseNotification" ]) {
+        if (! gearHUDIsVisible ) {
+            [self addGearHUD:gearHUD];
+            gearHUDIsVisible = YES;
+        } else {
+            [self removeGearHUD:gearHUD];
+            gearHUDIsVisible = NO;
+        }
+        
+    }
+    
+    
     
     
     
