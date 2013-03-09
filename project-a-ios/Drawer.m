@@ -54,5 +54,25 @@
 }
 
 
++(CCMutableTexture2D *) stoneTile {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    [t fill:gray];
+    [ t apply ];
+    return t;
+}
+
+
++(CCMutableTexture2D *) voidTile {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    [t fill:black];
+    [ t apply ];
+    return t;
+}
+
+
+
+
 
 @end

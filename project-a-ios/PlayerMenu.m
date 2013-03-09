@@ -276,6 +276,7 @@
  
         //    CCMenuItem *menuItemClose = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelClose target:self selector:@selector(menuItemClosePressed) ];
         CCMenuItem *menuItemClose = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture] selectedSprite:[CCSprite spriteWithTexture:texture] disabledSprite:[CCSprite spriteWithTexture:texture] target:self selector:@selector(menuItemClosePressed)];
+            menuItemClose.scale = 2;
             menuItemClose.position = ccp( 0 + menuItemLabelClose.contentSize.width/2, h - (menuItemLabelClose.contentSize.height/2) );
             
             CCMenu *menu = [[ CCMenu alloc ] initWithArray: [NSArray arrayWithObjects:

@@ -10,5 +10,9 @@
 
 +(CCMutableTexture2D *) basicSwordWithColor: (Color_t) bladeColor withHandleColor: (Color_t) handleColor;
 +(CCMutableTexture2D *) basicShieldWithColor: (Color_t) baseColor withEmblemColor: (Color_t) emblemColor;
-    
+
++(CCMutableTexture2D *) stoneTile;
++(CCMutableTexture2D *) voidTile;
+
+
 @end

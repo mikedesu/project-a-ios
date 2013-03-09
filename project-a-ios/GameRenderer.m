@@ -126,10 +126,34 @@ NSInteger getMod( NSInteger n ) {
         color = tmpColor;
     }
  
+    CCMutableTexture2D *tileTexture =
+    tileType==TILE_FLOOR_STONE ? [Drawer stoneTile] :
+    tileType==TILE_FLOOR_VOID ?  [Drawer voidTile] :
+    nil;
+    
     // in most cases, we will fill our texture
     CCMutableTexture2D *texture = ( CCMutableTexture2D * ) tileSprite.texture;
-    [ texture fill: color ];
+    
+    for ( int i = 0; i < 16; i++ ) {
+        for ( int j = 0; j < 16; j++ ) {
+            if ( tileTexture != nil ) {
+                [texture setPixelAt:ccp(i,j) rgba:[tileTexture pixelAt:ccp(i,j)]];
+            }
+        }
+    }
     [ texture apply ];
+    
+    
+    if ( data.isSelected ) {
+        for ( int i = 0; i < 16; i++ )
+            for ( int j = 0; j < 16; j++ ) {
+                Color_t px = [texture pixelAt:ccp(i,j)];
+                px.a = 128;
+                [texture setPixelAt:ccp(i,j) rgba:px];
+            }
+    }
+    [texture apply];
+    
     
     
     /*
