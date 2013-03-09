@@ -90,6 +90,33 @@
 }
 
 
++(CCMutableTexture2D *) bookOfAllKnowing {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    [t fill:yellow];
+    [ t apply ];
+    return t;
+}
+
+
++(CCMutableTexture2D *) hero {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    [t fill:white];
+    [ t apply ];
+    return t;
+}
+
+
++(CCMutableTexture2D *) monster {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    [t fill:red];
+    [ t apply ];
+    return t;
+}
+
+
 
 
 

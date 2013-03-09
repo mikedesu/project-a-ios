@@ -111,20 +111,6 @@ NSInteger getMod( NSInteger n ) {
  */
 +( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data {
     Tile_t tileType = data.tileType;
-    
-    // Select our primary working color based on tileType
-    Color_t color =
-    (tileType==TILE_FLOOR_VOID) ?  black :
-    (tileType==TILE_FLOOR_UPSTAIRS) ? cyan :
-    (tileType==TILE_FLOOR_DOWNSTAIRS) ? purple :
-    (tileType==TILE_FLOOR_GRASS) ? green :
-    (tileType==TILE_FLOOR_STONE) ? gray :
-    blue ;
-    
-    if (  data.isSelected ) {
-        Color_t tmpColor = newColor( color.r + 0xAA , color.g + 0xAA , color.b + 0x00, color.a );
-        color = tmpColor;
-    }
  
     CCMutableTexture2D *tileTexture =
     tileType==TILE_FLOOR_STONE ?        [Drawer stoneTile] :
@@ -146,10 +132,6 @@ NSInteger getMod( NSInteger n ) {
     [ texture apply ];
     
     
-
-    
-    
-    
     for (Entity *entity in [data contents]) {
         
         // Below, we define the draw routines for each entity-type
@@ -159,19 +141,13 @@ NSInteger getMod( NSInteger n ) {
         
         if ( entity.entityType == ENTITY_T_PC ) {
             // draw on the texture
-            if ( data.isSelected ) {
-                [ texture fill: blue_alpha( 255 ) ];
-                [ texture apply ];
-            } else {
-                [ texture fill: white ];
-                [ texture apply ];
-                
-                //MLOG(@"PC Entity drawn");
-                
-                
-                //[texture apply ];
-                
-            }
+            // draw sprite on top of cell, w/o black background
+            CCMutableTexture2D *t = [Drawer hero];
+            for ( int i = 0; i < 16; i++ )
+                for ( int j = 0; j < 16; j++ )
+                    if ( [t pixelAt:ccp(i,j)].a != 0 )
+                        [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
+            [texture apply];
         }
         
         else if ( [ [entity name] isEqualToString: @"Test1" ] ) {
@@ -182,19 +158,19 @@ NSInteger getMod( NSInteger n ) {
                 }
             }
             [ texture apply ];
+            
+            
+           
+            
         }
         
         else if ( entity.entityType == ENTITY_T_NPC ) {
-            color = red;
-            if ( data.isSelected ) {
-                color = newColor(color.r, color.g, color.b + 0xff, color.a);
-                [ texture fill: color ];
-                
-            } else {
-                [ texture fill: color ];
-            }
-            
-            [ texture apply ];
+            CCMutableTexture2D *t = [Drawer monster];
+            for ( int i = 0; i < 16; i++ )
+                for ( int j = 0; j < 16; j++ )
+                    if ( [t pixelAt:ccp(i,j)].a != 0 )
+                        [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
+            [texture apply];
         }
         
         
@@ -221,11 +197,21 @@ NSInteger getMod( NSInteger n ) {
                     }
                 [texture apply];
             }
-        }
             
-        
+            // only one book so far...
+            else if ( entity.itemType == E_ITEM_T_BOOK ) {
+                // draw sprite on top of cell, w/o black background
+                CCMutableTexture2D *t = [Drawer bookOfAllKnowing];
+                for ( int i = 0; i < 16; i++ )
+                    for ( int j = 0; j < 16; j++ ) {
+                        if ( [t pixelAt:ccp(i,j)].a != 0 )
+                            [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
+                    }
+                [texture apply];
+                
+            }
+        }
     }
-    
     
     
     // handle selected tiles

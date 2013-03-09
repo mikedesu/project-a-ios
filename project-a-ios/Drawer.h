@@ -16,4 +16,10 @@
 +(CCMutableTexture2D *) upstairsTile;
 +(CCMutableTexture2D *) downstairsTile;
 
++(CCMutableTexture2D *) bookOfAllKnowing;
+
++(CCMutableTexture2D *) hero;
++(CCMutableTexture2D *) monster;
+
+
 @end
