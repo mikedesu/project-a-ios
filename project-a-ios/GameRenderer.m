@@ -193,24 +193,28 @@ NSInteger getMod( NSInteger n ) {
         
         
         else if ( entity.entityType == ENTITY_T_ITEM ) {
-            /*
-            color = yellow;
-            if ( data.isSelected ) {
-                color = newColor(color.r, color.g, color.b + 0xff, color.a);
-                [ texture fill: color ];
+            
+            if ( entity.itemType == E_ITEM_T_WEAPON ) {
+                // draw sprite on top of cell, w/o black background
+                CCMutableTexture2D *t = [Drawer basicSwordWithColor:white withHandleColor:blue];
+                for ( int i = 0; i < 16; i++ )
+                    for ( int j = 0; j < 16; j++ ) {
+                        if ( [t pixelAt:ccp(i,j)].a != 0 )
+                            [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
+                    }
+                [texture apply];
                 
-            } else {
-                [ texture fill: color ];
             }
-            
-            [ texture apply ];
-             */
-            NSInteger r = [Dice roll:255];
-            NSInteger g = [Dice roll:255];
-            NSInteger b = [Dice roll:255];
-            Color_t color = ccc4(r, g, b, 255);
-            
-            tileSprite.texture = [Drawer basicSwordWithColor:color withHandleColor:blue];
+            else if ( entity.itemType == E_ITEM_T_ARMOR ) {
+                // draw sprite on top of cell, w/o black background
+                CCMutableTexture2D *t = [Drawer basicShieldWithColor:darkgray withEmblemColor:yellow];
+                for ( int i = 0; i < 16; i++ )
+                    for ( int j = 0; j < 16; j++ ) {
+                        if ( [t pixelAt:ccp(i,j)].a != 0 )
+                            [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
+                    }
+                [texture apply];
+            }
         }
             
         

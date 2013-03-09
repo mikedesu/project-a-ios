@@ -146,7 +146,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.01
+#define STEP_SPEED              0.2
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
