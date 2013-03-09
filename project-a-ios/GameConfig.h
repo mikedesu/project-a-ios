@@ -12,6 +12,7 @@
 #import "Armor.h"
 #import "Colors.h"
 #import "Dice.h"
+#import "Drawer.h"
 #import "Dungeon.h"
 #import "DungeonFloor.h"
 #import "EditorHUD.h"

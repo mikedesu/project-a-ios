@@ -193,7 +193,8 @@ NSInteger getMod( NSInteger n ) {
         
         
         else if ( entity.entityType == ENTITY_T_ITEM ) {
-             color = yellow;
+            /*
+            color = yellow;
             if ( data.isSelected ) {
                 color = newColor(color.r, color.g, color.b + 0xff, color.a);
                 [ texture fill: color ];
@@ -203,6 +204,13 @@ NSInteger getMod( NSInteger n ) {
             }
             
             [ texture apply ];
+             */
+            NSInteger r = [Dice roll:255];
+            NSInteger g = [Dice roll:255];
+            NSInteger b = [Dice roll:255];
+            Color_t color = ccc4(r, g, b, 255);
+            
+            tileSprite.texture = [Drawer basicSwordWithColor:color withHandleColor:blue];
         }
             
         

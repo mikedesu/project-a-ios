@@ -64,7 +64,9 @@
         [ texture1 apply ];
         
         // attack button
-        CCMutableTexture2D *texture2 = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+        //CCMutableTexture2D *texture2 = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+        CCTexture2D *texture2 = [Drawer basicSwordWithColor:white withHandleColor:darkgray];
+        /*
         [ texture2 fill: black_alpha(128) ];
         
         Color_t bladeColor = gray;
@@ -162,7 +164,8 @@
         [ texture2 setPixelAt:ccp(9,15) rgba:handleColor];
         
         [ texture2 apply ];
-        
+        */
+         
         // step button
         CCMutableTexture2D *texture3 = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
         [ texture3 fill: black_alpha(128) ];
