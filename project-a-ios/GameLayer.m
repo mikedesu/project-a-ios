@@ -90,8 +90,6 @@ unsigned get_memory_mb(void) {
         
         
         // our list of entities
-        //entityArray = [ [ NSMutableArray alloc ] init ];
-        //[ entityArray addObject: pcEntity ];
         [[[ dungeon objectAtIndex:floorNumber ] entityArray] addObject: pcEntity];
         
  
@@ -105,8 +103,6 @@ unsigned get_memory_mb(void) {
         }
         
         
-        // set the hero on the startTile and center the camera
-        //[ self setEntity:pcEntity onTile: startTile ];
         [ GameRenderer setEntity:pcEntity onTile:startTile ];
         [ self resetCameraPosition ];
         
@@ -161,26 +157,6 @@ unsigned get_memory_mb(void) {
  
         needsRedraw = YES;
         
-        // draw the screen (kind of)
-        //[ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
-        //[ GameRenderer spawnRandomItemAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1] ];
-        
-        /*
-        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1 ];
-         [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1 ];
-        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1 ];
-        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 1 ];
-        */
-        
-        // spawn a short sword
-        /*
-        [ GameRenderer spawnEntityAtRandomLocation:[Weapons bastardSword:0] onFloor:[dungeon objectAtIndex:0]];
-        [ GameRenderer spawnEntityAtRandomLocation:[Weapons bastardSword:10] onFloor:[dungeon objectAtIndex:0]];
-        */
-        
-        //[ GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: 0] onFloor:[dungeon objectAtIndex:0]];
-        
-        
         // generate and scatter some treasure
         for ( int i = 0; i < [dungeon count]; i++ ) {
             NSInteger treasureCount = [Dice roll:6] + 1;
@@ -194,19 +170,6 @@ unsigned get_memory_mb(void) {
                 }
             }
         }
-        
-        
-        // spawn our enemies beforehand
-        /*
-        for ( int i = 0; i < [dungeon count]; i++ ) {
-            MLOG(@"i=%d", i);
-            NSInteger numMonsters = [Dice roll: 10] + 1;
-            for ( int j = 0; j < numMonsters; j++ ) {
-                //MLOG(@"i=%d j=%d", i, j);
-                [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:i] withPC:pcEntity withChanceDie: 1 ];
-            }
-        }
-         */
         
         
         [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
