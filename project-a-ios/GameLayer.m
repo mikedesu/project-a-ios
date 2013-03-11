@@ -142,7 +142,7 @@ unsigned get_memory_mb(void) {
         [ self schedule:@selector(tick:)];
         
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.2
+#define STEP_SPEED              0.01
         
         // turn on gameLogic & autostepping
         gameLogicIsOn = YES;
@@ -172,8 +172,9 @@ unsigned get_memory_mb(void) {
         }
         
         
-        [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
-        
+        [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
+        //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
+    
 	}
 	return self;
 }
@@ -469,23 +470,27 @@ unsigned get_memory_mb(void) {
             if ( monsterNear ) {
                 [ self moveEntity:pcEntity toPosition:nearest ];
                 pcEntity.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
+             //   [pcEntity getHungry];
             }
             
             // prioritize healing
             else if ( pcEntity.hp < pcEntity.maxhp ) {
                 pcEntity.hp++;
                 [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+              //  [pcEntity getHungry];
             }
  
             // prioritize the roll
             else {
                 if ( roll != 9 ) {
                     [ self moveEntity:pcEntity toPosition: newPosition ];
+                   // [pcEntity getHungry];
                 } else {
                     // heal the pcEntity a bit
                     if ( pcEntity.hp < pcEntity.maxhp ) {
                         pcEntity.hp++;
                         [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+                      //  [pcEntity getHungry];
                     }
                 }
             }
@@ -615,9 +620,11 @@ unsigned get_memory_mb(void) {
                 else if ( pcEntity.hp < pcEntity.maxhp ) {
                     pcEntity.hp++;
                     [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+                 //   [pcEntity getHungry];
                 }
                 else {
                     [ self moveEntity: pcEntity toPosition: nearest ];
+                   // [pcEntity getHungry];
                 }
         
             }
@@ -1174,19 +1181,8 @@ unsigned get_memory_mb(void) {
 -( void ) updatePlayerHUDLabel {
     playerHUD.label.fontSize = 12;
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
-                                   [ NSString stringWithFormat: @"%@ - %@  T:%d", pcEntity.name,
-                                    
-                                    pcEntity.alignment == ENTITYALIGNMENT_T_LAWFUL_GOOD ?       @"Lawful Good" :
-                                    pcEntity.alignment == ENTITYALIGNMENT_T_LAWFUL_NEUTRAL ?    @"Lawful Neutral" :
-                                    pcEntity.alignment == ENTITYALIGNMENT_T_LAWFUL_EVIL ?       @"Lawful Evil" :
-                                    pcEntity.alignment == ENTITYALIGNMENT_T_NEUTRAL_GOOD ?      @"Neutral Good" :
-                                    pcEntity.alignment == ENTITYALIGNMENT_T_NEUTRAL_NEUTRAL ?   @"Neutral Neutral" :
-                                    pcEntity.alignment == ENTITYALIGNMENT_T_NEUTRAL_EVIL ?      @"Neutral Evil" :
-                                    pcEntity.alignment == ENTITYALIGNMENT_T_CHAOTIC_EVIL ?      @"Chaotic Evil" :
-                                    pcEntity.alignment == ENTITYALIGNMENT_T_CHAOTIC_GOOD ?      @"Chaotic Good" :
-                                    pcEntity.alignment == ENTITYALIGNMENT_T_CHAOTIC_NEUTRAL ?   @"Chaotic Neutral" : @"Unknown"
-                                    ,
-                                    
+                                   [ NSString stringWithFormat: @"%@ - H:%d T:%d", pcEntity.name,
+                                    pcEntity.hunger,
                                     turnCounter ],
                                    [ NSString stringWithFormat: @"St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d",
                                     pcEntity.strength,
@@ -1574,6 +1570,7 @@ unsigned get_memory_mb(void) {
                 
                 // move the pcEntity to the tile
                 [ self moveEntity:pcEntity toPosition:mapPoint ];
+              //  [ pcEntity getHungry ];
                 
                 // step game logic
                 if ( gameLogicIsOn ) {
@@ -2243,6 +2240,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             //[ self addMessage: @"Can't move there!" ];
         }
     }
+    [entity getHungry];
 }
 
 
@@ -2501,145 +2499,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     return array;
 }
-
-
--( NSArray * ) nearestNonVoidWeightedPointsForCGPoint: (CGPoint) a toCGPoint: (CGPoint) b withWeight: (NSInteger) weight {
-    NSMutableArray *array = nil;
-    if ( ccpFuzzyEqual(a, b, 0) ) {
-        array = nil;
-    }
-    
-    else {
-        array = [ NSMutableArray array ];
-            
-        CGPoint ul, u, ur, l, r, dl, d, dr;
-        ul = ccp( a.x-1, a.y-1 );
-        u  = ccp( a.x+0, a.y-1 );
-        ur = ccp( a.x+1, a.y-1 );
-        l  = ccp( a.x-1, a.y+0 );
-        r  = ccp( a.x+1, a.y+0 );
-        dl = ccp( a.x-1, a.y+1 );
-        d  = ccp( a.x+0, a.y+1 );
-        dr = ccp( a.x+1, a.y+1 );
-        
-        /*
-        NSInteger uld = [ self distanceFromCGPoint:ul toCGPoint:b ];
-        NSInteger ud  = [ self distanceFromCGPoint:u  toCGPoint:b ];
-        NSInteger urd = [ self distanceFromCGPoint:ur toCGPoint:b ];
-        NSInteger ld  = [ self distanceFromCGPoint:l  toCGPoint:b ];
-        NSInteger rd  = [ self distanceFromCGPoint:r  toCGPoint:b ];
-        NSInteger dld = [ self distanceFromCGPoint:dl toCGPoint:b ];
-        NSInteger dd  = [ self distanceFromCGPoint:d  toCGPoint:b ];
-        NSInteger drd = [ self distanceFromCGPoint:dr toCGPoint:b ];
-        */
-        
-        WeightedPoint wul, wu, wur, wl, wr, wdl, wd, wdr;
-        wul.x = ul.x; wul.y = ul.y; wul.weight = weight;
-        wu.x  = u.x;  wu.y  = u.y;  wu.weight  = weight;
-        wur.x = ur.x; wur.y = ur.y; wur.weight = weight;
-        wl.x  = l.x;  wl.y  = l.y;  wl.weight  = weight;
-        wr.x  = r.x;  wr.y  = r.y;  wr.weight  = weight;
-        wdl.x = dl.x; wdl.y = dl.y; wdl.weight = weight;
-        wd.x  = d.x;  wd.y  = d.y;  wd.weight  = weight;
-        wdr.x = dr.x; wdr.y = dr.y; wdr.weight = weight;
-        
-        
-        [array addObject: [NSValue valueWithBytes:&wul objCType:@encode(WeightedPoint)]];
-        [array addObject: [NSValue valueWithBytes:&wu  objCType:@encode(WeightedPoint)]];
-        [array addObject: [NSValue valueWithBytes:&wur objCType:@encode(WeightedPoint)]];
-        [array addObject: [NSValue valueWithBytes:&wl  objCType:@encode(WeightedPoint)]];
-        [array addObject: [NSValue valueWithBytes:&wr  objCType:@encode(WeightedPoint)]];
-        [array addObject: [NSValue valueWithBytes:&wdl objCType:@encode(WeightedPoint)]];
-        [array addObject: [NSValue valueWithBytes:&wd  objCType:@encode(WeightedPoint)]];
-        [array addObject: [NSValue valueWithBytes:&wdr objCType:@encode(WeightedPoint)]];
-        
-        for ( int i = 0; i < array.count; i++ ) {
-            WeightedPoint p;
-            [((NSValue *)[ array objectAtIndex: i ]) getValue: &p ];
-            CGPoint cgp = ccp( p.x, p.y );
-            if ( ((Tile *)[self getTileForCGPoint:cgp forFloor:[dungeon objectAtIndex:floorNumber]]).tileType == TILE_FLOOR_VOID ) {
-                [ array removeObjectAtIndex: i ];
-                i = 0;
-            }
-        }
-        
-    }
-    
-    return array;
-}
-
-
-
-// craft a path from the endpoint to the pcEntity
--( NSArray * ) doAlgorithm {
-    MLOG(@"Do algorithm");
-    
-    NSMutableArray *pathArray = [ NSMutableArray array ];
-    
-    CGPoint e = [ GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber]];
-    CGPoint s = pcEntity.positionOnMap;
-    
-    NSInteger w = 0;
-    
-    WeightedPoint end;  end.x = e.x;  end.y = e.y;  end.weight = w;
-    
-    w++;
-    
-    [pathArray addObject: [NSValue valueWithBytes:&end objCType:@encode(WeightedPoint)]];
-    
-    
-    for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] tileDataArray] count]; i++ ) {
-    //for ( int i = 0; i < pathArray.count; i++ ) {
-        MLOG(@"i=%d/%d", i, pathArray.count);
-        
-        WeightedPoint tmp;  [(NSValue *)[pathArray objectAtIndex:i] getValue:&tmp];
-        
-        MLOG(@"tmp=(%.0f,%.0f)  s=(%.0f,%.0f)", tmp.x, tmp.y, s.x, s.y );
-        if ( tmp.x == s.x && tmp.y == s.y ) {
-            // hit the pcEntity! we have our path!
-            MLOG(@"path found!");
-            break;
-        }
-        else {
-            MLOG(@"path not found yet...");
-        }
-        
-        NSArray *list = [ self nearestNonVoidWeightedPointsForCGPoint:ccp(tmp.x, tmp.y) toCGPoint:s withWeight: tmp.weight+1 ];
-        NSMutableArray *mutableList = [ NSMutableArray arrayWithArray: list ];
-        
- 
-        for ( int j = 0; j < mutableList.count; j++ ) {
-            WeightedPoint p0; [(NSValue *)[mutableList objectAtIndex:j] getValue:&p0];
-            
-            for ( int k = 0; k < pathArray.count; k++ ) {
-                WeightedPoint p1; [(NSValue *)[mutableList objectAtIndex:j] getValue:&p1];
-                
-                if ( p0.x == p1.x && p0.y == p1.y && p1.weight <= p0.weight ) {
-                    [ mutableList removeObjectAtIndex: j ];
-                    j = 0;
-                    break;
-                }
-                
-            }
-            
-        }
-        
-        // mutableList is ready - add the items to pathArray
-        for ( NSValue *v in mutableList ) {
-            WeightedPoint p0; [v getValue:&p0];
-            [pathArray addObject: [NSValue valueWithBytes:&p0 objCType:@encode(WeightedPoint)]];
-        }
-        
-        MLOG(@"%d. Path array = %@", i, pathArray );
-        
-    }
-
-    return pathArray;
-}
-
-
-
-
 
 
 
@@ -3034,7 +2893,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
  
         // spawn a new monster on the current floor
-        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 100 ];
+        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 2 ];
         Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
         
         // check if we've obtained the Book of All-Knowing
@@ -3137,6 +2996,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         // try to move the entity to the new position
         // TODO: move movEntity to GameRenderer
         [ self moveEntity:e toPosition: newPosition ];
+        //[ e getHungry ];
     }
 }
 

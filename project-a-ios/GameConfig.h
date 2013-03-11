@@ -23,17 +23,18 @@
 #import "HUDMenu.h"
 #import "Items.h"
 #import "MLog.h"
+#import "Monsters.h"
 #import "PlayerHUD.h"
 #import "PlayerMenu.h"
 #import "Tile.h"
 #import "Weapons.h"
 
-
+/*
 typedef struct {
     CGFloat x, y;
     NSInteger weight;
 } WeightedPoint;
-
+*/
 
 // Defines the width x length of tiles in pixels
 #define TILE_SIZE                   16

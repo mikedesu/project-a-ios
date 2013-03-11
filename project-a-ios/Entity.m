@@ -36,6 +36,7 @@
 @synthesize ac;
 
 @synthesize money;
+@synthesize hunger;
 
 @synthesize itemType;
 @synthesize damageBonus;
@@ -134,6 +135,7 @@
         
         ac = 10; // the higher the better
         
+        hunger = 0;
         money = 0;
         
         inventoryArray = [ [ NSMutableArray alloc ] init ];
@@ -375,6 +377,21 @@
 -( void ) step {
     //MLOG( @"Entity step" );
 }
+
+
+/*
+ ====================
+ getHungry
+ 
+ advances the entity's hunger
+ ====================
+ */
+-( void ) getHungry {
+    hunger++;
+}
+
+
+
 
 
 @end

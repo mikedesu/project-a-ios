@@ -129,6 +129,8 @@ typedef enum {
     
     NSMutableArray *pathTaken;
     
+    NSUInteger hunger;
+    
     
     // Feats sieve:
     // 0000 0000 0001 0011
@@ -173,6 +175,7 @@ typedef enum {
 @property (atomic, assign) EntityItemPickupAlgorithm_t itemPickupAlgorithm;
 
 @property (atomic, assign) NSUInteger money;
+@property (atomic, assign) NSUInteger hunger;
 @property (atomic) NSMutableArray *inventoryArray;
 
 @property (atomic) Entity *equippedArmsLeft;
@@ -200,5 +203,7 @@ typedef enum {
 
     
 -( void ) step;
+
+-( void ) getHungry;
 
 @end

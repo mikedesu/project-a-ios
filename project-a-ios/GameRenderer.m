@@ -167,7 +167,7 @@ NSInteger getMod( NSInteger n ) {
         }
         
         else if ( entity.entityType == ENTITY_T_NPC ) {
-            CCMutableTexture2D *t = [Drawer monster];
+            CCMutableTexture2D *t = [Drawer ghoul];
             for ( int i = 0; i < 16; i++ )
                 for ( int j = 0; j < 16; j++ )
                     if ( [t pixelAt:ccp(i,j)].a != 0 )
@@ -922,7 +922,8 @@ NSInteger getMod( NSInteger n ) {
     if ( diceroll <= spawnChancePercent ) {
         
         //Entity *e = [ GameRenderer randomMonsterForPC: pc ];
-        Entity *e = [ GameRenderer randomMonsterForFloor:floor ];
+        //Entity *e = [ GameRenderer randomMonsterForFloor:floor ];
+        Entity *e = [ Monsters ghoul ];
         [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
         
     }

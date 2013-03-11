@@ -23,6 +23,7 @@
 
 +(CCMutableTexture2D *) hero;
 +(CCMutableTexture2D *) monster;
++(CCMutableTexture2D *) ghoul;
 
 
 @end

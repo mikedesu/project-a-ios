@@ -57,7 +57,23 @@
 +(CCMutableTexture2D *) stoneTile {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
-    [t fill:gray];
+    
+    Color_t c0 = gray;
+    Color_t c1 = darkgray;
+    
+    [t fill:c0];
+    for (int j=0; j<16; j+=2) {
+        for (int i=0; i<16; i++) {
+            [t setPixelAt:ccp(i,j) rgba:c1];
+        }
+    }
+    for (int i=0; i<16; i+=2) {
+        for (int j=0; j<16; j++) {
+            [t setPixelAt:ccp(i,j) rgba:c1];
+        }
+    }
+    
+    
     [ t apply ];
     return t;
 }
@@ -67,6 +83,19 @@
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
     [t fill:black];
+    /*
+    for (int i=0; i<16; i+=2) {
+        for (int j=1; j<16; j+=2) {
+            [t setPixelAt:ccp(i,j) rgba:darkgray];
+        }
+    }
+    */
+    
+    NSInteger x = [Dice roll:16]-1;
+    NSInteger y = [Dice roll:16]-1;
+    
+    [t setPixelAt:ccp(x,y) rgba:white];
+    
     [ t apply ];
     return t;
 }
@@ -75,7 +104,23 @@
 +(CCMutableTexture2D *) upstairsTile {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
-    [t fill:cyan];
+    
+    Color_t c0 = gray;
+    Color_t c1 = black;
+    
+    for (int i=4; i<16; i++)
+        for (int j=14; j<16; j++)
+            [t setPixelAt:ccp(i,j) rgba:c0];
+    for (int i=8; i<16; i++)
+        for (int j=10; j<16; j++)
+            [t setPixelAt:ccp(i,j) rgba:c0];
+    for (int i=12; i<16; i++)
+        for (int j=6; j<16; j++)
+            [t setPixelAt:ccp(i,j) rgba:c0];
+    for (int i=0; i<16; i++) {
+        [t setPixelAt:ccp(i, 9) rgba:c1];
+        [t setPixelAt:ccp(i, 13) rgba:c1];
+    }
     [ t apply ];
     return t;
 }
@@ -84,7 +129,22 @@
 +(CCMutableTexture2D *) downstairsTile {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
-    [t fill:purple];
+    
+    Color_t c0 = gray;
+    
+    for (int i=0; i<16; i++) {
+        int j;
+        for (j=i<4?2:i<8?6:i<12?10:14; j<16; j++) {
+            [t setPixelAt:ccp(i,j) rgba:c0];
+        }
+    }
+    
+    for (int i=0; i<16; i++) {
+        [t setPixelAt:ccp(3,i) rgba:black];
+        [t setPixelAt:ccp(7,i) rgba:black];
+        [t setPixelAt:ccp(11,i) rgba:black];
+    }
+    
     [ t apply ];
     return t;
 }
@@ -93,7 +153,15 @@
 +(CCMutableTexture2D *) bookOfAllKnowing {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
-    [t fill:yellow];
+    
+    for (int i=2; i<14; i++)
+        for (int j=2; j<14; j++)
+            [t setPixelAt:ccp(i,j) rgba:brown];
+    
+    for (int i=4; i<14; i++)
+        for (int j=11; j<13; j++)
+            [t setPixelAt:ccp(i,j) rgba:white];
+    
     [ t apply ];
     return t;
 }
@@ -266,6 +334,32 @@
     //[ t apply ];
     //return t;
     return [Drawer marioWithSuitColor:green skinColor:skincolor3];
+}
+
+
++(CCMutableTexture2D *) ghoul {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    
+    // ghoul body
+    Color_t c0 = green;
+    for (int i=2; i<14; i++)
+        for (int j=2; j<8; j++)
+            [t setPixelAt:ccp(i,j) rgba:c0];
+    for (int i=8; i<12; i++)
+        for (int j=0; j<12; j++)
+            [t setPixelAt:ccp(i,j) rgba:c0];
+    
+    //left eye
+    Color_t c1 = black;
+    [t setPixelAt:ccp(4,4) rgba:c1];
+    [t setPixelAt:ccp(5,4) rgba:c1];
+ 
+    //right eye
+    [t setPixelAt:ccp(8,4) rgba:c1];
+    [t setPixelAt:ccp(9,4) rgba:c1];
+    [ t apply ];
+    return t;
 }
 
 
