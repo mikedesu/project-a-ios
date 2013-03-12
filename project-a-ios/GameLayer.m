@@ -729,8 +729,8 @@ unsigned get_memory_mb(void) {
     }
     
     else if ( [notification.name isEqualToString: @"PlayerMenuInventoryNotification" ]) {
-        MLOG(@"Status menu");
-        [self addStatusMenu];
+        MLOG(@"Inventory menu");
+        [self addInventoryMenu];
     }
     
     
@@ -741,8 +741,8 @@ unsigned get_memory_mb(void) {
     }
     
     else if ( [notification.name isEqualToString: @"InventoryMenuReturnNotification" ]) {
-        MLOG(@"Status menu");
-        [self removeStatusMenu];
+        MLOG(@"Inventory menu");
+        [self removeInventoryMenu];
     }
     
     
