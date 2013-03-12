@@ -8,11 +8,12 @@
 #import "GameConfig.h"
 
 @interface InventoryMenu : CCLayerColor {
-    CCLabelTTF *content;
+    NSMutableArray *inventory;
+    CCMenu *menu;
 }
-@property (atomic) CCLabelTTF *content;
--(id) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h;
-
--(id) init;
-
+@property (atomic) NSMutableArray *inventory;
+@property (atomic) CCMenu *menu;
+//-(id) init;
+-(id) initWithInventory: (NSMutableArray *) pcInventory ;
+-(void) update;
 @end

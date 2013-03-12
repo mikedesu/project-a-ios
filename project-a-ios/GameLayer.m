@@ -1398,7 +1398,7 @@ unsigned get_memory_mb(void) {
 #pragma mark - Inventory Menu
 
 -(void) initInventoryMenu {
-    inventoryMenu = [[InventoryMenu alloc] init];
+    inventoryMenu = [[InventoryMenu alloc] initWithInventory:pcEntity.inventoryArray];
     inventoryMenu.position = ccp(0,0);
 }
 
@@ -1421,6 +1421,7 @@ unsigned get_memory_mb(void) {
 
 -(void) updateInventoryMenu {
     MLOG(@"updateInventoryMenu");
+    [inventoryMenu update];
 }
 
 
