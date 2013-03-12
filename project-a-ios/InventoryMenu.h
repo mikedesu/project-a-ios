@@ -8,8 +8,10 @@
 #import "GameConfig.h"
 
 @interface InventoryMenu : CCLayerColor {
-    
+    CCLabelTTF *content;
 }
+@property (atomic) CCLabelTTF *content;
+-(id) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h;
 
 -(id) init;
 

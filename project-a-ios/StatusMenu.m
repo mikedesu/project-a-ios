@@ -14,36 +14,36 @@
     CGSize s = [[CCDirector sharedDirector] winSize];
     if ((self=[super initWithColor:black width:s.width height:s.height])) {
         
-        content = [[CCLabelTTF alloc] initWithString:[NSString stringWithFormat: @"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
-                                                      @"1",
-                                                      @"2",
-                                                      @"3",
-                                                      @"4",
-                                                      @"5",
-                                                      @"6",
-                                                      @"7",
-                                                      @"8",
-                                                      @"9",
-                                                      @"10",
-                                                      @"11",
-                                                      @"12",
-                                                      @"13",
-                                                      @"14",
-                                                      @"15",
-                                                      @"16",
-                                                      @"17",
-                                                      @"18",
-                                                      @"19",
-                                                      @"20",
-                                                      @"21",
-                                                      @"22",
-                                                      @"23",
-                                                      @"24",
-                                                      @"25",
-                                                      
-                                                      
-                                                      nil
-                                                      ] dimensions:CGSizeMake(s.width-20, s.height-20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:14];
+        NSString *contentStr = [NSString stringWithFormat: @"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
+                                @"1",
+                                @"2",
+                                @"3",
+                                @"4",
+                                @"5",
+                                @"6",
+                                @"7",
+                                @"8",
+                                @"9",
+                                @"10",
+                                @"11",
+                                @"12",
+                                @"13",
+                                @"14",
+                                @"15",
+                                @"16",
+                                @"17",
+                                @"18",
+                                @"19",
+                                @"20",
+                                @"21",
+                                @"22",
+                                @"23",
+                                @"24",
+                                @"25",
+                                nil
+                                ];
+        
+        content = [[CCLabelTTF alloc] initWithString:contentStr dimensions:CGSizeMake(s.width-20, s.height-20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:14];
         content.position = ccp(0 + content.contentSize.width / 2, 0 + content.contentSize.height / 2);
         [self addChild:content];
         
