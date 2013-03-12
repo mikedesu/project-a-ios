@@ -10,6 +10,8 @@
 		2721D00516E9F01300C26F9E /* HUDMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D00416E9F01300C26F9E /* HUDMenu.m */; };
 		2721D02116EAD57200C26F9E /* Drawer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D02016EAD57100C26F9E /* Drawer.m */; };
 		2721D6F216EDE94F0051352D /* Monsters.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D6F116EDE94F0051352D /* Monsters.m */; };
+		2721D6F516EEB9CD0051352D /* StatusMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D6F416EEB9CC0051352D /* StatusMenu.m */; };
+		2721D6FE16EEBA620051352D /* InventoryMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D6FD16EEBA610051352D /* InventoryMenu.m */; };
 		272EF4CA16C5695D005DF231 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 272EF4C916C5695D005DF231 /* QuartzCore.framework */; };
 		272EF4CC16C5695D005DF231 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 272EF4CB16C5695D005DF231 /* OpenGLES.framework */; };
 		272EF4CE16C5695D005DF231 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 272EF4CD16C5695D005DF231 /* OpenAL.framework */; };
@@ -159,6 +161,10 @@
 		2721D02016EAD57100C26F9E /* Drawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Drawer.m; sourceTree = "<group>"; };
 		2721D6F016EDE94F0051352D /* Monsters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Monsters.h; sourceTree = "<group>"; };
 		2721D6F116EDE94F0051352D /* Monsters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Monsters.m; sourceTree = "<group>"; };
+		2721D6F316EEB9CC0051352D /* StatusMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusMenu.h; sourceTree = "<group>"; };
+		2721D6F416EEB9CC0051352D /* StatusMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusMenu.m; sourceTree = "<group>"; };
+		2721D6FC16EEBA610051352D /* InventoryMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InventoryMenu.h; sourceTree = "<group>"; };
+		2721D6FD16EEBA610051352D /* InventoryMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InventoryMenu.m; sourceTree = "<group>"; };
 		272EF4C616C5695D005DF231 /* project-a-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "project-a-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		272EF4C916C5695D005DF231 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		272EF4CB16C5695D005DF231 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -540,6 +546,8 @@
 				27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */,
 				2721D00316E9F01200C26F9E /* HUDMenu.h */,
 				2721D00416E9F01300C26F9E /* HUDMenu.m */,
+				2721D6FC16EEBA610051352D /* InventoryMenu.h */,
+				2721D6FD16EEBA610051352D /* InventoryMenu.m */,
 				2767E0C916E83FA500013CBE /* Items.h */,
 				2767E0CA16E83FA500013CBE /* Items.m */,
 				27C4145216C7FB9E00BE09F9 /* GameConfig.h */,
@@ -554,6 +562,8 @@
 				2773F29416C949C4001C3E83 /* PlayerHUD.m */,
 				2773F29616C94DA3001C3E83 /* PlayerMenu.h */,
 				2773F29716C94DA3001C3E83 /* PlayerMenu.m */,
+				2721D6F316EEB9CC0051352D /* StatusMenu.h */,
+				2721D6F416EEB9CC0051352D /* StatusMenu.m */,
 				27C4145316C804E300BE09F9 /* Tile.h */,
 				27C4145416C804E300BE09F9 /* Tile.m */,
 				2767E0CC16E8596900013CBE /* Weapons.h */,
@@ -1119,6 +1129,8 @@
 				2721D00516E9F01300C26F9E /* HUDMenu.m in Sources */,
 				2721D02116EAD57200C26F9E /* Drawer.m in Sources */,
 				2721D6F216EDE94F0051352D /* Monsters.m in Sources */,
+				2721D6F516EEB9CD0051352D /* StatusMenu.m in Sources */,
+				2721D6FE16EEBA620051352D /* InventoryMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

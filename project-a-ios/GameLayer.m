@@ -214,6 +214,11 @@ unsigned get_memory_mb(void) {
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuMonitorCloseNotification" object:nil];
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuGearHUDCloseNotification" object:nil];
     
+    
+    // status menu items
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"StatusMenuReturnNotification" object:nil];
+    
+    
 }
 
 
@@ -710,6 +715,13 @@ unsigned get_memory_mb(void) {
     
     
     
+    else if ( [notification.name isEqualToString: @"PlayerMenuStatusNotification" ]) {
+        MLOG(@"Status menu");
+    }
+    
+    else if ( [notification.name isEqualToString: @"StatusMenuReturn" ]) {
+        MLOG(@"Status menu");
+    }
     
     
     
