@@ -18,8 +18,10 @@ typedef enum {
 @class EditorHUD;
 @class EntityInfoHUD;
 @class HUDMenu;
+@class InventoryMenu;
 @class PlayerHUD;
 @class PlayerMenu;
+@class StatusMenu;
 @class Tile;
 
 @interface GameLayer : CCLayer <UIAlertViewDelegate> {
@@ -34,11 +36,8 @@ typedef enum {
     DungeonFloor *floor;
     
     NSMutableArray *dungeon;
-    
     NSMutableArray *tileArray;
-    
     NSMutableArray *tileDataArray;
-    
     NSMutableArray *entityArray;
     
     NSMutableArray *dLog;
@@ -75,6 +74,14 @@ typedef enum {
     
     BOOL hudMenuIsVisible;
     HUDMenu *hudMenu;
+    
+    BOOL statusMenuIsVisible;
+    StatusMenu *statusMenu;
+    
+    BOOL inventoryMenuIsVisible;
+    InventoryMenu *inventoryMenu;
+    
+    
     
     CGPoint cameraAnchorPoint;
     
@@ -130,6 +137,18 @@ typedef enum {
 -( void ) addGearHUD: ( PlayerHUD * ) _hud;
 -( void ) removeGearHUD: ( PlayerHUD * ) _hud;
 -( void ) updateGearHUDLabel;
+
+-(void) initStatusMenu;
+-(void) addStatusMenu;
+-(void) removeStatusMenu;
+-(void) updateStatusMenu;
+
+-(void) initInventoryMenu;
+-(void) addInventoryMenu;
+-(void) removeInventoryMenu;
+-(void) updateInventoryMenu;
+
+
 
 
 

@@ -123,6 +123,7 @@ unsigned get_memory_mb(void) {
         // first turn
         turnCounter = 1;
         
+        
         // initialize our notifications
         [ self initializeNotifications ];
         
@@ -158,6 +159,7 @@ unsigned get_memory_mb(void) {
                 }
             }
         }
+        
         
         
         [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
@@ -219,6 +221,12 @@ unsigned get_memory_mb(void) {
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"StatusMenuReturnNotification" object:nil];
     
     
+    // inventory menu items
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"InventoryMenuReturnNotification" object:nil];
+    
+    
+    
+    
 }
 
 
@@ -229,7 +237,7 @@ unsigned get_memory_mb(void) {
  ====================
  */
 -( void ) receiveNotification: ( NSNotification * ) notification {
-    //MLOG( @"received notification: %@", notification );
+    MLOG( @"received notification: %@", notification );
     
     if ( [[ notification name ] isEqualToString: @"TestNotification1" ] ) {
         //MLOG( @"TestNotification1" );
@@ -717,11 +725,27 @@ unsigned get_memory_mb(void) {
     
     else if ( [notification.name isEqualToString: @"PlayerMenuStatusNotification" ]) {
         MLOG(@"Status menu");
+        [self addStatusMenu];
     }
     
-    else if ( [notification.name isEqualToString: @"StatusMenuReturn" ]) {
+    else if ( [notification.name isEqualToString: @"PlayerMenuInventoryNotification" ]) {
         MLOG(@"Status menu");
+        [self addStatusMenu];
     }
+    
+    
+    
+    else if ( [notification.name isEqualToString: @"StatusMenuReturnNotification" ]) {
+        MLOG(@"Status menu");
+        [self removeStatusMenu];
+    }
+    
+    else if ( [notification.name isEqualToString: @"InventoryMenuReturnNotification" ]) {
+        MLOG(@"Status menu");
+        [self removeStatusMenu];
+    }
+    
+    
     
     
     
@@ -1295,11 +1319,64 @@ unsigned get_memory_mb(void) {
 
 
 
+#pragma mark - Status Menu
+
+-(void) initStatusMenu {
+    //CGSize size = [[CCDirector sharedDirector] winSize];
+    statusMenu = [[ StatusMenu alloc ] init];
+    statusMenu.position = ccp( 0, 0);
+}
+
+-(void) addStatusMenu {
+    MLOG(@"removeStatusMenu");
+    if ( ! statusMenuIsVisible ) {
+        MLOG(@"! statusMenuIsVisible");
+        [self addChild:statusMenu];
+        statusMenuIsVisible = YES;
+    }
+}
+
+-(void) removeStatusMenu {
+    MLOG(@"removeStatusMenu");
+    if ( statusMenuIsVisible ) {
+        MLOG(@"statusMenuIsVisible");
+        [self removeChild:statusMenu cleanup:NO];
+        statusMenuIsVisible = NO;
+    }
+}
+
+-(void) updateStatusMenu {
+    MLOG(@"updateStatusMenu");
+}
 
 
+#pragma mark - Inventory Menu
+
+-(void) initInventoryMenu {
+    inventoryMenu = [[InventoryMenu alloc] init];
+    inventoryMenu.position = ccp(0,0);
+}
 
 
+-(void) addInventoryMenu {
+    if ( ! inventoryMenuIsVisible ) {
+        [self addChild:inventoryMenu];
+        inventoryMenuIsVisible = YES;
+    }
+}
 
+
+-(void) removeInventoryMenu {
+    if ( inventoryMenuIsVisible ) {
+        [self removeChild:inventoryMenu cleanup:NO];
+        inventoryMenuIsVisible = NO;
+    }
+}
+
+
+-(void) updateInventoryMenu {
+    MLOG(@"updateInventoryMenu");
+}
 
 
 
@@ -1330,6 +1407,8 @@ unsigned get_memory_mb(void) {
             [ self updateEntityInfoHUDLabel ];
         if ( gearHUDIsVisible )
             [ self updateGearHUDLabel ];
+        //if (statusMenuIsVisible)
+        //    [ self updateStatusMenu ];
         
         [ self resetCameraPosition ];
         
@@ -2776,6 +2855,15 @@ NSUInteger getMagicY( NSUInteger y ) {
     hudMenuIsVisible = NO;
     [ self initHUDMenu ];
     // [ self addHUDMenu: hudMenu ];
+    
+    
+    statusMenuIsVisible = NO;
+    [self initStatusMenu];
+    // [self addStatusMenu];
+    
+    inventoryMenuIsVisible = NO;
+    [self initInventoryMenu];
+    //[self addInventoryMenu];
     
 }
 

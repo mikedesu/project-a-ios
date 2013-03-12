@@ -11,6 +11,6 @@
     
 }
 
--(id) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h;
+-(id) init;
 
 @end

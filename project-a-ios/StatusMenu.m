@@ -22,6 +22,7 @@
         CCMenu *menu = [CCMenu menuWithArray:items];
         menu.position = ccp(0,0);
         [self addChild:menu];
+        
     }
     return self;
 }

@@ -22,10 +22,12 @@
 #import "GameRenderer.h"
 #import "HUDMenu.h"
 #import "Items.h"
+#import "InventoryMenu.h"
 #import "MLog.h"
 #import "Monsters.h"
 #import "PlayerHUD.h"
 #import "PlayerMenu.h"
+#import "StatusMenu.h"
 #import "Tile.h"
 #import "Weapons.h"
 

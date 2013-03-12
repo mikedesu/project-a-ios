@@ -8,12 +8,27 @@
 
 @implementation InventoryMenu
 
--(id) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h {
-    if ((self=[super initWithColor:color width:w height:h])) {
+-(id) init {
+    CGSize s = [[ CCDirector sharedDirector ] winSize];
+    if ((self=[super initWithColor:black width:s.width height:s.height])) {
+        CCMenuItemLabel *l0 = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Return" fontName:@"Courier New" fontSize:18] target:self selector:@selector(returnPressed)];
+        l0.position = ccp( 0 + l0.contentSize.width/2, 0 + l0.contentSize.height/2 );
+        
+        NSArray *items = [NSArray arrayWithObjects:
+                          l0,
+                          nil];
+        
+        CCMenu *menu = [CCMenu menuWithArray:items];
+        menu.position = ccp(0,0);
+        [self addChild:menu];
         
     }
     return self;
 }
 
+-(void) returnPressed {
+    MLOG(@"Return pressed");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"InventoryMenuReturnNotification" object:self];
+}
 
 @end
