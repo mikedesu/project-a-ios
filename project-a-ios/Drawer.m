@@ -364,6 +364,51 @@
 
 
 
++(CCMutableTexture2D *) statusIcon {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    
+    // fill black bg
+    Color_t bg = black;
+    [t fill:bg];
+    
+    // draw a white 'S'
+    Color_t fontColor = white;
+    for (int i=4; i<12; i++)
+        for (int j=2; j<15; j+=6)
+            [t setPixelAt:ccp(i,j) rgba:fontColor];
+    for (int j=2; j<9; j++)
+        [t setPixelAt:ccp(4,j) rgba:fontColor];
+    for (int j=8; j<15; j++)
+        [t setPixelAt:ccp(11,j) rgba:fontColor];
+    [t apply];
+    
+    return t;
+}
+
+
++(CCMutableTexture2D *) itemIcon {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    
+    // fill black bg
+    Color_t bg = black;
+    [t fill:bg];
+    
+    // draw a white 'I'
+    Color_t fontColor = white;
+    for (int i=8; i<9; i++)
+        for (int j=2; j<14; j++)
+            [t setPixelAt:ccp(i,j) rgba:fontColor];
+    for (int i=4; i<12; i++) {
+        [t setPixelAt:ccp(i,2) rgba:fontColor];
+        [t setPixelAt:ccp(i,13) rgba:fontColor];
+    }
+    
+    [t apply];
+    return t;
+}
+
 
 
 

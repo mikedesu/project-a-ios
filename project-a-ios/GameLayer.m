@@ -6,7 +6,6 @@
 #import "Dice.h"
 #import "GameLayer.h"
 
-
 #import <mach/mach.h> // for reporting memory info
 
 // used for reporting memory used in-game
@@ -14,21 +13,10 @@ unsigned get_memory_bytes(void) {
     struct task_basic_info info;
     mach_msg_type_number_t size = sizeof(info);
     kern_return_t kerr = task_info( mach_task_self(), TASK_BASIC_INFO, (task_info_t) &info, &size );
-    
-    unsigned retval = 0;
-    
-    if ( kerr == KERN_SUCCESS ) {
-        //MLOG( @"Memory in use (in bytes): %u", info.resident_size );
-        retval = info.resident_size;
-    } else {
-        //MLOG( @"Error with task_info(): %s", mach_error_string(kerr) );
-    }
-    
-    return retval;
+    return kerr == KERN_SUCCESS ? info.resident_size : 0;
 }
 
 unsigned get_memory_kb(void) {
-    //return get_memory_bytes() / 1024;
     return get_memory_bytes() >> 10;
 }
 
@@ -209,15 +197,19 @@ unsigned get_memory_mb(void) {
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
     
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MonitorNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MoveNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"StepNotification" object:nil];
-    
+ 
+    // player menu items
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuCloseNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuStatusNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuInventoryNotification" object:nil];
     
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuStepNotification" object:nil];
+    
+    //
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuTogglePositionNotification" object:nil];
-    
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuToggleHUDsNotification" object:nil];
     
+    //
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuEditorHUDCloseNotification" object:nil];
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuMonitorCloseNotification" object:nil];
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuGearHUDCloseNotification" object:nil];
@@ -261,7 +253,7 @@ unsigned get_memory_mb(void) {
         //[ self removePlayerMenu: playerMenu ];
         //gameState = GAMESTATE_T_GAME;
     }
-    else if ( [[ notification name ] isEqualToString: @"StepNotification" ] ) {
+    else if ( [[ notification name ] isEqualToString: @"PlayerMenuStepNotification" ] ) {
         //MLOG( @"StepNotification" );
         
         //[ self removePlayerMenu: playerMenu ];
@@ -738,7 +730,7 @@ unsigned get_memory_mb(void) {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:40 height:150 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(225) width:100 height:160 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
@@ -787,7 +779,7 @@ unsigned get_memory_mb(void) {
  */
 -( void ) initPlayerMenuMin {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenuMin = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:40 height:30 isMinimized:YES];
+    playerMenuMin = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:100 height:30 isMinimized:YES];
     playerMenuMin.position = ccp( 0 , size.height - (playerMenuMin.contentSize.height) );
 }
 
@@ -1063,7 +1055,7 @@ unsigned get_memory_mb(void) {
  */
 -( void ) initEditorHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    editorHUD = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:80 ];
+    editorHUD = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:200 height:80 ];
     editorHUD.position = ccp(  size.width - editorHUD.contentSize.width , size.height - (editorHUD.contentSize.height) - 5 );
     editorHUD.label.fontSize = 12;
     [ self updateEditorHUDLabel ];
@@ -1078,8 +1070,9 @@ unsigned get_memory_mb(void) {
  ====================
  */
 -( void ) updateEditorHUDLabel {
+    
     /*
-    [[editorHUD label] setString: [ NSString stringWithFormat: @"%@%@%@%@%@%@%@",
+     [[editorHUD label] setString: [ NSString stringWithFormat: @"%@%@%@%@%@%@%@",
                                   [dLog objectAtIndex: dLogIndex+0 ],
                                   [dLog objectAtIndex: dLogIndex+1 ],
                                   [dLog objectAtIndex: dLogIndex+2 ],
@@ -1088,7 +1081,7 @@ unsigned get_memory_mb(void) {
                                   [dLog objectAtIndex: dLogIndex+5 ],
                                   [dLog objectAtIndex: dLogIndex+6 ]
                                   ]];
-    */
+     */
     
     [[editorHUD label] setString: [ NSString stringWithFormat: @"%@",
                                    [dLog objectAtIndex: dLogIndex ]
@@ -2079,7 +2072,8 @@ NSUInteger getMagicY( NSUInteger y ) {
 //#define MAX_DISPLAYED_MESSAGES      7
 #define MAX_DISPLAYED_MESSAGES      1
 -( void ) addMessage: (NSString * ) message {
-    NSString *str = [ NSString stringWithFormat: @"%@\n", message ];
+    NSString *str = [ NSString stringWithFormat: @"%@\n",
+                     message ];
     [ dLog addObject: str ];
     if ( [ dLog count ] > MAX_DISPLAYED_MESSAGES ) {
         dLogIndex++;

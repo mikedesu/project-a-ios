@@ -25,5 +25,8 @@
 +(CCMutableTexture2D *) monster;
 +(CCMutableTexture2D *) ghoul;
 
++(CCMutableTexture2D *) statusIcon;
++(CCMutableTexture2D *) itemIcon;
+
 
 @end
