@@ -9,12 +9,13 @@
 @implementation StatusMenu
 
 @synthesize content;
+@synthesize contentStr;
 
 -(id) init {
     CGSize s = [[CCDirector sharedDirector] winSize];
     if ((self=[super initWithColor:black width:s.width height:s.height])) {
         
-        NSString *contentStr = [NSString stringWithFormat: @"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
+        contentStr = [NSString stringWithFormat: @"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
                                 @"1",
                                 @"2",
                                 @"3",

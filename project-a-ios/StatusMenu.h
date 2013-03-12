@@ -8,9 +8,11 @@
 #import "GameConfig.h"
 
 @interface StatusMenu : CCLayerColor {
+    NSString *contentStr;
     CCLabelTTF *content;
 }
 @property (atomic) CCLabelTTF *content;
+@property (atomic) NSString *contentStr;
 -(id) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h;
 
 @end

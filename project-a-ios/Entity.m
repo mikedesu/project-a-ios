@@ -277,6 +277,30 @@
 
 /*
  ====================
+ damageRollBase
+ 
+ returns the damage roll base for this entity
+ ====================
+ */
+-( NSInteger ) damageRollBase {
+    NSInteger base = damageRollBase;
+    if ( equippedArmsLeft == nil && equippedArmsRight == nil ) {
+        base = damageRollBase;
+    }
+    else {
+        base = equippedArmsLeft.damageRollBase;
+    }
+    return base;
+}
+
+
+
+
+
+
+
+/*
+ ====================
  ac
  
  returns the total ac 

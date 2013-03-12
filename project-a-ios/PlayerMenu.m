@@ -34,6 +34,11 @@
         CCLabelTTF *menuItemLabelStep = [[CCLabelTTF alloc] initWithString: @"Step" fontName:@"Courier New" fontSize:16 ];
         menuItemLabelInventory.color = white3;
         
+        CCLabelTTF *menuItemLabelAutostep = [[CCLabelTTF alloc] initWithString: @"Autostep" fontName:@"Courier New" fontSize:16 ];
+        menuItemLabelInventory.color = white3;
+        
+        
+        
         
         
         CCMenuItem *menuItemMinimize = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelMinimize target:self selector:@selector(menuItemClosePressed) ];
@@ -48,6 +53,11 @@
         CCMenuItem *menuItemStep = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelStep target:self selector:@selector(menuItemStepPressed) ];
         menuItemStep.position = ccp( 0 + menuItemStep.contentSize.width/2, h - 32-32-32-32 - 5*4 );
         
+        CCMenuItem *menuItemAutostep = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelAutostep target:self selector:@selector(menuItemAutostepPressed) ];
+        menuItemAutostep.position = ccp( 0 + menuItemAutostep.contentSize.width/2, h -32-32-32-32-32 - 5*5 );
+        
+        
+        
         
         
         
@@ -56,6 +66,7 @@
                                                          menuItemStatus,
                                                          menuItemInventory,
                                                          menuItemStep,
+                                                         menuItemAutostep,
                                                          nil] ];
         menu.position = ccp( 0, 0 );
         [ self addChild: menu ];
@@ -106,6 +117,12 @@
 -( void ) menuItemStepPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuStepNotification"  object:self];
 }
+
+-( void ) menuItemAutostepPressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuAutostepNotification"  object:self];
+}
+
+
 
 -( void ) menuItemTogglePositionPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuTogglePositionNotification"  object:self];

@@ -162,8 +162,8 @@ unsigned get_memory_mb(void) {
         
         
         
-        [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
-        //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
+        //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
+        [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
     
 	}
 	return self;
@@ -206,6 +206,7 @@ unsigned get_memory_mb(void) {
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuInventoryNotification" object:nil];
     
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuStepNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuAutostepNotification" object:nil];
     
     //
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuTogglePositionNotification" object:nil];
@@ -722,11 +723,22 @@ unsigned get_memory_mb(void) {
     }
     
     
-    
     else if ( [notification.name isEqualToString: @"PlayerMenuStatusNotification" ]) {
         MLOG(@"Status menu");
         [self addStatusMenu];
     }
+ 
+    
+    else if ( [notification.name isEqualToString: @"PlayerMenuAutostepNotification" ]) {
+        MLOG(@"Autostep toggle");
+        autostepGameLogic = !autostepGameLogic;
+        if ( gameLogicIsOn && autostepGameLogic ) {
+            [ self scheduleStepAction ];
+        } else {
+            [ self unscheduleStepAction ];
+        }
+    }
+    
     
     else if ( [notification.name isEqualToString: @"PlayerMenuInventoryNotification" ]) {
         MLOG(@"Inventory menu");
@@ -734,11 +746,11 @@ unsigned get_memory_mb(void) {
     }
     
     
-    
     else if ( [notification.name isEqualToString: @"StatusMenuReturnNotification" ]) {
         MLOG(@"Status menu");
         [self removeStatusMenu];
     }
+    
     
     else if ( [notification.name isEqualToString: @"InventoryMenuReturnNotification" ]) {
         MLOG(@"Inventory menu");
@@ -752,6 +764,9 @@ unsigned get_memory_mb(void) {
     else {
         //MLOG( @"Notification not handled: %@", notification.name );
     }
+    
+    
+    needsRedraw = YES;
 }
 
 #pragma mark - Menus and HUD code
@@ -1347,6 +1362,36 @@ unsigned get_memory_mb(void) {
 
 -(void) updateStatusMenu {
     MLOG(@"updateStatusMenu");
+    [statusMenu.content setString:
+     [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
+      
+      [NSString stringWithFormat:@"Name: %@", pcEntity.name],
+      [NSString stringWithFormat:@"Level: %d  -  XP: %d", pcEntity.level, pcEntity.totalxp],
+      [NSString stringWithFormat:@"HP: %d/%d  -  Base AC: %d\nTotal AC: %d\nHunger: %d\n", pcEntity.hp, pcEntity.maxhp, pcEntity.ac, pcEntity.totalac, pcEntity.hunger],
+      
+      [NSString stringWithFormat:@"Strength: %d (%d)\nDexterity: %d (%d)\nConstitution: %d (%d)\nIntelligence: %d (%d)\nWisdom: %d (%d)\nCharisma:  %d (%d)\n",
+       pcEntity.strength,       [GameRenderer modifierForNumber:pcEntity.strength],
+       pcEntity.dexterity,      [GameRenderer modifierForNumber:pcEntity.dexterity],
+       pcEntity.constitution,   [GameRenderer modifierForNumber:pcEntity.constitution],
+       pcEntity.intelligence,   [GameRenderer modifierForNumber:pcEntity.intelligence],
+       pcEntity.wisdom,         [GameRenderer modifierForNumber:pcEntity.wisdom],
+       pcEntity.charisma,       [GameRenderer modifierForNumber:pcEntity.charisma],
+       nil],
+      
+      [NSString stringWithFormat:@"Attack Bonus: %d\nDamage Base: %d\n", pcEntity.attackBonus, pcEntity.damageRollBase ],
+      
+      [NSString stringWithFormat:@"Money: %d\n", pcEntity.money],
+      
+      [NSString stringWithFormat:@"L.Arm: %@\nChest: %@\nLegs: %@\n" ,
+                                pcEntity.equippedArmsLeft.name,
+                                pcEntity.equippedArmorChest.name,
+                                @"none",
+                                nil],
+
+      
+      
+      nil]
+     ];
 }
 
 
@@ -1407,8 +1452,10 @@ unsigned get_memory_mb(void) {
             [ self updateEntityInfoHUDLabel ];
         if ( gearHUDIsVisible )
             [ self updateGearHUDLabel ];
-        //if (statusMenuIsVisible)
-        //    [ self updateStatusMenu ];
+        if (statusMenuIsVisible)
+            [ self updateStatusMenu ];
+        if (inventoryMenuIsVisible)
+            [ self updateInventoryMenu ];
         
         [ self resetCameraPosition ];
         
@@ -2886,28 +2933,22 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     hero.level = 1;
     
-    hero.strength = [Dice roll:6 nTimes:3];
-    hero.dexterity = [Dice roll:6 nTimes:3];
-    hero.constitution = [Dice roll:6 nTimes:3];
-    hero.intelligence = [Dice roll:6 nTimes:3];
-    hero.wisdom = [Dice roll:6 nTimes:3];
-    hero.charisma = [Dice roll:6 nTimes:3];
+    hero.strength       = [Dice roll:6 nTimes:3];
+    hero.dexterity      = [Dice roll:6 nTimes:3];
+    hero.constitution   = [Dice roll:6 nTimes:3];
+    hero.intelligence   = [Dice roll:6 nTimes:3];
+    hero.wisdom         = [Dice roll:6 nTimes:3];
+    hero.charisma       = [Dice roll:6 nTimes:3];
     
-    
-    NSInteger conMod =
-    hero.constitution <= 3 ? -4 :
-    hero.constitution <= 5 ? -3 :
-    hero.constitution <= 7 ? -2 :
-    hero.constitution <= 9 ? -1 :
-    hero.constitution <= 11 ? 0 :
-    hero.constitution <= 13 ? 1 :
-    hero.constitution <= 15 ? 2 :
-    hero.constitution <= 17 ? 3 : 4;
+    NSInteger conMod = [GameRenderer modifierForNumber:hero.constitution];
     
     hero.maxhp = [Dice roll:12] + conMod;
     hero.hp = hero.maxhp;
     
     hero.ac = 15;
+    
+    //using fists...
+    hero.damageRollBase = 6;
     
     pcEntity = hero;
     //[ Entity drawTextureForEntity: hero ];
@@ -2987,7 +3028,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
  
         // spawn a new monster on the current floor
-        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 2 ];
+        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
         Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
         
         // check if we've obtained the Book of All-Knowing
@@ -3417,7 +3458,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) scheduledStepAction {
     if ( autostepGameLogic ) {
-        [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"StepNotification" object: self ];
+        [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuStepNotification" object: self ];
     }
 }
 
