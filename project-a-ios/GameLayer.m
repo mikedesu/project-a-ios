@@ -212,6 +212,8 @@ unsigned get_memory_mb(void) {
     //
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuTogglePositionNotification" object:nil];
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuToggleHUDsNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuResetNotification" object:nil];
+    
     
     //
     [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuEditorHUDCloseNotification" object:nil];
@@ -758,9 +760,10 @@ unsigned get_memory_mb(void) {
         [self removeInventoryMenu];
     }
     
-    
-    
-    
+    else if ( [notification.name isEqualToString: @"PlayerMenuResetNotification" ]) {
+        MLOG(@"Reset...");
+        
+    }
     
     else {
         //MLOG( @"Notification not handled: %@", notification.name );
