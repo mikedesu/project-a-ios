@@ -26,17 +26,21 @@
         
         CGFloat x = 0;
         CGFloat y = s.height;
-        
-        
-        for (Entity *e in pcInventory) {
-            CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Item" fontName:@"Courier New" fontSize:16] block:^(id sender) {
-                MLOG(@"Not yet implemented");
+    
+        for (int i = 0; i < pcInventory.count; i++) {
+            
+            //Entity *e = [pcInventory objectAtIndex:i];
+            CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Item" fontName:@"Courier New" fontSize:16] block:^(CCMenuItemLabel * sender) {
+                MLOG(@"%@ : %d", sender.label.string, sender.tag );
+                [inventory      removeObjectAtIndex: sender.tag];
+                [sender.parent  removeChild:sender   cleanup:YES];
             }];
             
             x = 0 + item.contentSize.width/2;
             y = y - item.contentSize.height/2;
             
             item.position = ccp( x , y );
+            [item setTag: i];
             
             [menuItems addObject:item];
         }
@@ -76,15 +80,24 @@
     CGFloat y = s.height;
     CGFloat pad = 10;
     
-    for (Entity *e in inventory) {
-        CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:e.name fontName:@"Courier New" fontSize:14] block:^(id sender) {
-            MLOG(@"Not yet implemented");
+    for (int i = 0; i < inventory.count; i++) {
+        Entity *e = [inventory objectAtIndex:i];
+        
+        CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:e.name fontName:@"Courier New" fontSize:14] block:^(CCMenuItemLabel *sender) {
+            MLOG(@"%@ : %d", sender.label.string, sender.tag );
+            [inventory      removeObjectAtIndex: sender.tag];
+            
+            InventoryMenu *inventoryMenu = (InventoryMenu *) sender.parent.parent;
+            [sender.parent  removeChild:sender   cleanup:YES]; // removes this item from the inventory on use
+            [inventoryMenu update];
         }];
         
         x = 0 + item.contentSize.width /2 ;
         y = y - item.contentSize.height/2 - pad;
         
+        
         if ( y >= 0 ) {
+            [item setTag: i];
             item.position = ccp( x , y );
             [menuItems addObject:item];
         }
