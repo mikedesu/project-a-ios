@@ -45,6 +45,190 @@ unsigned get_memory_mb(void) {
 }
 
 
+-(void) bootGame {
+    [self cleanupGame];
+    
+    // setting up some basic variables
+    self.isTouchEnabled = YES;
+    selectedTile = -1;
+    touchedTileIndex = -1;
+    isTouched = NO;
+    
+    
+    // Dungeon initialization
+    [ self initializeDungeon ];
+    //[ self doTimer:@selector(initializeDungeon)];
+    
+    CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: [dungeon objectAtIndex:floorNumber]];
+    
+    // set up our 'hero'
+    [ self initializePCEntity ];
+    
+    // set the camera anchor point
+    cameraAnchorPoint = ccp( 7, 5 );
+    
+    
+    // our list of entities
+    [[[ dungeon objectAtIndex:floorNumber ] entityArray] addObject: pcEntity];
+    
+    
+    // set the starting tile
+    Tile *startTile = nil;
+    for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
+        if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
+            startTile = t;
+            break;
+        }
+    }
+    
+    
+    [ GameRenderer setEntity:pcEntity onTile:startTile ];
+    [ self resetCameraPosition ];
+    
+    
+    // set the selectedTilePoint to (-1,-1) (none)
+    selectedTilePoint = ccp( -1, -1 );
+    
+    
+    // initialize our debug Log
+    dLog = [ [ NSMutableArray alloc ] init ];
+    dLogIndex = 0;
+    
+    // add some test messages
+    [ self addMessage: @"Testing" ];
+    [ self addMessage: @"Editor" ];
+    [ self addMessage: @"HUD" ];
+    [ self addMessage: @"Output" ];
+    [ self addMessage: @"Nice :)" ];
+    [ self addMessage: @"Let's roll" ];
+    [ self addMessage: @"" ];
+    
+    
+    // initialize our various HUDs
+    [ self initializeHUDs ];
+    
+    
+    // haven't touched the hero yet
+    heroTouches = 0;
+    
+    // first turn
+    turnCounter = 1;
+    
+    
+    // initialize our notifications
+    [ self initializeNotifications ];
+    
+    // schedule our update method, tick
+    [ self schedule:@selector(tick:)];
+    
+#define MAX_SAFE_STEP_SPEED     0.0001
+#define STEP_SPEED              0.01
+    
+    // turn on gameLogic & autostepping
+    gameLogicIsOn = YES;
+    //autostepGameLogic = YES;
+    autostepGameLogic = NO;
+    
+    // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
+    autostepGameLogic = autostepGameLogic && gameLogicIsOn;
+    if ( gameLogicIsOn && autostepGameLogic ) {
+        [ self scheduleStepAction ];
+    }
+    
+    needsRedraw = YES;
+    
+    // generate and scatter some treasure
+    for ( int i = 0; i < [dungeon count]; i++ ) {
+        NSInteger treasureCount = [Dice roll:6] + 1;
+        for ( int j = 0; j < treasureCount; j++ ) {
+            NSInteger roll = [Dice roll:4];
+            if ( roll == 1 ) {
+                [ GameRenderer spawnEntityAtRandomLocation:[Weapons shortSword: i] onFloor:[dungeon objectAtIndex:i]];
+            }
+            else if ( roll == 2 ) {
+                [ GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: i] onFloor:[dungeon objectAtIndex:i]];
+            }
+            else if ( roll == 3 || roll == 4 ) {
+                [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
+            }
+        }
+    }
+    
+    
+    
+    //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
+    [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
+}
+
+
+-(void) cleanupGame {
+    
+    gameState = 0;
+    turnCounter = 0;
+    selectedTilePoint = ccp(0,0);
+    pcEntity = nil;
+    
+    floorNumber = 0;
+    floor = nil;
+    
+    dungeon = nil;
+    tileArray = nil;
+    tileDataArray = nil;
+    entityArray = nil;
+    
+    dLog = nil;
+    dLogIndex = nil;
+    
+    isTouched = nil;
+    touchedTileIndex = 0;
+    selectedTile = 0;
+    
+    heroTouches = 0;
+    
+    editorHUDIsVisible = NO;
+    monitorIsVisible = NO;
+    editorHUD = nil;
+    monitor = nil;
+    
+    entityInfoHUDIsVisible = NO;
+    entityInfoHUD = nil;
+    
+    
+    playerHUDIsVisible = NO;
+    playerHUD = nil;
+    
+    gearHUDIsVisible = NO;
+    gearHUD = nil;
+    
+    playerMenuIsVisible = NO;
+    playerMenu = nil;
+    
+    playerMenuIsMin = NO;
+    playerMenuMin = nil;
+    
+    hudMenuIsVisible = NO;
+    hudMenu = nil;
+    
+    statusMenuIsVisible = NO;
+    statusMenu = nil;
+    
+    inventoryMenuIsVisible = NO;
+    inventoryMenu = nil;
+    
+    cameraAnchorPoint = ccp(0,0);
+    
+    touchBeganTime = 0;
+    
+    gameLogicIsOn = NO;
+    autostepGameLogic = NO;
+    
+    needsRedraw = NO;
+    
+    [self removeAllChildrenWithCleanup:YES];
+}
+
+
+
 /*
  ====================
  init
@@ -55,117 +239,7 @@ unsigned get_memory_mb(void) {
 -(id) init {
 	if ( ( self = [ super init ] ) ) {
         
-        // setting up some basic variables
-        self.isTouchEnabled = YES;
-        selectedTile = -1;
-        touchedTileIndex = -1;
-        isTouched = NO;
- 
-        
-        // Dungeon initialization
-        [ self initializeDungeon ];
-        //[ self doTimer:@selector(initializeDungeon)];
-        
-        CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: [dungeon objectAtIndex:floorNumber]];
-        
-        // set up our 'hero'
-        [ self initializePCEntity ];
-        
-        // set the camera anchor point
-        cameraAnchorPoint = ccp( 7, 5 );
-        
-        
-        // our list of entities
-        [[[ dungeon objectAtIndex:floorNumber ] entityArray] addObject: pcEntity];
-        
- 
-        // set the starting tile
-        Tile *startTile = nil;
-        for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
-            if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
-                startTile = t;
-                break;
-            }
-        }
-        
-        
-        [ GameRenderer setEntity:pcEntity onTile:startTile ];
-        [ self resetCameraPosition ];
-        
- 
-        // set the selectedTilePoint to (-1,-1) (none)
-        selectedTilePoint = ccp( -1, -1 );
-        
-        
-        // initialize our debug Log
-        dLog = [ [ NSMutableArray alloc ] init ];
-        dLogIndex = 0;
-        
-        // add some test messages
-        [ self addMessage: @"Testing" ];
-        [ self addMessage: @"Editor" ];
-        [ self addMessage: @"HUD" ];
-        [ self addMessage: @"Output" ];
-        [ self addMessage: @"Nice :)" ];
-        [ self addMessage: @"Let's roll" ];
-        [ self addMessage: @"" ];
-        
-        
-        // initialize our various HUDs
-        [ self initializeHUDs ];
-        
-        
-        // haven't touched the hero yet
-        heroTouches = 0;
-        
-        // first turn
-        turnCounter = 1;
-        
-        
-        // initialize our notifications
-        [ self initializeNotifications ];
-        
-        // schedule our update method, tick
-        [ self schedule:@selector(tick:)];
-        
-#define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.01
-        
-        // turn on gameLogic & autostepping
-        gameLogicIsOn = YES;
-        //autostepGameLogic = YES;
-        autostepGameLogic = NO;
-        
-        // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
-        autostepGameLogic = autostepGameLogic && gameLogicIsOn;
-        if ( gameLogicIsOn && autostepGameLogic ) {
-            [ self scheduleStepAction ];
-        }
- 
-        needsRedraw = YES;
-        
-        // generate and scatter some treasure
-        for ( int i = 0; i < [dungeon count]; i++ ) {
-            NSInteger treasureCount = [Dice roll:6] + 1;
-            for ( int j = 0; j < treasureCount; j++ ) {
-                NSInteger roll = [Dice roll:4];
-                if ( roll == 1 ) {
-                    [ GameRenderer spawnEntityAtRandomLocation:[Weapons shortSword: i] onFloor:[dungeon objectAtIndex:i]];
-                }
-                else if ( roll == 2 ) {
-                    [ GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: i] onFloor:[dungeon objectAtIndex:i]];
-                }
-                else if ( roll == 3 || roll == 4 ) {
-                    [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
-                }
-            }
-        }
-        
-        
-        
-        //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
-        [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
-    
+        [self bootGame];
 	}
 	return self;
 }
@@ -762,7 +836,7 @@ unsigned get_memory_mb(void) {
     
     else if ( [notification.name isEqualToString: @"PlayerMenuResetNotification" ]) {
         MLOG(@"Reset...");
-        
+        [ self bootGame ];
     }
     
     else {
@@ -1020,7 +1094,7 @@ unsigned get_memory_mb(void) {
     monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
     //monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
     monitor.label.fontSize = 12;
-    monitor.position = ccp(  size.width - monitor.contentSize.width , 0 + playerHUD.contentSize.height + monitor.contentSize.height );
+    monitor.position = ccp(  size.width - monitor.contentSize.width , 0 + monitor.contentSize.height );
     [ self updateMonitorLabel ];
 }
 
