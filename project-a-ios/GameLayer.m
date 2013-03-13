@@ -3052,7 +3052,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
         
         // increase turn counter
-        turnCounter++;
+        [self incrementTurn];
         
         needsRedraw = YES;
     }
@@ -3504,6 +3504,18 @@ NSUInteger getMagicY( NSUInteger y ) {
         CFAbsoluteTime total = ( end - start );
         MLOG( @"method ran in %f s", total );
     }
+}
+
+
+/*
+ ====================
+ incrementTurn
+ 
+ increments the turnCounter
+ ====================
+ */
+-( void ) incrementTurn {
+    turnCounter++;
 }
 
 @end

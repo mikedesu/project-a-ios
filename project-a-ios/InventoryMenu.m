@@ -14,7 +14,7 @@
 @synthesize floor;
 @synthesize gameLayer;
 
--(id) initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) gameLayer {
+-(id) initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) _gameLayer {
     CGSize s = [[ CCDirector sharedDirector ] winSize];
     if ((self=[super initWithColor:black width:s.width height:s.height])) {
         
@@ -23,6 +23,7 @@
         pc = _pc;
         inventory = _pc.inventoryArray;
         floor = _floor;
+        gameLayer = _gameLayer;
         
         NSMutableArray *menuItems = [NSMutableArray array];
         
@@ -47,7 +48,14 @@
                         MLOG(@"healed %d", total);
                     }
                 }
-                gameLayer.turnCounter++;
+ 
+                //NSUInteger tc = gameLayer.turnCounter + 1;
+                //[gameLayer setTurnCounter: tc];
+                //[gameLayer incrementTurn];
+                
+                [gameLayer removeInventoryMenu];
+                
+                [gameLayer stepGameLogic];
                 
                 [inventory      removeObjectAtIndex: sender.tag];
                 [sender.parent  removeChild:sender   cleanup:YES];
@@ -123,7 +131,14 @@
                 }
             }
             
-            gameLayer.turnCounter++;
+            //NSUInteger tc = gameLayer.turnCounter + 1;
+            //[gameLayer setTurnCounter: tc];
+            
+            [gameLayer removeInventoryMenu];
+            
+            [gameLayer stepGameLogic];
+            
+            //[gameLayer incrementTurn];
             
             [inventory      removeObjectAtIndex: sender.tag];
             InventoryMenu *inventoryMenu = (InventoryMenu *) sender.parent.parent;

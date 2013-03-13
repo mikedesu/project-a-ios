@@ -92,7 +92,7 @@ typedef enum {
     BOOL needsRedraw;
 }
 
-@property (atomic) NSUInteger turnCounter;
+@property (nonatomic, assign) NSUInteger turnCounter;
 
 
 +(CCScene *) scene;
@@ -222,5 +222,8 @@ typedef enum {
 -( void ) unscheduleStepAction;
 
 -( void ) doTimer: (SEL) selector;
+
+
+-( void ) incrementTurn;
 
 @end

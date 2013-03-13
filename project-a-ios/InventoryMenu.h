@@ -22,6 +22,6 @@
 @property (atomic) DungeonFloor *floor;
 @property (atomic) GameLayer *gameLayer;
 
--(id)   initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) gameLayer;
+-(id)   initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) _gameLayer;
 -(void) update;
 @end
