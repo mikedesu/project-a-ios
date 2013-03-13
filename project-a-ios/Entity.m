@@ -45,7 +45,7 @@
 
 @synthesize itemType;
 @synthesize damageBonus;
-@synthesize damageRollBase;
+//@synthesize damageRollBase;
 @synthesize weight;
 @synthesize durability;
 @synthesize totalDurability;
@@ -65,6 +65,7 @@
 @synthesize entityType;
 
 @synthesize potionType;
+@synthesize raceType;
 
 /*
  ====================
@@ -86,33 +87,15 @@
         level       = 1;
         entityType  = ENTITY_T_VOID;
         
+        
         totalKills  = 0;
         
-        itemType    = E_ITEM_T_NONE;
-        damageRollBase = 4;
-        damageBonus = 0;
-        weight      = 0;
-        durability  = 0;
-        totalDurability = 0;
-        
-        /*
-         stats.strength = 8;
-         stats.dexterity = 8;
-         stats.constitution = 8;
-         stats.intelligence = 8;
-         stats.wisdom = 8;
-         stats.charisma = 8;
-         */
-    
-        /*
-        strength = rollDice(6, 3);
-        dexterity = rollDice(6, 3);
-        constitution = rollDice(6, 3);
-        intelligence = rollDice(6, 3);
-        wisdom = rollDice(6, 3);
-        charisma = rollDice(6, 3);
-        
-        */
+        itemType            = E_ITEM_T_NONE;
+        damageRollBase      = 4;
+        damageBonus         = 0;
+        weight              = 0;
+        durability          = 0;
+        totalDurability     = 0;
         
         strength        = [Dice roll:6 nTimes:3];
         dexterity       = [Dice roll:6 nTimes:3];
@@ -156,8 +139,8 @@
         
         itemType        = E_ITEM_T_NONE;
         potionType      = POTION_T_NONE;
+        raceType        = RACE_T_NONE;
         
-        //MLOG(@"end init");
     }
     return self;
 }
@@ -218,25 +201,7 @@
  */
 -(NSInteger) attackBonus {
     
-    /*
-     in old dnd it was like
-     
-     1
-     2-3   : -4
-     4-5   : -3
-     6-7   : -2
-     8-9   : -1
-     10-11 : 0
-     12-13 : 1
-     14-15 : 2
-     16-17 : 3
-     18-19 : 4
-     20+   : 5
-     */
-    
     NSInteger strengthBonus = [ GameRenderer modifierForNumber: strength ];
-    
-    // [ GameRenderer getModifierForStat: self.strength ] ;
     
     // any items / equipped gear would be counted here
     
@@ -302,7 +267,16 @@
     return base;
 }
 
-
+/*
+ ====================
+ setDamageRollBase: _damageRollBase
+ 
+ sets the damage roll base
+ ====================
+ */
+-(void) setDamageRollBase:(NSInteger) _damageRollBase {
+    damageRollBase = _damageRollBase;
+}
 
 
 

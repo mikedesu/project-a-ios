@@ -165,6 +165,7 @@
 		2721D6F416EEB9CC0051352D /* StatusMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusMenu.m; sourceTree = "<group>"; };
 		2721D6FC16EEBA610051352D /* InventoryMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InventoryMenu.h; sourceTree = "<group>"; };
 		2721D6FD16EEBA610051352D /* InventoryMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InventoryMenu.m; sourceTree = "<group>"; };
+		2721D6FF16F078FC0051352D /* EntitySubtypeDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EntitySubtypeDefines.h; sourceTree = "<group>"; };
 		272EF4C616C5695D005DF231 /* project-a-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "project-a-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		272EF4C916C5695D005DF231 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		272EF4CB16C5695D005DF231 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -542,6 +543,7 @@
 				2773F29116C85469001C3E83 /* EditorHUD.m */,
 				2773F28D16C8447D001C3E83 /* Entity.h */,
 				2773F28E16C8447D001C3E83 /* Entity.m */,
+				2721D6FF16F078FC0051352D /* EntitySubtypeDefines.h */,
 				27DCE96116E2FB3900109F88 /* EntityInfoHUD.h */,
 				27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */,
 				2721D00316E9F01200C26F9E /* HUDMenu.h */,

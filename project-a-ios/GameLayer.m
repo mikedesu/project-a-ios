@@ -58,7 +58,6 @@ unsigned get_memory_mb(void) {
         // setting up some basic variables
         self.isTouchEnabled = YES;
         selectedTile = -1;
-        //prevSelectedTile = -1;
         touchedTileIndex = -1;
         isTouched = NO;
  
@@ -2346,16 +2345,19 @@ NSUInteger getMagicY( NSUInteger y ) {
             
             else if ( entity.entityType == ENTITY_T_NPC ) {
                 
+                // not handling NPCs going up/downstairs yet...
+                /*
                 if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
                     //[ self addMessage: @"Entity Going downstairs..." ];
                     //[ self goingDownstairs ];
-                    [ self entityGoingDownstairs: entity ];
+                    //[ self entityGoingDownstairs: entity ];
                     
                 }
                 else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
                     //[ self goingUpstairs ];
-                    [ self entityGoingUpstairs: entity ];
+                    //[ self entityGoingUpstairs: entity ];
                 }
+                 */
             }
         }
         
@@ -2662,26 +2664,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         [ dungeon addObject: newFloor ];
     }
     floorNumber = 0;
-    [ self loadDungeonFloor: floorNumber ];
     
-}
-
-
-/*
- ====================
- loadDungeonFloor: floorNumber
- ====================
- */
--( void ) loadDungeonFloor: ( NSUInteger ) floorNumber {
-    //MLOG( @"loadDungeonFloor" );
-    //floor = [ dungeon objectAtIndex: floorNumber ];
-    //[ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:floor withCamera:cameraAnchorPoint ];
-    
-    
-    needsRedraw = YES;
- //   [ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[dungeon objectAtIndex: floorNumber] withCamera:cameraAnchorPoint ];
-   // [ self resetCameraPosition ];
-    //MLOG( @"end loadDungeonFloor" );
 }
 
 
@@ -2691,25 +2674,19 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) goingUpstairs {
-    //MLOG(@"goingUpstairs...");
     if ( floorNumber == 0 ) {
         // top floor
     }
     else {
         floorNumber--;
-        [ self loadDungeonFloor: floorNumber ];
         [[[ dungeon objectAtIndex:floorNumber+1 ] entityArray ] removeObject: pcEntity ];
         
         // TODO: move setEntityOnDownstairs to GameRenderer (DungeonMaster)
         [ self setEntityOnDownstairs: pcEntity ];
-        
         [[[ dungeon objectAtIndex:floorNumber ] entityArray ] addObject: pcEntity ];
         
         needsRedraw = YES;
-        //[ self resetCameraPosition ];
-        //[ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
     }
-    //MLOG(@"end goingUpstairs...");
 }
 
 
@@ -2719,57 +2696,18 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) goingDownstairs {
-    //MLOG(@"goingDownstairs...");
     if ( floorNumber < [ dungeon count ] - 1 ) {
         floorNumber++;
-        [ self loadDungeonFloor: floorNumber ];
         
         // TODO: move setEntityOnUpstairs to GameRenderer (DungeonMaster)
-        
         [[[ dungeon objectAtIndex:floorNumber-1 ] entityArray ] removeObject: pcEntity ];
-        
         [ self setEntityOnUpstairs: pcEntity ];
-        
         [[[ dungeon objectAtIndex:floorNumber ] entityArray ] addObject: pcEntity ];
         
         needsRedraw = YES;
-        //[ self resetCameraPosition ];
-        //[ GameRenderer setAllVisibleTiles:tileArray withDungeonFloor:[ dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
-    }
-    else {
+    } else {
         // bottom floor        
     }
-    //MLOG(@"end goingDownstairs...");
-}
-
-
-/*
- ====================
- entityGoingUpstairs
- ====================
- */
--( void ) entityGoingUpstairs: (Entity *) entity {
-   // MLOG(@"entityGoingUpstairs not yet implemented!");
-    /*
-     autostepGameLogic = NO;
-    gameLogicIsOn = NO;
-    [ self unscheduleStepAction ];
-     */
-}
-
-
-/*
- ====================
- entityGoingDownstairs
- ====================
- */
--( void ) entityGoingDownstairs: (Entity *) entity {
-   // MLOG(@"entityGoingDownstairs not yet implemented!");
-    /*
-     autostepGameLogic = NO;
-    gameLogicIsOn = NO;
-    [ self unscheduleStepAction ];
-     */
 }
 
 

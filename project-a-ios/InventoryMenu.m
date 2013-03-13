@@ -26,6 +26,7 @@
 -(void) defineMenuControlBlock {
     menuControlBlock = ^(CCMenuItemLabel *sender) {
         
+        BOOL handled = YES;
         Entity *eItem = [inventory objectAtIndex:sender.tag];
         
         if ( eItem.itemType == E_ITEM_T_POTION ) {
@@ -42,13 +43,16 @@
         }
         else {
             MLOG(@"Not handled!");
+            handled = NO;
         }
         
         [gameLayer removeInventoryMenu];
-        [gameLayer stepGameLogic];
         
-        [inventory      removeObjectAtIndex: sender.tag];
-        [sender.parent  removeChild:sender   cleanup:YES];
+        if (handled) {
+            [gameLayer stepGameLogic];
+            [inventory      removeObjectAtIndex: sender.tag];
+            [sender.parent  removeChild:sender   cleanup:YES];
+        }
     };
 }
 

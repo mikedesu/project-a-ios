@@ -113,13 +113,11 @@ NSInteger getMod( NSInteger n ) {
     Tile_t tileType = data.tileType;
  
     CCMutableTexture2D *tileTexture =
-    tileType==TILE_FLOOR_STONE ?        [Drawer stoneTile] :
-    tileType==TILE_FLOOR_VOID ?         [Drawer voidTile] :
-    tileType==TILE_FLOOR_UPSTAIRS ?     [Drawer upstairsTile] :
-    tileType==TILE_FLOOR_DOWNSTAIRS ?   [Drawer downstairsTile] :
+    tileType == TILE_FLOOR_STONE          ? [Drawer stoneTile]      :
+    tileType == TILE_FLOOR_VOID           ? [Drawer voidTile]       :
+    tileType == TILE_FLOOR_UPSTAIRS       ? [Drawer upstairsTile]   :
+    tileType == TILE_FLOOR_DOWNSTAIRS     ? [Drawer downstairsTile] :
     nil;
-    
-    //tileTexture = [Drawer hero];
     
     // in most cases, we will fill our texture
     CCMutableTexture2D *texture = ( CCMutableTexture2D * ) tileSprite.texture;
@@ -160,10 +158,6 @@ NSInteger getMod( NSInteger n ) {
                 }
             }
             [ texture apply ];
-            
-            
-           
-            
         }
         
         else if ( entity.entityType == ENTITY_T_NPC ) {
@@ -240,13 +234,8 @@ NSInteger getMod( NSInteger n ) {
                 [texture apply];
                 
             }
-            
-            
-            
-            
         }
     }
-    
     
     // handle selected tiles
     if ( data.isSelected && tileTexture != nil ) {
@@ -402,18 +391,26 @@ NSInteger getMod( NSInteger n ) {
     [ self setAllTilesInFloor: floor toTileType:TILE_FLOOR_VOID ];
     
     if ( algorithm == DF_ALGORITHM_T_LARGEROOM ) {
-        
-        [ self setAllTilesInFloor:floor toTileType:TILE_FLOOR_GRASS ];
+ 
+        [self largeRoomAlgorithm:floor];
     }
     
     else if ( algorithm == DF_ALGORITHM_T_ALGORITHM0 ||
               algorithm == DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR
              ) {
-        
-        // profiling
-        //CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-        
-        
+        [ self algorithm0:algorithm withFloor:floor ];
+    }
+}
+
+
++(void) largeRoomAlgorithm: (DungeonFloor *) floor {
+    [ self setAllTilesInFloor:floor toTileType:TILE_FLOOR_STONE ];
+}
+
+
+
+
++(void) algorithm0: (DungeonFloorAlgorithm_t) algorithm withFloor: (DungeonFloor *) floor {
         // calc the top-left editable tile
         NSUInteger x = floor.border/2;
         NSUInteger y = floor.border/2;
@@ -423,10 +420,8 @@ NSInteger getMod( NSInteger n ) {
         
         NSUInteger numTilesPlaced = 0;
         NSUInteger maxTilesPlaced = 0;
-        //NSUInteger numTiles = rollDice(10, 10) + 10;
         NSUInteger numTiles = [Dice roll:10 nTimes:10] + 10;
-        //NSUInteger numTiles = [Dice roll:10 nTimes: floor.floorNumber ] + floor.floorNumber + 10;
-        
+    
         NSUInteger xo = 0;
         NSUInteger yo = 0;
         
@@ -450,38 +445,16 @@ NSInteger getMod( NSInteger n ) {
         // determine a tile-type as the base tile type to use
         Tile_t baseTileType;
         
-        // roll a d4
-        //roll = rollDiceOnce(4);
-        /*
-        roll = [Dice roll:4];
-        
-        // determine tiletype based on roll
-        if ( roll == 1 ) {
-            baseTileType = TILE_FLOOR_GRASS;
-        } else if ( roll == 2) {
-            baseTileType = TILE_FLOOR_ICE;
-        } else if ( roll == 3) {
-            baseTileType = TILE_FLOOR_STONE;
-        } else if ( roll == 4) {
-            baseTileType = TILE_FLOOR_STONE;
-        }
-         */
-        
         baseTileType = TILE_FLOOR_STONE;
-        
         
         CGPoint point = ccp( x, y );
         [ self setTileAtPosition:point onFloor:floor toType:baseTileType ];
         [ placedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
         numTilesPlaced++;
         
-        
         for ( int i = numTilesPlaced; i < numTiles; i++ ) {
             
             BOOL willReroll = NO;
-            
-            // roll a d4
-            //roll = rollDiceOnce(4);
             roll = [Dice roll:4];
             totalRolls++;
             
@@ -501,7 +474,6 @@ NSInteger getMod( NSInteger n ) {
             }
             
             CGPoint point = ccp( x+xo, y+yo );
-            //MLOG( @"trying (%d, %d)...", x+xo, y+yo );
             // roll-checking
             // check if this value exists in our placedTilesArray
             NSValue *v = [ NSValue valueWithCGPoint: point ];
@@ -526,39 +498,15 @@ NSInteger getMod( NSInteger n ) {
             if ( !willReroll ) {
                 willReroll = willReroll || (x+xo < x || y+yo < y) || (x+xo >= w+x || y+yo >= h+y );
             }
-                
+            
             if ( ! willReroll ) {
                 
                 Tile_t tileType = baseTileType;
-                //NSUInteger roll2 = rollDiceOnce(100);
-                NSUInteger roll2 = [Dice roll:100];
                 
-                if ( roll2 <= 5 ) {
-                    // change the tileType
-                    //roll2 = rollDiceOnce(4);
-                    /*
-                    roll2 = [Dice roll:4];
-                    
-                    if ( roll2 == 1 ) {
-                        tileType = TILE_FLOOR_GRASS;
-                    } else if ( roll2 == 2 ) {
-                        tileType = TILE_FLOOR_ICE;
-                    } else if ( roll2 == 3 ) {
-                        tileType = TILE_FLOOR_STONE;
-                    } else if ( roll2 == 4 ) {
-                        tileType = TILE_FLOOR_STONE;
-                    }
-                     */
-                    
-                    tileType = TILE_FLOOR_STONE;
-                }
-                    
                 [ self setTileAtPosition:point onFloor:floor toType:tileType ];
                 [ placedTilesArray addObject: v ];
                 [ triedTilesArray removeAllObjects ];
-                //MLOG( @"tile placed at (%d,%d)", x+xo, y+yo );
                 numTilesPlaced++;
-                //maxTilesPlaced = ( maxTilesPlaced > numTilesPlaced ) ? maxTilesPlaced : numTilesPlaced;
                 if ( maxTilesPlaced > numTilesPlaced ) {
                     maxTilesPlaced = maxTilesPlaced;
                 }
@@ -567,14 +515,8 @@ NSInteger getMod( NSInteger n ) {
                     doPrintMaxTiles = YES;
                 }
                 
-                //if ( maxTilesPlaced % 10 == 0 )
-                //if ( doPrintMaxTiles ) {
-                    //MLOG( @"maxTilesPlaced: %d", maxTilesPlaced );
-                //    doPrintMaxTiles = NO;
-                //}
             }
             
-        
             else if ( willReroll ) {
                 
                 [ triedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
@@ -587,12 +529,10 @@ NSInteger getMod( NSInteger n ) {
                 
                 rerolls++;
                 totalRerolls++;
-                //MLOG( @"Reroll # %d", totalRerolls );
                 i--;
                 
                 // check reroll tolerance
                 if ( totalRerolls >= rerollTolerance ) {
-                      //  MLOG( @"tolerance break %d", toleranceBreaks );
                     xo = 0;
                     yo = 0;
                     
@@ -619,10 +559,6 @@ NSInteger getMod( NSInteger n ) {
         MLOG( @"total rerolls: %d", totalRerolls );
         MLOG( @"total tolerance breaks: %d", toleranceBreaks );
         
-        //CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
-        //CFAbsoluteTime totalTimeSpent = (end - start) * 1000;
-        //MLOG( @"method took %f ms", totalTimeSpent );
-        
         // place the upstairs/downstairs tiles
         BOOL isDownstairsPlaced = NO;
         BOOL isUpstairsPlaced = NO;
@@ -630,12 +566,10 @@ NSInteger getMod( NSInteger n ) {
         while ( !isUpstairsPlaced ) {
             for ( NSValue *p in placedTilesArray ) {
                 // roll dice
-                //roll = rollDiceOnce(100);
                 roll = [Dice roll:100];
                 NSUInteger percentage = 5;
                 if ( roll <= percentage ) {
                     [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_UPSTAIRS ];
-                    //MLOG( @"Upstairs placed" );
                     isUpstairsPlaced = YES;
                     break;
                 }
@@ -647,13 +581,11 @@ NSInteger getMod( NSInteger n ) {
         if ( algorithm != DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ) {
             while ( !isDownstairsPlaced ) {
                 for ( NSValue *p in placedTilesArray ) {
-                    //roll = rollDiceOnce(100);
                     roll = [Dice roll:100];
                     NSUInteger percentage = 5;
                     if ( roll <= percentage ) {
                         if ( ! CGPointEqualToPoint(upstairsPoint, p.CGPointValue) ) {
                             [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
-                            //MLOG( @"Downstairs placed" );
                             isDownstairsPlaced = YES;
                             break;
                         }
@@ -661,10 +593,8 @@ NSInteger getMod( NSInteger n ) {
                 }
             }
         }
- 
-    }
-    
 }
+
 
 
 /*
@@ -701,9 +631,6 @@ NSInteger getMod( NSInteger n ) {
 }
 
 
-
-
-
 /*
  ====================
  getTileForFloor: floor forCGPoint: p
@@ -735,12 +662,11 @@ NSInteger getMod( NSInteger n ) {
 
 
 
-
 #pragma mark - Entity-spawning code
 
 /*
  ====================
- 
+ randomEntity
  ====================
  */
 +( Entity * ) randomEntity {
@@ -765,7 +691,7 @@ NSInteger getMod( NSInteger n ) {
 
 /*
  ====================
- 
+ randomItem
  ====================
  */
 +( Entity * ) randomItem {
@@ -787,7 +713,7 @@ NSInteger getMod( NSInteger n ) {
 
 /*
  ====================
- 
+ randomMonster
  ====================
  */
 +( Entity * ) randomMonster {
@@ -807,24 +733,21 @@ NSInteger getMod( NSInteger n ) {
 
 /*
  ====================
- 
+ randomMonsterForFloor: floor
  ====================
  */
 +( Entity * ) randomMonsterForFloor: (DungeonFloor *) floor {
-    //MLOG(@"randomMonsterForFloor");
     // calc a level in range of floorNumber
-    //NSUInteger randomLevel = floor.floorNumber;
     NSUInteger randomLevel = [Dice roll: floor.floorNumber];
     NSUInteger mod =
-    floor.floorNumber <= 4 ?  0 :
-    floor.floorNumber <= 8 ?  1 :
-    floor.floorNumber <= 12 ? 2 :
-    floor.floorNumber <= 16 ? 3 :
-    floor.floorNumber <= 20 ? 4 :
+    floor.floorNumber <= 4  ?  0 :
+    floor.floorNumber <= 8  ?  1 :
+    floor.floorNumber <= 12 ?  2 :
+    floor.floorNumber <= 16 ?  3 :
+    floor.floorNumber <= 20 ?  4 :
     5;
  
     NSUInteger calculatedLevel = randomLevel + mod;
-    
     NSInteger randomHitDie = [Dice roll:12] + mod;
     
     
@@ -848,41 +771,26 @@ NSInteger getMod( NSInteger n ) {
     } else if ( roll == 4 ) {
         [randomString setString:@"Imp"];
     }
-    //[e.name setString: [self generateNameForEntityType: e.entityType ] ];
     [e.name setString: randomString ];
     
     e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
     e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
-    //MLOG(@"spawned %@ with level %u", e.name, calculatedLevel );
     return e;
 }
 
 
 
-
-
-
-
-
-
-
-
-
 /*
  ====================
- 
+ spawnEntityAtRandomLocation: entity onFloor: floor
  ====================
  */
 +( void ) spawnEntityAtRandomLocation: (Entity *) entity onFloor: (DungeonFloor *) floor {
-    //MLOG(@"spawnEntityAtRandomLocation");
     BOOL locationIsAcceptable = NO;
     Tile *spawnTile = nil;
     
     while ( ! locationIsAcceptable ) {
-        //MLOG(@"Location Is Unacceptable");
-        
-        //NSUInteger diceroll = rollDiceOnce( [[floor tileDataArray] count] ) - 1;
         NSUInteger diceroll = [Dice roll: [[floor tileDataArray] count]] - 1;
         
         Tile *tile = [[ floor tileDataArray ] objectAtIndex: diceroll ];
@@ -890,8 +798,7 @@ NSInteger getMod( NSInteger n ) {
                  tile.tileType != TILE_FLOOR_UPSTAIRS &&
                  tile.tileType != TILE_FLOOR_DOWNSTAIRS
                 ) {
-                
-                
+            
                 BOOL tileIsFree = YES;
                 
                 // check if a pc/npc occupies the tile contents
@@ -903,17 +810,14 @@ NSInteger getMod( NSInteger n ) {
                         tileIsFree = NO;
                         break;
                     }
-                    
                 }
-                
-                
+            
                 if ( tileIsFree ) {
                     spawnTile = tile;
                     locationIsAcceptable = YES;
                     break;
                 }
         }
-        
     }
     
     if ( spawnTile != nil ) {
@@ -925,25 +829,13 @@ NSInteger getMod( NSInteger n ) {
 
 /*
  ====================
- 
+ spawnRandomMonsterAtRandomLocationOnFloor: floor withPC: pc
  ====================
  */
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc {
     
     [ self spawnRandomMonsterAtRandomLocationOnFloor:floor withPC:pc withChanceDie: 1 ];
     
-    /*
-    NSUInteger spawnChancePercent = 1;
-    NSUInteger diceroll = [Dice roll:100];
-    
-    if ( diceroll <= spawnChancePercent ) {
-        
-        //Entity *e = [ GameRenderer randomMonsterForPC: pc ];
-        Entity *e = [ GameRenderer randomMonsterForFloor:floor ];
-        [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
-        
-    }
-     */
 }
 
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc withChanceDie: (NSInteger) chanceDie {
@@ -952,12 +844,8 @@ NSInteger getMod( NSInteger n ) {
     NSUInteger diceroll = chanceDie == 1 ? 1 : [Dice roll:chanceDie];
     
     if ( diceroll <= spawnChancePercent ) {
-        
-        //Entity *e = [ GameRenderer randomMonsterForPC: pc ];
-        //Entity *e = [ GameRenderer randomMonsterForFloor:floor ];
         Entity *e = [ Monsters ghoul ];
         [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
-        
     }
 }
 
@@ -984,8 +872,6 @@ NSInteger getMod( NSInteger n ) {
 }
 
 
-
-
 #pragma mark - Entity code
 
 /*
@@ -998,8 +884,6 @@ NSInteger getMod( NSInteger n ) {
     //[ tile.contents addObject: entity ];
     [ tile addObjectToContents: entity ];
 }
-
-
 
 
 /*
@@ -1028,6 +912,5 @@ NSInteger getMod( NSInteger n ) {
     
     return [ NSString stringWithString: randomString ];
 }
-
 
 @end

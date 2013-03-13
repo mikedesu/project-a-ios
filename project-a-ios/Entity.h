@@ -4,81 +4,14 @@
 //  Created by Mike Bell on 2/10/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
-typedef enum {
-    ENTITY_T_VOID=0,
-    ENTITY_T_PC,
-    ENTITY_T_NPC,
-    ENTITY_T_ITEM
-} EntityTypes_t;
-
-
-// Items
-typedef enum {
-    E_ITEM_T_NONE,
-    E_ITEM_T_WEAPON,
-    E_ITEM_T_ARMOR,
-    E_ITEM_T_POTION,
-    E_ITEM_T_FOOD,
-    E_ITEM_T_BOOK,
-} EntityItemTypes_t;
-
-
-typedef enum {
-    POTION_T_NONE,
-    POTION_T_HEALING,
-} PotionTypes_t;
-
-
-
-typedef struct {
-    NSUInteger strength;
-    NSUInteger dexterity;
-    NSUInteger constitution;
-    NSUInteger intelligence;
-    NSUInteger wisdom;
-    NSUInteger charisma;
-} EntityStats_t;
-
-
-typedef enum {
-    ENTITYPATHFINDINGALGORITHM_T_NONE=0,
-    ENTITYPATHFINDINGALGORITHM_T_RANDOM,
-    ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM,
-    ENTITYPATHFINDINGALGORITHM_T_TEMP_RANDOM,
-    ENTITYPATHFINDINGALGORITHM_T_SIMPLE,
-    ENTITYPATHFINDINGALGORITHM_T_SIMPLE_LEFT,
-} EntityPathFindingAlgorithm_t;
-
-
-typedef enum {
-    ENTITYITEMPICKUPALGORITHM_T_NONE=0,
-    ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE
-} EntityItemPickupAlgorithm_t;
-
-
-typedef enum {
-    ENTITYALIGNMENT_T_LAWFUL_GOOD = 0,
-    ENTITYALIGNMENT_T_LAWFUL_NEUTRAL,
-    ENTITYALIGNMENT_T_LAWFUL_EVIL,
-    
-    ENTITYALIGNMENT_T_NEUTRAL_GOOD,
-    ENTITYALIGNMENT_T_NEUTRAL_NEUTRAL,
-    ENTITYALIGNMENT_T_NEUTRAL_EVIL,
-    
-    ENTITYALIGNMENT_T_CHAOTIC_GOOD,
-    ENTITYALIGNMENT_T_CHAOTIC_NEUTRAL,
-    ENTITYALIGNMENT_T_CHAOTIC_EVIL,
-    
-} EntityAlignment_t;
-
-
+#import "EntitySubtypeDefines.h"
 
 @class CCMutableTexture2D;
 
 @interface Entity : NSObject {
-//@public
     BOOL isPC;
     BOOL isAlive;
+ 
     CGPoint positionOnMap;
     
     CCMutableTexture2D *texture;
@@ -149,10 +82,8 @@ typedef enum {
     
     // for food
     NSInteger foodBase;
-    
-    
-    // Feats sieve:
-    // 0000 0000 0001 0011
+ 
+    RaceTypes_t raceType;
 }
 
 @property (atomic, assign) BOOL isPC;
@@ -210,6 +141,8 @@ typedef enum {
 @property (atomic, assign) NSInteger healingRollBase;
 @property (atomic, assign) NSInteger healingBonus;
 
+@property (atomic, assign) RaceTypes_t raceType;
+
 -(Entity *) init;
 -(Entity *) initWithLevel: (NSInteger) _level;
 -(Entity *) initWithHitDie: (NSInteger) hd ;
@@ -228,5 +161,8 @@ typedef enum {
 
 -( void ) step;
 -( void ) getHungry;
+
+-( NSInteger ) damageRollBase ;
+-( void ) setDamageRollBase: (NSInteger) _damageRollBase;
 
 @end

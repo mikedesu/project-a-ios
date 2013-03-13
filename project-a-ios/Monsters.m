@@ -8,18 +8,29 @@
 
 @implementation Monsters
 
-+(Entity *) ghoul {
-    NSInteger level = 1;
-    NSInteger hd = 4;
-    
-    Entity *e = [[Entity alloc] initWithLevel: level withHitDie:hd ];
-    e.entityType = ENTITY_T_NPC;
-    e.isPC = NO;
-    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
-    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
-    e.damageRollBase = 6;
+
+/*
  
-    NSMutableString *name = [ NSMutableString stringWithString:@"Ghoul" ];
+ monsterSpawnScript
+ 
+ new Ghoul( levelRange, hitDie, damageRollBase, 
+ 
+ */
+
+
+
++(Entity *) ghoul {
+    NSInteger level     = 1;
+    NSInteger hd        = 6;
+    
+    Entity *e               = [[Entity alloc] initWithLevel: level withHitDie:hd ];
+    e.entityType            = ENTITY_T_NPC;
+    e.isPC                  = NO;
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    e.damageRollBase        = 6;
+    
+    NSMutableString *name   = [ NSMutableString stringWithString:@"Ghoul" ];
     [e.name setString: name ];
     
     return e;

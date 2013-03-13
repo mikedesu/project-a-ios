@@ -11,9 +11,7 @@
 @synthesize tileType;
 @synthesize isSelected;
 @synthesize needsRedraw;
-//@synthesize texture;
 @synthesize position;
-//@synthesize contents;
 
 /*
  ====================
@@ -22,14 +20,11 @@
  */
 -( id ) init {
     if ( ( self = [ super init ] ) ) {
-        self->tileType = TILE_FLOOR_DEFAULT;
-        self->isSelected = NO;
-        self->needsRedraw = YES;
-        //self->tileSprite = nil;
-  //      self->texture = [[ CCMutableTexture2D alloc ] initWithSize:CGSizeMake(TILE_SIZE, TILE_SIZE) pixelFormat:kCCTexture2DPixelFormat_Default ];
-        self->position = ccp( 0, 0 );
-        self->contents = nil;
-        //self->contents = [ [ NSMutableArray alloc ] init ];
+        tileType    = TILE_FLOOR_DEFAULT;
+        isSelected  = NO;
+        needsRedraw = YES;
+        position    = ccp( 0, 0 );
+        contents    = nil;
     }
     return self;
 }
@@ -40,16 +35,13 @@
  initWithTileType: tileType
  ====================
  */
--( id ) initWithTileType: ( Tile_t ) tileType {
+-( id ) initWithTileType: ( Tile_t ) _tileType {
     if ( ( self = [ super init ] ) ) {
-        self->tileType = tileType;
-        self->isSelected = NO;
-        self->needsRedraw = YES;
-        //self->tileSprite = nil;
-    //    self->texture = [[ CCMutableTexture2D alloc ] initWithSize:CGSizeMake(TILE_SIZE, TILE_SIZE) pixelFormat:kCCTexture2DPixelFormat_Default ];
-        self->position = ccp( 0, 0 );
-        self->contents = nil;
-        //self->contents = [ [ NSMutableArray alloc ] init ];
+        tileType    = _tileType;
+        isSelected  = NO;
+        needsRedraw = YES;
+        position    = ccp( 0, 0 );
+        contents    = nil;
     }
     return self;
 }
@@ -61,16 +53,11 @@
  ====================
  */
 +( Tile * ) newTileWithType: ( Tile_t ) tileType withPosition: ( CGPoint ) position {
-    //MLOG( @"newTileWithType: withPosition: (%f,%f)", position.x, position.y );
     Tile *tile = [[ Tile alloc ] initWithTileType: tileType ];
     tile->position.x = position.x;
     tile->position.y = position.y;
-    //MLOG( @"end newTileWithType" );
     return tile;
 }
-
-
-//////////////////
 
 
 /*
