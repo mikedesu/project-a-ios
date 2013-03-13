@@ -228,4 +228,6 @@ typedef enum {
 
 -( void ) incrementTurn;
 
+-( void ) swapAutostep;
+
 @end

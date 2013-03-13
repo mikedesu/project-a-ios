@@ -913,6 +913,8 @@ static NSString  * const notifications[] = {
     
     else if ( [notification.name isEqualToString: @"PlayerMenuInventoryNotification" ]) {
         MLOG(@"Inventory menu");
+        autostepGameLogic = NO;
+        [self unscheduleStepAction];
         [self addInventoryMenu];
     }
     
@@ -3628,6 +3630,11 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) incrementTurn {
     turnCounter++;
+}
+
+
+-( void ) swapAutostep {
+    autostepGameLogic = ! autostepGameLogic;
 }
 
 @end

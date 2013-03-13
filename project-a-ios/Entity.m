@@ -16,7 +16,6 @@
 
 @synthesize name;
 @synthesize level;
-//@synthesize stats;
 @synthesize strength;
 @synthesize dexterity;
 @synthesize constitution;
@@ -45,7 +44,7 @@
 
 @synthesize itemType;
 @synthesize damageBonus;
-//@synthesize damageRollBase;
+
 @synthesize weight;
 @synthesize durability;
 @synthesize totalDurability;
@@ -161,8 +160,6 @@
 
 
 
-
-
 -(Entity *) initWithLevel:(NSInteger)_level withHitDie: (NSInteger) hd {
     Entity *e = [[ Entity alloc ] initWithHitDie: hd];
     e.entityType = ENTITY_T_NPC;
@@ -171,10 +168,6 @@
     }
     return e;
 }
-
-
-
-
 
 
 -(Entity *) initWithLevel: (NSInteger) _level {
@@ -187,11 +180,6 @@
 }
 
 
-
-
-
-
-
 /*
  ====================
  attackBonus
@@ -200,16 +188,12 @@
  ====================
  */
 -(NSInteger) attackBonus {
-    
     NSInteger strengthBonus = [ GameRenderer modifierForNumber: strength ];
     
     // any items / equipped gear would be counted here
-    
     NSInteger gearBonus = 0;
     
-    if ( self.equippedArmsLeft != nil )
-        gearBonus += self.equippedArmsLeft.damageBonus;
-    
+    if ( self.equippedArmsLeft != nil ) gearBonus += self.equippedArmsLeft.damageBonus;
     return strengthBonus + gearBonus;
 }
 
@@ -341,22 +325,29 @@
  manages level up events
  ====================
  */
+
 -( void ) handleLevelUp {
     level++;
     xp = 0;
     nextLevelXP *= 2;
     
-
+    // every 4 levels, up a stat at random (for now)
+    if ( level % 4 == 0 ) {
+        NSInteger r = [Dice roll:6];
+        
+        (r==1) ? strength++ :
+        (r==2) ? dexterity++ :
+        (r==3) ? constitution++ :
+        (r==4) ? intelligence++ :
+        (r==5) ? wisdom++ :
+        (r==6) ? charisma++ :
+        0;
+    }
+    
     // lets up our hp
     NSInteger conMod = [ GameRenderer modifierForNumber: constitution ];
-    
-    //maxhp = maxhp + rollDiceOnce(12) + conMod;
-    maxhp = maxhp + [Dice roll:12] + conMod;
+    maxhp = maxhp + [Dice roll: hitDie ] + conMod;
     hp = maxhp;
-    
-    // lets up our strength/ac
-    strength++;
-    ac++;
 }
 
 
