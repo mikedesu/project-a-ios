@@ -9,9 +9,7 @@
 
 @class CCSprite;
 
-@interface GameRenderer : NSObject {
-
-}
+@interface GameRenderer : NSObject {}
 
 +( NSInteger ) modifierForNumber: (NSInteger) n;
 
@@ -20,7 +18,7 @@
 +( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data;
 +( void ) setAllTiles: ( NSArray * ) tileArray withData: ( NSArray * ) data;
 
-+( void ) setAllVisibleTiles: ( NSArray * ) tileArray withDungeonFloor: ( DungeonFloor * ) floor withCamera: ( CGPoint ) camera ;
++( void ) setAllVisibleTiles: ( NSArray * ) tileArray withDungeonFloor: ( DungeonFloor * ) floor withCamera: ( CGPoint ) camera withSprites: (NSDictionary *) sprites;
 +( void ) setAllTiles: ( NSArray * ) tileArray toTileType: ( Tile_t ) tileType;
 +( void ) setTileArrayBoundary: ( DungeonFloor * ) floor toTileType: ( Tile_t ) tileType withLevel: ( NSInteger ) level;
 +( void ) setDefaultTileArrayBoundary: (DungeonFloor *) floor;

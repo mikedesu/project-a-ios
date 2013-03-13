@@ -42,6 +42,8 @@ typedef enum {
     NSMutableArray *tileDataArray;
     NSMutableArray *entityArray;
     
+    NSMutableDictionary *sprites;
+    
     NSMutableArray *dLog;
     NSInteger dLogIndex;
     

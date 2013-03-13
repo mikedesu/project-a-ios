@@ -45,8 +45,30 @@ unsigned get_memory_mb(void) {
 }
 
 
+-(void) loadSprites {
+    
+    sprites = [NSMutableDictionary dictionary];
+    NSMutableDictionary *s = sprites;
+    
+    [s setObject:[Drawer hero]                                              forKey: @"Hero"];
+    [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
+    [s setObject:[Drawer stoneTile]                                         forKey: @"StoneTile"];
+    [s setObject:[Drawer upstairsTile]                                      forKey: @"UpstairsTile"];
+    [s setObject:[Drawer downstairsTile]                                    forKey: @"DownstairsTile"];
+    [s setObject:[Drawer ghoul]                                             forKey: @"Ghoul"];
+    [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:blue]     forKey: @"ShortSword"];
+    [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];
+    [s setObject:[Drawer basicPotionWithColor:yellow]                       forKey: @"PotionOfLightHealing"];
+    [s setObject:[Drawer bookOfAllKnowing]                                  forKey: @"BookOfAllKnowing"];
+    
+}
+
+
+
 -(void) bootGame {
     [self cleanupGame];
+    
+    [self loadSprites];
     
     // setting up some basic variables
     self.isTouchEnabled = YES;
@@ -122,7 +144,7 @@ unsigned get_memory_mb(void) {
     [ self schedule:@selector(tick:)];
     
 #define MAX_SAFE_STEP_SPEED     0.0001
-#define STEP_SPEED              0.01
+#define STEP_SPEED              0.1
     
     // turn on gameLogic & autostepping
     gameLogicIsOn = YES;
@@ -132,6 +154,7 @@ unsigned get_memory_mb(void) {
     // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
     autostepGameLogic = autostepGameLogic && gameLogicIsOn;
     if ( gameLogicIsOn && autostepGameLogic ) {
+        MLOG(@"bootGame schedule step action...");
         [ self scheduleStepAction ];
     }
     
@@ -171,15 +194,23 @@ unsigned get_memory_mb(void) {
     floorNumber = 0;
     floor = nil;
     
+    if (dungeon!=nil) [dungeon removeAllObjects];
     dungeon = nil;
+    
+    if (tileArray!=nil) [tileArray removeAllObjects];
     tileArray = nil;
+    
+    if (tileDataArray!=nil) [tileDataArray removeAllObjects];
     tileDataArray = nil;
+    
+    if (entityArray!=nil) [entityArray removeAllObjects];
     entityArray = nil;
     
+    if (dLog!=nil) [dLog removeAllObjects];
     dLog = nil;
-    dLogIndex = nil;
+    dLogIndex = 0;
     
-    isTouched = nil;
+    isTouched = NO;
     touchedTileIndex = 0;
     selectedTile = 0;
     
@@ -192,7 +223,6 @@ unsigned get_memory_mb(void) {
     
     entityInfoHUDIsVisible = NO;
     entityInfoHUD = nil;
-    
     
     playerHUDIsVisible = NO;
     playerHUD = nil;
@@ -223,6 +253,13 @@ unsigned get_memory_mb(void) {
     autostepGameLogic = NO;
     
     needsRedraw = NO;
+    
+    if (sprites!=nil) [sprites removeAllObjects];
+    sprites = nil;
+    
+    [self unschedule:@selector(tick:)];
+    
+    [self removeNotifications];
     
     [self removeAllChildrenWithCleanup:YES];
 }
@@ -260,6 +297,26 @@ unsigned get_memory_mb(void) {
 
 #pragma mark - Notification code
 
+static const NSUInteger notificationsCount = 16;
+static NSString  * const notifications[] = {
+//static const NSString *notifications[] = {
+    /*0*/ @"TestNotification1",
+    /*1*/ @"TestNotification2",
+    /*2*/ @"MonitorNotification",
+    /*3*/ @"PlayerMenuCloseNotification",
+    /*4*/ @"PlayerMenuStatusNotification",
+    /*5*/ @"PlayerMenuInventoryNotification",
+    /*6*/ @"PlayerMenuStepNotification",
+    /*7*/ @"PlayerMenuAutostepNotification",
+    /*8*/ @"PlayerMenuTogglePositionNotification",
+    /*9*/ @"PlayerMenuToggleHUDsNotification",
+    /*10*/ @"PlayerMenuResetNotification",
+    /*11*/ @"HUDMenuEditorHUDCloseNotification",
+    /*12*/ @"HUDMenuMonitorCloseNotification",
+    /*13*/ @"HUDMenuGearHUDCloseNotification",
+    /*14*/ @"StatusMenuReturnNotification",
+    /*15*/ @"InventoryMenuReturnNotification"
+};
 
 
 /*
@@ -270,42 +327,71 @@ unsigned get_memory_mb(void) {
  ====================
  */
 -( void ) initializeNotifications {
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification1" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"TestNotification2" object:nil];
-    
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"MonitorNotification" object:nil];
- 
-    // player menu items
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuCloseNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuStatusNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuInventoryNotification" object:nil];
-    
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuStepNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuAutostepNotification" object:nil];
-    
-    //
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuTogglePositionNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuToggleHUDsNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"PlayerMenuResetNotification" object:nil];
-    
-    
-    //
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuEditorHUDCloseNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuMonitorCloseNotification" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"HUDMenuGearHUDCloseNotification" object:nil];
-    
-    
-    // status menu items
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"StatusMenuReturnNotification" object:nil];
-    
-    
-    // inventory menu items
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"InventoryMenuReturnNotification" object:nil];
-    
-    
-    
+    /*
+    NSArray *notifications = [ NSArray arrayWithObjects:
+                              @"TestNotification1",
+                              @"TestNotification2",
+                              @"MonitorNotification",
+                              @"PlayerMenuCloseNotification",
+                              @"PlayerMenuStatusNotification",
+                              @"PlayerMenuInventoryNotification",
+                              @"PlayerMenuStepNotification",
+                              @"PlayerMenuAutostepNotification",
+                              @"PlayerMenuTogglePositionNotification",
+                              @"PlayerMenuToggleHUDsNotification",
+                              @"PlayerMenuResetNotification",
+                              @"HUDMenuEditorHUDCloseNotification",
+                              @"HUDMenuMonitorCloseNotification",
+                              @"HUDMenuGearHUDCloseNotification",
+                              @"StatusMenuReturnNotification",
+                              @"InventoryMenuReturnNotification",
+                              nil];
+    for ( NSString *notification in notifications )
+        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:notification object:nil];
+    */
+    for (int i=0; i<notificationsCount; i++)
+        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:notifications[i] object:nil];
     
 }
+
+/*
+ ====================
+ removeNotifications
+ 
+ initializes the various notifications used by the game's engine
+ ====================
+ */
+-( void ) removeNotifications {
+    /*
+    NSArray *notifications = [ NSArray arrayWithObjects:
+                              @"TestNotification1",
+                              @"TestNotification2",
+                              @"MonitorNotification",
+                              @"PlayerMenuCloseNotification",
+                              @"PlayerMenuStatusNotification",
+                              @"PlayerMenuInventoryNotification",
+                              @"PlayerMenuStepNotification",
+                              @"PlayerMenuAutostepNotification",
+                              @"PlayerMenuTogglePositionNotification",
+                              @"PlayerMenuToggleHUDsNotification",
+                              @"PlayerMenuResetNotification",
+                              @"HUDMenuEditorHUDCloseNotification",
+                              @"HUDMenuMonitorCloseNotification",
+                              @"HUDMenuGearHUDCloseNotification",
+                              @"StatusMenuReturnNotification",
+                              @"InventoryMenuReturnNotification",
+                              nil];
+    
+    for ( NSString *notification in notifications )
+        [[ NSNotificationCenter defaultCenter ] removeObserver:self name:notification object:nil];
+     */
+    for (int i=0; i<notificationsCount; i++)
+        [[ NSNotificationCenter defaultCenter ] removeObserver:self name:notifications[i] object:nil];
+        //[[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:notifications[i] object:nil];
+}
+
+
+
 
 
 
@@ -809,9 +895,17 @@ unsigned get_memory_mb(void) {
     else if ( [notification.name isEqualToString: @"PlayerMenuAutostepNotification" ]) {
         MLOG(@"Autostep toggle");
         autostepGameLogic = !autostepGameLogic;
+        
+        if (autostepGameLogic)
+            MLOG(@"autoStepGameLogic = YES");
+        else
+            MLOG(@"autoStepGameLogic = NO");
+        
         if ( gameLogicIsOn && autostepGameLogic ) {
+            MLOG(@"Scheduling step action...");
             [ self scheduleStepAction ];
         } else {
+            MLOG(@"Unscheduling step action...");
             [ self unscheduleStepAction ];
         }
     }
@@ -1519,7 +1613,7 @@ unsigned get_memory_mb(void) {
 
     // only if we need redraw, really...
     if ( needsRedraw ) {
-        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint ];
+        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint withSprites: sprites ];
         
         if ( editorHUDIsVisible )
             [ self updateEditorHUDLabel ];

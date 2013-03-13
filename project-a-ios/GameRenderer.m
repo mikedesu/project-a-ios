@@ -109,15 +109,23 @@ NSInteger getMod( NSInteger n ) {
  setTile
  ====================
  */
-+( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data {
++( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data withSprites: (NSDictionary *) sprites {
+//+( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data {
     Tile_t tileType = data.tileType;
  
     CCMutableTexture2D *tileTexture =
-    tileType == TILE_FLOOR_STONE          ? [Drawer stoneTile]      :
-    tileType == TILE_FLOOR_VOID           ? [Drawer voidTile]       :
-    tileType == TILE_FLOOR_UPSTAIRS       ? [Drawer upstairsTile]   :
-    tileType == TILE_FLOOR_DOWNSTAIRS     ? [Drawer downstairsTile] :
-    nil;
+    //tileType == TILE_FLOOR_STONE          ? [Drawer stoneTile]      :
+    tileType == TILE_FLOOR_STONE          ? [sprites objectForKey:@"StoneTile"]      :
+    
+    //tileType == TILE_FLOOR_VOID           ? [Drawer voidTile]       :
+    tileType == TILE_FLOOR_VOID           ? [sprites objectForKey:@"VoidTile"]       :
+    
+                                             //tileType == TILE_FLOOR_UPSTAIRS       ? [Drawer upstairsTile]   :
+    tileType == TILE_FLOOR_UPSTAIRS       ? [sprites objectForKey:@"UpstairsTile"]   :
+    
+    //tileType == TILE_FLOOR_DOWNSTAIRS     ? [Drawer downstairsTile] :
+    tileType == TILE_FLOOR_DOWNSTAIRS     ? [sprites objectForKey:@"DownstairsTile"] :
+                                             nil;
     
     // in most cases, we will fill our texture
     CCMutableTexture2D *texture = ( CCMutableTexture2D * ) tileSprite.texture;
@@ -161,7 +169,8 @@ NSInteger getMod( NSInteger n ) {
         }
         
         else if ( entity.entityType == ENTITY_T_NPC ) {
-            CCMutableTexture2D *t = [Drawer ghoul];
+            //CCMutableTexture2D *t = [Drawer ghoul];
+            CCMutableTexture2D *t = [sprites objectForKey: @"Ghoul"];
             for ( int i = 0; i < 16; i++ )
                 for ( int j = 0; j < 16; j++ )
                     if ( [t pixelAt:ccp(i,j)].a != 0 )
@@ -174,7 +183,8 @@ NSInteger getMod( NSInteger n ) {
             
             if ( entity.itemType == E_ITEM_T_WEAPON ) {
                 // draw sprite on top of cell, w/o black background
-                CCMutableTexture2D *t = [Drawer basicSwordWithColor:white withHandleColor:blue];
+                //CCMutableTexture2D *t = [Drawer basicSwordWithColor:white withHandleColor:blue];
+                CCMutableTexture2D *t = [sprites objectForKey:@"ShortSword"];
                 for ( int i = 0; i < 16; i++ )
                     for ( int j = 0; j < 16; j++ ) {
                         if ( [t pixelAt:ccp(i,j)].a != 0 )
@@ -185,7 +195,8 @@ NSInteger getMod( NSInteger n ) {
             }
             else if ( entity.itemType == E_ITEM_T_ARMOR ) {
                 // draw sprite on top of cell, w/o black background
-                CCMutableTexture2D *t = [Drawer basicShieldWithColor:darkgray withEmblemColor:yellow];
+                //CCMutableTexture2D *t = [Drawer basicShieldWithColor:darkgray withEmblemColor:yellow];
+                CCMutableTexture2D *t = [sprites objectForKey:@"LeatherArmor"];
                 for ( int i = 0; i < 16; i++ )
                     for ( int j = 0; j < 16; j++ ) {
                         if ( [t pixelAt:ccp(i,j)].a != 0 )
@@ -197,7 +208,8 @@ NSInteger getMod( NSInteger n ) {
             // only one book so far...
             else if ( entity.itemType == E_ITEM_T_BOOK ) {
                 // draw sprite on top of cell, w/o black background
-                CCMutableTexture2D *t = [Drawer bookOfAllKnowing];
+                //CCMutableTexture2D *t = [Drawer bookOfAllKnowing];
+                CCMutableTexture2D *t = [sprites objectForKey:@"BookOfAllKnowing"];
                 for ( int i = 0; i < 16; i++ )
                     for ( int j = 0; j < 16; j++ ) {
                         if ( [t pixelAt:ccp(i,j)].a != 0 )
@@ -211,7 +223,8 @@ NSInteger getMod( NSInteger n ) {
             else if ( entity.itemType == E_ITEM_T_POTION ) {
                 // draw sprite on top of cell, w/o black background
                 
-                CCMutableTexture2D *t = [Drawer basicPotionWithColor: yellow];
+                //CCMutableTexture2D *t = [Drawer basicPotionWithColor: yellow];
+                CCMutableTexture2D *t = [sprites objectForKey:@"PotionOfLightHealing"];
                 for ( int i = 0; i < 16; i++ )
                     for ( int j = 0; j < 16; j++ ) {
                         if ( [t pixelAt:ccp(i,j)].a != 0 )
@@ -225,7 +238,8 @@ NSInteger getMod( NSInteger n ) {
             else if ( entity.itemType == E_ITEM_T_FOOD ) {
                 // draw sprite on top of cell, w/o black background
                 
-                CCMutableTexture2D *t = [Drawer basicPotionWithColor: red];
+                //CCMutableTexture2D *t = [Drawer basicPotionWithColor: red];
+                CCMutableTexture2D *t = [sprites objectForKey:@"Chicken"];
                 for ( int i = 0; i < 16; i++ )
                     for ( int j = 0; j < 16; j++ ) {
                         if ( [t pixelAt:ccp(i,j)].a != 0 )
@@ -268,14 +282,14 @@ NSInteger getMod( NSInteger n ) {
  setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera: camera
  ====================
  */
-+( void ) setAllVisibleTiles: ( NSArray * ) tileArray withDungeonFloor: ( DungeonFloor * ) floor withCamera: ( CGPoint ) camera {
++( void ) setAllVisibleTiles: ( NSArray * ) tileArray withDungeonFloor: ( DungeonFloor * ) floor withCamera: ( CGPoint ) camera withSprites:(NSDictionary *)sprites {
     //MLOG( @"setAllVisibleTiles: withDungeonFloor:" );
     CGPoint c = camera;
     for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
         //MLOG(@"j = %d", j);
         for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
             CCSprite *sprite = [ tileArray objectAtIndex: i+j*NUMBER_OF_TILES_ONSCREEN_X ];
-            [ GameRenderer setTile: sprite withData: [ [floor tileDataArray] objectAtIndex: (i+c.x)+((j+c.y)*[floor width]) ] ];
+            [ GameRenderer setTile: sprite withData: [ [floor tileDataArray] objectAtIndex: (i+c.x)+((j+c.y)*[floor width]) ] withSprites: sprites ];
         }
     }
 }
