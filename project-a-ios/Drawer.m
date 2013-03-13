@@ -9,12 +9,50 @@
 @implementation Drawer
 
 
++(CCMutableTexture2D *) chicken {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:clear];
+    [t apply];
+    return t;
+}
+
+
 +(CCMutableTexture2D *) basicPotionWithColor: (Color_t) liquidColor {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
-    [t fill:black_alpha(0)];
     
-    // for now, fill
-    [t fill:liquidColor];
+    Color_t bg = clear;
+    Color_t outer = white;
+    
+    [t fill: bg];
+    
+    for (int i=0; i<4; i++) {
+        [t setPixelAt:ccp(i+2,0) rgba:liquidColor];
+        [t setPixelAt:ccp(i+2,2) rgba:outer];
+        [t setPixelAt:ccp(i+2,9) rgba:liquidColor];
+    }
+    for (int i=0; i<2; i++) {
+        [t setPixelAt:ccp(i+3,1) rgba:liquidColor];
+        [t setPixelAt:ccp(i+3,3) rgba:liquidColor];
+    }
+    for (int i=0; i<6; i++) {
+        [t setPixelAt:ccp(i+1,6) rgba:liquidColor];
+        [t setPixelAt:ccp(i+1,7) rgba:liquidColor];
+        [t setPixelAt:ccp(i+1,8) rgba:liquidColor];
+    }
+ 
+    [t setPixelAt:ccp(2,3) rgba:outer];
+    [t setPixelAt:ccp(5,3) rgba:outer];
+    [t setPixelAt:ccp(1,4) rgba:outer];
+    [t setPixelAt:ccp(2,4) rgba:outer];
+    [t setPixelAt:ccp(5,4) rgba:outer];
+    [t setPixelAt:ccp(6,4) rgba:outer];
+    for (int j=5; j<10; j++) {
+        [t setPixelAt:ccp(0,j) rgba:outer];
+        [t setPixelAt:ccp(7,j) rgba:outer];
+    }
+    [t setPixelAt:ccp(1,9) rgba:outer];
+    [t setPixelAt:ccp(6,9) rgba:outer];
+    for (int i=1; i<7; i++) [t setPixelAt:ccp(i, 10) rgba:outer];
     
     [t apply];
     return t;
@@ -72,45 +110,47 @@
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
     
-    Color_t c0 = gray;
-    Color_t c1 = darkgray;
+    Color_t c0 = darkgray;
+    Color_t c1 = black;
     
     [t fill:c0];
-    for (int j=0; j<16; j+=2) {
-        for (int i=0; i<16; i++) {
+    for (int j=0; j<16; j+=2)
+        for (int i=0; i<16; i++)
             [t setPixelAt:ccp(i,j) rgba:c1];
-        }
-    }
-    for (int i=0; i<16; i+=2) {
-        for (int j=0; j<16; j++) {
+    for (int i=0; i<16; i+=2)
+        for (int j=0; j<16; j++)
             [t setPixelAt:ccp(i,j) rgba:c1];
-        }
-    }
-    
-    
     [ t apply ];
     return t;
 }
 
 
-+(CCMutableTexture2D *) voidTile {
++(CCMutableTexture2D *) heartWithColors: (Color_t) c0 c1: (Color_t) c1 c2: (Color_t) c2 {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
-    [t fill:black_alpha(0)];
-    [t fill:black];
-    /*
-    for (int i=0; i<16; i+=2) {
-        for (int j=1; j<16; j+=2) {
-            [t setPixelAt:ccp(i,j) rgba:darkgray];
-        }
+    Color_t bg = c0, outer = c1, inner = c2;
+    [t fill:bg];
+    for ( int i = 0; i < 9; i++) {
+        [t setPixelAt:ccp(i,0) rgba: i == 0 ? bg : i <= 3 ? outer : i == 4 ? bg : i <= 7 ? outer : i == 8 ? bg : clear ];
+        [t setPixelAt:ccp(i,1) rgba: i == 0 ? outer : i <= 3 ? inner   : i == 4 ? outer : i <= 7 ? inner   : i == 8 ? outer : clear ];
+        [t setPixelAt:ccp(i,2) rgba: i == 0 ? outer : i <= 7 ? inner   : i == 8 ? outer : clear];
+        [t setPixelAt:ccp(i,3) rgba: i == 0 ? outer : i <= 7 ? inner   : i == 8 ? outer : clear];
+        i >= 1 && i < 8 ? [t setPixelAt:ccp(i,4) rgba: i == 1 ? outer : i <= 6 ? inner : i == 7 ? outer : clear] : 0;
+        i >= 2 && i < 7 ? [t setPixelAt:ccp(i,5) rgba: i == 2 ? outer : i <= 5 ? inner : i == 6 ? outer : clear] : 0;
+        i >= 3 && i < 6 ? [t setPixelAt:ccp(i,6) rgba: i == 3 ? outer : i == 4 ? inner : i == 5 ? outer : clear] : 0;
     }
-    */
-    
-    NSInteger x = [Dice roll:16]-1;
-    NSInteger y = [Dice roll:16]-1;
-    
-    [t setPixelAt:ccp(x,y) rgba:white];
-    
+    [t setPixelAt:ccp(4,7) rgba:outer];
     [ t apply ];
+    return t;
+}
+
+
+
++(CCMutableTexture2D *) voidTile {
+    CCMutableTexture2D *t = [self heartWithColors:white c1:black c2:red];
+    //CCMutableTexture2D *t = [self heartWithColors:black c1:red c2:red];
+    //[CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    //[t fill:black_alpha(0)];
+    
     return t;
 }
 

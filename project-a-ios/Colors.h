@@ -100,6 +100,8 @@
 /* ==================== */
 /* ==================== */
 
+#define clear       ccc4(0,0,0,0)
+
 
 #define black       CC4B_BLACK
 #define white       CC4B_WHITE

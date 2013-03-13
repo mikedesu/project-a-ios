@@ -8,6 +8,9 @@
 
 @interface Drawer : NSObject {}
 
++(CCMutableTexture2D *) chicken;
++(CCMutableTexture2D *) heartWithColors: (Color_t) c0 c1: (Color_t) c1 c2: (Color_t) c2;
+
 +(CCMutableTexture2D *) basicPotionWithColor: (Color_t) liquidColor;
 +(CCMutableTexture2D *) basicSwordWithColor:  (Color_t) bladeColor    withHandleColor: (Color_t) handleColor;
 +(CCMutableTexture2D *) basicShieldWithColor: (Color_t) baseColor     withEmblemColor: (Color_t) emblemColor;

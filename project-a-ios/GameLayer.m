@@ -58,8 +58,9 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer ghoul]                                             forKey: @"Ghoul"];
     [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:blue]     forKey: @"ShortSword"];
     [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];
-    [s setObject:[Drawer basicPotionWithColor:yellow]                       forKey: @"PotionOfLightHealing"];
+    [s setObject:[Drawer basicPotionWithColor:red]                          forKey: @"PotionOfLightHealing"];
     [s setObject:[Drawer bookOfAllKnowing]                                  forKey: @"BookOfAllKnowing"];
+    [s setObject:[Drawer chicken]                                           forKey: @"Chicken"];
     
 }
 
@@ -955,7 +956,7 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(225) width:100 height:160 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black width:100 height:250 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
