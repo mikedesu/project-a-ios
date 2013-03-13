@@ -13,12 +13,16 @@
 
 
 +( Entity * ) randomItem {
-    Entity *e = [[Entity alloc] init];
-    e.entityType = ENTITY_T_ITEM;
-    e.isPC = NO;
-    [e.name setString: @"Book of All-Knowing" ];
-    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    Entity *e = nil;
+    
+    NSUInteger roll = [Dice roll:2];
+    if (roll==1)
+        e = [Items potionOfLightHealing:1];
+    else
+        e = [Items chicken];
+    
+    NSAssert( e!=nil, @"Random Item: roll failed to set entity" );
+    
     return e;
 }
 
@@ -34,5 +38,67 @@
     e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     return e;
 }
+
+
++( Entity * ) potionOfLightHealing: (NSInteger) bonus {
+    Entity *e = [[Entity alloc] init];
+    
+    e.entityType = ENTITY_T_ITEM;
+    e.itemType = E_ITEM_T_POTION;
+    e.isPC = NO;
+    [e.name setString:@"Potion of Light Healing"];
+    
+    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    
+    // now to define the effects of the potion when used
+    
+    e.healingRollBase   = 6;
+    e.healingBonus      = bonus;
+    e.weight            = 0.1;
+    e.durability        = 1;
+    e.totalDurability   = 1;
+    
+    return e;
+}
+
+
+
+
++(Entity *) chicken {
+    Entity *e = [[Entity alloc] init];
+    
+    e.entityType = ENTITY_T_ITEM;
+    e.itemType = E_ITEM_T_FOOD;
+    [e.name setString:@"Chicken"];
+    
+    e.isPC = NO;
+    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    
+    // now to define the effects of the food when used
+    e.foodBase          = 6;
+    e.weight            = 1;
+    e.durability        = 100;
+    e.totalDurability   = 100;
+    
+    return e;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end

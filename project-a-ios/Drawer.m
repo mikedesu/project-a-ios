@@ -8,6 +8,20 @@
 
 @implementation Drawer
 
+
++(CCMutableTexture2D *) basicPotionWithColor: (Color_t) liquidColor {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    
+    // for now, fill
+    [t fill:liquidColor];
+    
+    [t apply];
+    return t;
+}
+                                            
+
+
 +(CCMutableTexture2D *) basicSwordWithColor: (Color_t) bladeColor withHandleColor: (Color_t) handleColor {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];

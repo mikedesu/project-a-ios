@@ -38,6 +38,11 @@
 @synthesize money;
 @synthesize hunger;
 
+@synthesize healingBonus;
+@synthesize healingRollBase;
+
+@synthesize foodBase;
+
 @synthesize itemType;
 @synthesize damageBonus;
 @synthesize damageRollBase;

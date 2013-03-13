@@ -212,6 +212,38 @@ NSInteger getMod( NSInteger n ) {
                 [texture apply];
                 
             }
+            
+            // potions
+            else if ( entity.itemType == E_ITEM_T_POTION ) {
+                // draw sprite on top of cell, w/o black background
+                
+                CCMutableTexture2D *t = [Drawer basicPotionWithColor: yellow];
+                for ( int i = 0; i < 16; i++ )
+                    for ( int j = 0; j < 16; j++ ) {
+                        if ( [t pixelAt:ccp(i,j)].a != 0 )
+                            [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
+                    }
+                [texture apply];
+                
+            }
+            
+            // food
+            else if ( entity.itemType == E_ITEM_T_FOOD ) {
+                // draw sprite on top of cell, w/o black background
+                
+                CCMutableTexture2D *t = [Drawer basicPotionWithColor: red];
+                for ( int i = 0; i < 16; i++ )
+                    for ( int j = 0; j < 16; j++ ) {
+                        if ( [t pixelAt:ccp(i,j)].a != 0 )
+                            [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
+                    }
+                [texture apply];
+                
+            }
+            
+            
+            
+            
         }
     }
     

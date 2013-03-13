@@ -8,4 +8,8 @@
 @interface Items : NSObject { }
 +(Entity *) randomItem;
 +(Entity *) bookOfAllKnowing;
+
++(Entity *) potionOfLightHealing:(NSInteger) bonus;
++(Entity *) chicken;
+
 @end

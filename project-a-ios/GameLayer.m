@@ -3030,6 +3030,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  
         // spawn a new monster on the current floor
         [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
+        [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:floorNumber]];
+        
         Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
         
         // check if we've obtained the Book of All-Knowing

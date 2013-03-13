@@ -18,8 +18,11 @@ typedef enum {
     E_ITEM_T_WEAPON,
     E_ITEM_T_ARMOR,
     E_ITEM_T_POTION,
+    E_ITEM_T_FOOD,
     E_ITEM_T_BOOK,
 } EntityItemTypes_t;
+
+
 
 
 
@@ -132,6 +135,14 @@ typedef enum {
     NSUInteger hunger;
     
     
+    // for potions/wands/healing items/etc 
+    NSInteger healingRollBase;
+    NSInteger healingBonus;
+    
+    // for food
+    NSInteger foodBase;
+    
+    
     // Feats sieve:
     // 0000 0000 0001 0011
 }
@@ -184,6 +195,10 @@ typedef enum {
 
 
 @property (atomic) NSMutableArray *pathTaken;
+
+@property (atomic, assign) NSInteger foodBase;
+@property (atomic, assign) NSInteger healingRollBase;
+@property (atomic, assign) NSInteger healingBonus;
 
 -(Entity *) init;
 -(Entity *) initWithLevel: (NSInteger) _level;
