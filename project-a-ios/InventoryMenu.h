@@ -7,6 +7,8 @@
 #import "cocos2d.h"
 #import "GameConfig.h"
 
+typedef void (^MenuControlBlock)(CCMenuItemLabel *);
+
 @class GameLayer;
 
 @interface InventoryMenu : CCLayerColor {
@@ -15,13 +17,19 @@
     Entity *pc;
     DungeonFloor *floor;
     GameLayer *gameLayer;
+    
+    MenuControlBlock menuControlBlock;
 }
+
 @property (atomic) NSMutableArray *inventory;
 @property (atomic) CCMenu *menu;
 @property (atomic) Entity *pc;
 @property (atomic) DungeonFloor *floor;
 @property (atomic) GameLayer *gameLayer;
 
+@property (readwrite, copy) MenuControlBlock menuControlBlock;
+
+-(void) defineMenuControlBlock;
 -(id)   initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) _gameLayer;
 -(void) update;
 @end

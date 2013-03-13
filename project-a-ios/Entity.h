@@ -140,7 +140,7 @@ typedef enum {
     
     NSMutableArray *pathTaken;
     
-    NSUInteger hunger;
+    NSInteger hunger;
     
     
     // for potions/wands/healing items/etc 
@@ -196,7 +196,7 @@ typedef enum {
 @property (atomic, assign) EntityItemPickupAlgorithm_t itemPickupAlgorithm;
 
 @property (atomic, assign) NSUInteger money;
-@property (atomic, assign) NSUInteger hunger;
+@property (atomic, assign) NSInteger hunger;
 @property (atomic) NSMutableArray *inventoryArray;
 
 @property (atomic) Entity *equippedArmsLeft;

@@ -149,12 +149,15 @@ unsigned get_memory_mb(void) {
         for ( int i = 0; i < [dungeon count]; i++ ) {
             NSInteger treasureCount = [Dice roll:6] + 1;
             for ( int j = 0; j < treasureCount; j++ ) {
-                NSInteger roll = [Dice roll:2];
+                NSInteger roll = [Dice roll:4];
                 if ( roll == 1 ) {
                     [ GameRenderer spawnEntityAtRandomLocation:[Weapons shortSword: i] onFloor:[dungeon objectAtIndex:i]];
                 }
                 else if ( roll == 2 ) {
                     [ GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: i] onFloor:[dungeon objectAtIndex:i]];
+                }
+                else if ( roll == 3 || roll == 4 ) {
+                    [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
                 }
             }
         }
@@ -2874,7 +2877,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     monitorIsVisible = NO;
     [ self initMonitor ];
-  //  [ self addMonitor: monitor ];
+    [ self addMonitor: monitor ];
     
    
     playerHUDIsVisible = NO;
@@ -3029,7 +3032,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  
         // spawn a new monster on the current floor
         [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
-        [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:floorNumber]];
+        //[ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:floorNumber]];
         
         Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
         
