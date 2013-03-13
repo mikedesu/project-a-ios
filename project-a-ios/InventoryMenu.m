@@ -10,28 +10,45 @@
 
 @synthesize inventory;
 @synthesize menu;
+@synthesize pc;
+@synthesize floor;
+@synthesize gameLayer;
 
--(id) initWithInventory: (NSMutableArray *) pcInventory {
+-(id) initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) gameLayer {
     CGSize s = [[ CCDirector sharedDirector ] winSize];
     if ((self=[super initWithColor:black width:s.width height:s.height])) {
         
-        //assuming pcInventory != nil
-        NSAssert(pcInventory!=nil, @"pcInventory was nil");
-        
-        inventory = pcInventory;
-        
         CGSize s = [[CCDirector sharedDirector] winSize];
+        
+        pc = _pc;
+        inventory = _pc.inventoryArray;
+        floor = _floor;
         
         NSMutableArray *menuItems = [NSMutableArray array];
         
         CGFloat x = 0;
         CGFloat y = s.height;
     
-        for (int i = 0; i < pcInventory.count; i++) {
+        for (int i = 0; i < inventory.count; i++) {
             
             //Entity *e = [pcInventory objectAtIndex:i];
             CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Item" fontName:@"Courier New" fontSize:16] block:^(CCMenuItemLabel * sender) {
                 MLOG(@"%@ : %d", sender.label.string, sender.tag );
+                Entity *eItem = [inventory objectAtIndex:sender.tag];
+                
+                if ( eItem.itemType == E_ITEM_T_POTION ) {
+                    MLOG(@"is potion");
+                    
+                    // handle potion use
+                    if ( eItem.potionType == POTION_T_HEALING ) {
+                        NSInteger total = [Dice roll: eItem.healingRollBase] + eItem.healingBonus;
+                        pc.hp += total;
+                        if ( pc.hp > pc.maxhp ) pc.hp = pc.maxhp;
+                        MLOG(@"healed %d", total);
+                    }
+                }
+                gameLayer.turnCounter++;
+                
                 [inventory      removeObjectAtIndex: sender.tag];
                 [sender.parent  removeChild:sender   cleanup:YES];
             }];
@@ -45,6 +62,13 @@
             [menuItems addObject:item];
         }
         
+        
+        
+        
+        
+        
+        
+        
         MLOG(@"menuItems: %@", menuItems);
         
        
@@ -52,11 +76,6 @@
         CCMenuItemLabel *l0 = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Return" fontName:@"Courier New" fontSize:18] target:self selector:@selector(returnPressed)];
         l0.position = ccp( 0 + l0.contentSize.width/2, 0 + l0.contentSize.height/2 );
         
-        /*
-        NSArray *items = [NSArray arrayWithObjects:
-                          l0,
-                          nil];
-        */
         [menuItems addObject:l0];
         
         menu = [CCMenu menuWithArray:menuItems];
@@ -84,11 +103,32 @@
         Entity *e = [inventory objectAtIndex:i];
         
         CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:e.name fontName:@"Courier New" fontSize:14] block:^(CCMenuItemLabel *sender) {
-            MLOG(@"%@ : %d", sender.label.string, sender.tag );
-            [inventory      removeObjectAtIndex: sender.tag];
+
+            // handle item use
+            Entity *eItem = [inventory objectAtIndex:sender.tag];
             
+            //MLOG(@"%@ : %d", sender.label.string, sender.tag );
+            MLOG(@"%@ ", eItem.name );
+            
+            if ( eItem.itemType == E_ITEM_T_POTION ) {
+                MLOG(@"is potion");
+                
+                // handle potion use
+                if ( eItem.potionType == POTION_T_HEALING ) {
+                    NSInteger total = [Dice roll: eItem.healingRollBase] + eItem.healingBonus;
+                    pc.hp += total;
+                    if ( pc.hp > pc.maxhp ) pc.hp = pc.maxhp;
+                    MLOG(@"healed %d", total);
+                    
+                }
+            }
+            
+            gameLayer.turnCounter++;
+            
+            [inventory      removeObjectAtIndex: sender.tag];
             InventoryMenu *inventoryMenu = (InventoryMenu *) sender.parent.parent;
             [sender.parent  removeChild:sender   cleanup:YES]; // removes this item from the inventory on use
+            
             [inventoryMenu update];
         }];
         

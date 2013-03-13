@@ -23,6 +23,10 @@ typedef enum {
 } EntityItemTypes_t;
 
 
+typedef enum {
+    POTION_T_NONE,
+    POTION_T_HEALING,
+} PotionTypes_t;
 
 
 
@@ -109,6 +113,10 @@ typedef enum {
     
     EntityItemTypes_t itemType;
     
+    
+    PotionTypes_t potionType;
+    
+    
     NSInteger damageRollBase; // x, where 1dx = damage roll
     NSInteger damageBonus; // weapon roll bonus, if any
     
@@ -176,6 +184,8 @@ typedef enum {
 @property (atomic, assign) NSInteger ac;
 
 @property (atomic, assign) EntityItemTypes_t itemType;
+@property (atomic, assign) PotionTypes_t potionType;
+
 @property (atomic, assign) NSInteger damageRollBase;
 @property (atomic, assign) NSInteger damageBonus;
 @property (atomic, assign) NSInteger weight;
@@ -216,9 +226,7 @@ typedef enum {
 -( void ) handleLevelUp;
 -( void ) handleLevelDown;
 
-    
 -( void ) step;
-
 -( void ) getHungry;
 
 @end

@@ -8,6 +8,7 @@
 
 #import <mach/mach.h> // for reporting memory info
 
+
 // used for reporting memory used in-game
 unsigned get_memory_bytes(void) {
     struct task_basic_info info;
@@ -25,9 +26,9 @@ unsigned get_memory_mb(void) {
 }
 
 
-
-
 @implementation GameLayer
+
+@synthesize turnCounter;
 
 /*
  ====================
@@ -60,18 +61,16 @@ unsigned get_memory_mb(void) {
         //prevSelectedTile = -1;
         touchedTileIndex = -1;
         isTouched = NO;
+ 
         
         // Dungeon initialization
         [ self initializeDungeon ];
         //[ self doTimer:@selector(initializeDungeon)];
         
-        
         CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: [dungeon objectAtIndex:floorNumber]];
-        
         
         // set up our 'hero'
         [ self initializePCEntity ];
-        
         
         // set the camera anchor point
         cameraAnchorPoint = ccp( 7, 5 );
@@ -1398,7 +1397,7 @@ unsigned get_memory_mb(void) {
 #pragma mark - Inventory Menu
 
 -(void) initInventoryMenu {
-    inventoryMenu = [[InventoryMenu alloc] initWithInventory:pcEntity.inventoryArray];
+    inventoryMenu = [[InventoryMenu alloc] initWithPC: pcEntity withFloor: [dungeon objectAtIndex:floorNumber] withGameLayer:self];
     inventoryMenu.position = ccp(0,0);
 }
 
@@ -2946,7 +2945,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.maxhp = [Dice roll:12] + conMod;
     hero.hp = hero.maxhp;
     
-    hero.ac = 15;
+    hero.ac = 10;
     
     //using fists...
     hero.damageRollBase = 6;

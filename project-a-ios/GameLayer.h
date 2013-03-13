@@ -28,6 +28,8 @@ typedef enum {
     
     GameState_t gameState;
     
+    NSUInteger turnCounter;
+    
     CGPoint selectedTilePoint;
     
     Entity *pcEntity;
@@ -49,7 +51,6 @@ typedef enum {
     //NSInteger prevSelectedTile;
     
     NSInteger heroTouches;
-    NSUInteger turnCounter;
     
     BOOL editorHUDIsVisible;
     BOOL monitorIsVisible;
@@ -81,8 +82,6 @@ typedef enum {
     BOOL inventoryMenuIsVisible;
     InventoryMenu *inventoryMenu;
     
-    
-    
     CGPoint cameraAnchorPoint;
     
     double touchBeganTime;
@@ -92,6 +91,9 @@ typedef enum {
     
     BOOL needsRedraw;
 }
+
+@property (atomic) NSUInteger turnCounter;
+
 
 +(CCScene *) scene;
 

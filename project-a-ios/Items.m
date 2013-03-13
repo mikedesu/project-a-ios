@@ -43,13 +43,14 @@
 +( Entity * ) potionOfLightHealing: (NSInteger) bonus {
     Entity *e = [[Entity alloc] init];
     
-    e.entityType = ENTITY_T_ITEM;
-    e.itemType = E_ITEM_T_POTION;
-    e.isPC = NO;
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_POTION;
+    e.potionType    = POTION_T_HEALING;
+    e.isPC          = NO;
     [e.name setString:@"Potion of Light Healing"];
     
-    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
     // now to define the effects of the potion when used
     

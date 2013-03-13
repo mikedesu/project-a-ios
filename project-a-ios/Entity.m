@@ -64,6 +64,8 @@
 
 @synthesize entityType;
 
+@synthesize potionType;
+
 /*
  ====================
  init
@@ -74,23 +76,23 @@
 -( id ) init {
     if ( ( self = [super init] ) ) {
         //MLOG(@"init");
-        isPC = NO;
-        isAlive = YES;
+        isPC            = NO;
+        isAlive         = YES;
         positionOnMap.x = 0;
         positionOnMap.y = 0;
-        texture = nil;
+        texture         = nil;
         
-        name = [ [ NSMutableString alloc ] init ];
-        level = 1;
-        entityType = ENTITY_T_VOID;
+        name        = [ [ NSMutableString alloc ] init ];
+        level       = 1;
+        entityType  = ENTITY_T_VOID;
         
-        totalKills = 0;
+        totalKills  = 0;
         
-        itemType = E_ITEM_T_NONE;
+        itemType    = E_ITEM_T_NONE;
         damageRollBase = 4;
         damageBonus = 0;
-        weight = 0;
-        durability = 0;
+        weight      = 0;
+        durability  = 0;
         totalDurability = 0;
         
         /*
@@ -112,46 +114,48 @@
         
         */
         
-        strength = [Dice roll:6 nTimes:3];
-        dexterity = [Dice roll:6 nTimes:3];
-        constitution = [Dice roll:6 nTimes:3];
-        intelligence = [Dice roll:6 nTimes:3];
-        wisdom = [Dice roll:6 nTimes:3];
-        charisma = [Dice roll:6 nTimes:3];
+        strength        = [Dice roll:6 nTimes:3];
+        dexterity       = [Dice roll:6 nTimes:3];
+        constitution    = [Dice roll:6 nTimes:3];
+        intelligence    = [Dice roll:6 nTimes:3];
+        wisdom          = [Dice roll:6 nTimes:3];
+        charisma        = [Dice roll:6 nTimes:3];
         
-        alignment = ENTITYALIGNMENT_T_NEUTRAL_NEUTRAL;
+        alignment       = ENTITYALIGNMENT_T_NEUTRAL_NEUTRAL;
         
-        xp = 0;
-        totalxp = 0;
+        xp          = 0;
+        totalxp     = 0;
         
 #define DEFAULT_LVL1_NEXT_LEVEL_XP      10
         nextLevelXP = DEFAULT_LVL1_NEXT_LEVEL_XP;
         
-        maxhp = 0;
-        
-        hitDie = 12;
+        maxhp   = 0;
+        hitDie  = 12;
         
         while ( maxhp == 0 ) {
-            NSInteger conMod = [ GameRenderer modifierForNumber: constitution ];
-            maxhp = [Dice roll:hitDie] + conMod;
-            hp = maxhp;
+            NSInteger conMod    = [ GameRenderer modifierForNumber: constitution ];
+            maxhp               = [Dice roll:hitDie] + conMod;
+            hp                  = maxhp;
             //MLOG(@"conMod = %d,  maxhp = %d", conMod, maxhp);
         }
         
         ac = 10; // the higher the better
         
-        hunger = 0;
-        money = 0;
+        hunger  = 0;
+        money   = 0;
         
-        inventoryArray = [ [ NSMutableArray alloc ] init ];
-        equippedArmsLeft = nil;
-        equippedArmsRight = nil;
-        equippedArmorChest = nil;
+        inventoryArray      = [ [ NSMutableArray alloc ] init ];
+        equippedArmsLeft    = nil;
+        equippedArmsRight   = nil;
+        equippedArmorChest  = nil;
         
         pathTaken = [ [ NSMutableArray alloc ] init ];
         
-        pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
-        itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+        pathFindingAlgorithm    = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
+        itemPickupAlgorithm     = ENTITYITEMPICKUPALGORITHM_T_NONE;
+        
+        itemType        = E_ITEM_T_NONE;
+        potionType      = POTION_T_NONE;
         
         //MLOG(@"end init");
     }
@@ -161,13 +165,13 @@
 
 
 -(Entity *) initWithHitDie: (NSInteger) hd {
-    Entity *e = [[Entity alloc] init];
-    maxhp = 0;
-    hitDie = hd;
+    Entity *e   = [[Entity alloc] init];
+    maxhp       = 0;
+    hitDie      = hd;
     while ( maxhp == 0 ) {
-        NSInteger conMod = [ GameRenderer modifierForNumber: e.constitution ];
-        maxhp = [Dice roll:hitDie] + conMod;
-        hp = maxhp;
+        NSInteger conMod    = [ GameRenderer modifierForNumber: e.constitution ];
+        maxhp               = [Dice roll:hitDie] + conMod;
+        hp                  = maxhp;
     }
     return e;
 }
