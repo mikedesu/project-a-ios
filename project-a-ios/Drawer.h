@@ -9,6 +9,7 @@
 @interface Drawer : NSObject {}
 
 +(CCMutableTexture2D *) chicken;
++(CCMutableTexture2D *) smallBlob: (Color_t) blobColor ;
 +(CCMutableTexture2D *) heartWithColors: (Color_t) c0 c1: (Color_t) c1 c2: (Color_t) c2;
 
 +(CCMutableTexture2D *) basicPotionWithColor: (Color_t) liquidColor;
@@ -32,5 +33,7 @@
 +(CCMutableTexture2D *) statusIcon;
 +(CCMutableTexture2D *) itemIcon;
 
++(NSString *) codeForPos: (CGPoint) p color: (Color_t) c;
++(NSArray *) codeForTexture: (CCMutableTexture2D *) t;
 
 @end

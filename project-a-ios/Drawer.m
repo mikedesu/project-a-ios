@@ -10,8 +10,20 @@
 
 
 +(CCMutableTexture2D *) chicken {
+    CCMutableTexture2D *t = [self smallBlob: green];
+    return t;
+}
+
+
++(CCMutableTexture2D *) smallBlob: (Color_t) blobColor {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:clear];
+    Color_t c = blobColor;
+    for (int j=7; j<10; j++)
+        for (int i=7; i<10; i++)
+            [t setPixelAt:ccp(i,j) rgba:c];
+    [t setPixelAt:ccp(8,6) rgba:c];
+    [t setPixelAt:ccp(8,10) rgba:c];
     [t apply];
     return t;
 }
@@ -465,7 +477,51 @@
 
 
 
++(NSString *) codeForPos: (CGPoint) p color: (Color_t) c {
+    return [NSString stringWithFormat:@"setPixel %.0f %.0f %d %d %d %d", p.x, p.y, c.r, c.g, c.b, c.a];
+}
 
+
+
++(NSArray *) codeForTexture: (CCMutableTexture2D *) t {
+    NSMutableArray *array = [NSMutableArray array];
+    
+    for (int i=0; i<16; i++) {
+        for (int j=0; j<16; j++) {
+            NSString *code = [self codeForPos:ccp(i,j) color:[t pixelAt:ccp(i,j)]];
+            [array addObject: code];
+        }
+    }
+    
+    return array;
+}
+
+
+
++(void) executeCodeForTexture: (CCMutableTexture2D *) t code: (NSString *) code {
+    // setPixel
+    if ( [code hasPrefix:@"setPixel"] ) {
+        NSString *paramsStr = [code substringFromIndex:8];
+        
+        NSArray *params = [paramsStr componentsSeparatedByString:@" "];
+        CGFloat x = [[params objectAtIndex:0] intValue];
+        CGFloat y = [[params objectAtIndex:1] intValue];
+        GLubyte r = [[params objectAtIndex:2] intValue];
+        GLubyte g = [[params objectAtIndex:3] intValue];
+        GLubyte b = [[params objectAtIndex:4] intValue];
+        GLubyte a = [[params objectAtIndex:5] intValue];
+    
+        // assuming all's well...
+        [t setPixelAt:ccp(x,y) rgba:ccc4(r, g , b , a)];
+    }
+}
+
+
++(void) executeCodesForTexture: (CCMutableTexture2D *) t codes: (NSArray *) codes {
+    for (NSString *code in codes) {
+        [self executeCodeForTexture:t code:code];
+    }
+}
 
 
 @end

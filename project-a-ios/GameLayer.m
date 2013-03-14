@@ -182,6 +182,15 @@ unsigned get_memory_mb(void) {
     
     //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
     [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
+    
+    
+    MLOG(@"INSTRUCTIONS");
+    
+    for ( NSString *s in [Drawer codeForTexture:[sprites objectForKey:@"BookOfAllKnowing"]]) {
+        MLOG(@"%@", s);
+    }
+    
+    MLOG(@"END INSTRUCTIONS");
 }
 
 
@@ -402,7 +411,7 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) receiveNotification: ( NSNotification * ) notification {
-    MLOG( @"received notification: %@", notification );
+    //MLOG( @"received notification: %@", notification );
     
     if ( [[ notification name ] isEqualToString: @"TestNotification1" ] ) {
         //MLOG( @"TestNotification1" );
@@ -1536,7 +1545,7 @@ static NSString  * const notifications[] = {
 }
 
 -(void) updateStatusMenu {
-    MLOG(@"updateStatusMenu");
+    //MLOG(@"updateStatusMenu");
     [statusMenu.content setString:
      [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
       
