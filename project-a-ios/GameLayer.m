@@ -1409,8 +1409,14 @@ static NSString  * const notifications[] = {
 -( void ) updatePlayerHUDLabel {
     playerHUD.label.fontSize = 12;
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
-                                   [ NSString stringWithFormat: @"%@ - H:%d T:%d", pcEntity.name,
-                                    pcEntity.hunger,
+                                   [ NSString stringWithFormat: @"%@ - H:%@ T:%d", pcEntity.name,
+                                        pcEntity.hunger < 50  ? @"" :
+                                        pcEntity.hunger < 100 ? @"Mild Hunger" :
+                                        pcEntity.hunger < 150 ? @"Hungry" :
+                                        pcEntity.hunger < 200 ? @"Very Hungry" :
+                                        pcEntity.hunger < 250 ? @"Starving" :
+                                        @""
+                                    ,
                                     turnCounter ],
                                    [ NSString stringWithFormat: @"St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d",
                                     pcEntity.strength,
@@ -1885,8 +1891,17 @@ static NSString  * const notifications[] = {
                 [ self selectTileAtPosition: mapPoint ];
                 
                 // move the pcEntity to the tile
-                [ self moveEntity:pcEntity toPosition:mapPoint ];
-              //  [ pcEntity getHungry ];
+                
+                if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y )
+                    [ self moveEntity:pcEntity toPosition:mapPoint ];
+                else {
+                    // rest
+                    MLOG(@"%.0f %.0f %.0f %.0f", pcEntity.positionOnMap.x, mapPoint.x, pcEntity.positionOnMap.y, mapPoint.y);
+                    [self addMessage:@"You rest..."];
+                    pcEntity.hp++;
+                    if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
+                    [pcEntity getHungry];
+                }
                 
                 // step game logic
                 if ( gameLogicIsOn ) {
@@ -2561,6 +2576,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
     }
     [entity getHungry];
+    
 }
 
 
@@ -3139,6 +3155,24 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( void ) stepGameLogic {
     if ( gameLogicIsOn ) {
         
+          // check if we've obtained the Book of All-Knowing
+        BOOL hasTheBook = NO;
+        for(Entity*e in pcEntity.inventoryArray){if(e.itemType==E_ITEM_T_BOOK&&[e.name isEqualToString:@"Book of All-Knowing"]){hasTheBook=YES;break;}}
+        
+        // check player's hunger
+        if ( ! pcEntity.isAlive ) {
+            if ( pcEntity.hunger >= 250 ) {
+                MLOG(@"You starved to death...");
+                [ self addMessage: [NSString stringWithFormat:@"You starved to death.\nYou killed %d monsters.\n",
+                                    pcEntity.totalKills ]];
+                gameLogicIsOn       = NO;
+                autostepGameLogic   = NO;
+                gameState           = GAMESTATE_T_GAME_PC_DEAD;
+                [ self unscheduleStepAction ];
+            }
+        }
+        
+        
         // have all entities on this floor act
         [ self haveAllEntitiesActOnThisFloor ];
         
@@ -3153,14 +3187,10 @@ NSUInteger getMagicY( NSUInteger y ) {
  
         // spawn a new monster on the current floor
         [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
-        //[ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:floorNumber]];
         
         Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
         
-        // check if we've obtained the Book of All-Knowing
-        BOOL hasTheBook = NO;
-        for(Entity*e in pcEntity.inventoryArray){if(e.itemType==E_ITEM_T_BOOK&&[e.name isEqualToString:@"Book of All-Knowing"]){hasTheBook=YES;break;}}
-        
+       
         // check if we've won
         if ( floorNumber == 0 &&    tile.tileType == TILE_FLOOR_UPSTAIRS &&     hasTheBook ) {
             [ self addMessage:[NSString stringWithFormat: @"You win!\nYou killed %d monsters\n", pcEntity.totalKills ] ];

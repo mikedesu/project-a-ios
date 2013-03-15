@@ -859,6 +859,13 @@ NSInteger getMod( NSInteger n ) {
     
     if ( diceroll <= spawnChancePercent ) {
         Entity *e = [ Monsters ghoul ];
+        
+        // level up ghoul appropriately
+        
+        NSInteger levelRoll = [Dice roll: floor.floorNumber + 1];
+        for (int i=e.level; i<levelRoll; i++)
+            [e handleLevelUp];
+        
         [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
     }
 }

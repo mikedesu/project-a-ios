@@ -43,6 +43,7 @@
         }
         else {
             MLOG(@"Not handled!");
+            [gameLayer addMessage:[NSString stringWithFormat:@"%@-use not handled yet!", eItem.name]];
             handled = NO;
         }
         

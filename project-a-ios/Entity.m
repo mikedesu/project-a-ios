@@ -386,6 +386,20 @@
  */
 -( void ) getHungry {
     hunger++;
+    
+    // various levels of hunger...
+    // lets start with
+    // 50  = a little hungry
+    // 100 = hungry
+    // 150 = very hungry
+    // 200 = starving
+    // 250 = dead
+    
+    if ( hunger >= 250 ) {
+        hp = 0;
+        isAlive = NO;
+        
+    }
 }
 
 
