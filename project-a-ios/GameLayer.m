@@ -60,7 +60,7 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];
     [s setObject:[Drawer basicPotionWithColor:red]                          forKey: @"PotionOfLightHealing"];
     [s setObject:[Drawer bookOfAllKnowing]                                  forKey: @"BookOfAllKnowing"];
-    [s setObject:[Drawer chicken]                                           forKey: @"Chicken"];
+    [s setObject:[Drawer smallBlob:green]                                   forKey: @"SmallBlob"];
     
 }
 
@@ -965,7 +965,7 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black width:100 height:250 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(225) width:100 height:250 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
@@ -3164,8 +3164,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         // check if we've won
         if ( floorNumber == 0 &&    tile.tileType == TILE_FLOOR_UPSTAIRS &&     hasTheBook ) {
             [ self addMessage:[NSString stringWithFormat: @"You win!\nYou killed %d monsters\n", pcEntity.totalKills ] ];
-            gameLogicIsOn = NO;
-            autostepGameLogic = NO;
+            gameLogicIsOn       = NO;
+            autostepGameLogic   = NO;
             [ self unscheduleStepAction ];
             
             for ( int i = 0; i < dLog.count; i++ ) {

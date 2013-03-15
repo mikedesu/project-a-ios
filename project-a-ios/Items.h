@@ -10,6 +10,6 @@
 +(Entity *) bookOfAllKnowing;
 
 +(Entity *) potionOfLightHealing:(NSInteger) bonus;
-+(Entity *) chicken;
++(Entity *) greenBlob;
 
 @end

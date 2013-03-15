@@ -239,14 +239,14 @@ NSInteger getMod( NSInteger n ) {
                 // draw sprite on top of cell, w/o black background
                 
                 //CCMutableTexture2D *t = [Drawer basicPotionWithColor: red];
-                CCMutableTexture2D *t = [sprites objectForKey:@"Chicken"];
-                for ( int i = 0; i < 16; i++ )
+                CCMutableTexture2D *t = [sprites objectForKey:@"SmallBlob"];
+                for ( int i = 0; i < 16; i++ ) {
                     for ( int j = 0; j < 16; j++ ) {
                         if ( [t pixelAt:ccp(i,j)].a != 0 )
                             [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
                     }
+                }
                 [texture apply];
-                
             }
         }
     }

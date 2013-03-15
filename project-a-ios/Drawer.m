@@ -9,7 +9,7 @@
 @implementation Drawer
 
 
-+(CCMutableTexture2D *) chicken {
++(CCMutableTexture2D *) greenBlob {
     CCMutableTexture2D *t = [self smallBlob: green];
     return t;
 }
@@ -158,10 +158,10 @@
 
 
 +(CCMutableTexture2D *) voidTile {
-    CCMutableTexture2D *t = [self heartWithColors:white c1:black c2:red];
+    //CCMutableTexture2D *t = [self heartWithColors:white c1:black c2:red];
     //CCMutableTexture2D *t = [self heartWithColors:black c1:red c2:red];
-    //[CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
-    //[t fill:black_alpha(0)];
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
     
     return t;
 }
@@ -476,6 +476,9 @@
 }
 
 
+
+
+#pragma mark - Experimental code/drawing stuff
 
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c {
     return [NSString stringWithFormat:@"setPixel %.0f %.0f %d %d %d %d", p.x, p.y, c.r, c.g, c.b, c.a];

@@ -19,7 +19,7 @@
     if (roll==1)
         e = [Items potionOfLightHealing:1];
     else
-        e = [Items chicken];
+        e = [Items greenBlob];
     
     NSAssert( e!=nil, @"Random Item: roll failed to set entity" );
     
@@ -66,19 +66,19 @@
 
 
 
-+(Entity *) chicken {
++(Entity *) greenBlob {
     Entity *e = [[Entity alloc] init];
     
-    e.entityType = ENTITY_T_ITEM;
-    e.itemType = E_ITEM_T_FOOD;
-    [e.name setString:@"Chicken"];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_FOOD;
+    [e.name setString:@"Green Blob"];
     
-    e.isPC = NO;
-    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    e.isPC                  = NO;
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
     // now to define the effects of the food when used
-    e.foodBase          = 6;
+    e.foodBase          = 10;
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
