@@ -1415,7 +1415,7 @@ static NSString  * const notifications[] = {
                                         pcEntity.hunger < 150 ? @"Hungry" :
                                         pcEntity.hunger < 200 ? @"Very Hungry" :
                                         pcEntity.hunger < 250 ? @"Starving" :
-                                        @""
+                                        @"Dead"
                                     ,
                                     turnCounter ],
                                    [ NSString stringWithFormat: @"St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d",
@@ -3173,17 +3173,35 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
         
         
-        // have all entities on this floor act
-        [ self haveAllEntitiesActOnThisFloor ];
         
         // cleanup entityArray
+        /*
         for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] entityArray] count]; i++ ) {
             Entity *e = [[[dungeon objectAtIndex:floorNumber] entityArray] objectAtIndex: i];
             if ( e.isAlive == NO ) {
+                CGPoint entityPos = e.positionOnMap;
+                
+                //NSInteger roll = [Dice roll:4];
+                //if ( roll == 1 ) {
+                Entity *food = [Items greenBlob];
+                [GameRenderer spawnEntity:food onFloor:[dungeon objectAtIndex:floorNumber] atLocation:entityPos];
+                //}
+                
                 [[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: e ];
                 i = 0;
             }
         }
+         */
+        
+        
+        
+        [ self cleanupEntityArray ];
+        
+        // have all entities on this floor act
+        [ self haveAllEntitiesActOnThisFloor ];
+        [ self cleanupEntityArray ];
+        
+        
  
         // spawn a new monster on the current floor
         [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
@@ -3354,50 +3372,36 @@ NSUInteger getMagicY( NSUInteger y ) {
             // e v.s. target setup section
             // modifiers would go here
             
-            NSInteger roll = [Dice roll:20];
-            NSInteger totalroll = roll + e.attackBonus;
+            NSInteger roll                  = [Dice roll:20];
+            NSInteger confirmCritical       = [Dice roll:20];
+            NSInteger confirmInstantKill    = [Dice roll:20];
+            NSInteger totalroll             = roll + e.attackBonus;
             
             
             // attack condition section
             // probably comparing attack roll vs armor class
             
-            BOOL victory = NO;
+            BOOL victory        = totalroll >= target.totalac;
+            BOOL isCritical     = roll == 20    && confirmCritical     == 20;
+            BOOL isInstantKill  = isCritical    && confirmInstantKill  == 20;
             
-            if ( totalroll >= target.totalac ) {
-                victory = YES;
-            }
-            
-            
-            //if ( roll > 10 && target != pcEntity ) {
-            //    victory = TRUE;
-            //}
-            // attack exchange
-            // cleanup
-            /*
-            if ( [target.name isEqualToString:@"Mike" ] ) {
-                MLOG( @"%@ attacks %@", e.name, target.name );
-                [ self addMessage: [NSString stringWithFormat: @"%@ attacks %@", e.name, target.name ]];
-            }
-             */
             
             if ( victory && e.isPC ) {
-                //if ( roll == 20 ) { // critical roll!
-                //    target.hp -= e.damageRoll + e.damageRoll;
-                //    MLOG(@"Critical!");
-                //}
-                
-                //else {
-                    // deal damage to NPC
+ 
                 NSInteger totaldamage = e.damageRoll;
-                totaldamage = (totaldamage > 0) ? totaldamage : 0;
+                totaldamage += isCritical       ? e.damageRoll  : 0;
+                totaldamage =  isInstantKill    ? target.hp     : totaldamage;
+                totaldamage = (totaldamage > 0) ? totaldamage   : 0;
+                
                 target.hp -= totaldamage;
                 
-                [ self addMessage: [ NSString stringWithFormat:@"%@ dealt %d damage to Lv%d %@", e.name, totaldamage, target.level, target.name ]];
-                //}
+                [ self addMessage: [ NSString stringWithFormat:@"%@%@ dealt %d damage to Lv%d %@",
+                                    isCritical ? @"Critical! " : @"",
+                                    e.name, totaldamage, target.level, target.name ]];
                 
                 if (target.hp <= 0 ) {
                     // increase entity xp
-                    [ e gainXP: target.level*2 + e.level ];
+                    [ e gainXP: target.level*4 + e.level ];
                     
                     pcEntity.totalKills++;
                     // remove target from t.contents
@@ -3412,48 +3416,39 @@ NSUInteger getMagicY( NSUInteger y ) {
             }
             
             else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_NPC ) {
-                //if ( roll == 20 ) { // critical
-                  //  target.hp -= e.damageRoll + e.damageRoll;
-                  //  MLOG(@"Critical!");
-                //}
-                
-                //else {
-                    // deal damage to NPC
+                // deal damage to NPC
                 NSInteger totaldamage = e.damageRoll;
+                totaldamage += isCritical       ? e.damageRoll  : 0;
+                totaldamage =  isInstantKill    ? target.hp     : totaldamage;
                 totaldamage = (totaldamage > 0) ? totaldamage : 0;
+                
                 target.hp -= totaldamage;
                 
-                //}
                 
                 if (target.hp <= 0 ) {
                     // increase entity xp
-                    [ e gainXP: target.level*2 + e.level ];
+                    [ e gainXP: target.level*4 + e.level ];
                     e.totalKills++;
                     
                     // remove target from t.contents
-                  //  [ self addMessage: [ NSString stringWithFormat:@"%@ slayed %@", e.name, target.name ] ];
                     [t removeObjectFromContents: target];
                     target.isAlive = NO;
                 }
-                
             }
-            
             
             else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_PC ) {
                 // deal damage to PC
-                //pcEntity.hp--;
-                //if ( roll == 20 ) {// critical
-                //    pcEntity.hp -= e.damageRoll + e.damageRoll;
-                 //   MLOG(@"Critical!");
-                //}
-                //else {
                 
                 NSInteger totaldamage = e.damageRoll;
+                totaldamage += isCritical       ? e.damageRoll  : 0;
+                totaldamage =  isInstantKill    ? target.hp     : totaldamage;
                 totaldamage = (totaldamage > 0) ? totaldamage : 0;
+                
                 target.hp -= totaldamage;
                 
-                [ self addMessage: [ NSString stringWithFormat:@"%@ took %d damage from Lv%d %@", pcEntity.name, totaldamage, e.level, e.name ] ];
-                //}
+                [ self addMessage: [ NSString stringWithFormat:@"%@%@ took %d damage from Lv%d %@",
+                                    isCritical ? @"Critical! " : @"",
+                                    pcEntity.name, totaldamage, e.level, e.name ] ];
                 
                 if ( pcEntity.hp <= 0 ) {
                     
@@ -3508,7 +3503,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) handleItemPickup: (Entity *) item forEntity: (Entity *) entity {
-    
+    BOOL wasPickedUp = NO;
     if ( item != nil && entity == pcEntity ) {
         if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
         } else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
@@ -3521,18 +3516,22 @@ NSUInteger getMagicY( NSUInteger y ) {
                     if ( entity.equippedArmsLeft == nil ) {
                         entity.equippedArmsLeft = item;
                         [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                        wasPickedUp = YES;
                     } else {
                         if ( entity.equippedArmsLeft.damageRollBase < item.damageRollBase ||
                              entity.equippedArmsLeft.damageBonus < item.damageBonus ) {
-                            [[ entity inventoryArray ] addObject: entity.equippedArmsLeft ];
+                            //[[ entity inventoryArray ] addObject: entity.equippedArmsLeft ];
                             // entity puts his weapon into his inventory
                             entity.equippedArmsLeft = item;
                             [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                            wasPickedUp = YES;
                         }
                         // else - we don't equip the new item, just store it
                         else {
-                            [[entity inventoryArray] addObject:item];
-                            [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                            //disabling weapon pickup if weaker than equipped
+                            //[[entity inventoryArray] addObject:item];
+                            //[ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                            [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", item.name]];
                         }
                     }
             
@@ -3543,22 +3542,25 @@ NSUInteger getMagicY( NSUInteger y ) {
                     if ( entity.equippedArmorChest == nil ) {
                         entity.equippedArmorChest = item;
                         [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                        wasPickedUp = YES;
                         MLOG(@"ac=%d", [pcEntity totalac]);
                     } else {
                         
                         if ( entity.equippedArmorChest.ac < item.ac ) {
                         
-                            [[ entity inventoryArray ] addObject: entity.equippedArmorChest ];
+                            //[[ entity inventoryArray ] addObject: entity.equippedArmorChest ];
                             // entity puts his weapon into his inventory
                             entity.equippedArmorChest = item;
                             [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                            wasPickedUp = YES;
                             MLOG(@"ac=%d", [pcEntity totalac]);
                         }
                         
                         // else - we don't equip the new item, just store it
                         else {
-                            [[entity inventoryArray] addObject:item];
-                            [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                            //[[entity inventoryArray] addObject:item];
+                            //[ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                            [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", item.name]];
                         }
                     }
         
@@ -3566,14 +3568,18 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 
                 else {
+                    wasPickedUp = YES;
                     [[ entity inventoryArray ] addObject: item ];
                     [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
                 }
                 
                 
                 // remove the item from our entityArray and from it's tile's contents
-                [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
-                [[ itemTile contents ] removeObject: item];
+                
+                if ( wasPickedUp ) {
+                    [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
+                    [[ itemTile contents ] removeObject: item];
+                }
             }
         }
     }
@@ -3676,5 +3682,28 @@ NSUInteger getMagicY( NSUInteger y ) {
 -( void ) swapAutostep {
     autostepGameLogic = ! autostepGameLogic;
 }
+
+
+-(void) cleanupEntityArray {
+    // cleanup entityArray
+    for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] entityArray] count]; i++ ) {
+        Entity *e = [[[dungeon objectAtIndex:floorNumber] entityArray] objectAtIndex: i];
+        if ( e.isAlive == NO ) {
+            CGPoint entityPos = e.positionOnMap;
+            
+            //NSInteger roll = [Dice roll:4];
+            //if ( roll == 1 ) {
+            Entity *food = [Items greenBlob];
+            [GameRenderer spawnEntity:food onFloor:[dungeon objectAtIndex:floorNumber] atLocation:entityPos];
+            //}
+            
+            [[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: e ];
+            i = 0;
+        }
+    }
+}
+
+
+
 
 @end

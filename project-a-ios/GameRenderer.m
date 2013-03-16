@@ -817,10 +817,8 @@ NSInteger getMod( NSInteger n ) {
                 
                 // check if a pc/npc occupies the tile contents
                 for ( Entity *e in tile.contents ) {
-                    
                     if ( e.entityType == ENTITY_T_PC ||
                         e.entityType == ENTITY_T_NPC ) {
-                        
                         tileIsFree = NO;
                         break;
                     }
@@ -839,6 +837,34 @@ NSInteger getMod( NSInteger n ) {
         [[ floor entityArray ] addObject: entity];
     }
 }
+
+
++( void ) spawnEntity: (Entity *) entity onFloor: (DungeonFloor *) floor atLocation: (CGPoint) location {
+    Tile *tile = nil;
+    for (Tile *t in [floor tileDataArray]) {
+        if ( location.x == t.position.x && location.y == t.position.y ) {
+            tile = t;
+            break;
+        }
+    }
+    BOOL g =    tile != nil &&
+                tile.tileType != TILE_FLOOR_VOID &&
+                tile.tileType != TILE_FLOOR_UPSTAIRS &&
+                tile.tileType != TILE_FLOOR_DOWNSTAIRS;
+    if ( ! g ) return;
+    
+    // check if a pc/npc occupies the tile contents
+    BOOL tileIsFree = YES;
+    for ( Entity *e in tile.contents ) {
+        tileIsFree = ! ( e.entityType == ENTITY_T_PC || e.entityType == ENTITY_T_NPC );
+        if ( ! tileIsFree ) break;
+    }
+    if ( tileIsFree ) {
+        [GameRenderer setEntity:entity onTile:tile];
+        [[floor entityArray] addObject: entity];
+    }
+}
+
 
 
 /*
