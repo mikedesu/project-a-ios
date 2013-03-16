@@ -50,7 +50,7 @@ unsigned get_memory_mb(void) {
     sprites = [NSMutableDictionary dictionary];
     NSMutableDictionary *s = sprites;
     
-    [s setObject:[Drawer hero]                                              forKey: @"Hero"];
+    [s setObject:[Drawer heroForPC:pcEntity]                                forKey: @"Hero"];
     [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
     [s setObject:[Drawer stoneTile]                                         forKey: @"StoneTile"];
     [s setObject:[Drawer upstairsTile]                                      forKey: @"UpstairsTile"];
@@ -69,14 +69,11 @@ unsigned get_memory_mb(void) {
 -(void) bootGame {
     [self cleanupGame];
     
-    [self loadSprites];
-    
     // setting up some basic variables
     self.isTouchEnabled = YES;
     selectedTile = -1;
     touchedTileIndex = -1;
     isTouched = NO;
-    
     
     // Dungeon initialization
     [ self initializeDungeon ];
@@ -87,13 +84,13 @@ unsigned get_memory_mb(void) {
     // set up our 'hero'
     [ self initializePCEntity ];
     
+    [self loadSprites];
+    
     // set the camera anchor point
     cameraAnchorPoint = ccp( 7, 5 );
     
-    
     // our list of entities
     [[[ dungeon objectAtIndex:floorNumber ] entityArray] addObject: pcEntity];
-    
     
     // set the starting tile
     Tile *startTile = nil;
@@ -3579,6 +3576,9 @@ NSUInteger getMagicY( NSUInteger y ) {
                 if ( wasPickedUp ) {
                     [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
                     [[ itemTile contents ] removeObject: item];
+                    
+                    // update our hero sprite
+                    [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
                 }
             }
         }

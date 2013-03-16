@@ -150,7 +150,7 @@ NSInteger getMod( NSInteger n ) {
         if ( entity.entityType == ENTITY_T_PC ) {
             // draw on the texture
             // draw sprite on top of cell, w/o black background
-            CCMutableTexture2D *t = [Drawer hero];
+            CCMutableTexture2D *t = [sprites objectForKey: @"Hero"];
             for ( int i = 0; i < 16; i++ )
                 for ( int j = 0; j < 16; j++ )
                     if ( [t pixelAt:ccp(i,j)].a != 0 )
