@@ -962,7 +962,7 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(225) width:100 height:250 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(225) width:100 height:160 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 

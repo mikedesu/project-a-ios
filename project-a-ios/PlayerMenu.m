@@ -40,25 +40,25 @@
         CCLabelTTF *menuItemLabelReset          = [[CCLabelTTF alloc] initWithString:   @"Reset"     fontName:@"Courier New" fontSize:16 ];
         menuItemLabelInventory.color            = white3;
         
-        
-        
+        NSInteger p = 24;
+        NSInteger k = 1;
         CCMenuItem *menuItemMinimize    = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelMinimize target:self selector:@selector(menuItemClosePressed) ];
-        menuItemMinimize.position       = ccp( 0 + menuItemMinimize.contentSize.width/2, h - 32 - 5 );
+        menuItemMinimize.position       = ccp( 0 + menuItemMinimize.contentSize.width/2, h - p*k++ );
         
         CCMenuItem *menuItemStatus      = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelStatus target:self selector:@selector(menuItemStatusPressed) ];
-        menuItemStatus.position         = ccp( 0 + menuItemStatus.contentSize.width/2, h - 32*2 - 5*2);
+        menuItemStatus.position         = ccp( 0 + menuItemStatus.contentSize.width/2, h - p*k++);
         
         CCMenuItem *menuItemInventory   = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelInventory target:self selector:@selector(menuItemInventoryPressed) ];
-        menuItemInventory.position      = ccp( 0 + menuItemInventory.contentSize.width/2, h - 32*3 - 5*3 );
+        menuItemInventory.position      = ccp( 0 + menuItemInventory.contentSize.width/2, h - p*k++ );
         
         CCMenuItem *menuItemStep        = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelStep target:self selector:@selector(menuItemStepPressed) ];
-        menuItemStep.position           = ccp( 0 + menuItemStep.contentSize.width/2, h - 32*4 - 5*4 );
+        menuItemStep.position           = ccp( 0 + menuItemStep.contentSize.width/2, h - p*k++ );
         
         CCMenuItem *menuItemAutostep    = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelAutostep target:self selector:@selector(menuItemAutostepPressed) ];
-        menuItemAutostep.position       = ccp( 0 + menuItemAutostep.contentSize.width/2, h -32*5 - 5*5 );
+        menuItemAutostep.position       = ccp( 0 + menuItemAutostep.contentSize.width/2, h - p*k++ );
         
         CCMenuItem *menuItemReset       = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelReset target:self selector:@selector(menuItemResetPressed) ];
-        menuItemReset.position          = ccp( 0 + menuItemReset.contentSize.width/2, h -32*6 - 5*6 );
+        menuItemReset.position          = ccp( 0 + menuItemReset.contentSize.width/2, h -p*k++ );
         
         
         
@@ -87,7 +87,7 @@
             menuItemLabelClose.color = white3;
  
             CCMenuItem *menuItemClose = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelClose  target:self selector:@selector(menuItemClosePressed)];
-            menuItemClose.position = ccp( 0 + menuItemClose.contentSize.width/2, h - 32 - 5 );
+            menuItemClose.position = ccp( 0 + menuItemClose.contentSize.width/2, h - 24 );
             
             CCMenu *menu = [[ CCMenu alloc ] initWithArray: [NSArray arrayWithObjects:
                                                              menuItemClose,
