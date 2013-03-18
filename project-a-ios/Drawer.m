@@ -171,8 +171,8 @@
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
     
-    Color_t c0 = darkgray;
-    Color_t c1 = black;
+    Color_t c0 = gray;
+    Color_t c1 = darkgray;
     
     [t fill:c0];
     for (int j=0; j<16; j+=2)

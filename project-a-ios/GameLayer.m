@@ -318,8 +318,8 @@ static NSString  * const notifications[] = {
     /*8*/ @"PlayerMenuTogglePositionNotification",
     /*9*/ @"PlayerMenuToggleHUDsNotification",
     /*10*/ @"PlayerMenuResetNotification",
-    /*11*/ @"HUDMenuEditorHUDCloseNotification",
-    /*12*/ @"HUDMenuMonitorCloseNotification",
+    /*11*/ @"PlayerMenuMonitorNotification",
+    /*12*/ @"HUDMenuEditorHUDCloseNotification",
     /*13*/ @"HUDMenuGearHUDCloseNotification",
     /*14*/ @"StatusMenuReturnNotification",
     /*15*/ @"InventoryMenuReturnNotification"
@@ -870,7 +870,7 @@ static NSString  * const notifications[] = {
         
     }
     
-    else if ( [notification.name isEqualToString: @"HUDMenuMonitorCloseNotification" ]) {
+    else if ( [notification.name isEqualToString: @"PlayerMenuMonitorNotification" ]) {
         if (! monitorIsVisible ) {
             [self addMonitor:monitor];
             monitorIsVisible = YES;
@@ -962,7 +962,7 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(225) width:100 height:160 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: white width:100 height:180 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
@@ -1194,10 +1194,11 @@ static NSString  * const notifications[] = {
  */
 -( void ) initMonitor {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    monitor = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:250 height:100 ];
+    monitor = [[ EditorHUD alloc ] initWithColor:white width:250 height:100 ];
     //monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
     monitor.label.fontSize = 12;
-    monitor.position = ccp(  size.width - monitor.contentSize.width , 0 + monitor.contentSize.height );
+    monitor.label.color = ccc3(0,0,0);
+    monitor.position = ccp(  size.width - monitor.contentSize.width , 0 + playerHUD.contentSize.height );
     [ self updateMonitorLabel ];
 }
 
@@ -1287,8 +1288,10 @@ static NSString  * const notifications[] = {
  */
 -( void ) initEditorHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    editorHUD = [[ EditorHUD alloc ] initWithColor:black_alpha(150) width:200 height:80 ];
-    editorHUD.position = ccp(  size.width - editorHUD.contentSize.width , size.height - (editorHUD.contentSize.height) - 5 );
+    editorHUD = [[ EditorHUD alloc ] initWithColor:white width:200 height:60 ];
+    CGFloat x = size.width - editorHUD.contentSize.width;
+    CGFloat y = size.height - editorHUD.contentSize.height;
+    editorHUD.position = ccp(x,y);
     editorHUD.label.fontSize = 12;
     [ self updateEditorHUDLabel ];
 }
@@ -1360,7 +1363,7 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerHUD = [[ PlayerHUD alloc ] initWithColor:black_alpha(150) width: size.width height:100 ];
+    playerHUD = [[ PlayerHUD alloc ] initWithColor:white width: size.width height:50 ];
     playerHUD.position = ccp(  0 , 0 );
     [ self updatePlayerHUDLabel ];
 }
@@ -3004,19 +3007,19 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) initializeHUDs {
+    MLOG(@"initializing HUDs...");
+    
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
     [ self addEditorHUD: editorHUD ];
-    
-    
-    monitorIsVisible = NO;
-    [ self initMonitor ];
-    [ self addMonitor: monitor ];
-    
    
     playerHUDIsVisible = NO;
     [ self initPlayerHUD ];
     [ self addPlayerHUD: playerHUD ];
+    
+    monitorIsVisible = NO;
+    [ self initMonitor ];
+    [ self addMonitor: monitor ];    
     
     playerMenuIsVisible = NO;
     [ self initPlayerMenu ];
@@ -3026,7 +3029,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ self initPlayerMenuMin ];
     // [ self addPlayerMenuMin: playerMenuMin ];
     
-    
     entityInfoHUDIsVisible = NO;
     [ self initEntityInfoHUD ];
     //[ self addEntityInfoHUD: entityInfoHUD ];
@@ -3035,11 +3037,9 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ self initGearHUD ];
    // [ self addGearHUD: gearHUD ];
     
-    
     hudMenuIsVisible = NO;
     [ self initHUDMenu ];
     // [ self addHUDMenu: hudMenu ];
-    
     
     statusMenuIsVisible = NO;
     [self initStatusMenu];

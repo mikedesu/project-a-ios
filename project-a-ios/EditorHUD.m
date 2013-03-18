@@ -17,7 +17,7 @@
 #define EDITORHUD_LABEL_FONTNAME    @"Courier New"
         label = [[CCLabelTTF alloc ] initWithString:@"####" dimensions:CGSizeMake(w, h) hAlignment:kCCTextAlignmentLeft fontName:EDITORHUD_LABEL_FONTNAME fontSize: EDITORHUD_LABEL_FONTSIZE ];
         label.position = ccp( 0 + w/2, h - (label.contentSize.height/2) );
-        label.color = white3;
+        label.color = black3;
         [self addChild: label];
     }
     return self;

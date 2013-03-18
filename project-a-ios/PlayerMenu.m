@@ -22,23 +22,28 @@
 -( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h {
     if ( ( self = [ super initWithColor: color width: w height: h ] ) ) {
         
+        Color3_t fontColor = black3;
+        
         CCLabelTTF *menuItemLabelMinimize       = [[CCLabelTTF alloc] initWithString:   @"Minimize"     fontName:@"Courier New" fontSize:16 ];
-        menuItemLabelMinimize.color             = white3;
+        menuItemLabelMinimize.color             = fontColor;
         
         CCLabelTTF *menuItemLabelStatus         = [[CCLabelTTF alloc] initWithString:   @"Status"       fontName:@"Courier New" fontSize:16 ];
-        menuItemLabelStatus.color               = white3;
+        menuItemLabelStatus.color               = fontColor;
         
         CCLabelTTF *menuItemLabelInventory      = [[CCLabelTTF alloc] initWithString:   @"Inventory"    fontName:@"Courier New" fontSize:16 ];
-        menuItemLabelInventory.color            = white3;
+        menuItemLabelInventory.color            = fontColor;
         
         CCLabelTTF *menuItemLabelStep           = [[CCLabelTTF alloc] initWithString:   @"Step"         fontName:@"Courier New" fontSize:16 ];
-        menuItemLabelInventory.color            = white3;
+        menuItemLabelStep.color                 = fontColor;
         
         CCLabelTTF *menuItemLabelAutostep       = [[CCLabelTTF alloc] initWithString:   @"Autostep"     fontName:@"Courier New" fontSize:16 ];
-        menuItemLabelInventory.color            = white3;
+        menuItemLabelAutostep.color             = fontColor;
         
-        CCLabelTTF *menuItemLabelReset          = [[CCLabelTTF alloc] initWithString:   @"Reset"     fontName:@"Courier New" fontSize:16 ];
-        menuItemLabelInventory.color            = white3;
+        CCLabelTTF *menuItemLabelMonitor        = [[CCLabelTTF alloc] initWithString:   @"Monitor"      fontName:@"Courier New" fontSize:16 ];
+        menuItemLabelMonitor.color              = fontColor;
+        
+        CCLabelTTF *menuItemLabelReset          = [[CCLabelTTF alloc] initWithString:   @"Reset"        fontName:@"Courier New" fontSize:16 ];
+        menuItemLabelReset.color                = fontColor;
         
         NSInteger p = 24;
         NSInteger k = 1;
@@ -57,11 +62,11 @@
         CCMenuItem *menuItemAutostep    = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelAutostep target:self selector:@selector(menuItemAutostepPressed) ];
         menuItemAutostep.position       = ccp( 0 + menuItemAutostep.contentSize.width/2, h - p*k++ );
         
+        CCMenuItem *menuItemMonitor     = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelMonitor target:self selector:@selector(menuItemMonitorPressed) ];
+        menuItemMonitor.position        = ccp( 0 + menuItemMonitor.contentSize.width/2, h - p*k++ );
+        
         CCMenuItem *menuItemReset       = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelReset target:self selector:@selector(menuItemResetPressed) ];
         menuItemReset.position          = ccp( 0 + menuItemReset.contentSize.width/2, h -p*k++ );
-        
-        
-        
         
         CCMenu *menu = [[ CCMenu alloc ] initWithArray: [NSArray arrayWithObjects:
                                                          menuItemMinimize,
@@ -69,6 +74,7 @@
                                                          menuItemInventory,
                                                          menuItemStep,
                                                          menuItemAutostep,
+                                                         menuItemMonitor,
                                                          menuItemReset,
                                                          nil] ];
         menu.position = ccp( 0, 0 );
@@ -125,6 +131,9 @@
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuAutostepNotification"  object:self];
 }
 
+-( void ) menuItemMonitorPressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuMonitorNotification"  object:self];
+}
 
 
 -( void ) menuItemTogglePositionPressed {
