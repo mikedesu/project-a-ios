@@ -1194,7 +1194,7 @@
 				GCC_PREFIX_HEADER = "project-a-ios/Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"project-a-ios/libs/kazmath/include\"";
 				INFOPLIST_FILE = "project-a-ios/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
@@ -1215,7 +1215,7 @@
 				GCC_PREFIX_HEADER = "project-a-ios/Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"project-a-ios/libs/kazmath/include\"";
 				INFOPLIST_FILE = "project-a-ios/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
