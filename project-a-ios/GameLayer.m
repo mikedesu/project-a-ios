@@ -2837,36 +2837,6 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
-
-#pragma mark - Initialization helper code
-
-/*
- ====================
- initializeDungeon
- ====================
- */
--( void ) initializeDungeon {
-    
-    [ self initializeTiles ];
-    
-    NSUInteger numberOfFloors = 20;
-    
-    dungeon = [[ NSMutableArray alloc ] init ];
-    for ( int i = 0; i < numberOfFloors; i++ ) {
-        DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:40 andHeight:40 andFloorNumber: i ];
-        if ( i != numberOfFloors - 1 ) {
-            [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
-        }
-        else {
-            [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ];
-        }
-        [ dungeon addObject: newFloor ];
-    }
-    floorNumber = 0;
-    
-}
-
-
 /*
  ====================
  goingUpstairs
@@ -2905,7 +2875,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         needsRedraw = YES;
     } else {
-        // bottom floor        
+        // bottom floor
     }
 }
 
@@ -2994,6 +2964,38 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     [ GameRenderer setEntity:entity onTile:tile];
 }
+
+
+
+
+#pragma mark - Initialization helper code
+
+/*
+ ====================
+ initializeDungeon
+ ====================
+ */
+-( void ) initializeDungeon {
+    
+    [ self initializeTiles ];
+    
+    NSUInteger numberOfFloors = 20;
+    
+    dungeon = [[ NSMutableArray alloc ] init ];
+    for ( int i = 0; i < numberOfFloors; i++ ) {
+        DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:40 andHeight:40 andFloorNumber: i ];
+        if ( i != numberOfFloors - 1 ) {
+            [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
+        }
+        else {
+            [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ];
+        }
+        [ dungeon addObject: newFloor ];
+    }
+    floorNumber = 0;
+    
+}
+
 
 
 
