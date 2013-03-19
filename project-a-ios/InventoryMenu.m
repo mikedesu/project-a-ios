@@ -68,35 +68,29 @@
 -(id) initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) _gameLayer {
     CGSize s = [[ CCDirector sharedDirector ] winSize];
     if ((self=[super initWithColor:black width:s.width height:s.height])) {
-        
-        CGSize s = [[CCDirector sharedDirector] winSize];
-        
-        pc = _pc;
-        inventory = _pc.inventoryArray;
-        floor = _floor;
-        gameLayer = _gameLayer;
+        CGSize s        = [[CCDirector sharedDirector] winSize];
+        pc              = _pc;
+        inventory       = _pc.inventoryArray;
+        floor           = _floor;
+        gameLayer       = _gameLayer;
         
         NSMutableArray *menuItems = [NSMutableArray array];
-        
         CGFloat x = 0;
         CGFloat y = s.height;
         
         [self defineMenuControlBlock];
         
         for (int i = 0; i < inventory.count; i++) {
-            
             CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Item" fontName:@"Courier New" fontSize:16]
                                                              block: menuControlBlock];
+            item.color = white3;
             
             x = 0 + item.contentSize.width/2;
             y = y - item.contentSize.height/2;
-            
             item.position = ccp( x , y );
             [item setTag: i];
-            
             [menuItems addObject:item];
         }
-        
         
         // return button
         CCMenuItemLabel *l0 = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Return" fontName:@"Courier New" fontSize:18] target:self selector:@selector(returnPressed)];
@@ -105,7 +99,7 @@
         [menuItems addObject:l0];
         
         menu = [CCMenu menuWithArray:menuItems];
-        menu.position = ccp(0,0);
+        menu.position = CGPointZero;
         [self addChild:menu];
     }
     return self;
@@ -122,38 +116,35 @@
 -(void) update {
     [menu removeAllChildrenWithCleanup:YES];
     
-    CGSize s = [[CCDirector sharedDirector] winSize];
+    CGSize s                    = [[CCDirector sharedDirector] winSize];
+    NSMutableArray *menuItems   = [NSMutableArray array];
     
-    NSMutableArray *menuItems = [NSMutableArray array];
-    
-    CGFloat x = 0;
-    CGFloat y = s.height;
+    CGFloat x   = 0;
+    CGFloat y   = s.height;
     CGFloat pad = 10;
     
     for (int i = 0; i < inventory.count; i++) {
         Entity *e = [inventory objectAtIndex:i];
-        
         CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:e.name fontName:@"Courier New" fontSize:14]
                                                          block:menuControlBlock];
+        item.color = white3;
         
         x = 0 + item.contentSize.width /2 ;
         y = y - item.contentSize.height/2 - pad;
-        
         [item setTag: i];
         item.position = ccp( x , y );
         [menuItems addObject:item];
-        
     }
     
     // return button
     CCMenuItemLabel *l0 = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Return" fontName:@"Courier New" fontSize:18] target:self selector:@selector(returnPressed)];
     l0.position = ccp( 0 + l0.contentSize.width/2, 0 + l0.contentSize.height/2 );
+    l0.color = white3;
     
     [menuItems addObject:l0];
 
-    for ( CCMenuItem *item in menuItems ) {
-        [menu addChild: item];
-    }
+    for ( CCMenuItem *item in menuItems ) [menu addChild: item];
+    
 }
 
 
