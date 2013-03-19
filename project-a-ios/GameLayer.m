@@ -1924,8 +1924,6 @@ static NSString  * const notifications[] = {
         else {
             [ self selectTileAtPosition: mapPoint ];
         }
-        
-       // [ self selectTileAtPosition: mapPoint ];
     }
     
     // something was not prev. selected
