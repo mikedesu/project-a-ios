@@ -150,7 +150,6 @@
 		27C4145116C7FB1F00BE09F9 /* GameRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C4145016C7FB1F00BE09F9 /* GameRenderer.m */; };
 		27C4145516C804E400BE09F9 /* Tile.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C4145416C804E300BE09F9 /* Tile.m */; };
 		27C88FE016C57607004AB4D8 /* ground_vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 27C88FDF16C57607004AB4D8 /* ground_vertical.png */; };
-		27D52A4916F84CA400E55E34 /* DungeonMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D52A4816F84CA400E55E34 /* DungeonMaster.m */; };
 		27DCE96016E2EA5000109F88 /* Dice.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DCE95F16E2EA5000109F88 /* Dice.m */; };
 		27DCE96316E2FB3900109F88 /* EntityInfoHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */; };
 /* End PBXBuildFile section */
@@ -458,8 +457,6 @@
 		27C4145416C804E300BE09F9 /* Tile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tile.m; sourceTree = "<group>"; };
 		27C88FDE16C573D4004AB4D8 /* MLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLog.h; sourceTree = "<group>"; };
 		27C88FDF16C57607004AB4D8 /* ground_vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_vertical.png; sourceTree = "<group>"; };
-		27D52A4716F84CA400E55E34 /* DungeonMaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DungeonMaster.h; sourceTree = "<group>"; };
-		27D52A4816F84CA400E55E34 /* DungeonMaster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DungeonMaster.m; sourceTree = "<group>"; };
 		27DCE95F16E2EA5000109F88 /* Dice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dice.m; sourceTree = "<group>"; };
 		27DCE96116E2FB3900109F88 /* EntityInfoHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityInfoHUD.h; sourceTree = "<group>"; };
 		27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityInfoHUD.m; sourceTree = "<group>"; };
@@ -538,8 +535,6 @@
 				27C26D8616CAFF66008B0E29 /* Dungeon.m */,
 				27C26D8216CAFDBE008B0E29 /* DungeonFloor.h */,
 				27C26D8316CAFDBE008B0E29 /* DungeonFloor.m */,
-				27D52A4716F84CA400E55E34 /* DungeonMaster.h */,
-				27D52A4816F84CA400E55E34 /* DungeonMaster.m */,
 				27506B7016D7599700245F72 /* DungeonTree.h */,
 				27506B7116D7599700245F72 /* DungeonTree.m */,
 				27506B7316D759E900245F72 /* DungeonTreeNode.h */,
@@ -1138,7 +1133,6 @@
 				2721D6F216EDE94F0051352D /* Monsters.m in Sources */,
 				2721D6F516EEB9CD0051352D /* StatusMenu.m in Sources */,
 				2721D6FE16EEBA620051352D /* InventoryMenu.m in Sources */,
-				27D52A4916F84CA400E55E34 /* DungeonMaster.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
