@@ -230,4 +230,6 @@ typedef enum {
 
 -( void ) swapAutostep;
 
+-(void) entityRest: (Entity *) e;
+
 @end

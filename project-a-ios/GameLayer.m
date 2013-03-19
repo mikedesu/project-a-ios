@@ -304,25 +304,23 @@ unsigned get_memory_mb(void) {
 
 #pragma mark - Notification code
 
-static const NSUInteger notificationsCount = 16;
+static const NSUInteger notificationsCount = 15;
 static NSString  * const notifications[] = {
-//static const NSString *notifications[] = {
-    /*0*/ @"TestNotification1",
-    /*1*/ @"TestNotification2",
-    /*2*/ @"MonitorNotification",
-    /*3*/ @"PlayerMenuCloseNotification",
-    /*4*/ @"PlayerMenuStatusNotification",
-    /*5*/ @"PlayerMenuInventoryNotification",
-    /*6*/ @"PlayerMenuStepNotification",
-    /*7*/ @"PlayerMenuAutostepNotification",
-    /*8*/ @"PlayerMenuTogglePositionNotification",
-    /*9*/ @"PlayerMenuToggleHUDsNotification",
-    /*10*/ @"PlayerMenuResetNotification",
-    /*11*/ @"PlayerMenuMonitorNotification",
-    /*12*/ @"HUDMenuEditorHUDCloseNotification",
-    /*13*/ @"HUDMenuGearHUDCloseNotification",
-    /*14*/ @"StatusMenuReturnNotification",
-    /*15*/ @"InventoryMenuReturnNotification"
+    @"TestNotification1",
+    @"TestNotification2",
+    @"PlayerMenuCloseNotification",
+    @"PlayerMenuStatusNotification",
+    @"PlayerMenuInventoryNotification",
+    @"PlayerMenuStepNotification",
+    @"PlayerMenuAutostepNotification",
+    @"PlayerMenuTogglePositionNotification",
+    @"PlayerMenuToggleHUDsNotification",
+    @"PlayerMenuResetNotification",
+    @"HUDMenuEditorHUDCloseNotification",
+    @"HUDMenuGearHUDCloseNotification",
+    @"StatusMenuReturnNotification",
+    @"InventoryMenuReturnNotification"
+    @"PlayerMenuRestNotification", // index 14
 };
 
 
@@ -334,32 +332,10 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) initializeNotifications {
-    /*
-    NSArray *notifications = [ NSArray arrayWithObjects:
-                              @"TestNotification1",
-                              @"TestNotification2",
-                              @"MonitorNotification",
-                              @"PlayerMenuCloseNotification",
-                              @"PlayerMenuStatusNotification",
-                              @"PlayerMenuInventoryNotification",
-                              @"PlayerMenuStepNotification",
-                              @"PlayerMenuAutostepNotification",
-                              @"PlayerMenuTogglePositionNotification",
-                              @"PlayerMenuToggleHUDsNotification",
-                              @"PlayerMenuResetNotification",
-                              @"HUDMenuEditorHUDCloseNotification",
-                              @"HUDMenuMonitorCloseNotification",
-                              @"HUDMenuGearHUDCloseNotification",
-                              @"StatusMenuReturnNotification",
-                              @"InventoryMenuReturnNotification",
-                              nil];
-    for ( NSString *notification in notifications )
-        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:notification object:nil];
-    */
     for (int i=0; i<notificationsCount; i++)
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:notifications[i] object:nil];
-    
 }
+
 
 /*
  ====================
@@ -369,36 +345,9 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) removeNotifications {
-    /*
-    NSArray *notifications = [ NSArray arrayWithObjects:
-                              @"TestNotification1",
-                              @"TestNotification2",
-                              @"MonitorNotification",
-                              @"PlayerMenuCloseNotification",
-                              @"PlayerMenuStatusNotification",
-                              @"PlayerMenuInventoryNotification",
-                              @"PlayerMenuStepNotification",
-                              @"PlayerMenuAutostepNotification",
-                              @"PlayerMenuTogglePositionNotification",
-                              @"PlayerMenuToggleHUDsNotification",
-                              @"PlayerMenuResetNotification",
-                              @"HUDMenuEditorHUDCloseNotification",
-                              @"HUDMenuMonitorCloseNotification",
-                              @"HUDMenuGearHUDCloseNotification",
-                              @"StatusMenuReturnNotification",
-                              @"InventoryMenuReturnNotification",
-                              nil];
-    
-    for ( NSString *notification in notifications )
-        [[ NSNotificationCenter defaultCenter ] removeObserver:self name:notification object:nil];
-     */
     for (int i=0; i<notificationsCount; i++)
         [[ NSNotificationCenter defaultCenter ] removeObserver:self name:notifications[i] object:nil];
-        //[[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:notifications[i] object:nil];
 }
-
-
-
 
 
 
@@ -408,15 +357,13 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) receiveNotification: ( NSNotification * ) notification {
-    //MLOG( @"received notification: %@", notification );
+    MLOG( @"received notification: %@", notification );
     
     if ( [[ notification name ] isEqualToString: @"TestNotification1" ] ) {
         //MLOG( @"TestNotification1" );
     } else if ( [[ notification name ] isEqualToString: @"TestNotification2" ] ) {
         //MLOG( @"TestNotification2" );
-    } else if ( [[ notification name ] isEqualToString: @"MonitorNotification" ] ) {
-        //MLOG( @"MonitorNotification" );
-        
+    } else if ( [[ notification name ] isEqualToString: @"PlayerMenuMonitorNotification" ] ) {
         if ( ! monitorIsVisible ) {
             [ self addMonitor: monitor ];
             monitorIsVisible = TRUE;
@@ -869,17 +816,7 @@ static NSString  * const notifications[] = {
         }
         
     }
-    
-    else if ( [notification.name isEqualToString: @"PlayerMenuMonitorNotification" ]) {
-        if (! monitorIsVisible ) {
-            [self addMonitor:monitor];
-            monitorIsVisible = YES;
-        } else {
-            [self removeMonitor:monitor];
-            monitorIsVisible = NO;
-        }
-        
-    }
+ 
     
     else if ( [notification.name isEqualToString: @"HUDMenuGearHUDCloseNotification" ]) {
         if (! gearHUDIsVisible ) {
@@ -942,6 +879,11 @@ static NSString  * const notifications[] = {
         [ self bootGame ];
     }
     
+    else if ( [notification.name isEqualToString: @"PlayerMenuRestNotification" ]) {
+        [ self entityRest: pcEntity ];
+        if ( gameLogicIsOn ) [ self stepGameLogic ];
+    }
+    
     else {
         //MLOG( @"Notification not handled: %@", notification.name );
     }
@@ -962,7 +904,7 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: white width:100 height:180 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: white width:100 height:200 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
@@ -1891,16 +1833,12 @@ static NSString  * const notifications[] = {
                 [ self selectTileAtPosition: mapPoint ];
                 
                 // move the pcEntity to the tile
-                
                 if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y )
                     [ self moveEntity:pcEntity toPosition:mapPoint ];
                 else {
                     // rest
-                    MLOG(@"%.0f %.0f %.0f %.0f", pcEntity.positionOnMap.x, mapPoint.x, pcEntity.positionOnMap.y, mapPoint.y);
-                    [self addMessage:@"You rest..."];
-                    pcEntity.hp++;
-                    if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
-                    [pcEntity getHungry];
+                    [self entityRest: pcEntity];
+                    
                 }
                 
                 // step game logic
@@ -2962,6 +2900,20 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     [ GameRenderer setEntity:entity onTile:tile];
 }
+
+
+/*
+ ====================
+ entityRest: e
+ ====================
+ */
+-(void) entityRest: (Entity *) e {
+    [self addMessage:@"You rest..."];
+    e.hp++;
+    if (e.hp >= e.maxhp) e.hp = e.maxhp;
+    [e getHungry];
+}
+
 
 
 
