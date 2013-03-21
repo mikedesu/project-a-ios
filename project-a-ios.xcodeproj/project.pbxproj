@@ -145,6 +145,7 @@
 		2773F29216C85469001C3E83 /* EditorHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29116C85469001C3E83 /* EditorHUD.m */; };
 		2773F29516C949C4001C3E83 /* PlayerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29416C949C4001C3E83 /* PlayerHUD.m */; };
 		2773F29816C94DA3001C3E83 /* PlayerMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29716C94DA3001C3E83 /* PlayerMenu.m */; };
+		27C0C2EA16FAA12D00AF1208 /* HelpMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C0C2E916FAA12D00AF1208 /* HelpMenu.m */; };
 		27C26D8416CAFDBE008B0E29 /* DungeonFloor.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C26D8316CAFDBE008B0E29 /* DungeonFloor.m */; };
 		27C26D8716CAFF66008B0E29 /* Dungeon.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C26D8616CAFF66008B0E29 /* Dungeon.m */; };
 		27C4145116C7FB1F00BE09F9 /* GameRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C4145016C7FB1F00BE09F9 /* GameRenderer.m */; };
@@ -444,6 +445,8 @@
 		2773F29416C949C4001C3E83 /* PlayerHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerHUD.m; sourceTree = "<group>"; };
 		2773F29616C94DA3001C3E83 /* PlayerMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerMenu.h; sourceTree = "<group>"; };
 		2773F29716C94DA3001C3E83 /* PlayerMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerMenu.m; sourceTree = "<group>"; };
+		27C0C2E816FAA12D00AF1208 /* HelpMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpMenu.h; sourceTree = "<group>"; };
+		27C0C2E916FAA12D00AF1208 /* HelpMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpMenu.m; sourceTree = "<group>"; };
 		27C26D8216CAFDBE008B0E29 /* DungeonFloor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DungeonFloor.h; sourceTree = "<group>"; };
 		27C26D8316CAFDBE008B0E29 /* DungeonFloor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DungeonFloor.m; sourceTree = "<group>"; };
 		27C26D8516CAFF66008B0E29 /* Dungeon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dungeon.h; sourceTree = "<group>"; };
@@ -546,17 +549,19 @@
 				2721D6FF16F078FC0051352D /* EntitySubtypeDefines.h */,
 				27DCE96116E2FB3900109F88 /* EntityInfoHUD.h */,
 				27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */,
+				27C4145216C7FB9E00BE09F9 /* GameConfig.h */,
+				272EF64F16C5695F005DF231 /* GameLayer.h */,
+				272EF65016C5695F005DF231 /* GameLayer.m */,
+				27C4144F16C7FB1E00BE09F9 /* GameRenderer.h */,
+				27C4145016C7FB1F00BE09F9 /* GameRenderer.m */,
+				27C0C2E816FAA12D00AF1208 /* HelpMenu.h */,
+				27C0C2E916FAA12D00AF1208 /* HelpMenu.m */,
 				2721D00316E9F01200C26F9E /* HUDMenu.h */,
 				2721D00416E9F01300C26F9E /* HUDMenu.m */,
 				2721D6FC16EEBA610051352D /* InventoryMenu.h */,
 				2721D6FD16EEBA610051352D /* InventoryMenu.m */,
 				2767E0C916E83FA500013CBE /* Items.h */,
 				2767E0CA16E83FA500013CBE /* Items.m */,
-				27C4145216C7FB9E00BE09F9 /* GameConfig.h */,
-				272EF64F16C5695F005DF231 /* GameLayer.h */,
-				272EF65016C5695F005DF231 /* GameLayer.m */,
-				27C4144F16C7FB1E00BE09F9 /* GameRenderer.h */,
-				27C4145016C7FB1F00BE09F9 /* GameRenderer.m */,
 				27C88FDE16C573D4004AB4D8 /* MLog.h */,
 				2721D6F016EDE94F0051352D /* Monsters.h */,
 				2721D6F116EDE94F0051352D /* Monsters.m */,
@@ -1133,6 +1138,7 @@
 				2721D6F216EDE94F0051352D /* Monsters.m in Sources */,
 				2721D6F516EEB9CD0051352D /* StatusMenu.m in Sources */,
 				2721D6FE16EEBA620051352D /* InventoryMenu.m in Sources */,
+				27C0C2EA16FAA12D00AF1208 /* HelpMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

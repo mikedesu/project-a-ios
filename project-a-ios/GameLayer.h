@@ -17,6 +17,7 @@ typedef enum {
 @class DungeonFloor;
 @class EditorHUD;
 @class EntityInfoHUD;
+@class HelpMenu;
 @class HUDMenu;
 @class InventoryMenu;
 @class PlayerHUD;
@@ -84,6 +85,9 @@ typedef enum {
     BOOL inventoryMenuIsVisible;
     InventoryMenu *inventoryMenu;
     
+    BOOL helpMenuIsVisible;
+    HelpMenu *helpMenu;
+    
     CGPoint cameraAnchorPoint;
     
     double touchBeganTime;
@@ -103,6 +107,10 @@ typedef enum {
 -( void ) dealloc;
 
 -( void ) receiveNotification: ( NSNotification * ) notification;
+
+-(void) initHelpMenu;
+-(void) addHelpMenu;
+-(void) removeHelpMenu;
 
 -( void ) initPlayerMenu;
 -( void ) addPlayerMenu: ( PlayerMenu * ) _menu;

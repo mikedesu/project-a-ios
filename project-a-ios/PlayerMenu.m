@@ -42,6 +42,10 @@
         CCLabelTTF *menuItemLabelMonitor        = [[CCLabelTTF alloc] initWithString:   @"Monitor"      fontName:@"Courier New" fontSize:16 ];
         menuItemLabelMonitor.color              = fontColor;
         
+        CCLabelTTF *menuItemLabelHelp           = [[CCLabelTTF alloc] initWithString:   @"Help"         fontName:@"Courier New" fontSize:16 ];
+        menuItemLabelHelp.color              = fontColor;
+        
+        
         CCLabelTTF *menuItemLabelReset          = [[CCLabelTTF alloc] initWithString:   @"Reset"        fontName:@"Courier New" fontSize:16 ];
         menuItemLabelReset.color                = fontColor;
         
@@ -65,6 +69,9 @@
         CCMenuItem *menuItemMonitor     = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelMonitor target:self selector:@selector(menuItemMonitorPressed) ];
         menuItemMonitor.position        = ccp( 0 + menuItemMonitor.contentSize.width/2, h - p*k++ );
         
+        CCMenuItem *menuItemHelp        = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelHelp target:self selector:@selector(menuItemHelpPressed) ];
+        menuItemHelp.position           = ccp( 0 + menuItemHelp.contentSize.width/2, h - p*k++ );
+        
         CCMenuItem *menuItemReset       = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelReset target:self selector:@selector(menuItemResetPressed) ];
         menuItemReset.position          = ccp( 0 + menuItemReset.contentSize.width/2, h -p*k++ );
         
@@ -75,6 +82,7 @@
                                                          menuItemStep,
                                                          menuItemAutostep,
                                                          menuItemMonitor,
+                                                         menuItemHelp,
                                                          menuItemReset,
                                                          nil] ];
         menu.position = ccp( 0, 0 );
@@ -146,6 +154,10 @@
 
 -( void ) menuItemResetPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuResetNotification"  object:self];
+}
+
+-( void ) menuItemHelpPressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuHelpNotification"  object:self];
 }
 
 

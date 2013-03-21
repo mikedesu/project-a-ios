@@ -304,9 +304,8 @@ unsigned get_memory_mb(void) {
 
 #pragma mark - Notification code
 
-static const NSUInteger notificationsCount = 16;
+static const NSUInteger notificationsCount = 18;
 static NSString  * const notifications[] = {
-//static const NSString *notifications[] = {
     /*0*/ @"TestNotification1",
     /*1*/ @"TestNotification2",
     /*2*/ @"MonitorNotification",
@@ -322,7 +321,9 @@ static NSString  * const notifications[] = {
     /*12*/ @"HUDMenuEditorHUDCloseNotification",
     /*13*/ @"HUDMenuGearHUDCloseNotification",
     /*14*/ @"StatusMenuReturnNotification",
-    /*15*/ @"InventoryMenuReturnNotification"
+    /*15*/ @"InventoryMenuReturnNotification",
+    /*16*/ @"PlayerMenuHelpNotification",
+    /*17*/ @"HelpMenuBackNotification"
 };
 
 
@@ -915,6 +916,21 @@ static NSString  * const notifications[] = {
         [ self bootGame ];
     }
     
+    else if ( [notification.name isEqualToString: @"PlayerMenuHelpNotification" ]) {
+        MLOG(@"Help pressed");
+        
+        if ( ! helpMenuIsVisible )
+            [ self addHelpMenu];
+        else
+            [self removeHelpMenu];
+    }
+    
+    else if ( [notification.name isEqualToString: @"HelpMenuBackNotification" ]) {
+        if ( helpMenuIsVisible )
+            [self removeHelpMenu];
+    }
+    
+    
     else {
         //MLOG( @"Notification not handled: %@", notification.name );
     }
@@ -926,6 +942,36 @@ static NSString  * const notifications[] = {
 #pragma mark - Menus and HUD code
 
 
+#pragma mark - Help Menu
+/*
+ ====================
+ help menu methods
+ ====================
+ */
+-(void) initHelpMenu {
+    CGSize size = [[CCDirector sharedDirector] winSize];
+    helpMenu = [[HelpMenu alloc] initWithColor:black width:size.width height:size.height];
+    helpMenu.position = ccp( 0, 0 );
+}
+
+
+-(void) addHelpMenu {
+    if ( ! helpMenuIsVisible ) {
+        [self addChild: helpMenu];
+        helpMenuIsVisible = YES;
+    }
+}
+
+
+-(void) removeHelpMenu {
+    if ( helpMenuIsVisible ) {
+        [self removeChild:helpMenu cleanup:NO];
+        helpMenuIsVisible = NO;
+    }
+}
+
+
+
 /*
  ====================
  initPlayerMenu
@@ -935,7 +981,7 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: white width:100 height:180 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: white width:100 height:220 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
@@ -3021,6 +3067,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     inventoryMenuIsVisible = NO;
     [self initInventoryMenu];
     //[self addInventoryMenu];
+    
+    helpMenuIsVisible = NO;
+    [self initHelpMenu];
+    //[self addHelpMenu];
     
 }
 
