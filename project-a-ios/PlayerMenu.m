@@ -43,7 +43,12 @@
         menuItemLabelMonitor.color              = fontColor;
         
         CCLabelTTF *menuItemLabelHelp           = [[CCLabelTTF alloc] initWithString:   @"Help"         fontName:@"Courier New" fontSize:16 ];
-        menuItemLabelHelp.color              = fontColor;
+        menuItemLabelHelp.color                 = fontColor;
+        
+        CCLabelTTF *menuItemLabelEntityInfo     = [[CCLabelTTF alloc] initWithString:   @"EntityInfo"   fontName:@"Courier New" fontSize:16 ];
+        menuItemLabelEntityInfo.color           = fontColor;
+        
+        
         
         
         CCLabelTTF *menuItemLabelReset          = [[CCLabelTTF alloc] initWithString:   @"Reset"        fontName:@"Courier New" fontSize:16 ];
@@ -72,6 +77,11 @@
         CCMenuItem *menuItemHelp        = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelHelp target:self selector:@selector(menuItemHelpPressed) ];
         menuItemHelp.position           = ccp( 0 + menuItemHelp.contentSize.width/2, h - p*k++ );
         
+        CCMenuItem *menuItemEntityInfo  = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelEntityInfo target:self selector:@selector(menuItemEntityInfoPressed) ];
+        menuItemEntityInfo.position     = ccp( 0 + menuItemLabelEntityInfo.contentSize.width/2, h - p*k++ );
+        
+        
+        
         CCMenuItem *menuItemReset       = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelReset target:self selector:@selector(menuItemResetPressed) ];
         menuItemReset.position          = ccp( 0 + menuItemReset.contentSize.width/2, h -p*k++ );
         
@@ -83,6 +93,7 @@
                                                          menuItemAutostep,
                                                          menuItemMonitor,
                                                          menuItemHelp,
+                                                         menuItemEntityInfo,
                                                          menuItemReset,
                                                          nil] ];
         menu.position = ccp( 0, 0 );
@@ -158,6 +169,10 @@
 
 -( void ) menuItemHelpPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuHelpNotification"  object:self];
+}
+
+-(void) menuItemEntityInfoPressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuEntityInfoNotification"  object:self];
 }
 
 

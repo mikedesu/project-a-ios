@@ -304,7 +304,7 @@ unsigned get_memory_mb(void) {
 
 #pragma mark - Notification code
 
-static const NSUInteger notificationsCount = 18;
+static const NSUInteger notificationsCount = 19;
 static NSString  * const notifications[] = {
     /*0*/ @"TestNotification1",
     /*1*/ @"TestNotification2",
@@ -323,7 +323,8 @@ static NSString  * const notifications[] = {
     /*14*/ @"StatusMenuReturnNotification",
     /*15*/ @"InventoryMenuReturnNotification",
     /*16*/ @"PlayerMenuHelpNotification",
-    /*17*/ @"HelpMenuBackNotification"
+    /*17*/ @"HelpMenuBackNotification",
+    /*18*/ @"PlayerMenuEntityInfoNotification"
 };
 
 
@@ -930,6 +931,18 @@ static NSString  * const notifications[] = {
             [self removeHelpMenu];
     }
     
+    else if ( [notification.name isEqualToString: @"PlayerMenuEntityInfoNotification" ]) {
+        if ( ! entityInfoHUDIsVisible ) {
+            [self addEntityInfoHUD:entityInfoHUD];
+            entityInfoHUDIsVisible = YES;
+        } else {
+            [self removeEntityInfoHUD:entityInfoHUD];
+            entityInfoHUDIsVisible = NO;
+        }
+    }
+    
+    
+    
     
     else {
         //MLOG( @"Notification not handled: %@", notification.name );
@@ -981,7 +994,7 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: white width:100 height:220 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: white width:100 height:240 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
@@ -1080,8 +1093,9 @@ static NSString  * const notifications[] = {
  */
 -( void ) initEntityInfoHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:black_alpha(150) width:200 height:100 ];
-    entityInfoHUD.position = ccp(  0 , size.height - playerMenu.contentSize.height - entityInfoHUD.contentSize.height );
+    //entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:black_alpha(150) width:200 height:100 ];
+    entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:white width:200 height:100 ];
+    entityInfoHUD.position = ccp(  size.width - entityInfoHUD.contentSize.width, size.height - editorHUD.contentSize.height - entityInfoHUD.contentSize.height );
     entityInfoHUD.label.fontSize = 12;
     [ self updateEntityInfoHUDLabel ];
 }
