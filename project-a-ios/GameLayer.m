@@ -456,42 +456,15 @@ static NSString  * const notifications[] = {
             //MLOG( @"rolled %d", roll );
             
             // UDLR UL, UR, DL, DR
-            if ( roll == 1 ) {
-                x = 0;
-                y = -1;
-            }
-            else if ( roll == 2 ) {
-                x = 0;
-                y = 1;
-            }
-            else if ( roll == 3) {
-                x = -1;
-                y = 0;
-            }
-            else if ( roll == 4) {
-                x = 1;
-                y = 0;
-            }
-            else if ( roll == 5) {
-                x = -1;
-                y = -1;
-            }
-            else if ( roll == 6) {
-                x = 1;
-                y = -1;
-            }
-            else if ( roll == 7) {
-                x = -1;
-                y = 1;
-            }
-            else if ( roll == 8) {
-                x = 1;
-                y = 1;
-            }
-            else if ( roll == 9 ) {
-                x = 0;
-                y = 0;
-            }
+            if ( roll == 1 ) { x = 0; y = -1; }
+            else if ( roll == 2 ) { x = 0; y = 1; }
+            else if ( roll == 3)  { x = -1; y = 0; }
+            else if ( roll == 4) { x = 1; y = 0; }
+            else if ( roll == 5) { x = -1; y = -1; }
+            else if ( roll == 6) { x = 1; y = -1; }
+            else if ( roll == 7) { x = -1; y = 1; }
+            else if ( roll == 8) { x = 1; y = 1; }
+            else if ( roll == 9 ) { x = 0; y = 0; }
             
             CGPoint newPosition;
             newPosition.x = pcEntity.positionOnMap.x + x;
