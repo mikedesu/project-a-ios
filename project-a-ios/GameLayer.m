@@ -1428,8 +1428,8 @@ static NSString  * const notifications[] = {
 -( void ) updatePlayerHUDLabel {
     playerHUD.label.fontSize = 12;
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
-                                   [ NSString stringWithFormat: @"%@ - H:%@ T:%d", pcEntity.name,
-                                        pcEntity.hunger < 50  ? @"" :
+                                   [ NSString stringWithFormat: @"%@ - Hunger:%@ T:%d", pcEntity.name,
+                                        pcEntity.hunger < 50  ? @"Satiated" :
                                         pcEntity.hunger < 100 ? @"Mild Hunger" :
                                         pcEntity.hunger < 150 ? @"Hungry" :
                                         pcEntity.hunger < 200 ? @"Very Hungry" :
