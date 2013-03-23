@@ -449,6 +449,8 @@ static NSString  * const notifications[] = {
         //[ self addMessage: @"Stepping..." ];
         // move pcEntity towards downstairsTile based on movement algorithm
         
+#pragma mark - Entity PathFinding Algorithm - Random
+        
         if ( pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_RANDOM )
         {
             NSUInteger roll = [Dice roll:9];
@@ -486,6 +488,8 @@ static NSString  * const notifications[] = {
                 }
             }
         }
+        
+#pragma mark - Entity PathFinding Algorithm - Smart Random
         
         else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM )
         {
@@ -538,6 +542,7 @@ static NSString  * const notifications[] = {
             [ self resetCameraPosition ];
         }
         
+#pragma mark - Entity PathFinding Algorithm - Temp Random
         
         else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_TEMP_RANDOM )
         {
@@ -654,7 +659,7 @@ static NSString  * const notifications[] = {
         }
         
         
-        
+#pragma mark - Entity PathFinding Algorithm - Simple
         
         else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SIMPLE )
         {
@@ -1162,6 +1167,17 @@ static NSString  * const notifications[] = {
                         str = [ NSString stringWithFormat: @"Item Name: %@\nType: %@\nAC: %d\nDurability: %d/%d\n",
                                e.name,
                                @"Armor",
+                               e.ac,
+                               e.durability,
+                               e.totalDurability
+                               ];
+                    }
+                    
+                    // generic item
+                    else {
+                        str = [ NSString stringWithFormat: @"Item Name: %@\nType: %d\nAC: %d\nDurability: %d/%d\n",
+                               e.name,
+                               e.itemType,
                                e.ac,
                                e.durability,
                                e.totalDurability
