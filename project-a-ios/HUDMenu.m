@@ -35,21 +35,17 @@
         [ texture1 apply ];
         
         
-        
-        
-        
-        
         CCMenuItem *miEditorHUDClose = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture0] selectedSprite:[CCSprite spriteWithTexture:texture0] disabledSprite:[CCSprite spriteWithTexture:texture0] target:self selector:@selector(miEditorHUDClosePressed)];
         miEditorHUDClose.scale = 2;
-        miEditorHUDClose.position = ccp( 0 + miEditorHUDClose.contentSize.width, 50 - 32 );
+        miEditorHUDClose.position = ccp( 0 + miEditorHUDClose.contentSize.width, 18 );
         
         CCMenuItem *miMonitorClose = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture1] selectedSprite:[CCSprite spriteWithTexture:texture1] disabledSprite:[CCSprite spriteWithTexture:texture1] target:self selector:@selector(miMonitorClosePressed)];
         miMonitorClose.scale = 2;
-        miMonitorClose.position = ccp( 0 + miMonitorClose.contentSize.width, 50 - 32 - 32 - 5 );
+        miMonitorClose.position = ccp( 0 + miMonitorClose.contentSize.width, -19 );
         
         CCMenuItem *miGearHUDClose = [ [ CCMenuItemSprite alloc ] initWithNormalSprite:[CCSprite spriteWithTexture:texture1] selectedSprite:[CCSprite spriteWithTexture:texture1] disabledSprite:[CCSprite spriteWithTexture:texture1] target:self selector:@selector(miGearHUDClosePressed)];
         miGearHUDClose.scale = 2;
-        miGearHUDClose.position = ccp( 0 + miMonitorClose.contentSize.width, 50 - 32 - 32 - 32 - 5 - 5 );
+        miGearHUDClose.position = ccp( 0 + miMonitorClose.contentSize.width, -56 );
         
         
         

@@ -37,37 +37,7 @@ NSInteger getMod( NSInteger n ) {
 }
 
 
-
 +( NSInteger ) modifierForNumber: (NSInteger) n {
-    /*
-    NSInteger mod =
-    n <= 1 ? -5 :
-    n <= 3 ? -4 :
-    n <= 5 ? -3 :
-    n <= 7 ? -2 :
-    n <= 9 ? -1 :
-    n <= 11 ? 0 :
-    n <= 13 ? 1 :
-    n <= 15 ? 2 :
-    n <= 17 ? 3 :
-    n <= 19 ? 4 :
-    n <= 21 ? 5 :
-    n <= 23 ? 6 :
-    n <= 25 ? 7 :
-    n <= 27 ? 8 :
-    n <= 29 ? 9 :
-    n <= 31 ? 10 :
-    n <= 33 ? 11 :
-    n <= 35 ? 12 :
-    n <= 37 ? 13 :
-    n <= 39 ? 14 :
-    n <= 41 ? 15 :
-    16
-    ;
-     */
-    
-    //return mod;
-    
     return getMod( n );
 }
 

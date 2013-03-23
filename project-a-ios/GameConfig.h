@@ -21,7 +21,7 @@
 #import "GameLayer.h"
 #import "GameRenderer.h"
 #import "HelpMenu.h"
-#import "HUDMenu.h"
+//#import "HUDMenu.h"
 #import "Items.h"
 #import "InventoryMenu.h"
 #import "MLog.h"

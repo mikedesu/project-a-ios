@@ -18,7 +18,7 @@ typedef enum {
 @class EditorHUD;
 @class EntityInfoHUD;
 @class HelpMenu;
-@class HUDMenu;
+//@class HUDMenu;
 @class InventoryMenu;
 @class PlayerHUD;
 @class PlayerMenu;
@@ -76,8 +76,8 @@ typedef enum {
     BOOL playerMenuIsMin;
     PlayerMenu *playerMenuMin;
     
-    BOOL hudMenuIsVisible;
-    HUDMenu *hudMenu;
+    //BOOL hudMenuIsVisible;
+    //HUDMenu *hudMenu;
     
     BOOL statusMenuIsVisible;
     StatusMenu *statusMenu;

@@ -243,8 +243,8 @@ unsigned get_memory_mb(void) {
     playerMenuIsMin = NO;
     playerMenuMin = nil;
     
-    hudMenuIsVisible = NO;
-    hudMenu = nil;
+    //hudMenuIsVisible = NO;
+    //hudMenu = nil;
     
     statusMenuIsVisible = NO;
     statusMenu = nil;
@@ -829,6 +829,7 @@ static NSString  * const notifications[] = {
         
     }
     
+    /*
     else if ( [notification.name isEqualToString: @"PlayerMenuToggleHUDsNotification" ]) {
         if (! hudMenuIsVisible ) {
             [self addHUDMenu:hudMenu];
@@ -838,6 +839,7 @@ static NSString  * const notifications[] = {
             hudMenuIsVisible = NO;
         }
     }
+     */
     
     else if ( [notification.name isEqualToString: @"HUDMenuEditorHUDCloseNotification" ]) {
         if (! editorHUDIsVisible ) {
@@ -1554,7 +1556,7 @@ static NSString  * const notifications[] = {
 }
 
 
-
+/*
 -( void ) initHUDMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
     hudMenu = [[ HUDMenu alloc ] init];
@@ -1574,7 +1576,7 @@ static NSString  * const notifications[] = {
         hudMenuIsVisible = NO;
     }
 }
-
+*/
 
 
 #pragma mark - Status Menu
@@ -3090,8 +3092,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ self initGearHUD ];
    // [ self addGearHUD: gearHUD ];
     
-    hudMenuIsVisible = NO;
-    [ self initHUDMenu ];
+    //hudMenuIsVisible = NO;
+    //[ self initHUDMenu ];
     // [ self addHUDMenu: hudMenu ];
     
     statusMenuIsVisible = NO;

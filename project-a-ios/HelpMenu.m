@@ -5,6 +5,7 @@
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
 #import "HelpMenu.h"
+#import "GameConfig.h"
 
 
 @implementation HelpMenu
@@ -43,21 +44,16 @@
                                @"--------------------------------------"
                                ];
         
-        
-        
         // help menu
-        CGSize s = [[CCDirector sharedDirector] winSize];
-        label   = [[CCLabelTTF alloc] initWithString:@"" dimensions:CGSizeMake(s.width,s.height) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New"fontSize:14];
-        label.color         = ccc3(255,255,255);
-        
-        
+        CGSize s            = [[CCDirector sharedDirector] winSize];
+        label               = [[CCLabelTTF alloc] initWithString:@"" dimensions:CGSizeMake(s.width,s.height) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New"fontSize:14];
+        label.color         = white3;
         
         [label setString: str];
-        
-        label.position      = ccp(s.width - label.contentSize.width/2, s.height - label.contentSize.height/2 );
-        
+        CGFloat x = s.width - label.contentSize.width/2,
+                y = s.height - label.contentSize.height/2;
+        label.position      = ccp( x, y );
         [self addChild:label];
-        
         
         
         CCMenuItemLabel *back = [[CCMenuItemLabel alloc] initWithLabel:[CCLabelTTF labelWithString:@"Back" fontName:@"Courier New" fontSize:16] block:^(id sender) {
