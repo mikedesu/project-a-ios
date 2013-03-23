@@ -34,6 +34,11 @@
         CCLabelTTF *menuItemLabelInventory      = [[CCLabelTTF alloc] initWithString:   @"Inventory"    fontName:@"Courier New" fontSize:16 ];
         menuItemLabelInventory.color            = fontColor;
         
+        CCLabelTTF *menuItemLabelPickup         = [[CCLabelTTF alloc] initWithString:   @"Pickup"       fontName:@"Courier New" fontSize:16 ];
+        menuItemLabelPickup.color               = fontColor;
+        
+        
+        
         CCLabelTTF *menuItemLabelStep           = [[CCLabelTTF alloc] initWithString:   @"Step"         fontName:@"Courier New" fontSize:16 ];
         menuItemLabelStep.color                 = fontColor;
         
@@ -66,6 +71,10 @@
         CCMenuItem *menuItemInventory   = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelInventory target:self selector:@selector(menuItemInventoryPressed) ];
         menuItemInventory.position      = ccp( 0 + menuItemInventory.contentSize.width/2, h - p*k++ );
         
+        CCMenuItem *menuItemPickup      = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelPickup target:self selector:@selector(menuItemPickupPressed) ];
+        menuItemPickup.position         = ccp( 0 + menuItemPickup.contentSize.width/2, h - p*k++ );
+        
+        
         CCMenuItem *menuItemStep        = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelStep target:self selector:@selector(menuItemStepPressed) ];
         menuItemStep.position           = ccp( 0 + menuItemStep.contentSize.width/2, h - p*k++ );
         
@@ -90,6 +99,7 @@
                                                          menuItemMinimize,
                                                          menuItemStatus,
                                                          menuItemInventory,
+                                                         menuItemPickup,
                                                          menuItemStep,
                                                          menuItemAutostep,
                                                          menuItemMonitor,
@@ -142,6 +152,11 @@
 -( void ) menuItemInventoryPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuInventoryNotification"  object:self];
 }
+
+-( void ) menuItemPickupPressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuPickupNotification"  object:self];
+}
+
 
 -( void ) menuItemStepPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuStepNotification"  object:self];

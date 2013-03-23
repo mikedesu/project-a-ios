@@ -304,7 +304,7 @@ unsigned get_memory_mb(void) {
 
 #pragma mark - Notification code
 
-static const NSUInteger notificationsCount = 19;
+static const NSUInteger notificationsCount = 20;
 static NSString  * const notifications[] = {
     /*0*/ @"TestNotification1",
     /*1*/ @"TestNotification2",
@@ -324,7 +324,8 @@ static NSString  * const notifications[] = {
     /*15*/ @"InventoryMenuReturnNotification",
     /*16*/ @"PlayerMenuHelpNotification",
     /*17*/ @"HelpMenuBackNotification",
-    /*18*/ @"PlayerMenuEntityInfoNotification"
+    /*18*/ @"PlayerMenuEntityInfoNotification",
+    /*19*/ @"PlayerMenuPickupNotification",
 };
 
 
@@ -829,18 +830,6 @@ static NSString  * const notifications[] = {
         
     }
     
-    /*
-    else if ( [notification.name isEqualToString: @"PlayerMenuToggleHUDsNotification" ]) {
-        if (! hudMenuIsVisible ) {
-            [self addHUDMenu:hudMenu];
-            hudMenuIsVisible = YES;
-        } else {
-            [self removeHUDMenu:hudMenu];
-            hudMenuIsVisible = NO;
-        }
-    }
-     */
-    
     else if ( [notification.name isEqualToString: @"HUDMenuEditorHUDCloseNotification" ]) {
         if (! editorHUDIsVisible ) {
             [self addEditorHUD:editorHUD];
@@ -948,13 +937,30 @@ static NSString  * const notifications[] = {
         }
     }
     
-    
-    
+#pragma mark - Handle PlayerMenu Notification - Pickup
+    else if ( [notification.name isEqualToString: @"PlayerMenuPickupNotification" ]) {
+        
+        // handle item pickup
+        MLOG(@"Handling item pickup...");
+        
+        // simple for now - grab the item on top of the tile
+        Tile *t = [self getTileForCGPoint: pcEntity.positionOnMap];
+        Entity *item = nil;
+        for (Entity *e in t.contents) {
+            if (e.entityType == ENTITY_T_ITEM) {
+                item = e;
+                break;
+            }
+        }
+        
+        item != nil     ? [self handleItemPickup:item forEntity:pcEntity] : 0;
+        gameLogicIsOn   ? [self stepGameLogic] : 0;
+        
+    }
     
     else {
         //MLOG( @"Notification not handled: %@", notification.name );
     }
-    
     
     needsRedraw = YES;
 }
@@ -1086,9 +1092,6 @@ static NSString  * const notifications[] = {
         //[ self addMessage: @"Closed Player Menu" ];
     }
 }
-
-
-
 
 
 
@@ -1959,9 +1962,12 @@ static NSString  * const notifications[] = {
                 }
                 
                 // step game logic
-                if ( gameLogicIsOn ) {
-                    [ self stepGameLogic ];
-                }
+                //if ( gameLogicIsOn ) {
+                //    [ self stepGameLogic ];
+                //}
+                
+                gameLogicIsOn ? [self stepGameLogic] : 0;
+                
                 
                 [ self resetCameraPosition ];
                 
@@ -3568,7 +3574,85 @@ NSUInteger getMagicY( NSUInteger y ) {
     BOOL wasPickedUp = NO;
     if ( item != nil && entity == pcEntity ) {
         if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
-        } else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
+            // player-controlled
+            
+            Tile *itemTile = [ self getTileForCGPoint:item.positionOnMap ];
+            if ( itemTile != nil ) {
+                
+                if ( item.itemType == E_ITEM_T_WEAPON ) {
+                    // equip the weapon
+                    if ( entity.equippedArmsLeft == nil ) {
+                        entity.equippedArmsLeft = item;
+                        [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                        wasPickedUp = YES;
+                    } else {
+                        if ( entity.equippedArmsLeft.damageRollBase < item.damageRollBase ||
+                            entity.equippedArmsLeft.damageBonus < item.damageBonus ) {
+                            //[[ entity inventoryArray ] addObject: entity.equippedArmsLeft ];
+                            // entity puts his weapon into his inventory
+                            entity.equippedArmsLeft = item;
+                            [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                            wasPickedUp = YES;
+                        }
+                        // else - we don't equip the new item, just store it
+                        else {
+                            //disabling weapon pickup if weaker than equipped
+                            //[[entity inventoryArray] addObject:item];
+                            //[ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                            [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", item.name]];
+                        }
+                    }
+                    
+                }
+                
+                else if ( item.itemType == E_ITEM_T_ARMOR ) {
+                    // equip the weapon
+                    if ( entity.equippedArmorChest == nil ) {
+                        entity.equippedArmorChest = item;
+                        [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                        wasPickedUp = YES;
+                        MLOG(@"ac=%d", [pcEntity totalac]);
+                    } else {
+                        
+                        if ( entity.equippedArmorChest.ac < item.ac ) {
+                            
+                            //[[ entity inventoryArray ] addObject: entity.equippedArmorChest ];
+                            // entity puts his weapon into his inventory
+                            entity.equippedArmorChest = item;
+                            [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                            wasPickedUp = YES;
+                            MLOG(@"ac=%d", [pcEntity totalac]);
+                        }
+                        
+                        // else - we don't equip the new item, just store it
+                        else {
+                            //[[entity inventoryArray] addObject:item];
+                            //[ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                            [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", item.name]];
+                        }
+                    }
+                    
+                }
+            
+                else {
+                    wasPickedUp = YES;
+                    [[ entity inventoryArray ] addObject: item ];
+                    [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                }
+                
+                // remove the item from our entityArray and from it's tile's contents
+                
+                if ( wasPickedUp ) {
+                    [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
+                    [[ itemTile contents ] removeObject: item];
+                    
+                    // update our hero sprite
+                    [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
+                }
+            }
+        }
+        
+        else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
             // add the item to the entity's inventory
             Tile *itemTile = [ self getTileForCGPoint:item.positionOnMap ];
             if ( itemTile != nil ) {
