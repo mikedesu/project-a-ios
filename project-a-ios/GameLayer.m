@@ -2571,28 +2571,33 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 else if ( itemExists ) {
                     // list all items on the tile
-                    Entity *item = nil;
-                    for ( Entity *e in [tile contents] ) {
-                        if ( e.entityType == ENTITY_T_ITEM ) {
-                            MLOG( @"There is a %@ here", e.name );
-                            [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
-                            
-                            if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
-                            
-                            }
-                            
-                            else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
-                                //[ self addMessage: [NSString stringWithFormat:@"You pick up the %@", e.name]];
-                                item = e;
-                                break;
+                    
+                    if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
+                        for ( Entity *e in [tile contents] ) {
+                            if ( e.entityType == ENTITY_T_ITEM ) {
+                                MLOG( @"There is a %@ here", e.name );
+                                [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                             }
                         }
                     }
                     
-                    if ( item != nil ) {
-                        // add the item to your inventory
-                        [ self handleItemPickup: item forEntity: entity ];
+                    
+                    else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
+                        Entity *item = nil;
+                        for ( Entity *e in [tile contents] ) {
+                            if ( e.entityType == ENTITY_T_ITEM ) {
+                                MLOG( @"There is a %@ here", e.name );
+                                [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                item = e;
+                                break;
+                            }
+                        }
+                        if ( item != nil ) {
+                            // add the item to your inventory
+                            [ self handleItemPickup: item forEntity: entity ];
+                        }
                     }
+                    
                 }
             }
             
@@ -3125,7 +3130,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.isPC = YES;
     //hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
     hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
-    hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE;
+    //hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE;
+    hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
     hero.level = 1;
     
