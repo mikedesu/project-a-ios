@@ -7,6 +7,7 @@
 //
 
 #import "EntityInfoHUD.h"
+#import "GameConfig.h"
 
 @implementation EntityInfoHUD
 
@@ -23,8 +24,8 @@
         
         label = [[ CCLabelTTF alloc ] initWithString:@"####" dimensions:CGSizeMake(w, h) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:14];
         label.position = ccp( 0 + w/2, h - (label.contentSize.height/2) );
-        //label.color = ccc3( 255,255,255 );
-        label.color = ccc3(0,0,0);
+        //label.color = black3;
+        label.color = white3;
         [self addChild: label];
         
     }

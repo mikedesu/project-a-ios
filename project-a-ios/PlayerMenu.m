@@ -22,7 +22,8 @@
 -( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h {
     if ( ( self = [ super initWithColor: color width: w height: h ] ) ) {
         
-        Color3_t fontColor = black3;
+        //Color3_t fontColor = black3;
+        Color3_t fontColor = white3;
         
         CCLabelTTF *menuItemLabelMinimize       = [[CCLabelTTF alloc] initWithString:   @"Minimize"     fontName:@"Courier New" fontSize:16 ];
         menuItemLabelMinimize.color             = fontColor;

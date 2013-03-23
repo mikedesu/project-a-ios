@@ -999,7 +999,8 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: white width:100 height:240 ];
+    //playerMenu = [[ PlayerMenu alloc ] initWithColor: white width:100 height:240 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black width:100 height:240 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
@@ -1098,8 +1099,8 @@ static NSString  * const notifications[] = {
  */
 -( void ) initEntityInfoHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    //entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:black_alpha(150) width:200 height:100 ];
-    entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:white width:200 height:100 ];
+    entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:black_alpha(150) width:200 height:100 ];
+    //entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:white width:200 height:100 ];
     entityInfoHUD.position = ccp(  size.width - entityInfoHUD.contentSize.width, size.height - editorHUD.contentSize.height - entityInfoHUD.contentSize.height );
     entityInfoHUD.label.fontSize = 12;
     [ self updateEntityInfoHUDLabel ];
@@ -1243,10 +1244,11 @@ static NSString  * const notifications[] = {
  */
 -( void ) initMonitor {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    monitor = [[ EditorHUD alloc ] initWithColor:white width:250 height:100 ];
+    //monitor = [[ EditorHUD alloc ] initWithColor:white width:250 height:100 ];
+    monitor = [[ EditorHUD alloc ] initWithColor:black width:250 height:100 ];
     //monitor.position = ccp(  0 , size.height - (monitor.contentSize.height) - (editorHUD.contentSize.height) - 10 );
     monitor.label.fontSize = 12;
-    monitor.label.color = ccc3(0,0,0);
+ //   monitor.label.color = ccc3(0,0,0);
     monitor.position = ccp(  size.width - monitor.contentSize.width , 0 + playerHUD.contentSize.height );
     [ self updateMonitorLabel ];
 }
@@ -1337,7 +1339,8 @@ static NSString  * const notifications[] = {
  */
 -( void ) initEditorHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    editorHUD = [[ EditorHUD alloc ] initWithColor:white width:200 height:60 ];
+    //editorHUD = [[ EditorHUD alloc ] initWithColor:white width:200 height:60 ];
+    editorHUD = [[ EditorHUD alloc ] initWithColor:black width:200 height:60 ];
     CGFloat x = size.width - editorHUD.contentSize.width;
     CGFloat y = size.height - editorHUD.contentSize.height;
     editorHUD.position = ccp(x,y);
@@ -1412,7 +1415,8 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerHUD = [[ PlayerHUD alloc ] initWithColor:white width: size.width height:50 ];
+    //playerHUD = [[ PlayerHUD alloc ] initWithColor:white width: size.width height:50 ];
+    playerHUD = [[ PlayerHUD alloc ] initWithColor:black width: size.width height:50 ];
     playerHUD.position = ccp(  0 , 0 );
     [ self updatePlayerHUDLabel ];
 }
