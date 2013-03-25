@@ -3579,6 +3579,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             Tile *itemTile = [ self getTileForCGPoint:item.positionOnMap ];
             if ( itemTile != nil ) {
                 
+                /*
                 if ( item.itemType == E_ITEM_T_WEAPON ) {
                     // equip the weapon
                     if ( entity.equippedArmsLeft == nil ) {
@@ -3634,7 +3635,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                     
                 }
             
-                else {
+                else 
+                {
                     wasPickedUp = YES;
                     [[ entity inventoryArray ] addObject: item ];
                     [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
@@ -3649,6 +3651,14 @@ NSUInteger getMagicY( NSUInteger y ) {
                     // update our hero sprite
                     [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
                 }
+                 */
+                
+                [[ entity inventoryArray ] addObject: item ];
+                [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
+                [[ itemTile contents ] removeObject: item];
+                [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
+                
             }
         }
         
