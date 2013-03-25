@@ -304,7 +304,7 @@ unsigned get_memory_mb(void) {
 
 #pragma mark - Notification code
 
-static const NSUInteger notificationsCount = 20;
+static const NSUInteger notificationsCount = 21;
 static NSString  * const notifications[] = {
     /*0*/ @"TestNotification1",
     /*1*/ @"TestNotification2",
@@ -326,6 +326,7 @@ static NSString  * const notifications[] = {
     /*17*/ @"HelpMenuBackNotification",
     /*18*/ @"PlayerMenuEntityInfoNotification",
     /*19*/ @"PlayerMenuPickupNotification",
+    /*20*/ @"PlayerMenuEquipNotification"
 };
 
 
@@ -955,6 +956,15 @@ static NSString  * const notifications[] = {
         
         item != nil     ? [self handleItemPickup:item forEntity:pcEntity] : 0;
         gameLogicIsOn   ? [self stepGameLogic] : 0;
+        
+    }
+    
+    else if ( [notification.name isEqualToString: @"PlayerMenuEquipNotification" ]) {
+        
+        // handle equipping items
+        
+        // we'll show an 'equip' menu
+        MLOG( @"Notification not handled: %@", notification.name );
         
     }
     

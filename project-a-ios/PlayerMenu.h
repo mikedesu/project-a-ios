@@ -16,5 +16,6 @@
 -( id ) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h isMinimized: (BOOL) isMin;
 
 -( void ) menuItemHelpPressed;
+-( void ) menuItemEquipPressed;
 
 @end
