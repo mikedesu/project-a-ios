@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "make_targz script..."
+
+DATE=$(date +"%Y%m%d%H%M")
+cd ..
+tar -cf project-a-ios.tar project-a-ios/ && gzip -9 -N -v -c project-a-ios.tar > project-a-ios-$DATE.tar.gz
+rm -rfv project-a-ios.tar
+cd project-a-ios
+
+echo "make_targz successful! :)"

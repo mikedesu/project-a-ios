@@ -3,9 +3,19 @@
 # usage: ./quickupdate  
 
 echo "running quickupdate..."
+
 ./checkout_uistate
+
+echo "updating git repos..."
+
 git ci -a
 git push origin master
 git push origin dev
 ./update_dropbox
+
+echo "repo update successful :)"
+
+./make_targz
+./update_server_targz
+
 echo "quickupdate script successful :)"
