@@ -7,7 +7,7 @@
 #import "cocos2d.h"
 #import "GameConfig.h"
 
-typedef void (^MenuControlBlock)(CCMenuItemLabel *);
+typedef void (^InventoryMenuControlBlock)(CCMenuItemLabel *);
 
 @class GameLayer;
 
@@ -18,7 +18,7 @@ typedef void (^MenuControlBlock)(CCMenuItemLabel *);
     DungeonFloor *floor;
     GameLayer *gameLayer;
     
-    MenuControlBlock menuControlBlock;
+    InventoryMenuControlBlock menuControlBlock;
 }
 
 @property (atomic) NSMutableArray *inventory;
@@ -27,7 +27,7 @@ typedef void (^MenuControlBlock)(CCMenuItemLabel *);
 @property (atomic) DungeonFloor *floor;
 @property (atomic) GameLayer *gameLayer;
 
-@property (readwrite, copy) MenuControlBlock menuControlBlock;
+@property (readwrite, copy) InventoryMenuControlBlock menuControlBlock;
 
 -(void) defineMenuControlBlock;
 -(id)   initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) _gameLayer;

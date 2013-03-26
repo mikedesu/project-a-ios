@@ -965,6 +965,7 @@ static NSString  * const notifications[] = {
     else if ( [notification.name isEqualToString: @"PlayerMenuEquipNotification" ]) {
         
         // handle equipping items
+        MLOG(@"Equip Notification: %@", equipMenuIsVisible ? @"1" : @"0");
         
         // we'll show an 'equip' menu
         if ( ! equipMenuIsVisible ) {
@@ -981,7 +982,7 @@ static NSString  * const notifications[] = {
     }
     
     else {
-        //MLOG( @"Notification not handled: %@", notification.name );
+        MLOG( @"Notification not handled: %@", notification.name );
     }
     
     needsRedraw = YES;
@@ -999,8 +1000,9 @@ static NSString  * const notifications[] = {
  */
 
 -(void) initEquipMenu {
-    equipMenu = [[EquipMenu alloc] init];
+    equipMenu = [[EquipMenu alloc] initWithPC:pcEntity withFloor:[dungeon objectAtIndex:floorNumber] withGameLayer:self];
     equipMenu.position = ccp(0,0);
+//    equipMenu.position = ccp(screenwidth/2, screenheight/2);
 }
 
 -(void) addEquipMenu {
@@ -1015,6 +1017,10 @@ static NSString  * const notifications[] = {
         [self removeChild:equipMenu cleanup:NO];
         equipMenuIsVisible = NO;
     }
+}
+
+-(void) updateEquipMenu {
+    
 }
 
 
@@ -1756,6 +1762,8 @@ static NSString  * const notifications[] = {
             [ self updateStatusMenu ];
         if (inventoryMenuIsVisible)
             [ self updateInventoryMenu ];
+        if (equipMenuIsVisible)
+            [self updateEquipMenu];
         
         [ self resetCameraPosition ];
         

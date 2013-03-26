@@ -76,6 +76,7 @@
         floor = _floor;
         gameLayer = _gameLayer;
         
+        
         NSMutableArray *menuItems = [NSMutableArray array];
         
         CGFloat x = 0;
@@ -118,7 +119,7 @@
  
  update the inventory menu
  ====================
-*/
+ */
 -(void) update {
     [menu removeAllChildrenWithCleanup:YES];
     
@@ -150,7 +151,7 @@
     l0.position = ccp( 0 + l0.contentSize.width/2, 0 + l0.contentSize.height/2 );
     
     [menuItems addObject:l0];
-
+    
     for ( CCMenuItem *item in menuItems ) {
         [menu addChild: item];
     }
