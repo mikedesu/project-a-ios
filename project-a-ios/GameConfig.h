@@ -18,6 +18,7 @@
 #import "EditorHUD.h"
 #import "Entity.h"
 #import "EntityInfoHUD.h"
+#import "EquipDefines.h"
 #import "EquipMenu.h"
 #import "GameLayer.h"
 #import "GameRenderer.h"

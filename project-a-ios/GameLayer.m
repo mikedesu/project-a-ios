@@ -1065,7 +1065,7 @@ static NSString  * const notifications[] = {
 -( void ) initPlayerMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
     //playerMenu = [[ PlayerMenu alloc ] initWithColor: white width:100 height:240 ];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black width:100 height:240 ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black width:100 height:300 ];
     playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
 }
 
@@ -1114,7 +1114,7 @@ static NSString  * const notifications[] = {
  */
 -( void ) initPlayerMenuMin {
     CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenuMin = [[ PlayerMenu alloc ] initWithColor: black_alpha(200) width:100 height:30 isMinimized:YES];
+    playerMenuMin = [[ PlayerMenu alloc ] initWithColor: black width:100 height:30 isMinimized:YES];
     playerMenuMin.position = ccp( 0 , size.height - (playerMenuMin.contentSize.height) );
 }
 

@@ -463,6 +463,7 @@
 		27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityInfoHUD.m; sourceTree = "<group>"; };
 		27DFEA0D1701150A00933C8A /* EquipMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EquipMenu.h; sourceTree = "<group>"; };
 		27DFEA0E1701150A00933C8A /* EquipMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EquipMenu.m; sourceTree = "<group>"; };
+		27DFEA101701413F00933C8A /* EquipDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EquipDefines.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -551,6 +552,7 @@
 				27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */,
 				27DFEA0D1701150A00933C8A /* EquipMenu.h */,
 				27DFEA0E1701150A00933C8A /* EquipMenu.m */,
+				27DFEA101701413F00933C8A /* EquipDefines.h */,
 				27C4145216C7FB9E00BE09F9 /* GameConfig.h */,
 				272EF64F16C5695F005DF231 /* GameLayer.h */,
 				272EF65016C5695F005DF231 /* GameLayer.m */,
