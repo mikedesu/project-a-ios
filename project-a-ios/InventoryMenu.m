@@ -24,7 +24,8 @@
  ====================
  */
 -(void) defineMenuControlBlock {
-    menuControlBlock = ^(CCMenuItemLabel *sender) {
+    __block typeof(self) weakSelf = self;
+    weakSelf.menuControlBlock = ^(CCMenuItemLabel *sender) {
         
         BOOL handled = YES;
         Entity *eItem = [inventory objectAtIndex:sender.tag];

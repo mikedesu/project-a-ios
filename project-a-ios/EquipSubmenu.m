@@ -10,7 +10,16 @@
 @implementation EquipSubmenu
 
 @synthesize pc;
+@synthesize menu;
 @synthesize menuControlBlock;
+
+
+-(void) defineMenuControlBlock {
+    __block typeof(self) weakSelf = self;
+    weakSelf.menuControlBlock = ^(CCMenuItemLabel *sender) {
+        MLOG(@"Testing...");
+    };
+}
 
 -(id) initWithPC: (Entity *) pc {
     if ((self=[super initWithColor:black width:screenwidth height:screenheight])) {

@@ -25,7 +25,8 @@
  ====================
  */
 -(void) defineMenuControlBlock {
-    menuControlBlock = ^(CCMenuItemLabel *sender) {
+    __block typeof(self) weakSelf = self;
+    weakSelf.menuControlBlock = ^(CCMenuItemLabel *sender) {
         MLOG(@"Testing: %@ tag %d", sender, sender.tag);
         /*
         BOOL handled = YES;
