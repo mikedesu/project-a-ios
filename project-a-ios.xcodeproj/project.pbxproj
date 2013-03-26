@@ -153,6 +153,7 @@
 		27DCE96016E2EA5000109F88 /* Dice.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DCE95F16E2EA5000109F88 /* Dice.m */; };
 		27DCE96316E2FB3900109F88 /* EntityInfoHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */; };
 		27DFEA0F1701150A00933C8A /* EquipMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DFEA0E1701150A00933C8A /* EquipMenu.m */; };
+		27DFEA13170241A800933C8A /* EquipSubmenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DFEA12170241A800933C8A /* EquipSubmenu.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -464,6 +465,8 @@
 		27DFEA0D1701150A00933C8A /* EquipMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EquipMenu.h; sourceTree = "<group>"; };
 		27DFEA0E1701150A00933C8A /* EquipMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EquipMenu.m; sourceTree = "<group>"; };
 		27DFEA101701413F00933C8A /* EquipDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EquipDefines.h; sourceTree = "<group>"; };
+		27DFEA11170241A800933C8A /* EquipSubmenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EquipSubmenu.h; sourceTree = "<group>"; };
+		27DFEA12170241A800933C8A /* EquipSubmenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EquipSubmenu.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -550,9 +553,11 @@
 				2721D6FF16F078FC0051352D /* EntitySubtypeDefines.h */,
 				27DCE96116E2FB3900109F88 /* EntityInfoHUD.h */,
 				27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */,
+				27DFEA101701413F00933C8A /* EquipDefines.h */,
 				27DFEA0D1701150A00933C8A /* EquipMenu.h */,
 				27DFEA0E1701150A00933C8A /* EquipMenu.m */,
-				27DFEA101701413F00933C8A /* EquipDefines.h */,
+				27DFEA11170241A800933C8A /* EquipSubmenu.h */,
+				27DFEA12170241A800933C8A /* EquipSubmenu.m */,
 				27C4145216C7FB9E00BE09F9 /* GameConfig.h */,
 				272EF64F16C5695F005DF231 /* GameLayer.h */,
 				272EF65016C5695F005DF231 /* GameLayer.m */,
@@ -1141,6 +1146,7 @@
 				2721D6FE16EEBA620051352D /* InventoryMenu.m in Sources */,
 				27C0C2EA16FAA12D00AF1208 /* HelpMenu.m in Sources */,
 				27DFEA0F1701150A00933C8A /* EquipMenu.m in Sources */,
+				27DFEA13170241A800933C8A /* EquipSubmenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
