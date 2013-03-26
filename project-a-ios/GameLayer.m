@@ -304,7 +304,7 @@ unsigned get_memory_mb(void) {
 
 #pragma mark - Notification code
 
-static const NSUInteger notificationsCount = 21;
+static const NSUInteger notificationsCount = 22;
 static NSString  * const notifications[] = {
     /*0*/ @"TestNotification1",
     /*1*/ @"TestNotification2",
@@ -326,7 +326,8 @@ static NSString  * const notifications[] = {
     /*17*/ @"HelpMenuBackNotification",
     /*18*/ @"PlayerMenuEntityInfoNotification",
     /*19*/ @"PlayerMenuPickupNotification",
-    /*20*/ @"PlayerMenuEquipNotification"
+    /*20*/ @"PlayerMenuEquipNotification",
+    /*21*/ @"EquipMenuReturnNotification"
 };
 
 
@@ -959,13 +960,24 @@ static NSString  * const notifications[] = {
         
     }
     
+    
+#pragma mark - Handle PlayerMenu Notification - Equip
     else if ( [notification.name isEqualToString: @"PlayerMenuEquipNotification" ]) {
         
         // handle equipping items
         
         // we'll show an 'equip' menu
-        MLOG( @"Notification not handled: %@", notification.name );
+        if ( ! equipMenuIsVisible ) {
+            [self addEquipMenu];
+        } else {
+            [self removeEquipMenu];
+        }
         
+    }
+    
+#pragma mark - Handle EquipMenu Notification - Return
+    else if ( [notification.name isEqualToString: @"EquipMenuReturnNotification" ]) {
+        [self removeEquipMenu];
     }
     
     else {
@@ -976,6 +988,34 @@ static NSString  * const notifications[] = {
 }
 
 #pragma mark - Menus and HUD code
+
+
+#pragma mark - Equip Menu
+
+/*
+ ====================
+ equip menu methods
+ ====================
+ */
+
+-(void) initEquipMenu {
+    equipMenu = [[EquipMenu alloc] init];
+    equipMenu.position = ccp(0,0);
+}
+
+-(void) addEquipMenu {
+    if ( ! equipMenuIsVisible ) {
+        [self addChild:equipMenu];
+        equipMenuIsVisible = YES;
+    }
+}
+
+-(void) removeEquipMenu {
+    if ( equipMenuIsVisible ) {
+        [self removeChild:equipMenu cleanup:NO];
+        equipMenuIsVisible = NO;
+    }
+}
 
 
 #pragma mark - Help Menu
@@ -1007,6 +1047,7 @@ static NSString  * const notifications[] = {
 }
 
 
+#pragma mark - Player Menu
 
 /*
  ====================
@@ -3128,6 +3169,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     helpMenuIsVisible = NO;
     [self initHelpMenu];
     //[self addHelpMenu];
+    
+    equipMenuIsVisible = NO;
+    [self initEquipMenu];
+    //[self addEquipMenu];
     
 }
 

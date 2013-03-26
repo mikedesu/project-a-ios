@@ -18,6 +18,7 @@
 #import "EditorHUD.h"
 #import "Entity.h"
 #import "EntityInfoHUD.h"
+#import "EquipMenu.h"
 #import "GameLayer.h"
 #import "GameRenderer.h"
 #import "HelpMenu.h"
@@ -50,4 +51,9 @@ typedef struct {
 #define NUMBER_OF_TILES_ONSCREEN_Y  15
 
 #define NUMBER_OF_TILES_ONSCREEN    ( NUMBER_OF_TILES_ONSCREEN_X * NUMBER_OF_TILES_ONSCREEN_Y )
+
+
+#define screenwidth     ([[CCDirector sharedDirector] winSize].width)
+#define screenheight    ([[CCDirector sharedDirector] winSize].height)
+
 
