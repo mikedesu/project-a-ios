@@ -8,6 +8,7 @@
 
 @implementation EquipMenu
 
+@synthesize title;
 @synthesize inventory;
 @synthesize menu;
 @synthesize pc;
@@ -32,6 +33,7 @@
         
         [equipSubmenu.title setString:
          [NSString stringWithFormat:@"Equipment - %@", EquipSlotToStr(sender.tag)]];
+        [equipSubmenu update];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotification" object:self];
         
@@ -88,13 +90,9 @@
         [self defineMenuControlBlock];
         
         
-        CCLabelTTF *title = [[CCLabelTTF alloc] initWithString:@"Equipment" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:16];
-        
+        title = [[CCLabelTTF alloc] initWithString:@"Equipment" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:16];
         title.position = ccp( screenwidth/2, screenheight - title.contentSize.height );
-        //title.position = ccp( screenwidth/2, screenheight/2 );
-        
         [self addChild:title];
-        
         
         
         NSMutableArray *menuItems = [NSMutableArray array];
@@ -316,8 +314,10 @@
     [menu removeAllChildrenWithCleanup:YES];
  
     
-    CCLabelTTF *title = [[CCLabelTTF alloc] initWithString:@"Equipment" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:16];
-    
+    //title = [[CCLabelTTF alloc] initWithString:@"Equipment" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:16];
+    //title.position = ccp( screenwidth/2, screenheight - title.contentSize.height );
+    //[self addChild:title];
+
     
     NSMutableArray *menuItems = [NSMutableArray array];
     
@@ -545,6 +545,7 @@
         } else {
             [self removeChild:equipSubmenu cleanup:NO];
             equipSubmenuIsVisible = NO;
+            [self update];
         }
         
     }

@@ -22,20 +22,22 @@
     };
 }
 
--(id) initWithPC: (Entity *) pc {
+-(id) initWithPC: (Entity *) _pc {
     if ((self=[super initWithColor:black width:screenwidth height:screenheight])) {
-                
+        
+        pc = _pc;
+        
         title = [[CCLabelTTF alloc] initWithString:@"Equipment" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:16];
         title.position = ccp( screenwidth/2, screenheight - title.contentSize.height );
         [self addChild: title];
         
- 
+        
         NSMutableArray *menuItems = [NSMutableArray array];
         
         //return button
         CCMenuItemLabel *returnButton = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Return" fontName:@"Courier New" fontSize:18] target:self selector:@selector(returnPressed)];
         returnButton.position = ccp( returnButton.contentSize.width/2, returnButton.contentSize.height/2 );
- 
+        
         [menuItems addObject: returnButton];
         
         menu = [CCMenu menuWithArray:menuItems];
@@ -50,7 +52,26 @@
 
 
 -(void) update {
-    MLOG(@"Update");
+    MLOG(@"Updating");
+    [menu removeAllChildrenWithCleanup:YES];
+    
+    //CCLabelTTF *title = [[CCLabelTTF alloc] initWithString:@"Equipment" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:16];
+    //title.position = ccp( screenwidth/2, screenheight - title.contentSize.height );
+    //[self addChild: title];
+    
+    
+    NSMutableArray *menuItems = [NSMutableArray array];
+    
+    //return button
+    CCMenuItemLabel *returnButton = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Return" fontName:@"Courier New" fontSize:18] target:self selector:@selector(returnPressed)];
+    returnButton.position = ccp( returnButton.contentSize.width/2, returnButton.contentSize.height/2 );
+    
+    [menuItems addObject: returnButton];
+    
+    for ( CCMenuItem *item in menuItems ) {
+        [menu addChild: item];
+    }
+    
 }
 
 

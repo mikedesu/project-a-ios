@@ -12,6 +12,8 @@ typedef void (^EquipMenuControlBlock)(CCMenuItemLabel *);
 @class GameLayer;
 
 @interface EquipMenu : CCLayerColor {
+    CCLabelTTF *title;
+    
     NSMutableArray *inventory;
     CCMenu *menu;
     Entity *pc;
@@ -23,6 +25,7 @@ typedef void (^EquipMenuControlBlock)(CCMenuItemLabel *);
     BOOL equipSubmenuIsVisible;
 }
 
+@property (atomic) CCLabelTTF *title;
 @property (atomic) NSMutableArray *inventory;
 @property (atomic) CCMenu *menu;
 @property (atomic) Entity *pc;

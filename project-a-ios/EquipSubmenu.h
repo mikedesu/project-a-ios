@@ -20,6 +20,9 @@ typedef void (^EquipSubmenuControlBlock)(CCMenuItemLabel *);
 @property (atomic) CCMenu *menu;
 @property (readwrite, copy) EquipSubmenuControlBlock menuControlBlock;
 
--(id) initWithPC: (Entity *) pc;
+-(void) defineMenuControlBlock;
+-(id) initWithPC: (Entity *) _pc;
+-(void) update;
+-(void) returnPressed;
 
 @end
