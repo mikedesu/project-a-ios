@@ -31,8 +31,7 @@
         MLOG(@"Testing: %@ tag %d", sender, sender.tag);
         
         [equipSubmenu.title setString:
-         [NSString stringWithFormat:@"%@", sender]
-         ];
+         [NSString stringWithFormat:@"Equipment - %@", EquipSlotToStr(sender.tag)]];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotification" object:self];
         
