@@ -20,6 +20,7 @@
 #import "EntityInfoHUD.h"
 #import "EquipDefines.h"
 #import "EquipMenu.h"
+#import "EquipSubmenu.h"
 #import "GameLayer.h"
 #import "GameRenderer.h"
 #import "HelpMenu.h"

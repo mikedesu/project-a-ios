@@ -8,6 +8,7 @@
 
 typedef void (^EquipMenuControlBlock)(CCMenuItemLabel *);
 
+@class EquipSubmenu;
 @class GameLayer;
 
 @interface EquipMenu : CCLayerColor {
@@ -17,6 +18,9 @@ typedef void (^EquipMenuControlBlock)(CCMenuItemLabel *);
     DungeonFloor *floor;
     GameLayer *gameLayer;
     EquipMenuControlBlock menuControlBlock;
+    
+    EquipSubmenu *equipSubmenu;
+    BOOL equipSubmenuIsVisible;
 }
 
 @property (atomic) NSMutableArray *inventory;
@@ -25,9 +29,15 @@ typedef void (^EquipMenuControlBlock)(CCMenuItemLabel *);
 @property (atomic) DungeonFloor *floor;
 @property (atomic) GameLayer *gameLayer;
 
+@property (atomic) EquipSubmenu *equipSubmenu;
+@property (atomic) BOOL equipSubmenuIsVisible;
+
 @property (readwrite, copy) EquipMenuControlBlock menuControlBlock;
 
 -(void) defineMenuControlBlock;
 -(id)   initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) _gameLayer;
 -(void) update;
+
+-(void) registerNotifications;
+-(void) receiveNotification: (NSNotification *) notification;
 @end

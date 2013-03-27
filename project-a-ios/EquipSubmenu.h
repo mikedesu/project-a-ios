@@ -9,11 +9,13 @@
 typedef void (^EquipSubmenuControlBlock)(CCMenuItemLabel *);
 
 @interface EquipSubmenu : CCLayerColor {
+    CCLabelTTF *title;
     Entity *pc;
     CCMenu *menu;
     EquipSubmenuControlBlock menuControlBlock;
 }
 
+@property (atomic) CCLabelTTF *title;
 @property (atomic) Entity *pc;
 @property (atomic) CCMenu *menu;
 @property (readwrite, copy) EquipSubmenuControlBlock menuControlBlock;
