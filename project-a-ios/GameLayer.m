@@ -1667,6 +1667,16 @@ static NSString  * const notifications[] = {
 
 -(void) updateStatusMenu {
     //MLOG(@"updateStatusMenu");
+    
+    
+    NSObject *equipmentObjects[19];
+    Entity *equipmentEntities[19];
+    for (int i=0; i<19; i++) {
+        equipmentObjects[i] = [pcEntity.equipment objectAtIndex: i];
+        equipmentEntities[i] = [ equipmentObjects[i] isKindOfClass:NSClassFromString(@"Entity")] ? (Entity *) equipmentObjects[i] : nil;
+    }
+ 
+    
     [statusMenu.content setString:
      [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
       
@@ -1688,10 +1698,13 @@ static NSString  * const notifications[] = {
       [NSString stringWithFormat:@"Money: %d\n", pcEntity.money],
       
       [NSString stringWithFormat:@"L.Arm: %@\nChest: %@\nLegs: %@\n" ,
-                                pcEntity.equippedArmsLeft.name,
-                                pcEntity.equippedArmorChest.name,
-                                @"none",
-                                nil],
+//       [pcEntity.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL],
+       //e_larmtool != nil ? e_larmtool.name : @"Empty" ,
+       equipmentEntities[ EQUIPSLOT_T_LARMTOOL ] == nil ? @"Empty" : equipmentEntities[ EQUIPSLOT_T_LARMTOOL ].name ,
+       equipmentEntities[ EQUIPSLOT_T_CHEST ] == nil    ? @"Empty" : equipmentEntities[ EQUIPSLOT_T_CHEST ].name ,
+       //[pcEntity.equipment objectAtIndex: EQUIPSLOT_T_CHEST],
+       @"none",
+       nil],
 
       
       

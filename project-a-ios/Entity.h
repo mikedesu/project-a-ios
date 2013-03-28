@@ -5,6 +5,7 @@
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
 #import "EntitySubtypeDefines.h"
+#import "EquipDefines.h"
 
 @class CCMutableTexture2D;
 
@@ -69,6 +70,9 @@
     Entity *equippedArmsLeft;
     Entity *equippedArmsRight;
     Entity *equippedArmorChest;
+    
+    //Entity *equipment[19];
+    NSMutableArray *equipment;
     
     
     NSMutableArray *pathTaken;
@@ -135,7 +139,9 @@
 @property (atomic) Entity *equippedArmorChest;
 
 
+@property (nonatomic) NSMutableArray *equipment;
 @property (atomic) NSMutableArray *pathTaken;
+
 
 @property (atomic, assign) NSInteger foodBase;
 @property (atomic, assign) NSInteger healingRollBase;
@@ -164,5 +170,7 @@
 
 -( NSInteger ) damageRollBase ;
 -( void ) setDamageRollBase: (NSInteger) _damageRollBase;
+
+-(void) equipItem: (Entity *) item forEquipSlot: (EquipSlot_t) equipSlot;
 
 @end

@@ -169,7 +169,7 @@
 
 +(CCMutableTexture2D *) stoneTile {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
-    [t fill:black_alpha(0)];
+     [t fill:black_alpha(0)];
     
     Color_t c0 = gray;
     Color_t c1 = darkgray;
@@ -182,6 +182,7 @@
         for (int j=0; j<16; j++)
             [t setPixelAt:ccp(i,j) rgba:c1];
     [ t apply ];
+    
     return t;
 }
 

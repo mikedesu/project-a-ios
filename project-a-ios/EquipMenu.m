@@ -31,6 +31,9 @@
     weakSelf.menuControlBlock = ^(CCMenuItemLabel *sender) {
         MLOG(@"Testing: %@ tag %d", sender, sender.tag);
         
+        // set which equip-slot this will load a submenu for
+        equipSubmenu.equipSlot = sender.tag;
+        
         [equipSubmenu.title setString:
          [NSString stringWithFormat:@"Equipment - %@", EquipSlotToStr(sender.tag)]];
         [equipSubmenu update];

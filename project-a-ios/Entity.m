@@ -59,6 +59,8 @@
 @synthesize pathFindingAlgorithm;
 @synthesize itemPickupAlgorithm;
 
+@synthesize equipment;
+
 @synthesize pathTaken;
 
 @synthesize entityType;
@@ -85,6 +87,18 @@
         name        = [ [ NSMutableString alloc ] init ];
         level       = 1;
         entityType  = ENTITY_T_VOID;
+        
+        NSInteger numEquipSlots = 19;
+        //equipment = [NSMutableArray arrayWithCapacity: numEquipSlots];
+        equipment = [NSMutableArray array];
+        // add the 19 entity pointers
+ 
+        NSObject *empty = [[NSObject alloc] init];
+        
+        MLOG(@"setting equipment...");
+        for (int i=0; i<numEquipSlots; i++)
+            //[equipment setObject:e atIndexedSubscript:i];
+            [equipment addObject: empty];
         
         
         totalKills  = 0;
@@ -193,7 +207,12 @@
     // any items / equipped gear would be counted here
     NSInteger gearBonus = 0;
     
-    if ( self.equippedArmsLeft != nil ) gearBonus += self.equippedArmsLeft.damageBonus;
+    
+    if ( [[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity") ] ) {
+        gearBonus += [(Entity *)[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] damageBonus];
+    }
+    
+    //if ( self.equippedArmsLeft != nil ) gearBonus += self.equippedArmsLeft.damageBonus;
     return strengthBonus + gearBonus;
 }
 
@@ -276,8 +295,12 @@
 -( NSInteger ) totalac {
     NSInteger dexterityBonus = [ GameRenderer modifierForNumber: dexterity ];
     NSInteger armorBonus = 0;
-    if ( equippedArmorChest != nil )
-        armorBonus = equippedArmorChest.ac;
+//    if ( equippedArmorChest != nil ) armorBonus = equippedArmorChest.ac;
+    
+    if ( [[self.equipment objectAtIndex: EQUIPSLOT_T_CHEST] isKindOfClass:NSClassFromString(@"Entity") ] ) {
+        armorBonus = [(Entity *) [self.equipment objectAtIndex: EQUIPSLOT_T_CHEST] ac];
+    }
+    
     NSInteger total = ac + dexterityBonus + armorBonus;
     return total ;
 }
@@ -404,6 +427,14 @@
 
 
 
-
+/*
+ ====================
+ equipItem: item forEquipSlot: equipSlot
+ ====================
+ */
+-(void) equipItem: (Entity *) item forEquipSlot: (EquipSlot_t) equipSlot {
+    MLOG(@"equipItem: %@ forEquipSlot: %@", item.name, EquipSlotToStr(equipSlot));
+    [self.equipment setObject: item atIndexedSubscript: equipSlot];
+}
 
 @end

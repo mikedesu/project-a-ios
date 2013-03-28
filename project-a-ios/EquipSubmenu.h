@@ -12,12 +12,15 @@ typedef void (^EquipSubmenuControlBlock)(CCMenuItemLabel *);
     CCLabelTTF *title;
     Entity *pc;
     CCMenu *menu;
+    EquipSlot_t equipSlot;
     EquipSubmenuControlBlock menuControlBlock;
+    
 }
 
 @property (atomic) CCLabelTTF *title;
 @property (atomic) Entity *pc;
 @property (atomic) CCMenu *menu;
+@property (atomic) EquipSlot_t equipSlot;
 @property (readwrite, copy) EquipSubmenuControlBlock menuControlBlock;
 
 -(void) defineMenuControlBlock;
