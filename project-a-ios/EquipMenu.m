@@ -112,25 +112,25 @@
             equipmentNames[i] = (e == nil) ? nil : [e isKindOfClass:NSClassFromString(@"NSNull")] ? nil : [NSString stringWithFormat:@"%@", e.name];
         }
         
-        head.label.string       = [NSString stringWithFormat:@"Head: %@",           nil];
-        neck.label.string       = [NSString stringWithFormat:@"Neck: %@",           nil];
+        head.label.string       = [NSString stringWithFormat:@"Head: %@",           equipmentNames[EQUIPSLOT_T_HEAD]];
+        neck.label.string       = [NSString stringWithFormat:@"Neck: %@",           equipmentNames[EQUIPSLOT_T_BACK]];
         chest.label.string      = [NSString stringWithFormat:@"Chest: %@",          equipmentNames[EQUIPSLOT_T_CHEST]];
-        lshoulder.label.string  = [NSString stringWithFormat:@"L. Shoulder: %@",    nil];
-        rshoulder.label.string  = [NSString stringWithFormat:@"R. Shoulder: %@",    nil];
-        back.label.string       = [NSString stringWithFormat:@"Back: %@",           nil];
-        larm.label.string       = [NSString stringWithFormat:@"L. Arm: %@",         nil];
-        rarm.label.string       = [NSString stringWithFormat:@"R. Arm: %@",         nil];
-        lhand.label.string      = [NSString stringWithFormat:@"L. Hand: %@",        nil];
-        rhand.label.string      = [NSString stringWithFormat:@"R. Hand: %@",        nil];
-        lring.label.string      = [NSString stringWithFormat:@"L. Ring: %@",        nil];
-        rring.label.string      = [NSString stringWithFormat:@"R. Ring: %@",        nil];
-        waist.label.string      = [NSString stringWithFormat:@"Waist: %@",          nil];
-        lleg.label.string       = [NSString stringWithFormat:@"L. Leg: %@",         nil];
-        rleg.label.string       = [NSString stringWithFormat:@"R. Leg: %@",         nil];
-        lfoot.label.string      = [NSString stringWithFormat:@"L. Foot: %@",        nil];
-        rfoot.label.string      = [NSString stringWithFormat:@"R. Foot: %@",        nil];
+        lshoulder.label.string  = [NSString stringWithFormat:@"L. Shoulder: %@",    equipmentNames[EQUIPSLOT_T_LSHOULDER]];
+        rshoulder.label.string  = [NSString stringWithFormat:@"R. Shoulder: %@",    equipmentNames[EQUIPSLOT_T_RSHOULDER]];
+        back.label.string       = [NSString stringWithFormat:@"Back: %@",           equipmentNames[EQUIPSLOT_T_BACK]];
+        larm.label.string       = [NSString stringWithFormat:@"L. Arm: %@",         equipmentNames[EQUIPSLOT_T_LARM]];
+        rarm.label.string       = [NSString stringWithFormat:@"R. Arm: %@",         equipmentNames[EQUIPSLOT_T_RARM]];
+        lhand.label.string      = [NSString stringWithFormat:@"L. Hand: %@",        equipmentNames[EQUIPSLOT_T_LHAND]];
+        rhand.label.string      = [NSString stringWithFormat:@"R. Hand: %@",        equipmentNames[EQUIPSLOT_T_RHAND]];
+        lring.label.string      = [NSString stringWithFormat:@"L. Ring: %@",        equipmentNames[EQUIPSLOT_T_LRING]];
+        rring.label.string      = [NSString stringWithFormat:@"R. Ring: %@",        equipmentNames[EQUIPSLOT_T_RRING]];
+        waist.label.string      = [NSString stringWithFormat:@"Waist: %@",          equipmentNames[EQUIPSLOT_T_WAIST]];
+        lleg.label.string       = [NSString stringWithFormat:@"L. Leg: %@",         equipmentNames[EQUIPSLOT_T_LLEG]];
+        rleg.label.string       = [NSString stringWithFormat:@"R. Leg: %@",         equipmentNames[EQUIPSLOT_T_RLEG]];
+        lfoot.label.string      = [NSString stringWithFormat:@"L. Foot: %@",        equipmentNames[EQUIPSLOT_T_LFOOT]];
+        rfoot.label.string      = [NSString stringWithFormat:@"R. Foot: %@",        equipmentNames[EQUIPSLOT_T_RFOOT]];
         larmtool.label.string   = [NSString stringWithFormat:@"L. Tool: %@",        equipmentNames[EQUIPSLOT_T_LARMTOOL]];
-        rarmtool.label.string   = [NSString stringWithFormat:@"R. Tool: %@",        nil];
+        rarmtool.label.string   = [NSString stringWithFormat:@"R. Tool: %@",        equipmentNames[EQUIPSLOT_T_RARMTOOL]];
         
         head.tag        = EQUIPSLOT_T_HEAD;
         neck.tag        = EQUIPSLOT_T_NECK;
@@ -277,25 +277,26 @@
         equipmentNames[i] = (e == nil) ? nil : [e isKindOfClass:NSClassFromString(@"NSNull")] ? nil : [NSString stringWithFormat:@"%@", e.name];
     }
     
-    head.label.string       = [NSString stringWithFormat:@"Head: %@",           nil];
-    neck.label.string       = [NSString stringWithFormat:@"Neck: %@",           nil];
+    head.label.string       = [NSString stringWithFormat:@"Head: %@",           equipmentNames[EQUIPSLOT_T_HEAD]];
+    neck.label.string       = [NSString stringWithFormat:@"Neck: %@",           equipmentNames[EQUIPSLOT_T_BACK]];
     chest.label.string      = [NSString stringWithFormat:@"Chest: %@",          equipmentNames[EQUIPSLOT_T_CHEST]];
-    lshoulder.label.string  = [NSString stringWithFormat:@"L. Shoulder: %@",    nil];
-    rshoulder.label.string  = [NSString stringWithFormat:@"R. Shoulder: %@",    nil];
-    back.label.string       = [NSString stringWithFormat:@"Back: %@",           nil];
-    larm.label.string       = [NSString stringWithFormat:@"L. Arm: %@",         nil];
-    rarm.label.string       = [NSString stringWithFormat:@"R. Arm: %@",         nil];
-    lhand.label.string      = [NSString stringWithFormat:@"L. Hand: %@",        nil];
-    rhand.label.string      = [NSString stringWithFormat:@"R. Hand: %@",        nil];
-    lring.label.string      = [NSString stringWithFormat:@"L. Ring: %@",        nil];
-    rring.label.string      = [NSString stringWithFormat:@"R. Ring: %@",        nil];
-    waist.label.string      = [NSString stringWithFormat:@"Waist: %@",          nil];
-    lleg.label.string       = [NSString stringWithFormat:@"L. Leg: %@",         nil];
-    rleg.label.string       = [NSString stringWithFormat:@"R. Leg: %@",         nil];
-    lfoot.label.string      = [NSString stringWithFormat:@"L. Foot: %@",        nil];
-    rfoot.label.string      = [NSString stringWithFormat:@"R. Foot: %@",        nil];
+    lshoulder.label.string  = [NSString stringWithFormat:@"L. Shoulder: %@",    equipmentNames[EQUIPSLOT_T_LSHOULDER]];
+    rshoulder.label.string  = [NSString stringWithFormat:@"R. Shoulder: %@",    equipmentNames[EQUIPSLOT_T_RSHOULDER]];
+    back.label.string       = [NSString stringWithFormat:@"Back: %@",           equipmentNames[EQUIPSLOT_T_BACK]];
+    larm.label.string       = [NSString stringWithFormat:@"L. Arm: %@",         equipmentNames[EQUIPSLOT_T_LARM]];
+    rarm.label.string       = [NSString stringWithFormat:@"R. Arm: %@",         equipmentNames[EQUIPSLOT_T_RARM]];
+    lhand.label.string      = [NSString stringWithFormat:@"L. Hand: %@",        equipmentNames[EQUIPSLOT_T_LHAND]];
+    rhand.label.string      = [NSString stringWithFormat:@"R. Hand: %@",        equipmentNames[EQUIPSLOT_T_RHAND]];
+    lring.label.string      = [NSString stringWithFormat:@"L. Ring: %@",        equipmentNames[EQUIPSLOT_T_LRING]];
+    rring.label.string      = [NSString stringWithFormat:@"R. Ring: %@",        equipmentNames[EQUIPSLOT_T_RRING]];
+    waist.label.string      = [NSString stringWithFormat:@"Waist: %@",          equipmentNames[EQUIPSLOT_T_WAIST]];
+    lleg.label.string       = [NSString stringWithFormat:@"L. Leg: %@",         equipmentNames[EQUIPSLOT_T_LLEG]];
+    rleg.label.string       = [NSString stringWithFormat:@"R. Leg: %@",         equipmentNames[EQUIPSLOT_T_RLEG]];
+    lfoot.label.string      = [NSString stringWithFormat:@"L. Foot: %@",        equipmentNames[EQUIPSLOT_T_LFOOT]];
+    rfoot.label.string      = [NSString stringWithFormat:@"R. Foot: %@",        equipmentNames[EQUIPSLOT_T_RFOOT]];
     larmtool.label.string   = [NSString stringWithFormat:@"L. Tool: %@",        equipmentNames[EQUIPSLOT_T_LARMTOOL]];
-    rarmtool.label.string   = [NSString stringWithFormat:@"R. Tool: %@",        nil];
+    rarmtool.label.string   = [NSString stringWithFormat:@"R. Tool: %@",        equipmentNames[EQUIPSLOT_T_RARMTOOL]];
+    
     
     head.tag        = EQUIPSLOT_T_HEAD;
     neck.tag        = EQUIPSLOT_T_NECK;
