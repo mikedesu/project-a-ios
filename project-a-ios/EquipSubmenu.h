@@ -14,7 +14,6 @@ typedef void (^EquipSubmenuControlBlock)(CCMenuItemLabel *);
     CCMenu *menu;
     EquipSlot_t equipSlot;
     EquipSubmenuControlBlock menuControlBlock;
-    
 }
 
 @property (atomic) CCLabelTTF *title;
@@ -27,5 +26,4 @@ typedef void (^EquipSubmenuControlBlock)(CCMenuItemLabel *);
 -(id) initWithPC: (Entity *) _pc;
 -(void) update;
 -(void) returnPressed;
-
 @end

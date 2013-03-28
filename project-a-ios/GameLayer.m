@@ -979,6 +979,9 @@ static NSString  * const notifications[] = {
 #pragma mark - Handle EquipMenu Notification - Return
     else if ( [notification.name isEqualToString: @"EquipMenuReturnNotification" ]) {
         [self removeEquipMenu];
+        
+        // update our hero sprite
+        [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
     }
     
     else {
@@ -1697,6 +1700,9 @@ static NSString  * const notifications[] = {
       
       [NSString stringWithFormat:@"Money: %d\n", pcEntity.money],
       
+      @"(empty)",
+      
+      /*
       [NSString stringWithFormat:@"L.Arm: %@\nChest: %@\nLegs: %@\n" ,
 //       [pcEntity.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL],
        //e_larmtool != nil ? e_larmtool.name : @"Empty" ,
@@ -1705,7 +1711,7 @@ static NSString  * const notifications[] = {
        //[pcEntity.equipment objectAtIndex: EQUIPSLOT_T_CHEST],
        @"none",
        nil],
-
+*/
       
       
       nil]
@@ -3724,8 +3730,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                     [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
                     [[ itemTile contents ] removeObject: item];
                     
-                    // update our hero sprite
-                    [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
+                 // update our hero sprite
+                 [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
                 }
                  */
                 

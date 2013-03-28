@@ -93,12 +93,10 @@
         equipment = [NSMutableArray array];
         // add the 19 entity pointers
  
-        NSObject *empty = [[NSObject alloc] init];
-        
         MLOG(@"setting equipment...");
         for (int i=0; i<numEquipSlots; i++)
             //[equipment setObject:e atIndexedSubscript:i];
-            [equipment addObject: empty];
+            [equipment addObject: [NSNull null] ];
         
         
         totalKills  = 0;

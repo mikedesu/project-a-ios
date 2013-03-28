@@ -6,7 +6,6 @@
 
 #import "EquipSubmenu.h"
 
-
 @implementation EquipSubmenu
 
 @synthesize title;
@@ -15,11 +14,9 @@
 @synthesize menuControlBlock;
 @synthesize equipSlot;
 
-
 -(void) defineMenuControlBlock {
     __block typeof(self) weakSelf = self;
     weakSelf.menuControlBlock = ^(CCMenuItemLabel *sender) {
-        
         Entity *item = [pc.inventoryArray objectAtIndex: sender.tag];
         MLOG(@"Item pressed: %@", item.name);
         
@@ -33,9 +30,9 @@
     };
 }
 
+
 -(id) initWithPC: (Entity *) _pc {
     if ((self=[super initWithColor:black width:screenwidth height:screenheight])) {
-        
         [self defineMenuControlBlock];
         
         pc = _pc;
@@ -44,9 +41,7 @@
         title.position = ccp( screenwidth/2, screenheight - title.contentSize.height );
         [self addChild: title];
         
-        
         NSMutableArray *menuItems = [NSMutableArray array];
-        
         
         CGFloat x = 0;
         CGFloat y = screenheight;
@@ -67,8 +62,9 @@
                 
                 [menuItems addObject: item];
             }
+            
+            
         }
-        
         
         //return button
         CCMenuItemLabel *returnButton = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Return" fontName:@"Courier New" fontSize:18] target:self selector:@selector(returnPressed)];
@@ -79,12 +75,9 @@
         menu = [CCMenu menuWithArray:menuItems];
         menu.position = ccp(0,0);
         [self addChild:menu];
-
-        
     }
     return self;
 }
-
 
 
 -(void) update {
@@ -106,24 +99,9 @@
             // and handle listing the relevant item type
             
             CCMenuItemLabel *item;
-            BOOL itemIsSet = NO;
-            
-            /*
-            if ( (self.equipSlot == EQUIPSLOT_T_LARMTOOL || self.equipSlot == EQUIPSLOT_T_RARMTOOL) &&
-                  e.itemType == E_ITEM_T_WEAPON ) {
-                itemIsSet = YES;
-            }
-            
-            else if ( self.equipSlot == EQUIPSLOT_T_CHEST &&
-                     e.itemType == E_ITEM_T_ARMOR ) {
-                itemIsSet = YES;
-            }
-            */
-            
-            itemIsSet =
+            BOOL itemIsSet =
             ((self.equipSlot == EQUIPSLOT_T_LARMTOOL || self.equipSlot == EQUIPSLOT_T_RARMTOOL) && e.itemType == E_ITEM_T_WEAPON) ||
-             (self.equipSlot == EQUIPSLOT_T_CHEST                                               && e.itemType == E_ITEM_T_ARMOR);
-            
+            (self.equipSlot == EQUIPSLOT_T_CHEST                                               && e.itemType == E_ITEM_T_ARMOR);
             
             if ( itemIsSet ) {
                 item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:e.name fontName:@"Courier New" fontSize:16] block: menuControlBlock];
@@ -135,8 +113,6 @@
             }
         }
     }
-    
-    
     
     //return button
     CCMenuItemLabel *returnButton = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Return" fontName:@"Courier New" fontSize:18] target:self selector:@selector(returnPressed)];
@@ -155,6 +131,4 @@
     MLOG(@"Return pressed");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotification" object:self];
 }
-
-
 @end
