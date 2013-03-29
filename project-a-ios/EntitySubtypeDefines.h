@@ -14,18 +14,46 @@ typedef enum {
 // Items
 typedef enum {
     E_ITEM_T_NONE,
+    
+    // Weapon Types
     E_ITEM_T_WEAPON,
+    
+    // Tool Types
+    E_ITEM_T_FISHING_ROD,
+    E_ITEM_T_FISHING_LURE,
+    E_ITEM_T_FISHING_BAIT,
+    
+    // Armor Types - for each slot
     E_ITEM_T_ARMOR,
+    E_ITEM_T_HELMET,
+    E_ITEM_T_NECKLACE,
+    E_ITEM_T_SHOULDER,
+    E_ITEM_T_CAPE,
+    E_ITEM_T_ARMGUARD,
+    E_ITEM_T_GLOVE,
+    E_ITEM_T_RING,
+    E_ITEM_T_BELT,
+    E_ITEM_T_LEGGUARD,
+    E_ITEM_T_SHOE,
+    
     E_ITEM_T_POTION,
+    
     E_ITEM_T_FOOD,
+    
     E_ITEM_T_BOOK,
 } EntityItemTypes_t;
+
+
+
 
 
 typedef enum {
     POTION_T_NONE,
     POTION_T_HEALING,
 } PotionTypes_t;
+
+
+
 
 
 typedef enum {

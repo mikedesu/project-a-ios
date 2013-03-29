@@ -469,6 +469,7 @@
 		27DFEA11170241A800933C8A /* EquipSubmenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EquipSubmenu.h; sourceTree = "<group>"; };
 		27DFEA12170241A800933C8A /* EquipSubmenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EquipSubmenu.m; sourceTree = "<group>"; };
 		27DFEA1417039B2000933C8A /* tile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tile.png; sourceTree = "<group>"; };
+		27DFEA16170515A500933C8A /* MaterialTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaterialTypes.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -571,6 +572,7 @@
 				2721D6FD16EEBA610051352D /* InventoryMenu.m */,
 				2767E0C916E83FA500013CBE /* Items.h */,
 				2767E0CA16E83FA500013CBE /* Items.m */,
+				27DFEA16170515A500933C8A /* MaterialTypes.h */,
 				27C88FDE16C573D4004AB4D8 /* MLog.h */,
 				2721D6F016EDE94F0051352D /* Monsters.h */,
 				2721D6F116EDE94F0051352D /* Monsters.m */,

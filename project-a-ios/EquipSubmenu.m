@@ -103,6 +103,15 @@
             ((self.equipSlot == EQUIPSLOT_T_LARMTOOL || self.equipSlot == EQUIPSLOT_T_RARMTOOL) && e.itemType == E_ITEM_T_WEAPON) ||
             (self.equipSlot == EQUIPSLOT_T_CHEST                                               && e.itemType == E_ITEM_T_ARMOR);
             
+            for (int j=0; j < pc.equipment.count; j++ ) {
+                Entity *equipment = [pc.equipment objectAtIndex:j];
+                if ( [equipment isKindOfClass:NSClassFromString(@"Entity")] ) {
+                    BOOL isSameName = [e.name isEqualToString: equipment.name];
+                    itemIsSet = itemIsSet && !(isSameName);
+                }
+            }
+            
+            
             if ( itemIsSet ) {
                 item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:e.name fontName:@"Courier New" fontSize:16] block: menuControlBlock];
                 x = 0 + item.contentSize.width/2;
