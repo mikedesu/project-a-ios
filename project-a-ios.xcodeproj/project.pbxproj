@@ -144,6 +144,7 @@
 		2773F29216C85469001C3E83 /* EditorHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29116C85469001C3E83 /* EditorHUD.m */; };
 		2773F29516C949C4001C3E83 /* PlayerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29416C949C4001C3E83 /* PlayerHUD.m */; };
 		2773F29816C94DA3001C3E83 /* PlayerMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29716C94DA3001C3E83 /* PlayerMenu.m */; };
+		27A1A5A71709711E002C3A4A /* Attack_t.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A1A5A61709711E002C3A4A /* Attack_t.m */; };
 		27C0C2EA16FAA12D00AF1208 /* HelpMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C0C2E916FAA12D00AF1208 /* HelpMenu.m */; };
 		27C26D8416CAFDBE008B0E29 /* DungeonFloor.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C26D8316CAFDBE008B0E29 /* DungeonFloor.m */; };
 		27C26D8716CAFF66008B0E29 /* Dungeon.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C26D8616CAFF66008B0E29 /* Dungeon.m */; };
@@ -445,6 +446,10 @@
 		2773F29416C949C4001C3E83 /* PlayerHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerHUD.m; sourceTree = "<group>"; };
 		2773F29616C94DA3001C3E83 /* PlayerMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerMenu.h; sourceTree = "<group>"; };
 		2773F29716C94DA3001C3E83 /* PlayerMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerMenu.m; sourceTree = "<group>"; };
+		27A1A5A51709711E002C3A4A /* Attack_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attack_t.h; sourceTree = "<group>"; };
+		27A1A5A61709711E002C3A4A /* Attack_t.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attack_t.m; sourceTree = "<group>"; };
+		27A1A5A817097387002C3A4A /* AttackStatus_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttackStatus_t.h; sourceTree = "<group>"; };
+		27A1A5AB1709745D002C3A4A /* AttackElement_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttackElement_t.h; sourceTree = "<group>"; };
 		27C0C2E816FAA12D00AF1208 /* HelpMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpMenu.h; sourceTree = "<group>"; };
 		27C0C2E916FAA12D00AF1208 /* HelpMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpMenu.m; sourceTree = "<group>"; };
 		27C26D8216CAFDBE008B0E29 /* DungeonFloor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DungeonFloor.h; sourceTree = "<group>"; };
@@ -532,6 +537,10 @@
 				272EF64D16C5695F005DF231 /* AppDelegate.m */,
 				27506B7916D801FE00245F72 /* AsyncObject.h */,
 				27506B7A16D801FE00245F72 /* AsyncObject.m */,
+				27A1A5A51709711E002C3A4A /* Attack_t.h */,
+				27A1A5A61709711E002C3A4A /* Attack_t.m */,
+				27A1A5A817097387002C3A4A /* AttackStatus_t.h */,
+				27A1A5AB1709745D002C3A4A /* AttackElement_t.h */,
 				2767E0CF16E85F1900013CBE /* Armor.h */,
 				2767E0D016E85F1900013CBE /* Armor.m */,
 				27506B7616D7FF0200245F72 /* CCMutableTexture2D.h */,
@@ -1153,6 +1162,7 @@
 				27C0C2EA16FAA12D00AF1208 /* HelpMenu.m in Sources */,
 				27DFEA0F1701150A00933C8A /* EquipMenu.m in Sources */,
 				27DFEA13170241A800933C8A /* EquipSubmenu.m in Sources */,
+				27A1A5A71709711E002C3A4A /* Attack_t.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,8 +6,11 @@
 
 #import "EntitySubtypeDefines.h"
 #import "EquipDefines.h"
+#import "Attack_t.h"
+//#import "GameConfig.h"
 
 @class CCMutableTexture2D;
+@class Attack_t;
 
 @interface Entity : NSObject {
     BOOL isPC;
@@ -87,7 +90,7 @@
     // for food
     NSInteger foodBase;
  
-    RaceTypes_t raceType;
+    //RaceTypes_t raceType;
 }
 
 @property (atomic, assign) BOOL isPC;
@@ -147,12 +150,14 @@
 @property (atomic, assign) NSInteger healingRollBase;
 @property (atomic, assign) NSInteger healingBonus;
 
-@property (atomic, assign) RaceTypes_t raceType;
+//@property (atomic, assign) RaceTypes_t raceType;
 
 -(Entity *) init;
 -(Entity *) initWithLevel: (NSInteger) _level;
 -(Entity *) initWithHitDie: (NSInteger) hd ;
 -(Entity *) initWithLevel:(NSInteger)_level withHitDie: (NSInteger) hd ;
+-(Entity *) initWithName: (NSString *) _name withType: (EntityTypes_t) _entityType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (Attack_t*) _attack ;
+
 
 -( NSInteger ) attackBonus;
 -( NSInteger ) attackRoll;

@@ -854,7 +854,8 @@ NSInteger getMod( NSInteger n ) {
     NSUInteger diceroll = chanceDie == 1 ? 1 : [Dice roll:chanceDie];
     
     if ( diceroll <= spawnChancePercent ) {
-        Entity *e = [ Monsters ghoul ];
+        Entity *e = Ghoul;
+        MLOG(@"Spawned %@", e.name);
         
         // level up ghoul appropriately
         

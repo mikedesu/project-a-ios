@@ -6,9 +6,24 @@
 
 #import "GameConfig.h"
 
-@interface Monsters : NSObject { }
+#define MONSTER(n,l,h,p,i,d) \
+([[Entity alloc] \
+initWithName:n \
+withType: ENTITY_T_NPC \
+withLevel:l \
+withHitDie: h \
+withPFA: p \
+withIPA: i \
+withDamageRollBase: d \
+withAttacks: nil])
 
-+(Entity *) ghoul;
+#define Monster(n,l,h,p,i,d) MONSTER(n,l,h,p,i,d)
 
-
-@end
+#define Ghoul \
+(Monster(\
+@"Ghoul", \
+1, \
+6, \
+ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, \
+ENTITYITEMPICKUPALGORITHM_T_NONE, \
+6))
