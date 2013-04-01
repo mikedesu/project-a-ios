@@ -183,13 +183,14 @@
 
 
 
--(Entity *) initWithName: (NSString *) _name withType: (EntityTypes_t) _entityType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (Attack_t*) _attack {
+-(Entity *) initWithName: (NSString *) _name withType: (EntityTypes_t) _entityType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks {
     Entity *e = [[Entity alloc] initWithHitDie:_hd];
     e.entityType = _entityType;
     [e.name setString: _name];
     e.pathFindingAlgorithm = _pfa;
     e.itemPickupAlgorithm = _ipa;
     e.damageRollBase = _damageRollBase;
+    
     // currently not setting attack_t objects yet
     for (int i=e.level; i<_level; i++) {
         [e handleLevelUp];

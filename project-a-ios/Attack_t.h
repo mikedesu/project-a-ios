@@ -8,6 +8,20 @@
 #import "AttackStatus_t.h"
 #import "AttackElement_t.h"
 
+
+#define ATTACK(n,d,m,s,e) \
+[Attack attackWithNumRolls: n \
+withDamageBase: d \
+withMod: m \
+withStatus: s \
+withElement: e]
+
+#define Attack(n,d,m,s,e) ATTACK(n,d,m,s,e)
+
+#define BasicAttack(d) (Attack(1,d,0,ATTACKSTATUS_T_NONE,ATTACKELEMENT_T_NONE))
+
+
+
 @interface Attack_t : NSObject {
     NSInteger numRolls;
     NSInteger damageBase;
@@ -26,8 +40,6 @@
 
 
 -(id) init;
-
-//+(Attack_t *) attackWithString: (NSString *) _attackString;
 
 +(Attack_t *) attackWithNumRolls: (NSInteger) _numRolls withDamageBase: (NSInteger) _damageBase withMod: (NSInteger) _mod withStatus: (AttackStatus_t) _status withElement: (AttackElement_t) _element;
 

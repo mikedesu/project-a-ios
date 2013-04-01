@@ -6,7 +6,7 @@
 
 #import "GameConfig.h"
 
-#define MONSTER(n,l,h,p,i,d) \
+#define MONSTER(n,l,h,p,i,d,a) \
 ([[Entity alloc] \
 initWithName:n \
 withType: ENTITY_T_NPC \
@@ -15,9 +15,9 @@ withHitDie: h \
 withPFA: p \
 withIPA: i \
 withDamageRollBase: d \
-withAttacks: nil])
+withAttacks: a])
 
-#define Monster(n,l,h,p,i,d) MONSTER(n,l,h,p,i,d)
+#define Monster(n,l,h,p,i,d,a) MONSTER(n,l,h,p,i,d,a)
 
 #define Ghoul \
 (Monster(\
@@ -26,4 +26,5 @@ withAttacks: nil])
 6, \
 ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, \
 ENTITYITEMPICKUPALGORITHM_T_NONE, \
-6))
+6, \
+nil))

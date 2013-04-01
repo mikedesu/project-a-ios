@@ -156,7 +156,7 @@
 -(Entity *) initWithLevel: (NSInteger) _level;
 -(Entity *) initWithHitDie: (NSInteger) hd ;
 -(Entity *) initWithLevel:(NSInteger)_level withHitDie: (NSInteger) hd ;
--(Entity *) initWithName: (NSString *) _name withType: (EntityTypes_t) _entityType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (Attack_t*) _attack ;
+-(Entity *) initWithName: (NSString *) _name withType: (EntityTypes_t) _entityType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks ;
 
 
 -( NSInteger ) attackBonus;
