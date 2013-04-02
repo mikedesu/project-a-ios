@@ -81,6 +81,7 @@ typedef NSInteger MonsterPrefixGroup_t;
 #define MonsterPrefixGroup(a,b,c,d) (d + (c*MONSTERPREFIX_T_NUMTYPES) + (b*MONSTERPREFIX_T_NUMTYPES*2) + (a*MONSTERPREFIX_T_NUMTYPES*3))
 
 
+
 #define MONSTER(n,g,m,l,h,p,i,d,a) \
 ([[Entity alloc] \
 initWithName:n \

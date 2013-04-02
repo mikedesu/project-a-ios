@@ -201,6 +201,9 @@
     e.monsterType           = _monsterType;
     e.itemType              = _itemType;
     
+    e.monsterPrefixGroup    = mPrefixGroup;
+    e.itemPrefixGroup       = iPrefixGroup;
+    
     // currently not setting attack_t objects yet
     for (int i=e.level; i<_level; i++) {
         [e handleLevelUp];
