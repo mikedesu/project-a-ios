@@ -5,11 +5,10 @@
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
 #import "GameConfig.h"
+
 @interface Items : NSObject { }
 +(Entity *) randomItem;
 +(Entity *) bookOfAllKnowing;
-
 +(Entity *) potionOfLightHealing:(NSInteger) bonus;
 +(Entity *) greenBlob;
-
 @end

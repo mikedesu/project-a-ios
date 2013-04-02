@@ -24,6 +24,8 @@ typedef enum {
     EQUIPSLOT_T_LARMTOOL,
     EQUIPSLOT_T_RARMTOOL,
     
+    EQUIPSLOT_T_NUMSLOTS
+    
 } EquipSlot_t;
 
 

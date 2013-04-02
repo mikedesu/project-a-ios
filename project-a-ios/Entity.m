@@ -66,6 +66,8 @@
 @synthesize entityType;
 
 @synthesize potionType;
+@synthesize monsterType;
+
 //@synthesize raceType;
 
 /*
@@ -87,6 +89,9 @@
         name        = [ [ NSMutableString alloc ] init ];
         level       = 1;
         entityType  = ENTITY_T_VOID;
+        potionType  = POTION_T_NONE;
+        monsterType = MONSTER_T_NONE;
+        itemType    = E_ITEM_T_NONE;
         
         NSInteger numEquipSlots = 19;
         //equipment = [NSMutableArray arrayWithCapacity: numEquipSlots];
@@ -148,10 +153,6 @@
         pathFindingAlgorithm    = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
         itemPickupAlgorithm     = ENTITYITEMPICKUPALGORITHM_T_NONE;
         
-        itemType        = E_ITEM_T_NONE;
-        potionType      = POTION_T_NONE;
-        //raceType        = RACE_T_NONE;
-        
     }
     return self;
 }
@@ -182,14 +183,18 @@
 }
 
 
+    
+-(Entity *) initWithName: (NSString *) _name withEntityType: (EntityTypes_t) _entityType withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks {
 
--(Entity *) initWithName: (NSString *) _name withType: (EntityTypes_t) _entityType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks {
-    Entity *e = [[Entity alloc] initWithHitDie:_hd];
-    e.entityType = _entityType;
-    [e.name setString: _name];
-    e.pathFindingAlgorithm = _pfa;
-    e.itemPickupAlgorithm = _ipa;
-    e.damageRollBase = _damageRollBase;
+    Entity *e               = [[Entity alloc] initWithHitDie:_hd];
+    e.entityType            = _entityType;
+    [e.name setString:      _name];
+    e.pathFindingAlgorithm  = _pfa;
+    e.itemPickupAlgorithm   = _ipa;
+    e.damageRollBase        = _damageRollBase;
+    
+    e.monsterType           = _monsterType;
+    e.itemType              = _itemType;
     
     // currently not setting attack_t objects yet
     for (int i=e.level; i<_level; i++) {

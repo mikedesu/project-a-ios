@@ -17,8 +17,27 @@ typedef enum {
     
     // Weapon Types
     E_ITEM_T_WEAPON,
+    E_ITEM_T_WEAPON_SWORD,
+    E_ITEM_T_WEAPON_BLUDGEON,
+    E_ITEM_T_WEAPON_SPEAR,
+    E_ITEM_T_WEAPON_AXE,
+    E_ITEM_T_WEAPON_STAFF,
+    E_ITEM_T_WEAPON_WAND,
+    E_ITEM_T_WEAPON_BOW,
+    E_ITEM_T_WEAPON_CROSSBOW,
+    E_ITEM_T_WEAPON_GUN,
+    
+    // Ammo Types
+    E_ITEM_T_WEAPON_AMMO_BULLET,
+    E_ITEM_T_WEAPON_AMMO_ARROW,
+    E_ITEM_T_WEAPON_AMMO_BOLT,
     
     // Tool Types
+    
+    // Lockpick Items
+    E_ITEM_T_LOCKPICK,
+    
+    // Fishing Items
     E_ITEM_T_FISHING_ROD,
     E_ITEM_T_FISHING_LURE,
     E_ITEM_T_FISHING_BAIT,
@@ -36,11 +55,16 @@ typedef enum {
     E_ITEM_T_LEGGUARD,
     E_ITEM_T_SHOE,
     
+    // Consumables
     E_ITEM_T_POTION,
-    
     E_ITEM_T_FOOD,
-    
+ 
+    // Reading Items
     E_ITEM_T_BOOK,
+    E_ITEM_T_SCROLL,
+    E_ITEM_T_NOTE,
+    
+    E_ITEM_T_NUMTYPES
 } EntityItemTypes_t;
 
 
@@ -50,18 +74,17 @@ typedef enum {
 typedef enum {
     POTION_T_NONE,
     POTION_T_HEALING,
+    POTION_T_NUMTYPES
 } PotionTypes_t;
 
 
-
-
-
+/*
 typedef enum {
     RACE_T_NONE,
     RACE_T_UNDEAD_GENERIC,
     RACE_T_UNDEAD_GHOUL,
 } RaceTypes_t;
-
+*/
 
 
 
