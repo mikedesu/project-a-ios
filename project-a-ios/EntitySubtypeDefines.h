@@ -70,6 +70,19 @@ typedef enum {
 
 
 
+typedef enum {
+    ITEMPREFIX_T_NONE,
+    
+    ITEMPREFIX_T_NUMTYPES
+} ItemPrefix_t;
+
+
+typedef NSInteger ItemPrefixGroup_t;
+
+#define ItemPrefixGroup(a,b,c,d) (d + (c*ITEMPREFIX_T_NUMTYPES) + (b*ITEMPREFIX_T_NUMTYPES*2) + (a*ITEMPREFIX_T_NUMTYPES*3))
+
+
+
 
 typedef enum {
     POTION_T_NONE,

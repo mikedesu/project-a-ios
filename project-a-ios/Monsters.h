@@ -54,44 +54,40 @@ typedef enum {
 
 typedef enum {
     
+    MONSTERPREFIX_T_NONE,
     MONSTERPREFIX_T_FIRE,
     MONSTERPREFIX_T_WATER,
     MONSTERPREFIX_T_ICE,
     MONSTERPREFIX_T_WIND,
     MONSTERPREFIX_T_LIGHTNING,
-    
     MONSTERPREFIX_T_ACID,
-    MONSTERPREFIX_T_POISON,
-    MONSTERPREFIX_T_DISEASED,
-    
-    MONSTERPREFIX_T_DEMONIC,
-    MONSTERPREFIX_T_ANGELIC,
-    
-    MONSTERPREFIX_T_STONE,
-    
+    MONSTERPREFIX_T_ROCK,
+    MONSTERPREFIX_T_HOLY,
+    MONSTERPREFIX_T_UNHOLY,
     MONSTERPREFIX_T_UNDEAD,
+    MONSTERPREFIX_T_DEMONIC,
     MONSTERPREFIX_T_GHOSTLY,
-    
-    MONSTERPREFIX_T_DRUNK,
-    MONSTERPREFIX_T_INTOXICATED,
-    
-    MONSTERPREFIX_T_SLEEPY,
-    
-    MONSTERPREFIX_T_FUNGAL,
-    
     MONSTERPREFIX_T_BERSERK,
-    
+    MONSTERPREFIX_T_CAUSTIC,
+    MONSTERPREFIX_T_BIZARRO,
     MONSTERPREFIX_T_NUMTYPES
     
 } MonsterPrefix_t;
 
 
 
-#define MONSTER(n,m,l,h,p,i,d,a) \
+typedef NSInteger MonsterPrefixGroup_t;
+
+#define MonsterPrefixGroup(a,b,c,d) (d + (c*MONSTERPREFIX_T_NUMTYPES) + (b*MONSTERPREFIX_T_NUMTYPES*2) + (a*MONSTERPREFIX_T_NUMTYPES*3))
+
+
+#define MONSTER(n,g,m,l,h,p,i,d,a) \
 ([[Entity alloc] \
 initWithName:n \
 withEntityType: ENTITY_T_NPC \
+withMonsterPrefixGroup: g \
 withMonsterType: m \
+withItemPrefixGroup: 0 \
 withItemType: E_ITEM_T_NONE \
 withLevel:l \
 withHitDie: h \
@@ -100,11 +96,12 @@ withIPA: i \
 withDamageRollBase: d \
 withAttacks: a])
 
-#define Monster(n,m,l,h,p,i,d,a) MONSTER(n,m,l,h,p,i,d,a)
+#define Monster(n,g,m,l,h,p,i,d,a) MONSTER(n,g,m,l,h,p,i,d,a)
 
 #define Ghoul \
 (Monster(\
 @"Ghoul", \
+MonsterPrefixGroup(0,0,0,MONSTERPREFIX_T_UNDEAD), \
 MONSTER_T_GHOUL, \
 1, \
 6, \

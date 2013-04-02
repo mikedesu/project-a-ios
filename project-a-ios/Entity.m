@@ -68,7 +68,8 @@
 @synthesize potionType;
 @synthesize monsterType;
 
-//@synthesize raceType;
+@synthesize monsterPrefixGroup;
+@synthesize itemPrefixGroup;
 
 /*
  ====================
@@ -92,6 +93,9 @@
         potionType  = POTION_T_NONE;
         monsterType = MONSTER_T_NONE;
         itemType    = E_ITEM_T_NONE;
+
+        monsterPrefixGroup  = MonsterPrefixGroup(0, 0, 0, 0);
+        itemPrefixGroup     = ItemPrefixGroup(0, 0, 0, 0);
         
         NSInteger numEquipSlots = 19;
         //equipment = [NSMutableArray arrayWithCapacity: numEquipSlots];
@@ -184,7 +188,8 @@
 
 
     
--(Entity *) initWithName: (NSString *) _name withEntityType: (EntityTypes_t) _entityType withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks {
+-(Entity *) initWithName: (NSString *) _name withEntityType: (EntityTypes_t) _entityType
+  withMonsterPrefixGroup: (MonsterPrefixGroup_t) mPrefixGroup withMonsterType: (Monster_t) _monsterType withItemPrefixGroup: (ItemPrefixGroup_t) iPrefixGroup withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks {
 
     Entity *e               = [[Entity alloc] initWithHitDie:_hd];
     e.entityType            = _entityType;

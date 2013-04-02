@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2721D02116EAD57200C26F9E /* Drawer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D02016EAD57100C26F9E /* Drawer.m */; };
-		2721D6F216EDE94F0051352D /* Monsters.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D6F116EDE94F0051352D /* Monsters.m */; };
 		2721D6F516EEB9CD0051352D /* StatusMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D6F416EEB9CC0051352D /* StatusMenu.m */; };
 		2721D6FE16EEBA620051352D /* InventoryMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D6FD16EEBA610051352D /* InventoryMenu.m */; };
 		272EF4CA16C5695D005DF231 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 272EF4C916C5695D005DF231 /* QuartzCore.framework */; };
@@ -162,7 +161,6 @@
 		2721D01F16EAD57100C26F9E /* Drawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawer.h; sourceTree = "<group>"; };
 		2721D02016EAD57100C26F9E /* Drawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Drawer.m; sourceTree = "<group>"; };
 		2721D6F016EDE94F0051352D /* Monsters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Monsters.h; sourceTree = "<group>"; };
-		2721D6F116EDE94F0051352D /* Monsters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Monsters.m; sourceTree = "<group>"; };
 		2721D6F316EEB9CC0051352D /* StatusMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusMenu.h; sourceTree = "<group>"; };
 		2721D6F416EEB9CC0051352D /* StatusMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusMenu.m; sourceTree = "<group>"; };
 		2721D6FC16EEBA610051352D /* InventoryMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InventoryMenu.h; sourceTree = "<group>"; };
@@ -584,7 +582,6 @@
 				27DFEA16170515A500933C8A /* MaterialTypes.h */,
 				27C88FDE16C573D4004AB4D8 /* MLog.h */,
 				2721D6F016EDE94F0051352D /* Monsters.h */,
-				2721D6F116EDE94F0051352D /* Monsters.m */,
 				2773F29316C949C4001C3E83 /* PlayerHUD.h */,
 				2773F29416C949C4001C3E83 /* PlayerHUD.m */,
 				2773F29616C94DA3001C3E83 /* PlayerMenu.h */,
@@ -1156,7 +1153,6 @@
 				2767E0CE16E8596900013CBE /* Weapons.m in Sources */,
 				2767E0D116E85F1900013CBE /* Armor.m in Sources */,
 				2721D02116EAD57200C26F9E /* Drawer.m in Sources */,
-				2721D6F216EDE94F0051352D /* Monsters.m in Sources */,
 				2721D6F516EEB9CD0051352D /* StatusMenu.m in Sources */,
 				2721D6FE16EEBA620051352D /* InventoryMenu.m in Sources */,
 				27C0C2EA16FAA12D00AF1208 /* HelpMenu.m in Sources */,
