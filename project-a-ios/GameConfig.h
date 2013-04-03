@@ -34,6 +34,7 @@
 #import "Monsters.h"
 #import "PlayerHUD.h"
 #import "PlayerMenu.h"
+#import "Prefix_t.h"
 #import "StatusMenu.h"
 #import "Tile.h"
 #import "Weapons.h"

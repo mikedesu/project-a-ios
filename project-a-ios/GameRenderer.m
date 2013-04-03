@@ -140,7 +140,24 @@ NSInteger getMod( NSInteger n ) {
         
         else if ( entity.entityType == ENTITY_T_NPC ) {
             //CCMutableTexture2D *t = [Drawer ghoul];
+            
             CCMutableTexture2D *t = [sprites objectForKey: @"Ghoul"];
+            
+            if ( [[entity.prefixes objectAtIndex:0] isEqualToString:@""] ) {
+                t = [sprites objectForKey: @"Ghoul"];
+                
+            }
+            else if ( [[entity.prefixes objectAtIndex:0] isEqualToString:@"Fire"] ) {
+                t = [sprites objectForKey: @"FireGhoul"];
+                
+            }
+            else if ( [[entity.prefixes objectAtIndex:0] isEqualToString:@"Ice" ]) {
+                t = [sprites objectForKey: @"IceGhoul"];
+                
+            }
+            
+            
+            
             for ( int i = 0; i < 16; i++ )
                 for ( int j = 0; j < 16; j++ )
                     if ( [t pixelAt:ccp(i,j)].a != 0 )

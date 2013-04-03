@@ -35,7 +35,7 @@
 +(CCMutableTexture2D *) heroForPC: (Entity *) pc ;
 
 +(CCMutableTexture2D *) monster;
-+(CCMutableTexture2D *) ghoul;
++(CCMutableTexture2D *) ghoulWithBody: (Color_t) body;
 
 +(CCMutableTexture2D *) statusIcon;
 +(CCMutableTexture2D *) itemIcon;

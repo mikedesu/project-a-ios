@@ -473,12 +473,12 @@
 }
 
 
-+(CCMutableTexture2D *) ghoul {
++(CCMutableTexture2D *) ghoulWithBody: (Color_t) body {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
     
     // ghoul body
-    Color_t c0 = green;
+    Color_t c0 = body;
     for (int i=2; i<14; i++)
         for (int j=2; j<8; j++)
             [t setPixelAt:ccp(i,j) rgba:c0];

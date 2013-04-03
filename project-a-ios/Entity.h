@@ -52,8 +52,8 @@
     EntityItemTypes_t itemType;
     Monster_t monsterType;
     
-    ItemPrefixGroup_t itemPrefixGroup;
-    MonsterPrefixGroup_t monsterPrefixGroup;
+    //ItemPrefixGroup_t itemPrefixGroup;
+    //MonsterPrefixGroup_t monsterPrefixGroup;
     
     
     PotionTypes_t potionType;
@@ -96,6 +96,8 @@
     NSInteger foodBase;
  
     //RaceTypes_t raceType;
+    
+    NSMutableArray *prefixes;
 }
 
 @property (atomic, assign) BOOL isPC;
@@ -130,8 +132,8 @@
 @property (atomic, assign) PotionTypes_t potionType;
 @property (atomic, assign) Monster_t monsterType;
 
-@property (atomic, assign) MonsterPrefixGroup_t monsterPrefixGroup;
-@property (atomic, assign) ItemPrefixGroup_t itemPrefixGroup;
+//@property (atomic, assign) MonsterPrefixGroup_t monsterPrefixGroup;
+//@property (atomic, assign) ItemPrefixGroup_t itemPrefixGroup;
 
 @property (atomic, assign) NSInteger damageRollBase;
 @property (atomic, assign) NSInteger damageBonus;
@@ -154,6 +156,7 @@
 @property (nonatomic) NSMutableArray *equipment;
 @property (atomic) NSMutableArray *pathTaken;
 
+@property (atomic) NSMutableArray *prefixes;
 
 @property (atomic, assign) NSInteger foodBase;
 @property (atomic, assign) NSInteger healingRollBase;
@@ -165,8 +168,8 @@
 -(Entity *) initWithLevel: (NSInteger) _level;
 -(Entity *) initWithHitDie: (NSInteger) hd ;
 -(Entity *) initWithLevel:(NSInteger)_level withHitDie: (NSInteger) hd ;
--(Entity *) initWithName: (NSString *) _name withEntityType: (EntityTypes_t) _entityType
-  withMonsterPrefixGroup: (MonsterPrefixGroup_t) mPrefixGroup withMonsterType: (Monster_t) _monsterType withItemPrefixGroup: (ItemPrefixGroup_t) iPrefixGroup withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
+-(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType
+         withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
 
 
 -( NSInteger ) attackBonus;

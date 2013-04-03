@@ -68,8 +68,10 @@
 @synthesize potionType;
 @synthesize monsterType;
 
-@synthesize monsterPrefixGroup;
-@synthesize itemPrefixGroup;
+@synthesize prefixes;
+
+//@synthesize monsterPrefixGroup;
+//@synthesize itemPrefixGroup;
 
 /*
  ====================
@@ -93,9 +95,11 @@
         potionType  = POTION_T_NONE;
         monsterType = MONSTER_T_NONE;
         itemType    = E_ITEM_T_NONE;
+        
+        prefixes    = [[NSMutableArray alloc] init];
 
-        monsterPrefixGroup  = MonsterPrefixGroup(0, 0, 0, 0);
-        itemPrefixGroup     = ItemPrefixGroup(0, 0, 0, 0);
+        //monsterPrefixGroup  = MonsterPrefixGroup(0, 0, 0, 0);
+        //itemPrefixGroup     = ItemPrefixGroup(0, 0, 0, 0);
         
         NSInteger numEquipSlots = 19;
         //equipment = [NSMutableArray arrayWithCapacity: numEquipSlots];
@@ -188,8 +192,11 @@
 
 
     
--(Entity *) initWithName: (NSString *) _name withEntityType: (EntityTypes_t) _entityType
-  withMonsterPrefixGroup: (MonsterPrefixGroup_t) mPrefixGroup withMonsterType: (Monster_t) _monsterType withItemPrefixGroup: (ItemPrefixGroup_t) iPrefixGroup withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks {
+    
+    
+-(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType
+         withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks {
+
 
     Entity *e               = [[Entity alloc] initWithHitDie:_hd];
     e.entityType            = _entityType;
@@ -201,13 +208,24 @@
     e.monsterType           = _monsterType;
     e.itemType              = _itemType;
     
-    e.monsterPrefixGroup    = mPrefixGroup;
-    e.itemPrefixGroup       = iPrefixGroup;
+    [e.prefixes             setArray: _prefixes];
+ 
+    // parse a big prefix
+    // this is to get around an annoying bug involving commas and the C preprocessor
+    // see Monsters.h and later Items/EntitySubtypeDefines
+    
+    NSString *prefix = [_prefixes objectAtIndex:0];
+    MLOG(@"Prefix: '%@'", prefix);
     
     // currently not setting attack_t objects yet
     for (int i=e.level; i<_level; i++) {
         [e handleLevelUp];
     }
+    
+    // handle the prefix processing...
+
+    
+    
     return e;
 }
 

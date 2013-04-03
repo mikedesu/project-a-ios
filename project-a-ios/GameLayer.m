@@ -55,7 +55,11 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer stoneTile]                                         forKey: @"StoneTile"];
     [s setObject:[Drawer upstairsTile]                                      forKey: @"UpstairsTile"];
     [s setObject:[Drawer downstairsTile]                                    forKey: @"DownstairsTile"];
-    [s setObject:[Drawer ghoul]                                             forKey: @"Ghoul"];
+    
+    [s setObject:[Drawer ghoulWithBody: green]                                             forKey: @"Ghoul"];
+    [s setObject:[Drawer ghoulWithBody: red]                                             forKey: @"FireGhoul"];
+    [s setObject:[Drawer ghoulWithBody: blue]                                             forKey: @"IceGhoul"];
+    
     [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:blue]     forKey: @"ShortSword"];
     [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];
     [s setObject:[Drawer basicPotionWithColor:red]                          forKey: @"PotionOfLightHealing"];

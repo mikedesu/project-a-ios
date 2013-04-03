@@ -82,13 +82,12 @@ typedef NSInteger MonsterPrefixGroup_t;
 
 
 
-#define MONSTER(n,g,m,l,h,p,i,d,a) \
+#define MONSTER(n,r,m,l,h,p,i,d,a) \
 ([[Entity alloc] \
 initWithName:n \
+withPrefixes: r \
 withEntityType: ENTITY_T_NPC \
-withMonsterPrefixGroup: g \
 withMonsterType: m \
-withItemPrefixGroup: 0 \
 withItemType: E_ITEM_T_NONE \
 withLevel:l \
 withHitDie: h \
@@ -97,12 +96,12 @@ withIPA: i \
 withDamageRollBase: d \
 withAttacks: a])
 
-#define Monster(n,g,m,l,h,p,i,d,a) MONSTER(n,g,m,l,h,p,i,d,a)
+#define Monster(n,r,m,l,h,p,i,d,a) MONSTER(n,r,m,l,h,p,i,d,a)
 
 #define Ghoul \
 (Monster(\
 @"Ghoul", \
-MonsterPrefixGroup(0,0,0,MONSTERPREFIX_T_UNDEAD), \
+[NSArray arrayWithObject: RANDOM_PREFIX], \
 MONSTER_T_GHOUL, \
 1, \
 6, \
