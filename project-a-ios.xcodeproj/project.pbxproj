@@ -155,6 +155,8 @@
 		27DFEA0F1701150A00933C8A /* EquipMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DFEA0E1701150A00933C8A /* EquipMenu.m */; };
 		27DFEA13170241A800933C8A /* EquipSubmenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DFEA12170241A800933C8A /* EquipSubmenu.m */; };
 		27DFEA1517039B2000933C8A /* tile.png in Resources */ = {isa = PBXBuildFile; fileRef = 27DFEA1417039B2000933C8A /* tile.png */; };
+		27E19243170D75A200AA3F25 /* Effect_t.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E19242170D75A200AA3F25 /* Effect_t.m */; };
+		27E19245170D760600AA3F25 /* Prefix_t.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E19244170D760600AA3F25 /* Prefix_t.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -474,6 +476,9 @@
 		27DFEA12170241A800933C8A /* EquipSubmenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EquipSubmenu.m; sourceTree = "<group>"; };
 		27DFEA1417039B2000933C8A /* tile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tile.png; sourceTree = "<group>"; };
 		27DFEA16170515A500933C8A /* MaterialTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaterialTypes.h; sourceTree = "<group>"; };
+		27E19241170D75A200AA3F25 /* Effect_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Effect_t.h; sourceTree = "<group>"; };
+		27E19242170D75A200AA3F25 /* Effect_t.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Effect_t.m; sourceTree = "<group>"; };
+		27E19244170D760600AA3F25 /* Prefix_t.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Prefix_t.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -559,6 +564,8 @@
 				27506B7416D759E900245F72 /* DungeonTreeNode.m */,
 				2773F29016C85469001C3E83 /* EditorHUD.h */,
 				2773F29116C85469001C3E83 /* EditorHUD.m */,
+				27E19241170D75A200AA3F25 /* Effect_t.h */,
+				27E19242170D75A200AA3F25 /* Effect_t.m */,
 				2773F28D16C8447D001C3E83 /* Entity.h */,
 				2773F28E16C8447D001C3E83 /* Entity.m */,
 				2721D6FF16F078FC0051352D /* EntitySubtypeDefines.h */,
@@ -588,6 +595,7 @@
 				2773F29616C94DA3001C3E83 /* PlayerMenu.h */,
 				2773F29716C94DA3001C3E83 /* PlayerMenu.m */,
 				27A1A5AE170B9C94002C3A4A /* Prefix_t.h */,
+				27E19244170D760600AA3F25 /* Prefix_t.m */,
 				2721D6F316EEB9CC0051352D /* StatusMenu.h */,
 				2721D6F416EEB9CC0051352D /* StatusMenu.m */,
 				27C4145316C804E300BE09F9 /* Tile.h */,
@@ -1161,6 +1169,8 @@
 				27DFEA0F1701150A00933C8A /* EquipMenu.m in Sources */,
 				27DFEA13170241A800933C8A /* EquipSubmenu.m in Sources */,
 				27A1A5A71709711E002C3A4A /* Attack_t.m in Sources */,
+				27E19243170D75A200AA3F25 /* Effect_t.m in Sources */,
+				27E19245170D760600AA3F25 /* Prefix_t.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

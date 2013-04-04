@@ -214,8 +214,8 @@
     // this is to get around an annoying bug involving commas and the C preprocessor
     // see Monsters.h and later Items/EntitySubtypeDefines
     
-    NSString *prefix = [_prefixes objectAtIndex:0];
-    MLOG(@"Prefix: '%@'", prefix);
+    //NSString *prefix = [_prefixes objectAtIndex:0];
+    MLOG(@"Prefix: '%@'", e.prefixes);
     
     // currently not setting attack_t objects yet
     for (int i=e.level; i<_level; i++) {

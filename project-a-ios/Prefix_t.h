@@ -23,6 +23,7 @@
  
  */
 
+/*
 typedef enum {
     PREFIX_T_NONE=0,
     PREFIX_T_NUMTYPES
@@ -38,9 +39,26 @@ n==2 ? @"Ice"  : \
 @"Unknown")
 
 #define RANDOM_PREFIX ( PREFIX( arc4random_uniform( NUM_PREFIXES )))
+*/
 
+#import "GameConfig.h"
 
+@interface Prefix_t : NSObject {
+    NSString *name;
+    
+    // we need a way to describe the effect that the
+    // prefix has on the entity
+    
+    Effect_t *effect;
+}
 
++(Prefix_t *) effectWithName: (NSString *) _name ;
++(Prefix_t *) randomPrefix;
+
+@property (atomic) NSString *name;
+@property (atomic) Effect_t *effect;
+
+@end
 
 
 

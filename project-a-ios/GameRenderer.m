@@ -143,19 +143,15 @@ NSInteger getMod( NSInteger n ) {
             
             CCMutableTexture2D *t = [sprites objectForKey: @"Ghoul"];
             
-            if ( [[entity.prefixes objectAtIndex:0] isEqualToString:@""] ) {
+            if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@""] ) {
                 t = [sprites objectForKey: @"Ghoul"];
-                
             }
-            else if ( [[entity.prefixes objectAtIndex:0] isEqualToString:@"Fire"] ) {
+            else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Fire"] ) {
                 t = [sprites objectForKey: @"FireGhoul"];
-                
             }
-            else if ( [[entity.prefixes objectAtIndex:0] isEqualToString:@"Ice" ]) {
+            else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Ice"] ) {
                 t = [sprites objectForKey: @"IceGhoul"];
-                
             }
-            
             
             
             for ( int i = 0; i < 16; i++ )

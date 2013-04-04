@@ -19,6 +19,7 @@
 #import "Dungeon.h"
 #import "DungeonFloor.h"
 #import "EditorHUD.h"
+#import "Effect_t.h"
 #import "Entity.h"
 #import "EntityInfoHUD.h"
 #import "EntitySubtypeDefines.h"

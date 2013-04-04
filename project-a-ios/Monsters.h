@@ -101,7 +101,7 @@ withAttacks: a])
 #define Ghoul \
 (Monster(\
 @"Ghoul", \
-[NSArray arrayWithObject: RANDOM_PREFIX], \
+[NSArray arrayWithObject: [Prefix_t randomPrefix]], \
 MONSTER_T_GHOUL, \
 1, \
 6, \

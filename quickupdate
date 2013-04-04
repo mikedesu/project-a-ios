@@ -15,6 +15,6 @@ git push origin dev
 
 echo "repo update successful :)"
 
-#./make_targz
-#./update_server_targz
-#echo "quickupdate script successful :)"
+./make_targz
+./update_server_targz
+echo "quickupdate script successful :)"
