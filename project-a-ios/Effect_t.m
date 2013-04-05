@@ -28,14 +28,6 @@
 @synthesize lightningDamage;
 @synthesize earthDamage;
 
-/*
-@synthesize fireRes;
-@synthesize iceRes;
-@synthesize waterRes;
-@synthesize lightningRes;
-@synthesize earthRes;
-*/
-
 -(id) init {
     if ((self=[super init])) {
         area            =
@@ -57,14 +49,6 @@
         waterDamage     =
         lightningDamage =
         
-        /*
-        fireRes         =
-        iceRes          =
-        earthRes        =
-        waterRes        =
-        lightningRes    =
-        */
-        
         0;
     }
     return self;
@@ -85,14 +69,12 @@
 +(Effect_t *) firePrefix {
     Effect_t *effect    = [[Effect_t alloc] init];
     effect.fireDamage   = 1;
-    //effect.fireRes      = 1;
     return effect;
 }
 
 +(Effect_t *) icePrefix {
     Effect_t *effect    = [[Effect_t alloc] init];
     effect.iceDamage    = 1;
-    //effect.iceRes       = 1;
     return effect;
 }
 

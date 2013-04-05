@@ -8,7 +8,6 @@
 #import "EquipDefines.h"
 #import "Attack_t.h"
 #import "Monsters.h"
-//#import "GameConfig.h"
 
 @class CCMutableTexture2D;
 @class Attack_t;
@@ -25,7 +24,6 @@
     EntityTypes_t entityType;
     
     NSInteger level;
-    //EntityStats_t *stats;
     
     NSUInteger strength;
     NSUInteger dexterity;
@@ -39,14 +37,6 @@
     NSInteger earthDamage;
     NSInteger waterDamage;
     NSInteger lightningDamage;
-    
-    NSInteger fireRes;
-    NSInteger iceRes;
-    NSInteger earthRes;
-    NSInteger waterRes;
-    NSInteger lightningRes;
-    
-    
     
     EntityAlignment_t alignment;
     
@@ -65,10 +55,6 @@
     
     EntityItemTypes_t itemType;
     Monster_t monsterType;
-    
-    //ItemPrefixGroup_t itemPrefixGroup;
-    //MonsterPrefixGroup_t monsterPrefixGroup;
-    
     
     PotionTypes_t potionType;
     
@@ -93,9 +79,7 @@
     Entity *equippedArmsRight;
     Entity *equippedArmorChest;
     
-    //Entity *equipment[19];
     NSMutableArray *equipment;
-    
     
     NSMutableArray *pathTaken;
     
@@ -109,9 +93,8 @@
     // for food
     NSInteger foodBase;
  
-    //RaceTypes_t raceType;
-    
     NSMutableArray *prefixes;
+    NSMutableArray *effects;
 }
 
 @property (atomic, assign) BOOL isPC;
@@ -124,7 +107,6 @@
 
 @property (atomic, assign) NSInteger level;
 @property (atomic, assign) NSInteger totalKills;
-//@property (atomic, assign) EntityStats_t *stats;
 
 @property (atomic, assign) NSUInteger strength;
 @property (atomic, assign) NSUInteger constitution;
@@ -146,8 +128,6 @@
 @property (atomic, assign) NSInteger waterRes;
 @property (atomic, assign) NSInteger lightningRes;
 
-
-
 @property (atomic, assign) EntityAlignment_t alignment;
 
 @property (atomic, assign) NSUInteger xp;
@@ -162,9 +142,6 @@
 @property (atomic, assign) EntityItemTypes_t itemType;
 @property (atomic, assign) PotionTypes_t potionType;
 @property (atomic, assign) Monster_t monsterType;
-
-//@property (atomic, assign) MonsterPrefixGroup_t monsterPrefixGroup;
-//@property (atomic, assign) ItemPrefixGroup_t itemPrefixGroup;
 
 @property (atomic, assign) NSInteger damageRollBase;
 @property (atomic, assign) NSInteger damageBonus;
@@ -188,12 +165,11 @@
 @property (atomic) NSMutableArray *pathTaken;
 
 @property (atomic) NSMutableArray *prefixes;
+@property (atomic) NSMutableArray *effects;
 
 @property (atomic, assign) NSInteger foodBase;
 @property (atomic, assign) NSInteger healingRollBase;
 @property (atomic, assign) NSInteger healingBonus;
-
-//@property (atomic, assign) RaceTypes_t raceType;
 
 -(Entity *) init;
 -(Entity *) initWithLevel: (NSInteger) _level;
@@ -207,6 +183,7 @@
 -( NSInteger ) attackRoll;
 -( NSInteger ) totalac;
 -( NSInteger ) damageRoll;
+//-( NSInteger ) damageBonus;
 
 -( NSInteger ) movement;
 

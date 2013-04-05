@@ -24,15 +24,6 @@
     NSInteger earthDamage;
     NSInteger waterDamage;
     NSInteger lightningDamage;
-    
-/*
- NSInteger fireRes;
-    NSInteger iceRes;
-    NSInteger earthRes;
-    NSInteger waterRes;
-    NSInteger lightningRes;
-*/
- 
 }
 
 @property (atomic, assign) NSInteger area;
@@ -54,14 +45,6 @@
 @property (atomic, assign) NSInteger earthDamage;
 @property (atomic, assign) NSInteger waterDamage;
 @property (atomic, assign) NSInteger lightningDamage;
-
-/*
- @property (atomic, assign) NSInteger fireRes;
-@property (atomic, assign) NSInteger iceRes;
-@property (atomic, assign) NSInteger earthRes;
-@property (atomic, assign) NSInteger waterRes;
-@property (atomic, assign) NSInteger lightningRes;
-*/
 
 -(id) init;
 

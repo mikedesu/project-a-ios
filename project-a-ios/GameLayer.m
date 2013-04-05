@@ -1217,7 +1217,7 @@ static NSString  * const notifications[] = {
                            e.name,
                            e.hp,
                            e.maxhp,
-                           e.ac,
+                           e.totalac,
                            e.totalKills
                            ];
                 }
@@ -1248,7 +1248,7 @@ static NSString  * const notifications[] = {
                         str = [ NSString stringWithFormat: @"Item Name: %@\nType: %d\nAC: %d\nDurability: %d/%d\n",
                                e.name,
                                e.itemType,
-                               e.ac,
+                               e.totalac,
                                e.durability,
                                e.totalDurability
                                ];
@@ -3290,10 +3290,16 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 -( void ) haveAllEntitiesActOnFloor:(DungeonFloor *) _floor {
     for ( int i = 0; i < [[_floor entityArray] count]; i++ ) {
-        Entity *e = [[_floor entityArray] objectAtIndex: i];
-        if ( e.entityType != ENTITY_T_PC && e.isAlive ){
-            [ e step ];
-            [ self handleEntityStep: e ];
+        @try {
+            Entity *e = [[_floor entityArray] objectAtIndex: i];
+            if ( e.entityType != ENTITY_T_PC && e.isAlive
+                && e.entityType != ENTITY_T_ITEM ) {
+                [ e step ];
+                [ self handleEntityStep: e ];
+            }
+        }
+        @catch (NSException *exception) {
+            MLOG(@"Exception caught!  %@", exception);
         }
     }
 }
@@ -3357,25 +3363,31 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         
  
-        // spawn a new monster on the current floor
-        [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
-        
-        Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
-        
-       
-        // check if we've won
-        if ( floorNumber == 0 &&    tile.tileType == TILE_FLOOR_UPSTAIRS &&     hasTheBook ) {
-            [ self addMessage:[NSString stringWithFormat: @"You win!\nYou killed %d monsters\n", pcEntity.totalKills ] ];
-            gameLogicIsOn       = NO;
-            autostepGameLogic   = NO;
-            [ self unscheduleStepAction ];
+        @try {
+            // spawn a new monster on the current floor
             
-            for ( int i = 0; i < dLog.count; i++ ) {
-                MLOG(@"%d. %@", i, [dLog objectAtIndex:i]);
+            [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
+            
+            Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
+            
+            
+            // check if we've won
+            if ( floorNumber == 0 &&    tile.tileType == TILE_FLOOR_UPSTAIRS &&     hasTheBook ) {
+                
+                [ self addMessage:[NSString stringWithFormat: @"You win!\nYou killed %d monsters\n", pcEntity.totalKills ] ];
+                gameLogicIsOn       = NO;
+                autostepGameLogic   = NO;
+                [ self unscheduleStepAction ];
+                
+                for ( int i = 0; i < dLog.count; i++ ) {
+                    MLOG(@"%d. %@", i, [dLog objectAtIndex:i]);
+                }
             }
-            
-            
         }
+        @catch (NSException *exception) {
+            MLOG(@"Exception caught: %@", exception);
+        }
+        
         
         // increase turn counter
         [self incrementTurn];
@@ -3393,6 +3405,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) handleEntityStep: ( Entity * ) e {
+    MLOG(@"Handling Entity Step...");
     if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM )
     {
         
@@ -3402,6 +3415,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         while ( rollIsUnacceptable )
         {
             NSUInteger roll = [Dice roll:8];
+            MLOG(@"Rolled: %d", roll);
+            
             CGFloat x = -1;
             CGFloat y = -1;
             
@@ -3444,6 +3459,8 @@ NSUInteger getMagicY( NSUInteger y ) {
             newPosition.x = e.positionOnMap.x + x;
             newPosition.y = e.positionOnMap.y + y;
             
+            MLOG(@"Getting tile...");
+            
             Tile *tile = [ self getTileForCGPoint: newPosition ];
             if ( tile.tileType == TILE_FLOOR_VOID ) {
                 rollIsUnacceptable = TRUE;
@@ -3458,9 +3475,12 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         // try to move the entity to the new position
         // TODO: move movEntity to GameRenderer
+        MLOG(@"Moving entity to newPosition (%.0f,%.0f)", newPosition.x, newPosition.y);
+        
         [ self moveEntity:e toPosition: newPosition ];
         //[ e getHungry ];
     }
+    MLOG(@"End of handle entity step");
 }
 
 

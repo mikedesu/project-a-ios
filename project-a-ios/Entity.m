@@ -29,12 +29,6 @@
 @synthesize earthDamage;
 @synthesize lightningDamage;
 
-@synthesize fireRes;
-@synthesize iceRes;
-@synthesize waterRes;
-@synthesize earthRes;
-@synthesize lightningRes;
-
 @synthesize alignment;
 
 @synthesize xp;
@@ -81,6 +75,7 @@
 @synthesize monsterType;
 
 @synthesize prefixes;
+@synthesize effects;
 
 //@synthesize monsterPrefixGroup;
 //@synthesize itemPrefixGroup;
@@ -109,7 +104,8 @@
         itemType    = E_ITEM_T_NONE;
         
         prefixes    = [[NSMutableArray alloc] init];
-
+        effects     = [[NSMutableArray alloc] init];
+        
         //monsterPrefixGroup  = MonsterPrefixGroup(0, 0, 0, 0);
         //itemPrefixGroup     = ItemPrefixGroup(0, 0, 0, 0);
         
@@ -210,7 +206,6 @@
 
     Entity *e               = [[Entity alloc] initWithHitDie:_hd];
     e.entityType            = _entityType;
-    [e.name setString:      _name];
     e.pathFindingAlgorithm  = _pfa;
     e.itemPickupAlgorithm   = _ipa;
     e.damageRollBase        = _damageRollBase;
@@ -220,6 +215,13 @@
     
     [e.prefixes             setArray: _prefixes];
  
+    NSMutableString *prefixNames = [NSMutableString string];
+    for (Prefix_t *prefix in e.prefixes) {
+        [prefixNames appendFormat: @"%@ ", prefix.name ];
+    }
+    [prefixNames appendString: _name];
+    
+    [e.name setString:      prefixNames];
     // parse a big prefix
     // this is to get around an annoying bug involving commas and the C preprocessor
     // see Monsters.h and later Items/EntitySubtypeDefines
@@ -260,18 +262,22 @@
  */
 -(NSInteger) attackBonus {
     NSInteger strengthBonus = [ GameRenderer modifierForNumber: strength ];
+    NSInteger gearBonus     = 0;
+    NSInteger prefixBonus   = 0;
+    NSInteger effectsBonus  = 0;
     
     // any items / equipped gear would be counted here
-    NSInteger gearBonus = 0;
-    
-    
     if ( [[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity") ] ) {
-        gearBonus += [(Entity *)[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] damageBonus];
+        gearBonus += [(Entity *)[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] attackBonus];
     }
     
-    //if ( self.equippedArmsLeft != nil ) gearBonus += self.equippedArmsLeft.damageBonus;
+    prefixBonus  += [self prefixDamageSum];
+    effectsBonus += [self effectsDamageSum];
+    
     return strengthBonus + gearBonus;
 }
+
+
 
 
 /*
@@ -305,18 +311,38 @@
         roll = [Dice roll: damageRollBase] + self.attackBonus;
     }
     
-    // add any effect bonuses from prefixes
-    
-    for (Prefix_t *prefix in self.prefixes) {
-        roll += prefix.effect.fireDamage;
-        roll += prefix.effect.waterDamage;
-        roll += prefix.effect.earthDamage;
-        roll += prefix.effect.iceDamage;
-        roll += prefix.effect.lightningDamage;
-    }
+    // add any effect bonuses from prefixes and effects
+    roll += [self prefixDamageSum];
+    roll += [self effectsDamageSum];
     
     return roll;
 }
+
+
+-( NSInteger ) prefixDamageSum {
+    NSInteger sum = 0;
+    for (Prefix_t *prefix in self.prefixes) {
+        sum += prefix.effect.fireDamage;
+        sum += prefix.effect.waterDamage;
+        sum += prefix.effect.earthDamage;
+        sum += prefix.effect.iceDamage;
+        sum += prefix.effect.lightningDamage;
+    }
+    return sum;
+}
+
+-(NSInteger) effectsDamageSum {
+    NSInteger sum = 0;
+    for (Effect_t *effect in self.effects) {
+        sum += effect.fireDamage;
+        sum += effect.waterDamage;
+        sum += effect.earthDamage;
+        sum += effect.iceDamage;
+        sum += effect.lightningDamage;
+    }
+    return sum;
+}
+
 
 
 /*
@@ -418,12 +444,12 @@
     if ( level % 4 == 0 ) {
         NSInteger r = [Dice roll:6];
         
-        (r==1) ? strength++ :
-        (r==2) ? dexterity++ :
-        (r==3) ? constitution++ :
-        (r==4) ? intelligence++ :
-        (r==5) ? wisdom++ :
-        (r==6) ? charisma++ :
+        r==1 ? strength++       :
+        r==2 ? dexterity++      :
+        r==3 ? constitution++   :
+        r==4 ? intelligence++   :
+        r==5 ? wisdom++         :
+        r==6 ? charisma++       :
         0;
     }
     
