@@ -5,7 +5,70 @@
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
 @interface Effect_t : NSObject {
+    NSInteger area;
+    NSInteger distance;
     
+    NSInteger damageNumRolls;
+    NSInteger damageBaseRoll;
+    NSInteger damageMod;
+    
+    NSUInteger strength;
+    NSUInteger dexterity;
+    NSUInteger constitution;
+    NSUInteger intelligence;
+    NSUInteger wisdom;
+    NSUInteger charisma;
+    
+    NSInteger fireDamage;
+    NSInteger iceDamage;
+    NSInteger earthDamage;
+    NSInteger waterDamage;
+    NSInteger lightningDamage;
+    
+/*
+ NSInteger fireRes;
+    NSInteger iceRes;
+    NSInteger earthRes;
+    NSInteger waterRes;
+    NSInteger lightningRes;
+*/
+ 
 }
+
+@property (atomic, assign) NSInteger area;
+@property (atomic, assign) NSInteger distance;
+
+@property (atomic, assign) NSInteger damageNumRolls;
+@property (atomic, assign) NSInteger damageBaseRoll;
+@property (atomic, assign) NSInteger damageMod;
+
+@property (atomic, assign) NSUInteger strength;
+@property (atomic, assign) NSUInteger constitution;
+@property (atomic, assign) NSUInteger dexterity;
+@property (atomic, assign) NSUInteger intelligence;
+@property (atomic, assign) NSUInteger wisdom;
+@property (atomic, assign) NSUInteger charisma;
+
+@property (atomic, assign) NSInteger fireDamage;
+@property (atomic, assign) NSInteger iceDamage;
+@property (atomic, assign) NSInteger earthDamage;
+@property (atomic, assign) NSInteger waterDamage;
+@property (atomic, assign) NSInteger lightningDamage;
+
+/*
+ @property (atomic, assign) NSInteger fireRes;
+@property (atomic, assign) NSInteger iceRes;
+@property (atomic, assign) NSInteger earthRes;
+@property (atomic, assign) NSInteger waterRes;
+@property (atomic, assign) NSInteger lightningRes;
+*/
+
+-(id) init;
+
++(Effect_t *) attack: (NSInteger) numRolls withBaseRoll: (NSInteger) baseRoll withMod: (NSInteger) mod;
+
++(Effect_t *) firePrefix;
++(Effect_t *) icePrefix;
+
 
 @end

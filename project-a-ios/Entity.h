@@ -34,6 +34,20 @@
     NSUInteger wisdom;
     NSUInteger charisma;
     
+    NSInteger fireDamage;
+    NSInteger iceDamage;
+    NSInteger earthDamage;
+    NSInteger waterDamage;
+    NSInteger lightningDamage;
+    
+    NSInteger fireRes;
+    NSInteger iceRes;
+    NSInteger earthRes;
+    NSInteger waterRes;
+    NSInteger lightningRes;
+    
+    
+    
     EntityAlignment_t alignment;
     
     NSUInteger xp;
@@ -111,12 +125,29 @@
 @property (atomic, assign) NSInteger level;
 @property (atomic, assign) NSInteger totalKills;
 //@property (atomic, assign) EntityStats_t *stats;
+
 @property (atomic, assign) NSUInteger strength;
 @property (atomic, assign) NSUInteger constitution;
 @property (atomic, assign) NSUInteger dexterity;
 @property (atomic, assign) NSUInteger intelligence;
 @property (atomic, assign) NSUInteger wisdom;
 @property (atomic, assign) NSUInteger charisma;
+
+
+@property (atomic, assign) NSInteger fireDamage;
+@property (atomic, assign) NSInteger iceDamage;
+@property (atomic, assign) NSInteger earthDamage;
+@property (atomic, assign) NSInteger waterDamage;
+@property (atomic, assign) NSInteger lightningDamage;
+
+@property (atomic, assign) NSInteger fireRes;
+@property (atomic, assign) NSInteger iceRes;
+@property (atomic, assign) NSInteger earthRes;
+@property (atomic, assign) NSInteger waterRes;
+@property (atomic, assign) NSInteger lightningRes;
+
+
+
 @property (atomic, assign) EntityAlignment_t alignment;
 
 @property (atomic, assign) NSUInteger xp;

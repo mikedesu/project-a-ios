@@ -23,6 +23,18 @@
 @synthesize wisdom;
 @synthesize charisma;
 
+@synthesize fireDamage;
+@synthesize iceDamage;
+@synthesize waterDamage;
+@synthesize earthDamage;
+@synthesize lightningDamage;
+
+@synthesize fireRes;
+@synthesize iceRes;
+@synthesize waterRes;
+@synthesize earthRes;
+@synthesize lightningRes;
+
 @synthesize alignment;
 
 @synthesize xp;
@@ -192,8 +204,6 @@
 
 
     
-    
-    
 -(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType
          withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks {
 
@@ -287,14 +297,24 @@
 -( NSInteger ) damageRoll {
     //return rollDiceOnce(6) + self.attackBonus;
     NSInteger roll = 0;
-    if ( equippedArmsLeft == nil && equippedArmsRight == nil ) {
-        roll = [Dice roll: damageRollBase] + self.attackBonus;
+    
+    if ( [[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity") ] ) {
+        roll = [ Dice roll: [[self.equipment objectAtIndex:EQUIPSLOT_T_LARMTOOL] damageRollBase] ] + self.attackBonus;
     }
     else {
-        // weapon in left for now
-        if ( equippedArmsLeft != nil )
-            roll = [ Dice roll: equippedArmsLeft.damageRollBase ] + self.attackBonus;
+        roll = [Dice roll: damageRollBase] + self.attackBonus;
     }
+    
+    // add any effect bonuses from prefixes
+    
+    for (Prefix_t *prefix in self.prefixes) {
+        roll += prefix.effect.fireDamage;
+        roll += prefix.effect.waterDamage;
+        roll += prefix.effect.earthDamage;
+        roll += prefix.effect.iceDamage;
+        roll += prefix.effect.lightningDamage;
+    }
+    
     return roll;
 }
 
@@ -308,14 +328,15 @@
  */
 -( NSInteger ) damageRollBase {
     NSInteger base = damageRollBase;
-    if ( equippedArmsLeft == nil && equippedArmsRight == nil ) {
-        base = damageRollBase;
+    if ( [[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity") ] ) {
+        base = [[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] damageRollBase];
     }
     else {
-        base = equippedArmsLeft.damageRollBase;
+        base = damageRollBase;
     }
     return base;
 }
+
 
 /*
  ====================
@@ -327,8 +348,6 @@
 -(void) setDamageRollBase:(NSInteger) _damageRollBase {
     damageRollBase = _damageRollBase;
 }
-
-
 
 
 
@@ -353,7 +372,6 @@
 }
 
 
-
 /*
  ====================
  movement
@@ -364,11 +382,6 @@
 -( NSInteger ) movement {
     return 1;
 }
-
-
-
-
-
 
 
 /*
@@ -471,7 +484,6 @@
         
     }
 }
-
 
 
 /*
