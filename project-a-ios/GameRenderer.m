@@ -506,6 +506,11 @@ NSInteger getMod( NSInteger n ) {
                 
                 Tile_t tileType = baseTileType;
                 
+                NSInteger tileRoll = [Dice roll:100];
+                NSInteger waterChance = 5;
+                tileType = (tileRoll <= waterChance) ? TILE_FLOOR_WATER : tileType;
+                
+                
                 [ self setTileAtPosition:point onFloor:floor toType:tileType ];
                 [ placedTilesArray addObject: v ];
                 [ triedTilesArray removeAllObjects ];

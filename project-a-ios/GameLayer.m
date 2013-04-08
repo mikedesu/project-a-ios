@@ -1272,12 +1272,13 @@ static NSString  * const notifications[] = {
                 // empty tile contents
                 // display tile info
                 [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Tile Type: %@\n@\n@\n@\n",
-                                                t.tileType == TILE_FLOOR_DOWNSTAIRS ?   @"Downstairs" :
-                                                t.tileType == TILE_FLOOR_UPSTAIRS ?     @"Upstairs" :
-                                                t.tileType == TILE_FLOOR_GRASS ?        @"Grass" :
-                                                t.tileType == TILE_FLOOR_STONE ?        @"Stone" :
-                                                t.tileType == TILE_FLOOR_VOID ?         @"Void" :
-                                                t.tileType == TILE_FLOOR_ICE ?          @"Ice" :
+                                                t.tileType == TILE_FLOOR_DOWNSTAIRS     ? @"Downstairs" :
+                                                t.tileType == TILE_FLOOR_UPSTAIRS       ? @"Upstairs"   :
+                                                t.tileType == TILE_FLOOR_GRASS          ? @"Grass"      :
+                                                t.tileType == TILE_FLOOR_STONE          ? @"Stone"      :
+                                                t.tileType == TILE_FLOOR_VOID           ? @"Void"       :
+                                                t.tileType == TILE_FLOOR_ICE            ? @"Ice"        :
+                                                t.tileType == TILE_FLOOR_WATER          ? @"Water"      : 
                                                                                         @"Unknown"
                                                 ]];
             }
