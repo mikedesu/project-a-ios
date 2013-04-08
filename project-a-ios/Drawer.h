@@ -21,6 +21,7 @@
 +(CCMutableTexture2D *) basicShieldWithColor: (Color_t) baseColor     withEmblemColor: (Color_t) emblemColor;
 
 +(CCMutableTexture2D *) stoneTile;
++(CCMutableTexture2D *) flatTile: (Color_t) tileColor;
 +(CCMutableTexture2D *) voidTile;
 +(CCMutableTexture2D *) upstairsTile;
 +(CCMutableTexture2D *) downstairsTile;

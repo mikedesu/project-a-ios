@@ -38,6 +38,20 @@
     } else if ([prefix.name isEqualToString:@"Ice"]) {
         prefix.effect = [Effect_t icePrefix];
     }
+    else if ([prefix.name isEqualToString:@"Water"]) {
+        prefix.effect = [Effect_t waterPrefix];
+    }
+    else if ([prefix.name isEqualToString:@"Lightning"]) {
+        prefix.effect = [Effect_t lightningPrefix];
+    }
+    else if ([prefix.name isEqualToString:@"Earth"]) {
+        prefix.effect = [Effect_t earthPrefix];
+    }
+    
+    else if ([prefix.name isEqualToString:@"Weak"]) {
+        prefix.effect = [Effect_t weakPrefix];
+    }
+    
     
     
     return prefix;
@@ -48,6 +62,10 @@
                       @"",
                       @"Fire",
                       @"Ice",
+                      @"Water",
+                      @"Lightning",
+                      @"Earth",
+                      @"Weak",
                       nil];
     
     NSInteger roll = [Dice roll: names.count];

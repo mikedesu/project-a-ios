@@ -78,5 +78,35 @@
     return effect;
 }
 
++(Effect_t *) lightningPrefix {
+    Effect_t *effect    = [[Effect_t alloc] init];
+    effect.lightningDamage    = 1;
+    return effect;
+}
+
++(Effect_t *) waterPrefix {
+    Effect_t *effect    = [[Effect_t alloc] init];
+    effect.waterDamage    = 1;
+    return effect;
+}
+
++(Effect_t *) earthPrefix {
+    Effect_t *effect    = [[Effect_t alloc] init];
+    effect.earthDamage    = 1;
+    return effect;
+}
+
++(Effect_t *) weakPrefix {
+    Effect_t *effect    = [[Effect_t alloc] init];
+    effect.fireDamage    = -4;
+    return effect;
+}
+
+
+
+
+
+
+
 
 @end

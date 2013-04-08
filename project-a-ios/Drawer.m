@@ -167,6 +167,14 @@
 }
 
 
++(CCMutableTexture2D *) flatTile: (Color_t) tileColor {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: tileColor];
+    return t;
+}
+
+
+
 +(CCMutableTexture2D *) stoneTile {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
      [t fill:black_alpha(0)];

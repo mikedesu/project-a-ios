@@ -52,6 +52,12 @@
 
 +(Effect_t *) firePrefix;
 +(Effect_t *) icePrefix;
++(Effect_t *) waterPrefix;
++(Effect_t *) lightningPrefix;
++(Effect_t *) earthPrefix;
+
+
++(Effect_t *) weakPrefix;
 
 
 @end

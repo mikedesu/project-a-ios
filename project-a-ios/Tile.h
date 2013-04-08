@@ -11,6 +11,7 @@ typedef enum {
     TILE_FLOOR_GRASS,
     TILE_FLOOR_STONE,
     TILE_FLOOR_ICE,
+    TILE_FLOOR_WATER,
 } Tile_t;
 
 #define TILE_FLOOR_DEFAULT    TILE_FLOOR_GRASS

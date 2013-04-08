@@ -24,10 +24,11 @@
 #define CC4B_PURPLE_ALPHA(a)  ccc4( 0xff, 0x00, 0xff, a )
 
 #define CC4B_BROWN_ALPHA(a) ccc4(0xa5, 0x2a, 0x2a, a)
-
-
-
 #define CC4B_BROWN      CC4B_BROWN_ALPHA(255)
+
+#define CC4B_LIGHTBLUE_ALPHA(a) ccc4(0xad, 0xdf, 0xff, a)
+#define CC4B_LIGHTBLUE CC4B_LIGHTBLUE_ALPHA( 255 )
+
 
 
 #define CC4B_ORANGE0    ccc4( 255, 165, 0, 255 )
@@ -117,6 +118,8 @@
 #define purple CC4B_PURPLE
 
 #define brown CC4B_BROWN
+
+#define lightblue CC4B_LIGHTBLUE
 
 #define random_color4 CC4B_RANDOM
 #define random_color  random_color4

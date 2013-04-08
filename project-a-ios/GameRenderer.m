@@ -84,17 +84,11 @@ NSInteger getMod( NSInteger n ) {
     Tile_t tileType = data.tileType;
  
     CCMutableTexture2D *tileTexture =
-    //tileType == TILE_FLOOR_STONE          ? [Drawer stoneTile]      :
     tileType == TILE_FLOOR_STONE          ? [sprites objectForKey:@"StoneTile"]      :
-    
-    //tileType == TILE_FLOOR_VOID           ? [Drawer voidTile]       :
     tileType == TILE_FLOOR_VOID           ? [sprites objectForKey:@"VoidTile"]       :
-    
-                                             //tileType == TILE_FLOOR_UPSTAIRS       ? [Drawer upstairsTile]   :
     tileType == TILE_FLOOR_UPSTAIRS       ? [sprites objectForKey:@"UpstairsTile"]   :
-    
-    //tileType == TILE_FLOOR_DOWNSTAIRS     ? [Drawer downstairsTile] :
     tileType == TILE_FLOOR_DOWNSTAIRS     ? [sprites objectForKey:@"DownstairsTile"] :
+    tileType == TILE_FLOOR_WATER          ? [sprites objectForKey:@"WaterTile"]      :
                                              nil;
     
     // in most cases, we will fill our texture
@@ -143,7 +137,9 @@ NSInteger getMod( NSInteger n ) {
             
             CCMutableTexture2D *t = [sprites objectForKey: @"Ghoul"];
             
-            if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@""] ) {
+            if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@""] ||
+                 [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Weak"]
+                ) {
                 t = [sprites objectForKey: @"Ghoul"];
             }
             else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Fire"] ) {
@@ -152,6 +148,16 @@ NSInteger getMod( NSInteger n ) {
             else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Ice"] ) {
                 t = [sprites objectForKey: @"IceGhoul"];
             }
+            else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Water"] ) {
+                t = [sprites objectForKey: @"WaterGhoul"];
+            }
+            else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Earth"] ) {
+                t = [sprites objectForKey: @"EarthGhoul"];
+            }
+            else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Lightning"] ) {
+                t = [sprites objectForKey: @"LightningGhoul"];
+            }
+            
             
             
             for ( int i = 0; i < 16; i++ )
