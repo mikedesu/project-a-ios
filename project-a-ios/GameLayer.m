@@ -58,18 +58,21 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer flatTile: blue]                                    forKey: @"WaterTile"];
     
     
-    [s setObject:[Drawer ghoulWithBody: green]                                             forKey: @"Ghoul"];
+    [s setObject:[Drawer ghoulWithBody: green]                                           forKey: @"Ghoul"];
     [s setObject:[Drawer ghoulWithBody: red]                                             forKey: @"FireGhoul"];
-    [s setObject:[Drawer ghoulWithBody: blue]                                             forKey: @"IceGhoul"];
-    [s setObject:[Drawer ghoulWithBody: yellow]                                             forKey: @"LightningGhoul"];
-    [s setObject:[Drawer ghoulWithBody: lightblue]                                             forKey: @"WaterGhoul"];
-    [s setObject:[Drawer ghoulWithBody: brown]                                             forKey: @"EarthGhoul"];
+    [s setObject:[Drawer ghoulWithBody: blue]                                            forKey: @"IceGhoul"];
+    [s setObject:[Drawer ghoulWithBody: yellow]                                          forKey: @"LightningGhoul"];
+    [s setObject:[Drawer ghoulWithBody: lightblue]                                       forKey: @"WaterGhoul"];
+    [s setObject:[Drawer ghoulWithBody: brown]                                           forKey: @"EarthGhoul"];
     
     
     
     [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:blue]     forKey: @"ShortSword"];
     [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];
+    
     [s setObject:[Drawer basicPotionWithColor:red]                          forKey: @"PotionOfLightHealing"];
+    
+    
     [s setObject:[Drawer bookOfAllKnowing]                                  forKey: @"BookOfAllKnowing"];
     [s setObject:[Drawer smallBlob:green]                                   forKey: @"SmallBlob"];
     
@@ -1278,7 +1281,7 @@ static NSString  * const notifications[] = {
                                                 t.tileType == TILE_FLOOR_STONE          ? @"Stone"      :
                                                 t.tileType == TILE_FLOOR_VOID           ? @"Void"       :
                                                 t.tileType == TILE_FLOOR_ICE            ? @"Ice"        :
-                                                t.tileType == TILE_FLOOR_WATER          ? @"Water"      : 
+                                                t.tileType == TILE_FLOOR_WATER          ? @"Water"      :
                                                                                         @"Unknown"
                                                 ]];
             }

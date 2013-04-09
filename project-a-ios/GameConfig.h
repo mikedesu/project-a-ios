@@ -37,6 +37,7 @@
 #import "PlayerMenu.h"
 #import "Prefix_t.h"
 #import "StatusMenu.h"
+#import "Threat_t.h"
 #import "Tile.h"
 #import "Weapons.h"
 

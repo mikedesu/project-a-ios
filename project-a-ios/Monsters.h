@@ -74,19 +74,16 @@ typedef enum {
     
 } MonsterPrefix_t;
 
+//typedef NSInteger MonsterPrefixGroup_t;
 
+//#define MonsterPrefixGroup(a,b,c,d) (d + (c*MONSTERPREFIX_T_NUMTYPES) + (b*MONSTERPREFIX_T_NUMTYPES*2) + (a*MONSTERPREFIX_T_NUMTYPES*3))
 
-typedef NSInteger MonsterPrefixGroup_t;
-
-#define MonsterPrefixGroup(a,b,c,d) (d + (c*MONSTERPREFIX_T_NUMTYPES) + (b*MONSTERPREFIX_T_NUMTYPES*2) + (a*MONSTERPREFIX_T_NUMTYPES*3))
-
-
-
-#define MONSTER(n,r,m,l,h,p,i,d,a) \
+#define MONSTER(n,r,t,m,l,h,p,i,d,a) \
 ([[Entity alloc] \
 initWithName:n \
 withPrefixes: r \
 withEntityType: ENTITY_T_NPC \
+withThreat: t \
 withMonsterType: m \
 withItemType: E_ITEM_T_NONE \
 withLevel:l \
@@ -96,12 +93,13 @@ withIPA: i \
 withDamageRollBase: d \
 withAttacks: a])
 
-#define Monster(n,r,m,l,h,p,i,d,a) MONSTER(n,r,m,l,h,p,i,d,a)
+#define Monster(n,r,t,m,l,h,p,i,d,a) MONSTER(n,r,t,m,l,h,p,i,d,a)
 
 #define Ghoul \
 (Monster(\
 @"Ghoul", \
 [NSArray arrayWithObject: [Prefix_t randomPrefix]], \
+THREAT_T_HOSTILE, \
 MONSTER_T_GHOUL, \
 1, \
 6, \

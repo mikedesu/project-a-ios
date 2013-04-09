@@ -8,6 +8,7 @@
 #import "EquipDefines.h"
 #import "Attack_t.h"
 #import "Monsters.h"
+#import "Threat_t.h"
 
 @class CCMutableTexture2D;
 @class Attack_t;
@@ -24,6 +25,8 @@
     EntityTypes_t entityType;
     
     NSInteger level;
+    
+    Threat_t threatLevel;
     
     NSUInteger strength;
     NSUInteger dexterity;
@@ -103,7 +106,9 @@
 @property (atomic) CCMutableTexture2D *texture;
 
 @property (atomic) NSMutableString *name;
+
 @property (atomic, assign) EntityTypes_t entityType;
+@property (atomic, assign) Threat_t threatLevel;
 
 @property (atomic, assign) NSInteger level;
 @property (atomic, assign) NSInteger totalKills;
@@ -175,7 +180,7 @@
 -(Entity *) initWithLevel: (NSInteger) _level;
 -(Entity *) initWithHitDie: (NSInteger) hd ;
 -(Entity *) initWithLevel:(NSInteger)_level withHitDie: (NSInteger) hd ;
--(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType
+-(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat
          withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
 
 

@@ -16,6 +16,7 @@
 
 @synthesize name;
 @synthesize level;
+@synthesize threatLevel;
 @synthesize strength;
 @synthesize dexterity;
 @synthesize constitution;
@@ -98,6 +99,7 @@
         
         name        = [ [ NSMutableString alloc ] init ];
         level       = 1;
+        threatLevel = THREAT_T_NONE;
         entityType  = ENTITY_T_VOID;
         potionType  = POTION_T_NONE;
         monsterType = MONSTER_T_NONE;
@@ -200,7 +202,7 @@
 
 
     
--(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType
+-(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat 
          withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks {
 
 
@@ -210,6 +212,7 @@
     e.itemPickupAlgorithm   = _ipa;
     e.damageRollBase        = _damageRollBase;
     
+    e.threatLevel           = _threat;
     e.monsterType           = _monsterType;
     e.itemType              = _itemType;
     
