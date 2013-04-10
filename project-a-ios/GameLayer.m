@@ -51,6 +51,9 @@ unsigned get_memory_mb(void) {
     NSMutableDictionary *s = sprites;
     
     [s setObject:[Drawer heroForPC:pcEntity]                                forKey: @"Hero"];
+    
+    [s setObject:[Drawer cat:black eyes:red]                               forKey: @"Cat"];
+    
     [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
     [s setObject:[Drawer stoneTile]                                         forKey: @"StoneTile"];
     [s setObject:[Drawer upstairsTile]                                      forKey: @"UpstairsTile"];
@@ -58,12 +61,12 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer flatTile: blue]                                    forKey: @"WaterTile"];
     
     
-    [s setObject:[Drawer ghoulWithBody: green]                                           forKey: @"Ghoul"];
-    [s setObject:[Drawer ghoulWithBody: red]                                             forKey: @"FireGhoul"];
-    [s setObject:[Drawer ghoulWithBody: blue]                                            forKey: @"IceGhoul"];
-    [s setObject:[Drawer ghoulWithBody: yellow]                                          forKey: @"LightningGhoul"];
-    [s setObject:[Drawer ghoulWithBody: lightblue]                                       forKey: @"WaterGhoul"];
-    [s setObject:[Drawer ghoulWithBody: brown]                                           forKey: @"EarthGhoul"];
+    [s setObject:[Drawer ghoulWithBody: green]                              forKey: @"Ghoul"];
+    [s setObject:[Drawer ghoulWithBody: red]                                forKey: @"FireGhoul"];
+    [s setObject:[Drawer ghoulWithBody: blue]                               forKey: @"IceGhoul"];
+    [s setObject:[Drawer ghoulWithBody: yellow]                             forKey: @"LightningGhoul"];
+    [s setObject:[Drawer ghoulWithBody: lightblue]                          forKey: @"WaterGhoul"];
+    [s setObject:[Drawer ghoulWithBody: brown]                              forKey: @"EarthGhoul"];
     
     
     
@@ -3492,6 +3495,16 @@ NSUInteger getMagicY( NSUInteger y ) {
         [ self moveEntity:e toPosition: newPosition ];
         //[ e getHungry ];
     }
+    else if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_FRIENDLY_SMART_RANDOM )
+    {
+        // calculate newPosition
+        // friendly smart_random follows PC for now
+        CGPoint newPosition = e.positionOnMap;
+        
+        //[ self moveEntity:e toPosition:newPosition ];
+    }
+    
+    
     MLOG(@"End of handle entity step");
 }
 

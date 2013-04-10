@@ -52,10 +52,17 @@
         prefix.effect = [Effect_t weakPrefix];
     }
     
-    
-    
     return prefix;
 }
+
+
++(Prefix_t *) noPrefix {
+    Prefix_t *prefix = [Prefix_t effectWithName:@""];
+    prefix.effect = [Effect_t noPrefix];
+    return prefix;
+}
+
+
 
 +(NSString *) randomPrefixName {
     NSArray *names = [NSArray arrayWithObjects:

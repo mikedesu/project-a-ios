@@ -133,29 +133,37 @@ NSInteger getMod( NSInteger n ) {
         }
         
         else if ( entity.entityType == ENTITY_T_NPC ) {
-            //CCMutableTexture2D *t = [Drawer ghoul];
+            CCMutableTexture2D *t;
             
-            CCMutableTexture2D *t = [sprites objectForKey: @"Ghoul"];
+            if (entity.monsterType == MONSTER_T_GHOUL) {
             
-            if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@""] ||
+                t = [sprites objectForKey: @"Ghoul"];
+            
+                if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@""] ||
                  [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Weak"]
                 ) {
-                t = [sprites objectForKey: @"Ghoul"];
+                    t = [sprites objectForKey: @"Ghoul"];
+                }
+                else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Fire"] ) {
+                    t = [sprites objectForKey: @"FireGhoul"];
+                }
+                else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Ice"] ) {
+                    t = [sprites objectForKey: @"IceGhoul"];
+                }
+                else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Water"] ) {
+                    t = [sprites objectForKey: @"WaterGhoul"];
+                }
+                else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Earth"] ) {
+                    t = [sprites objectForKey: @"EarthGhoul"];
+                }
+                else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Lightning"] ) {
+                    t = [sprites objectForKey: @"LightningGhoul"];
+                }
             }
-            else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Fire"] ) {
-                t = [sprites objectForKey: @"FireGhoul"];
-            }
-            else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Ice"] ) {
-                t = [sprites objectForKey: @"IceGhoul"];
-            }
-            else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Water"] ) {
-                t = [sprites objectForKey: @"WaterGhoul"];
-            }
-            else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Earth"] ) {
-                t = [sprites objectForKey: @"EarthGhoul"];
-            }
-            else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Lightning"] ) {
-                t = [sprites objectForKey: @"LightningGhoul"];
+            
+            else if ( entity.monsterType == MONSTER_T_CAT ) {
+                t = [sprites objectForKey:@"Cat"];
+                
             }
             
             
@@ -878,7 +886,14 @@ NSInteger getMod( NSInteger n ) {
     NSUInteger diceroll = chanceDie == 1 ? 1 : [Dice roll:chanceDie];
     
     if ( diceroll <= spawnChancePercent ) {
-        Entity *e = Ghoul;
+        Entity *e;
+        
+        NSUInteger m0 = [Dice roll: 2];
+        e =     ( m0 == 1 ) ? Cat :
+                ( m0 == 2 ) ? Cat /* Ghoul */ :
+                Cat;
+        
+        
         MLOG(@"Spawned %@", e.name);
         
         // level up ghoul appropriately

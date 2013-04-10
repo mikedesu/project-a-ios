@@ -54,6 +54,7 @@ n==2 ? @"Ice"  : \
 
 +(Prefix_t *) effectWithName: (NSString *) _name ;
 +(Prefix_t *) randomPrefix;
++(Prefix_t *) noPrefix;
 
 @property (atomic) NSString *name;
 @property (atomic) Effect_t *effect;

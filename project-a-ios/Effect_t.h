@@ -50,6 +50,8 @@
 
 +(Effect_t *) attack: (NSInteger) numRolls withBaseRoll: (NSInteger) baseRoll withMod: (NSInteger) mod;
 
++(Effect_t *) noPrefix;
+
 +(Effect_t *) firePrefix;
 +(Effect_t *) icePrefix;
 +(Effect_t *) waterPrefix;

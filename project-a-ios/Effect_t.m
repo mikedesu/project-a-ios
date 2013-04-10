@@ -66,6 +66,12 @@
 }
 
 
++(Effect_t *) noPrefix {
+    Effect_t *effect = [[Effect_t alloc] init];
+    return effect;
+}
+
+
 +(Effect_t *) firePrefix {
     Effect_t *effect    = [[Effect_t alloc] init];
     effect.fireDamage   = 1;

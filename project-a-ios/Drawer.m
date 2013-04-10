@@ -77,6 +77,74 @@
 
 
 
++(CCMutableTexture2D *) cat: (Color_t) body eyes: (Color_t) eyes {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    
+    int x0, y0, x1, y1;
+    
+    x0 = 1, y0 = 0;    [t setPixelAt:ccp(x0,y0) rgba:body];
+    x0 = 8, y0 = 0;    [t setPixelAt:ccp(x0,y0) rgba:body];
+    
+    x0 = 0, y0 = 1;    for (int i=0; i<3;  i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    x0 = 7, y0 = 1;    for (int i=0; i<3;  i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    
+    x0 = 0, y0 = 2;    for (int i=0; i<10; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    x0 = 0, y0 = 3;    for (int i=0; i<10; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    x0 = 0, y0 = 4;    for (int i=0; i<10; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    x0 = 0, y0 = 5;    for (int i=0; i<10; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    x0 = 0, y0 = 6;    for (int i=0; i<10; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    x0 = 0, y0 = 7;    for (int i=0; i<10; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    
+    x0 = 13, y0 = 4;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    
+    x0 = 12, y0 = 5;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    x0 = 12, y0 = 6;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    
+    x0 = 13, y0 = 5;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    x0 = 13, y0 = 6;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    x0 = 13, y0 = 7;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    
+    x0 = 14, y0 = 5;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    x0 = 14, y0 = 6;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    x0 = 14, y0 = 7;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    x0 = 14, y0 = 8;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    
+    
+    
+    x0 = 1, y0 = 8;    for (int i=0; i<13; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    
+    x0 = 3, y0 = 9;    for (int i=0; i<11; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    x0 = 3, y0 = 10;   for (int i=0; i<11; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    
+    x0 = 4, y0 = 11;   for (int i=0; i<10; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    
+    x0 = 4, y0 = 12;   for (int i=0; i<7; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    
+    x0 = 12, y0 = 12;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    
+    x0 = 4, y0 = 13;   for (int i=0; i<7; i++) [t setPixelAt:ccp(x0+i, y0) rgba:body];
+    
+    x0 = 4, y0 = 14;   [t setPixelAt:ccp(x0,y0) rgba:body];
+    x0 = 10, y0 = 14;  [t setPixelAt:ccp(x0,y0) rgba:body];
+    
+    //[t fill:body];
+    
+    // eyes
+    x0 = 2, y0 = 5;   [t setPixelAt:ccp(x0,y0) rgba:eyes];
+    x0 = 2, y0 = 6;   [t setPixelAt:ccp(x0,y0) rgba:eyes];
+    
+    x0 = 7, y0 = 5;   [t setPixelAt:ccp(x0,y0) rgba:eyes];
+    x0 = 7, y0 = 6;   [t setPixelAt:ccp(x0,y0) rgba:eyes];
+    
+    x0 = 4, y0 = 7;   [t setPixelAt:ccp(x0,y0) rgba:eyes];
+    x0 = 5, y0 = 7;   [t setPixelAt:ccp(x0,y0) rgba:eyes];
+    
+    return t;
+}
+
+
+
+
 
 +(CCMutableTexture2D *) basicPotionWithColor: (Color_t) liquidColor {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];

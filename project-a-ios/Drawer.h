@@ -14,6 +14,8 @@
 +(CCMutableTexture2D *) smallBlob: (Color_t) blobColor ;
 +(CCMutableTexture2D *) guy: (Color_t) head body: (Color_t) body pants: (Color_t) pants ;
 
++(CCMutableTexture2D *) cat: (Color_t) body eyes: (Color_t) eyes;
+
 +(CCMutableTexture2D *) heartWithColors: (Color_t) c0 c1: (Color_t) c1 c2: (Color_t) c2;
 
 +(CCMutableTexture2D *) basicPotionWithColor: (Color_t) liquidColor;

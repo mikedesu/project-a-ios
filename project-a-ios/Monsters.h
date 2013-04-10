@@ -10,6 +10,8 @@
 typedef enum {
     MONSTER_T_NONE,
     
+    MONSTER_T_CAT,
+    
     MONSTER_T_DRAGON,
     
     MONSTER_T_DINOSAUR,
@@ -51,7 +53,7 @@ typedef enum {
 
 
 
-
+/*
 typedef enum {
     
     MONSTERPREFIX_T_NONE,
@@ -73,6 +75,8 @@ typedef enum {
     MONSTERPREFIX_T_NUMTYPES
     
 } MonsterPrefix_t;
+*/
+
 
 //typedef NSInteger MonsterPrefixGroup_t;
 
@@ -107,3 +111,19 @@ ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, \
 ENTITYITEMPICKUPALGORITHM_T_NONE, \
 6, \
 nil))
+
+
+#define Cat \
+(Monster(\
+@"Cat", \
+[NSArray arrayWithObject: [Prefix_t noPrefix]], \
+THREAT_T_FRIENDLY, \
+MONSTER_T_CAT, \
+1, \
+4, \
+ENTITYPATHFINDINGALGORITHM_T_FRIENDLY_SMART_RANDOM, \
+ENTITYITEMPICKUPALGORITHM_T_NONE, \
+4, \
+nil))
+
+
