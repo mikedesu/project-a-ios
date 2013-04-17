@@ -480,6 +480,7 @@
 		27E19242170D75A200AA3F25 /* Effect_t.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Effect_t.m; sourceTree = "<group>"; };
 		27E19244170D760600AA3F25 /* Prefix_t.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Prefix_t.m; sourceTree = "<group>"; };
 		27E192461714C3F800AA3F25 /* Threat_t.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Threat_t.h; sourceTree = "<group>"; };
+		27E19247171EB12000AA3F25 /* Version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -602,6 +603,7 @@
 				27E192461714C3F800AA3F25 /* Threat_t.h */,
 				27C4145316C804E300BE09F9 /* Tile.h */,
 				27C4145416C804E300BE09F9 /* Tile.m */,
+				27E19247171EB12000AA3F25 /* Version.h */,
 				2767E0CC16E8596900013CBE /* Weapons.h */,
 				2767E0CD16E8596900013CBE /* Weapons.m */,
 				272EF4DC16C5695D005DF231 /* Resources */,

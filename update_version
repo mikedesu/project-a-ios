@@ -1,0 +1,4 @@
+#!/bin/bash
+
+./update_version_bin $1 > project-a-ios/Version.h
+git tag -a $1
