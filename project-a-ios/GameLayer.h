@@ -94,6 +94,7 @@ typedef enum {
     
     BOOL messageWindowIsVisible;
     MessageWindow *messageWindow;
+    NSMutableArray *messageQueue;
     
     CGPoint cameraAnchorPoint;
     
@@ -117,6 +118,7 @@ typedef enum {
 
 -(void) initMessageWindow;
 -(void) addMessageWindowString: (NSString *) string;
+-(void) displayMessageWindow;
 -(void) removeMessageWindow;
 
 -(void) initEquipMenu;

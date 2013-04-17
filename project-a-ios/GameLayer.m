@@ -1015,22 +1015,40 @@ static NSString  * const notifications[] = {
 #pragma mark - Message Window
 
 -(void) initMessageWindow {
+    
+    messageQueue = [[NSMutableArray alloc] init];
+    
     messageWindow = [[MessageWindow alloc] init];
     messageWindow.position = ccp( screenwidth/2 - messageWindow.contentSize.width/2, screenheight/2 - messageWindow.contentSize.height/2 );
 }
 
 -(void) addMessageWindowString: (NSString *)string {
+    if ( ![string isEqualToString:@""]) {
+        [messageQueue addObject: string];
+    }
+}
+
+
+-(void) displayMessageWindow {
     if ( ! messageWindowIsVisible ) {
         [self addChild: messageWindow];
-        messageWindow.label.string = string;
+        messageWindow.label.string = [messageQueue objectAtIndex:0];
         messageWindowIsVisible = YES;
     }
 }
 
+
+
 -(void) removeMessageWindow {
     if ( messageWindowIsVisible ) {
-        [self removeChild:messageWindow cleanup:NO];
+        [self removeChild:messageWindow cleanup:YES];
         messageWindowIsVisible = NO;
+        
+        [messageQueue removeObjectAtIndex:0];
+        
+        if ([messageQueue count] > 0) {
+            [self displayMessageWindow];
+        }
     }
 }
 
@@ -2714,6 +2732,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                             if ( e.entityType == ENTITY_T_ITEM ) {
                                 MLOG( @"There is a %@ here", e.name );
                                 [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                
                                 [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                             }
                         }
@@ -3257,7 +3276,11 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     messageWindowIsVisible = NO;
     [self initMessageWindow];
+    
     [self addMessageWindowString: @"This seems to be a better solution than our original messaging system..."];
+    [self addMessageWindowString: @"Testing multiple-paged messages"];
+    [self addMessageWindowString: @"If this works, I am so awesome :)"];
+    [self displayMessageWindow];
     
 }
 
