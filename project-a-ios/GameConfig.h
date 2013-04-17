@@ -31,6 +31,7 @@
 #import "HelpMenu.h"
 #import "Items.h"
 #import "InventoryMenu.h"
+#import "MessageWindow.h"
 #import "MLog.h"
 #import "Monsters.h"
 #import "PlayerHUD.h"

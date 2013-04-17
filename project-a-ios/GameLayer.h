@@ -20,6 +20,7 @@ typedef enum {
 @class EquipMenu;
 @class HelpMenu;
 @class InventoryMenu;
+@class MessageWindow;
 @class PlayerHUD;
 @class PlayerMenu;
 @class StatusMenu;
@@ -91,6 +92,9 @@ typedef enum {
     BOOL equipMenuIsVisible;
     EquipMenu *equipMenu;
     
+    BOOL messageWindowIsVisible;
+    MessageWindow *messageWindow;
+    
     CGPoint cameraAnchorPoint;
     
     double touchBeganTime;
@@ -110,6 +114,10 @@ typedef enum {
 -( void ) dealloc;
 
 -( void ) receiveNotification: ( NSNotification * ) notification;
+
+-(void) initMessageWindow;
+-(void) addMessageWindowString: (NSString *) string;
+-(void) removeMessageWindow;
 
 -(void) initEquipMenu;
 -(void) addEquipMenu;

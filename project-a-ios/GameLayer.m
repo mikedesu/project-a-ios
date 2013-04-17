@@ -1012,6 +1012,30 @@ static NSString  * const notifications[] = {
 #pragma mark - Menus and HUD code
 
 
+#pragma mark - Message Window
+
+-(void) initMessageWindow {
+    messageWindow = [[MessageWindow alloc] init];
+    messageWindow.position = ccp( screenwidth/2 - messageWindow.contentSize.width/2, screenheight/2 - messageWindow.contentSize.height/2 );
+}
+
+-(void) addMessageWindowString: (NSString *)string {
+    if ( ! messageWindowIsVisible ) {
+        [self addChild: messageWindow];
+        messageWindow.label.string = string;
+        messageWindowIsVisible = YES;
+    }
+}
+
+-(void) removeMessageWindow {
+    if ( messageWindowIsVisible ) {
+        [self removeChild:messageWindow cleanup:NO];
+        messageWindowIsVisible = NO;
+    }
+}
+
+
+
 #pragma mark - Equip Menu
 
 /*
@@ -2022,81 +2046,91 @@ static NSString  * const notifications[] = {
     BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
     
     
-    // something was previously selected
-    if ( validSelectedPoint ) {
+    if ( messageWindowIsVisible ) {
         
-        MLOG( @"ccTouchEnded: valid point selected" );
-        // check if we hit the same tile again
+        // make window go away, we acknowledge message
         
-        Tile *a = [ self getTileForCGPoint: mapPoint ];
-        Tile *b = [ self getTileForCGPoint: selectedTilePoint ];
+        [ self removeMessageWindow ];
         
-        if ( a==b ) {
-            
-            // check distance from pcEntity
-            Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
-            
-            NSInteger distance = [ self distanceFromTile:a toTile: pcTile ];
-            
-            if ( distance <= pcEntity.movement ) {
-                // valid quick-move
-                MLOG(@"valid quick-move");
-                
-                // deselect the tile
-                [ self selectTileAtPosition: mapPoint ];
-                
-                // move the pcEntity to the tile
-                
-                if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y )
-                    [ self moveEntity:pcEntity toPosition:mapPoint ];
-                else {
-                    // rest
-                    MLOG(@"%.0f %.0f %.0f %.0f", pcEntity.positionOnMap.x, mapPoint.x, pcEntity.positionOnMap.y, mapPoint.y);
-                    [self addMessage:@"You rest..."];
-                    pcEntity.hp++;
-                    if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
-                    [pcEntity getHungry];
-                }
-                
-                // step game logic
-                //if ( gameLogicIsOn ) {
-                //    [ self stepGameLogic ];
-                //}
-                
-                gameLogicIsOn ? [self stepGameLogic] : 0;
-                
-                
-                [ self resetCameraPosition ];
-                
-            }
-            else {
-                // invalid quick-move
-                // possibly other quick-action
-                MLOG(@"invalid quick-move");
-                
-                // deselect the tile
-                [ self selectTileAtPosition: mapPoint ];
-            }
-        }
-        
-        else {
-            [ self selectTileAtPosition: mapPoint ];
-        }
-        
-       // [ self selectTileAtPosition: mapPoint ];
     }
     
-    // something was not prev. selected
     else {
-  
-        MLOG( @"ccTouchEnded: not prev. selected" );
-        [ self selectTileAtPosition: mapPoint ];
         
+        // something was previously selected
+        if ( validSelectedPoint ) {
+        
+            MLOG( @"ccTouchEnded: valid point selected" );
+            // check if we hit the same tile again
+        
+            Tile *a = [ self getTileForCGPoint: mapPoint ];
+            Tile *b = [ self getTileForCGPoint: selectedTilePoint ];
+        
+            if ( a==b ) {
+            
+                // check distance from pcEntity
+                Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
+            
+                NSInteger distance = [ self distanceFromTile:a toTile: pcTile ];
+            
+                if ( distance <= pcEntity.movement ) {
+                    // valid quick-move
+                    MLOG(@"valid quick-move");
+                
+                    // deselect the tile
+                    [ self selectTileAtPosition: mapPoint ];
+                
+                    // move the pcEntity to the tile
+                
+                    if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y )
+                        [ self moveEntity:pcEntity toPosition:mapPoint ];
+                    else {
+                        // rest
+                        MLOG(@"%.0f %.0f %.0f %.0f", pcEntity.positionOnMap.x, mapPoint.x, pcEntity.positionOnMap.y, mapPoint.y);
+                        [self addMessage:@"You rest..."];
+                        pcEntity.hp++;
+                        if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
+                        [pcEntity getHungry];
+                    }
+                
+                    // step game logic
+                    //if ( gameLogicIsOn ) {
+                    //    [ self stepGameLogic ];
+                    //}
+                
+                    gameLogicIsOn ? [self stepGameLogic] : 0;
+                
+                
+                    [ self resetCameraPosition ];
+                
+                }
+                else {
+                    // invalid quick-move
+                    // possibly other quick-action
+                    MLOG(@"invalid quick-move");
+                
+                    // deselect the tile
+                    [ self selectTileAtPosition: mapPoint ];
+                }
+            }
+        
+            else {
+                [ self selectTileAtPosition: mapPoint ];
+            }
+        
+           // [ self selectTileAtPosition: mapPoint ];
+        }
+    
+        // something was not prev. selected
+        else {
+  
+            MLOG( @"ccTouchEnded: not prev. selected" );
+            [ self selectTileAtPosition: mapPoint ];
+        
+        }
+    
+        needsRedraw = YES;
+        //[ self updateMonitorLabel ];
     }
-    
-    needsRedraw = YES;
-    //[ self updateMonitorLabel ];
-    
 }
 
 
@@ -3220,6 +3254,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     [self initEquipMenu];
     //[self addEquipMenu];
     
+    messageWindowIsVisible = NO;
+    [self initMessageWindow];
+    [self addMessageWindowString: @"This seems to be a better solution than our original messaging system..."];
+    
 }
 
 
@@ -3499,7 +3537,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     {
         // calculate newPosition
         // friendly smart_random follows PC for now
-        CGPoint newPosition = e.positionOnMap;
+        //CGPoint newPosition = e.positionOnMap;
         
         //[ self moveEntity:e toPosition:newPosition ];
     }
