@@ -2714,6 +2714,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                             if ( e.entityType == ENTITY_T_ITEM ) {
                                 MLOG( @"There is a %@ here", e.name );
                                 [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                             }
                         }
                     }
