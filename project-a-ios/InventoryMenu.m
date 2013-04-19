@@ -36,15 +36,19 @@
                 pc.hp += total;
                 if ( pc.hp > pc.maxhp ) pc.hp = pc.maxhp;
                 [gameLayer addMessage:[NSString stringWithFormat:@"%@ recovered %d hp", pc.name, total]];
+                [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ recovered %d hp", pc.name, total]];
             }
         }
         else if ( eItem.itemType == E_ITEM_T_FOOD ) {
             pc.hunger -= eItem.foodBase;
             [gameLayer addMessage:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
+            [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
+            
         }
         else {
             MLOG(@"Not handled!");
             [gameLayer addMessage:[NSString stringWithFormat:@"%@-use not handled yet!", eItem.name]];
+            [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@-use not handled yet!", eItem.name]];
             handled = NO;
         }
         

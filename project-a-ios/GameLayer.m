@@ -553,6 +553,7 @@ static NSString  * const notifications[] = {
                 if ( pcEntity.hp < pcEntity.maxhp ) {
                     pcEntity.hp++;
                     [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+                    [ self addMessageWindowString:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
                 }
             }
  
@@ -654,7 +655,8 @@ static NSString  * const notifications[] = {
             else if ( pcEntity.hp < pcEntity.maxhp ) {
                 pcEntity.hp++;
                 [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
-              //  [pcEntity getHungry];
+                [ self addMessageWindowString:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+                //  [pcEntity getHungry];
             }
  
             // prioritize the roll
@@ -667,7 +669,8 @@ static NSString  * const notifications[] = {
                     if ( pcEntity.hp < pcEntity.maxhp ) {
                         pcEntity.hp++;
                         [ self addMessage:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
-                      //  [pcEntity getHungry];
+                        [ self addMessageWindowString:[ NSString stringWithFormat:@"%@ rested", pcEntity.name ] ];
+                        //  [pcEntity getHungry];
                     }
                 }
             }
@@ -1031,9 +1034,11 @@ static NSString  * const notifications[] = {
 
 -(void) displayMessageWindow {
     if ( ! messageWindowIsVisible ) {
-        [self addChild: messageWindow];
-        messageWindow.label.string = [messageQueue objectAtIndex:0];
-        messageWindowIsVisible = YES;
+        if ( [messageQueue count] > 0 ) {
+            [self addChild: messageWindow];
+            messageWindow.label.string = [messageQueue objectAtIndex:0];
+            messageWindowIsVisible = YES;
+        }
     }
 }
 
@@ -1044,10 +1049,12 @@ static NSString  * const notifications[] = {
         [self removeChild:messageWindow cleanup:YES];
         messageWindowIsVisible = NO;
         
-        [messageQueue removeObjectAtIndex:0];
+        if ( [messageQueue count] > 0 ) {
+            [messageQueue removeObjectAtIndex:0];
         
-        if ([messageQueue count] > 0) {
-            [self displayMessageWindow];
+            if ([messageQueue count] > 0) {
+                [self displayMessageWindow];
+            }
         }
     }
 }
@@ -2105,6 +2112,8 @@ static NSString  * const notifications[] = {
                         // rest
                         MLOG(@"%.0f %.0f %.0f %.0f", pcEntity.positionOnMap.x, mapPoint.x, pcEntity.positionOnMap.y, mapPoint.y);
                         [self addMessage:@"You rest..."];
+                        [self addMessageWindowString:@"You rest..."];
+                        
                         pcEntity.hp++;
                         if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
                         [pcEntity getHungry];
@@ -2713,12 +2722,14 @@ NSUInteger getMagicY( NSUInteger y ) {
             if ( entity == pcEntity ) {
                 if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
                     [ self addMessage: @"Going downstairs..." ];
+                    [ self addMessageWindowString: @"Going downstairs..." ];
                     //MLOG(@"Going downstairs...");
                     [ self goingDownstairs ];
                 }
                 else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
                     if ( floorNumber != 0 ) {
                         [ self addMessage: @"Going upstairs..." ];
+                        [ self addMessageWindowString: @"Going upstairs..." ];
                         //MLOG(@"Going upstairs...");
                     }
                     [ self goingUpstairs ];
@@ -2732,7 +2743,6 @@ NSUInteger getMagicY( NSUInteger y ) {
                             if ( e.entityType == ENTITY_T_ITEM ) {
                                 MLOG( @"There is a %@ here", e.name );
                                 [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
-                                
                                 [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                             }
                         }
@@ -2745,6 +2755,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                             if ( e.entityType == ENTITY_T_ITEM ) {
                                 MLOG( @"There is a %@ here", e.name );
                                 [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                                 item = e;
                                 break;
                             }
@@ -3402,6 +3413,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                 MLOG(@"You starved to death...");
                 [ self addMessage: [NSString stringWithFormat:@"You starved to death.\nYou killed %d monsters.\n",
                                     pcEntity.totalKills ]];
+                [ self addMessageWindowString: [NSString stringWithFormat:@"You starved to death.\nYou killed %d monsters.\n",
+                                                pcEntity.totalKills ] ];
                 gameLogicIsOn       = NO;
                 autostepGameLogic   = NO;
                 gameState           = GAMESTATE_T_GAME_PC_DEAD;
@@ -3452,6 +3465,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             if ( floorNumber == 0 &&    tile.tileType == TILE_FLOOR_UPSTAIRS &&     hasTheBook ) {
                 
                 [ self addMessage:[NSString stringWithFormat: @"You win!\nYou killed %d monsters\n", pcEntity.totalKills ] ];
+                [ self addMessageWindowString:[NSString stringWithFormat: @"You win!\nYou killed %d monsters\n", pcEntity.totalKills ] ];
                 gameLogicIsOn       = NO;
                 autostepGameLogic   = NO;
                 [ self unscheduleStepAction ];
@@ -3470,6 +3484,9 @@ NSUInteger getMagicY( NSUInteger y ) {
         [self incrementTurn];
         
         needsRedraw = YES;
+        
+        // show accumulated messages and lock screen
+        [ self displayMessageWindow ];
     }
 }
 
@@ -3614,6 +3631,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         // can't attack a void tile
         MLOG( @"can't attack a void tile!" );
         [ self addMessage: @"Can't attack that!" ];
+        [ self addMessageWindowString: @"Can't attack that!" ];
     }
     
     else {
@@ -3660,20 +3678,28 @@ NSUInteger getMagicY( NSUInteger y ) {
                                     isCritical ? @"Critical! " : @"",
                                     e.name, totaldamage, target.level, target.name ]];
                 
+                [ self addMessageWindowString: [ NSString stringWithFormat:@"%@%@ dealt %d damage to Lv%d %@",
+                                    isCritical ? @"Critical! " : @"",
+                                    e.name, totaldamage, target.level, target.name ]];
+                
+                
+                
                 if (target.hp <= 0 ) {
                     // increase entity xp
                     [ e gainXP: target.level*4 + e.level ];
                     
                     pcEntity.totalKills++;
+                    [t removeObjectFromContents: target];
                     // remove target from t.contents
                     [ self addMessage: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
-                    [t removeObjectFromContents: target];
+                    [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
                     target.isAlive = NO;
                 }
             }
             
             else if ( !victory && e.isPC ) {
                 [ self addMessage: [ NSString stringWithFormat:@"%@ missed Lv%d %@", e.name, target.level, target.name ]];
+                [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ missed Lv%d %@", e.name, target.level, target.name ]];
             }
             
             else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_NPC ) {
@@ -3711,6 +3737,12 @@ NSUInteger getMagicY( NSUInteger y ) {
                                     isCritical ? @"Critical! " : @"",
                                     pcEntity.name, totaldamage, e.level, e.name ] ];
                 
+                [ self addMessageWindowString: [ NSString stringWithFormat:@"%@%@ took %d damage from Lv%d %@",
+                                    isCritical ? @"Critical! " : @"",
+                                    pcEntity.name, totaldamage, e.level, e.name ] ];
+                
+                
+                
                 if ( pcEntity.hp <= 0 ) {
                     
                     // check if they got the book of all-knowing
@@ -3726,6 +3758,10 @@ NSUInteger getMagicY( NSUInteger y ) {
                     [ self addMessage: [NSString stringWithFormat:@"You died.\nYou killed %d monsters.\nYou %@ the Book of All-Knowing.\n",
                                         pcEntity.totalKills,
                                         hasBook ? @"got" : @"did not get" ] ];
+                    [ self addMessageWindowString: [NSString stringWithFormat:@"You died.\nYou killed %d monsters.\nYou %@ the Book of All-Knowing.\n",
+                                        pcEntity.totalKills,
+                                        hasBook ? @"got" : @"did not get" ] ];
+                    
                     pcEntity.isAlive = NO;
                     gameLogicIsOn = NO;
                     autostepGameLogic = NO;
@@ -3848,6 +3884,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 [[ entity inventoryArray ] addObject: item ];
                 [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                [ self addMessageWindowString: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                
                 [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
                 [[ itemTile contents ] removeObject: item];
                 [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
@@ -3865,6 +3903,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     if ( entity.equippedArmsLeft == nil ) {
                         entity.equippedArmsLeft = item;
                         [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                        [ self addMessageWindowString: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
                         wasPickedUp = YES;
                     } else {
                         if ( entity.equippedArmsLeft.damageRollBase < item.damageRollBase ||
@@ -3873,6 +3912,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                             // entity puts his weapon into his inventory
                             entity.equippedArmsLeft = item;
                             [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                            [ self addMessageWindowString: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
                             wasPickedUp = YES;
                         }
                         // else - we don't equip the new item, just store it
@@ -3891,6 +3931,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     if ( entity.equippedArmorChest == nil ) {
                         entity.equippedArmorChest = item;
                         [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                        [ self addMessageWindowString: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
                         wasPickedUp = YES;
                         MLOG(@"ac=%d", [pcEntity totalac]);
                     } else {
@@ -3901,6 +3942,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                             // entity puts his weapon into his inventory
                             entity.equippedArmorChest = item;
                             [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                            [ self addMessageWindowString: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
                             wasPickedUp = YES;
                             MLOG(@"ac=%d", [pcEntity totalac]);
                         }
@@ -3910,6 +3952,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                             //[[entity inventoryArray] addObject:item];
                             //[ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
                             [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", item.name]];
+                            [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", item.name]];
                         }
                     }
         
@@ -3920,6 +3963,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     wasPickedUp = YES;
                     [[ entity inventoryArray ] addObject: item ];
                     [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                    [ self addMessageWindowString: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
                 }
                 
                 
@@ -3952,6 +3996,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         if ( entityTile != nil ) {
             //MLOG( @"%@ drops a %@", entity.name, item.name );
             [ self addMessage: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
+            [ self addMessageWindowString: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
             
             //[ self setEntity:item onTile:entityTile ];
             [ GameRenderer setEntity:item onTile:entityTile ];

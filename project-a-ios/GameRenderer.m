@@ -890,8 +890,8 @@ NSInteger getMod( NSInteger n ) {
         
         NSUInteger m0 = [Dice roll: 2];
         e =     ( m0 == 1 ) ? Cat :
-                ( m0 == 2 ) ? Cat /* Ghoul */ :
-                Cat;
+                ( m0 == 2 ) ? Ghoul :
+                Ghoul;
         
         
         MLOG(@"Spawned %@", e.name);
