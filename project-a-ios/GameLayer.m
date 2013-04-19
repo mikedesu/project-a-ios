@@ -5,7 +5,7 @@
 
 #import "Dice.h"
 #import "GameLayer.h"
-
+#import "Version.h"
 #import <mach/mach.h> // for reporting memory info
 
 
@@ -3288,6 +3288,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     messageWindowIsVisible = NO;
     [self initMessageWindow];
     
+    [self addMessageWindowString: [NSString stringWithFormat: @"Welcome to Project-A %@", GAME_VERSION]];
     [self addMessageWindowString: @"This seems to be a better solution than our original messaging system..."];
     [self addMessageWindowString: @"Testing multiple-paged messages"];
     [self addMessageWindowString: @"If this works, I am so awesome :)"];
