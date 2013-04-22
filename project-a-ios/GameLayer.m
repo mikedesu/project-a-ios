@@ -3594,12 +3594,54 @@ NSUInteger getMagicY( NSUInteger y ) {
     else if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_FRIENDLY_SMART_RANDOM )
     {
         // calculate newPosition
-        // friendly smart_random follows PC for now
+        // friendly smart_random does nothing for now
         //CGPoint newPosition = e.positionOnMap;
         
         //[ self moveEntity:e toPosition:newPosition ];
     }
-    
+    else if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_FRIENDLY_FOLLOW_PC_STRICT )
+    {
+        // calculate newPosition
+        
+        // check if next to the PC
+        CGPoint basePos = e.positionOnMap;
+        CGPoint pcPos = pcEntity.positionOnMap;
+        CGPoint newPosition;
+        
+        CGPoint p1, p2, p3, p4, p5, p6, p7, p8;
+        p1 = ccp( basePos.x - 1, basePos.y - 1);
+        p2 = ccp( basePos.x, basePos.y - 1);
+        p3 = ccp( basePos.x + 1, basePos.y - 1);
+        p4 = ccp( basePos.x - 1, basePos.y );
+        p5 = ccp( basePos.x + 1, basePos.y );
+        p6 = ccp( basePos.x - 1, basePos.y + 1 );
+        p7 = ccp( basePos.x, basePos.y + 1 );
+        p8 = ccp( basePos.x + 1, basePos.y + 1 );
+        
+        BOOL isNextToPC = NO;
+        
+        isNextToPC =    ccpFuzzyEqual(pcPos, p1, 0) ||
+                        ccpFuzzyEqual(pcPos, p2, 0) ||
+                        ccpFuzzyEqual(pcPos, p3, 0) ||
+                        ccpFuzzyEqual(pcPos, p4, 0) ||
+                        ccpFuzzyEqual(pcPos, p5, 0) ||
+                        ccpFuzzyEqual(pcPos, p6, 0) ||
+                        ccpFuzzyEqual(pcPos, p7, 0) ||
+                        ccpFuzzyEqual(pcPos, p8, 0);
+
+        if ( isNextToPC ) {
+            // do nothing
+        }
+        
+        else {
+            CGPoint nearest;
+            nearest = [ self nearestNonVoidCGPointFromCGPoint:basePos toCGPoint:pcPos ];
+            newPosition = nearest;
+            [ self moveEntity:e toPosition:newPosition ];
+        }
+        
+ 
+    }
     
     MLOG(@"End of handle entity step");
 }
@@ -3675,6 +3717,29 @@ NSUInteger getMagicY( NSUInteger y ) {
                 [self addMessageWindowString: [NSString stringWithFormat:@"You bump into a neutral %@", target.name] ];
                 return;
             }
+            
+            // friendly NPCs will only bump into each other
+            else if ( target.threatLevel == THREAT_T_FRIENDLY && !e.isPC && e.threatLevel == THREAT_T_FRIENDLY ) {
+                return;
+            }
+            
+            else if ( target.threatLevel == THREAT_T_FRIENDLY && !e.isPC && e.threatLevel == THREAT_T_NEUTRAL ) {
+                return;
+            }
+            
+            else if ( target.threatLevel == THREAT_T_NEUTRAL && !e.isPC && e.threatLevel == THREAT_T_NEUTRAL ) {
+                return;
+            }
+            
+            else if ( target.threatLevel == THREAT_T_NEUTRAL && !e.isPC && e.threatLevel == THREAT_T_FRIENDLY ) {
+                return;
+            }
+            
+            
+            
+            
+            
+            
             
             
             
