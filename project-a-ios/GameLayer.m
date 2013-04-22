@@ -301,6 +301,20 @@ unsigned get_memory_mb(void) {
 -(id) init {
 	if ( ( self = [ super init ] ) ) {
         
+        Entity *entity = [[Entity alloc] initWithName:@"None" withPrefixes:[NSArray arrayWithObject:[Prefix_t noPrefix]] withEntityType:ENTITY_T_NPC withThreat:THREAT_T_NEUTRAL withMonsterType:MONSTER_T_CAT withItemType:E_ITEM_T_NONE withLevel:1 withHitDie:12 withPFA:ENTITYPATHFINDINGALGORITHM_T_NONE withIPA:ENTITYITEMPICKUPALGORITHM_T_NONE withDamageRollBase:8 withAttacks:[NSArray arrayWithObject:[Attack_t attackWithNumRolls:1 withDamageBase:8 withMod:0 withStatus:ATTACKSTATUS_T_NONE withElement:ATTACKELEMENT_T_NONE]]];
+        
+        Maybe *maybe = [Maybe something: entity];
+        
+        MLOG(@"Maybe object: %@", maybe);
+        
+        if ( [maybe hasSomething] ) {
+            MLOG( @"Maybe something...%@", [maybe something] );
+        }
+        else {
+            MLOG( @"Maybe nothing...%@", [maybe something] );
+        }
+        
+        
         [self bootGame];
 	}
 	return self;

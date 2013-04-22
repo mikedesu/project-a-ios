@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "CCMutableTexture2D.h"
 
+#import "Maybe.h"
+
 #import "Attack_t.h"
 #import "AttackElement_t.h"
 #import "AttackStatus_t.h"

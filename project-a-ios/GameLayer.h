@@ -14,6 +14,8 @@ typedef enum {
     GAMESTATE_T_GAME_PC_DEAD,
 } GameState_t;
 
+@class Maybe;
+
 @class DungeonFloor;
 @class EditorHUD;
 @class EntityInfoHUD;

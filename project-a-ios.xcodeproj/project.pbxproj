@@ -159,6 +159,7 @@
 		27E19245170D760600AA3F25 /* Prefix_t.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E19244170D760600AA3F25 /* Prefix_t.m */; };
 		27E1924A171EB87300AA3F25 /* EntityEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E19249171EB87300AA3F25 /* EntityEvent.m */; };
 		27E1924D171EBA9100AA3F25 /* MessageWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E1924C171EBA9000AA3F25 /* MessageWindow.m */; };
+		27E192501721C72A00AA3F25 /* Maybe.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E1924F1721C72900AA3F25 /* Maybe.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -487,6 +488,8 @@
 		27E19249171EB87300AA3F25 /* EntityEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityEvent.m; sourceTree = "<group>"; };
 		27E1924B171EBA9000AA3F25 /* MessageWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageWindow.h; sourceTree = "<group>"; };
 		27E1924C171EBA9000AA3F25 /* MessageWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageWindow.m; sourceTree = "<group>"; };
+		27E1924E1721C72900AA3F25 /* Maybe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Maybe.h; sourceTree = "<group>"; };
+		27E1924F1721C72900AA3F25 /* Maybe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Maybe.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -598,6 +601,8 @@
 				2767E0C916E83FA500013CBE /* Items.h */,
 				2767E0CA16E83FA500013CBE /* Items.m */,
 				27DFEA16170515A500933C8A /* MaterialTypes.h */,
+				27E1924E1721C72900AA3F25 /* Maybe.h */,
+				27E1924F1721C72900AA3F25 /* Maybe.m */,
 				27E1924B171EBA9000AA3F25 /* MessageWindow.h */,
 				27E1924C171EBA9000AA3F25 /* MessageWindow.m */,
 				27C88FDE16C573D4004AB4D8 /* MLog.h */,
@@ -1187,6 +1192,7 @@
 				27E19245170D760600AA3F25 /* Prefix_t.m in Sources */,
 				27E1924A171EB87300AA3F25 /* EntityEvent.m in Sources */,
 				27E1924D171EBA9100AA3F25 /* MessageWindow.m in Sources */,
+				27E192501721C72A00AA3F25 /* Maybe.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
