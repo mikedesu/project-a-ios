@@ -98,7 +98,11 @@
  
     NSMutableArray *prefixes;
     NSMutableArray *effects;
+    
+    BOOL wasBumped;
 }
+
+@property (atomic, assign) BOOL wasBumped;
 
 @property (atomic, assign) BOOL isPC;
 @property (atomic, assign) BOOL isAlive;

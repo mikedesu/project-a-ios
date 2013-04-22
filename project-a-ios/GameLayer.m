@@ -3305,9 +3305,9 @@ NSUInteger getMagicY( NSUInteger y ) {
     [self initMessageWindow];
     
     [self addMessageWindowString: [NSString stringWithFormat: @"Welcome to Project-A %@", GAME_VERSION]];
-    [self addMessageWindowString: @"This seems to be a better solution than our original messaging system..."];
-    [self addMessageWindowString: @"Testing multiple-paged messages"];
-    [self addMessageWindowString: @"If this works, I am so awesome :)"];
+    //[self addMessageWindowString: @"This seems to be a better solution than our original messaging system..."];
+    //[self addMessageWindowString: @"Testing multiple-paged messages"];
+    //[self addMessageWindowString: @"If this works, I am so awesome :)"];
     [self displayMessageWindow];
     
 }
@@ -3601,46 +3601,118 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     else if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_FRIENDLY_FOLLOW_PC_STRICT )
     {
-        // calculate newPosition
         
-        // check if next to the PC
-        CGPoint basePos = e.positionOnMap;
-        CGPoint pcPos = pcEntity.positionOnMap;
-        CGPoint newPosition;
+        if ( ! e.wasBumped ) {
+            // calculate newPosition
         
-        CGPoint p1, p2, p3, p4, p5, p6, p7, p8;
-        p1 = ccp( basePos.x - 1, basePos.y - 1);
-        p2 = ccp( basePos.x, basePos.y - 1);
-        p3 = ccp( basePos.x + 1, basePos.y - 1);
-        p4 = ccp( basePos.x - 1, basePos.y );
-        p5 = ccp( basePos.x + 1, basePos.y );
-        p6 = ccp( basePos.x - 1, basePos.y + 1 );
-        p7 = ccp( basePos.x, basePos.y + 1 );
-        p8 = ccp( basePos.x + 1, basePos.y + 1 );
+            // check if next to the PC
+            CGPoint basePos = e.positionOnMap;
+            CGPoint pcPos = pcEntity.positionOnMap;
+            CGPoint newPosition;
         
-        BOOL isNextToPC = NO;
+            CGPoint p1, p2, p3, p4, p5, p6, p7, p8;
+            p1 = ccp( basePos.x - 1, basePos.y - 1);
+            p2 = ccp( basePos.x, basePos.y - 1);
+            p3 = ccp( basePos.x + 1, basePos.y - 1);
+            p4 = ccp( basePos.x - 1, basePos.y );
+            p5 = ccp( basePos.x + 1, basePos.y );
+            p6 = ccp( basePos.x - 1, basePos.y + 1 );
+            p7 = ccp( basePos.x, basePos.y + 1 );
+            p8 = ccp( basePos.x + 1, basePos.y + 1 );
         
-        isNextToPC =    ccpFuzzyEqual(pcPos, p1, 0) ||
-                        ccpFuzzyEqual(pcPos, p2, 0) ||
-                        ccpFuzzyEqual(pcPos, p3, 0) ||
-                        ccpFuzzyEqual(pcPos, p4, 0) ||
-                        ccpFuzzyEqual(pcPos, p5, 0) ||
-                        ccpFuzzyEqual(pcPos, p6, 0) ||
-                        ccpFuzzyEqual(pcPos, p7, 0) ||
-                        ccpFuzzyEqual(pcPos, p8, 0);
+            BOOL isNextToPC = NO;
+        
+            isNextToPC =    ccpFuzzyEqual(pcPos, p1, 0) ||
+                            ccpFuzzyEqual(pcPos, p2, 0) ||
+                            ccpFuzzyEqual(pcPos, p3, 0) ||
+                            ccpFuzzyEqual(pcPos, p4, 0) ||
+                            ccpFuzzyEqual(pcPos, p5, 0) ||
+                            ccpFuzzyEqual(pcPos, p6, 0) ||
+                            ccpFuzzyEqual(pcPos, p7, 0) ||
+                            ccpFuzzyEqual(pcPos, p8, 0);
 
-        if ( isNextToPC ) {
-            // do nothing
-        }
+            if ( isNextToPC ) {
+                // do nothing
+            }
         
+            else {
+                CGPoint nearest;
+                nearest = [ self nearestNonVoidCGPointFromCGPoint:basePos toCGPoint:pcPos ];
+                newPosition = nearest;
+                [ self moveEntity:e toPosition:newPosition ];
+            }
+        
+        }
         else {
-            CGPoint nearest;
-            nearest = [ self nearestNonVoidCGPointFromCGPoint:basePos toCGPoint:pcPos ];
-            newPosition = nearest;
-            [ self moveEntity:e toPosition:newPosition ];
+            // e was bumped
+            // perform a step as if smart-random
+            
+            BOOL rollIsUnacceptable = YES;
+            CGPoint newPosition;
+            
+            while ( rollIsUnacceptable )
+            {
+                NSUInteger roll = [Dice roll:8];
+                MLOG(@"Rolled: %d", roll);
+                
+                CGFloat x = -1;
+                CGFloat y = -1;
+                
+                //MLOG( @"rolled %d", roll );
+                
+                // UDLR UL, UR, DL, DR
+                if ( roll == 1 ) {
+                    x = 0;
+                    y = -1;
+                }
+                else if ( roll == 2 ) {
+                    x = 0;
+                    y = 1;
+                }
+                else if ( roll == 3) {
+                    x = -1;
+                    y = 0;
+                }
+                else if ( roll == 4) {
+                    x = 1;
+                    y = 0;
+                }
+                else if ( roll == 5) {
+                    x = -1;
+                    y = -1;
+                }
+                else if ( roll == 6) {
+                    x = 1;
+                    y = -1;
+                }
+                else if ( roll == 7) {
+                    x = -1;
+                    y = 1;
+                }
+                else if ( roll == 8) {
+                    x = 1;
+                    y = 1;
+                }
+                
+                newPosition.x = e.positionOnMap.x + x;
+                newPosition.y = e.positionOnMap.y + y;
+                
+                MLOG(@"Getting tile...");
+                
+                Tile *tile = [ self getTileForCGPoint: newPosition ];
+                if ( tile.tileType == TILE_FLOOR_VOID ) {
+                    rollIsUnacceptable = TRUE;
+                } else {
+                    rollIsUnacceptable = FALSE;
+                }
+            }
+            // try to move the entity to the new position
+            MLOG(@"Moving entity to newPosition (%.0f,%.0f)", newPosition.x, newPosition.y);
+            [ self moveEntity:e toPosition: newPosition ];
+            
+            // reset wasBumped
+            e.wasBumped = NO;
         }
-        
- 
     }
     
     MLOG(@"End of handle entity step");
@@ -3711,6 +3783,16 @@ NSUInteger getMagicY( NSUInteger y ) {
             // if target is friendly, return
             if ( target.threatLevel == THREAT_T_FRIENDLY  && e.isPC ) {
                 [self addMessageWindowString: [NSString stringWithFormat:@"You bump into a friendly %@", target.name] ];
+                
+                //[ GameRenderer setEntity:e      onTile: [self getTileForCGPoint:target.positionOnMap    forFloor:[dungeon objectAtIndex: floorNumber]] ];
+                //[ GameRenderer setEntity:target onTile: [self getTileForCGPoint:e.positionOnMap         forFloor:[dungeon objectAtIndex: floorNumber]] ];
+                //CGPoint tmpPos;
+                //tmpPos = e.positionOnMap;
+                //e.positionOnMap = target.positionOnMap;
+                //target.positionOnMap = tmpPos;
+                
+                target.wasBumped = YES;
+                
                 return;
             }
             else if ( target.threatLevel == THREAT_T_NEUTRAL && e.isPC ) {
@@ -3720,10 +3802,12 @@ NSUInteger getMagicY( NSUInteger y ) {
             
             // friendly NPCs will only bump into each other
             else if ( target.threatLevel == THREAT_T_FRIENDLY && !e.isPC && e.threatLevel == THREAT_T_FRIENDLY ) {
+                target.wasBumped = YES;
                 return;
             }
             
             else if ( target.threatLevel == THREAT_T_FRIENDLY && !e.isPC && e.threatLevel == THREAT_T_NEUTRAL ) {
+                target.wasBumped = YES;
                 return;
             }
             
@@ -3732,6 +3816,10 @@ NSUInteger getMagicY( NSUInteger y ) {
             }
             
             else if ( target.threatLevel == THREAT_T_NEUTRAL && !e.isPC && e.threatLevel == THREAT_T_FRIENDLY ) {
+                return;
+            }
+            
+            else if ( e.threatLevel == THREAT_T_FRIENDLY && target.isPC ) {
                 return;
             }
             

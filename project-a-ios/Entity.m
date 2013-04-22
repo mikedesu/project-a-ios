@@ -9,6 +9,8 @@
 
 @implementation Entity
 
+@synthesize wasBumped;
+
 @synthesize isPC;
 @synthesize isAlive;
 @synthesize positionOnMap;
@@ -91,6 +93,7 @@
 -( id ) init {
     if ( ( self = [super init] ) ) {
         //MLOG(@"init");
+        wasBumped       = NO;
         isPC            = NO;
         isAlive         = YES;
         positionOnMap.x = 0;
