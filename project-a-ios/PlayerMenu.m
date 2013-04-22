@@ -85,7 +85,7 @@
         menuItemStep.position           = ccp( 0 + menuItemStep.contentSize.width/2, h - p*k++ );
         
         CCMenuItem *menuItemAutostep    = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelAutostep target:self selector:@selector(menuItemAutostepPressed) ];
-        menuItemAutostep.position       = ccp( 0 + menuItemAutostep.contentSize.width/2, h - p*k++ );
+        //menuItemAutostep.position       = ccp( 0 + menuItemAutostep.contentSize.width/2, h - p*k++ );
         
         CCMenuItem *menuItemMonitor     = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelMonitor target:self selector:@selector(menuItemMonitorPressed) ];
         menuItemMonitor.position        = ccp( 0 + menuItemMonitor.contentSize.width/2, h - p*k++ );
@@ -108,7 +108,7 @@
                                                          menuItemInventory,
                                                          menuItemPickup,
                                                          menuItemStep,
-                                                         menuItemAutostep,
+                                                         //menuItemAutostep,
                                                          menuItemMonitor,
                                                          menuItemHelp,
                                                          menuItemEntityInfo,

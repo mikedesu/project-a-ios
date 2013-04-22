@@ -34,13 +34,13 @@
                                @"To move, double-tap a nearby tile     ",
                                @"To attack, move into an enemy         ",
                                @"To pick up an item, move over it      ",
-                               @"For now, you will auto-equip the      ",
-                               @"most powerful gear that you find.     ",
-                               @"This is an alpha and so this is       ",
-                               @"all subject to change!                ",
-                               @"                                      ",
-                               @"                                      ",
-                               @"                                      ",
+                               @"   and press the 'pickup' button      ",
+                               @"To use an item, open the inventory    ",
+                               @"   and select the item you wish to use",
+                               @"To equip something, press equip, then ",
+                               @"   select the bodypart, then the gear ",
+                               @"This game is still in alpha and is    ",
+                               @"   still subject to change!! Thank You",
                                @"--------------------------------------"
                                ];
         

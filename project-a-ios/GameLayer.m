@@ -1247,7 +1247,7 @@ static NSString  * const notifications[] = {
     CGSize size = [[CCDirector sharedDirector] winSize];
     entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:black_alpha(150) width:200 height:100 ];
     //entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:white width:200 height:100 ];
-    entityInfoHUD.position = ccp(  size.width - entityInfoHUD.contentSize.width, size.height - editorHUD.contentSize.height - entityInfoHUD.contentSize.height );
+    entityInfoHUD.position = ccp(  size.width - entityInfoHUD.contentSize.width, size.height - entityInfoHUD.contentSize.height );
     entityInfoHUD.label.fontSize = 12;
     [ self updateEntityInfoHUDLabel ];
 }
@@ -2701,28 +2701,28 @@ NSUInteger getMagicY( NSUInteger y ) {
     Tile *tile = [ self getMapTileFromPoint: position forFloor: _floor ];
     if ( tile.tileType != TILE_FLOOR_VOID ) {
         
-        BOOL isMoveValid = YES;
-        BOOL npcExists = NO;
-        BOOL pcExists = NO;
-        BOOL itemExists = NO;
+        BOOL isMoveValid    = YES;
+        BOOL npcExists      = NO;
+        BOOL pcExists       = NO;
+        BOOL itemExists     = NO;
         // check if there is an NPC...
         
         for ( Entity *e in [tile contents] ) {
             if ( e.entityType == ENTITY_T_NPC ) {
                 isMoveValid = NO;
-                npcExists = YES;
-                pcExists = NO;
+                npcExists   = YES;
+                pcExists    = NO;
                 break;
             }
             else if ( e.entityType == ENTITY_T_PC ) {
                 isMoveValid = NO;
-                npcExists = NO;
-                pcExists = YES;
+                npcExists   = NO;
+                pcExists    = YES;
                 break;
             }
             else if ( e.entityType == ENTITY_T_ITEM ) {
                 isMoveValid = YES;
-                itemExists = YES;
+                itemExists  = YES;
             }
             
         }
@@ -2803,6 +2803,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         
         else if ( npcExists ) {
             // moving into npc
+            
+            // check npc hostility
             
             [ self handleAttackForEntity:entity toPosition:position];
         }
@@ -3253,7 +3255,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
-    [ self addEditorHUD: editorHUD ];
+    //[ self addEditorHUD: editorHUD ];
    
     playerHUDIsVisible = NO;
     [ self initPlayerHUD ];
@@ -3663,6 +3665,20 @@ NSUInteger getMagicY( NSUInteger y ) {
                 return;
             }
             
+            // check target hostility
+            // if target is friendly, return
+            if ( target.threatLevel == THREAT_T_FRIENDLY  && e.isPC ) {
+                [self addMessageWindowString: [NSString stringWithFormat:@"You bump into a friendly %@", target.name] ];
+                return;
+            }
+            else if ( target.threatLevel == THREAT_T_NEUTRAL && e.isPC ) {
+                [self addMessageWindowString: [NSString stringWithFormat:@"You bump into a neutral %@", target.name] ];
+                return;
+            }
+            
+            
+            
+            
             // e v.s. target setup section
             // modifiers would go here
             
@@ -3715,6 +3731,10 @@ NSUInteger getMagicY( NSUInteger y ) {
             else if ( !victory && e.isPC ) {
                 [ self addMessage: [ NSString stringWithFormat:@"%@ missed Lv%d %@", e.name, target.level, target.name ]];
                 [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ missed Lv%d %@", e.name, target.level, target.name ]];
+            }
+            
+            else if ( !victory && !e.isPC ) {
+                [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ missed %@", e.name, target.name ]];
             }
             
             else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_NPC ) {
