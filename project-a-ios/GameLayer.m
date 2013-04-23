@@ -3602,117 +3602,143 @@ NSUInteger getMagicY( NSUInteger y ) {
     else if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_FRIENDLY_FOLLOW_PC_STRICT )
     {
         
-        if ( ! e.wasBumped ) {
-            // calculate newPosition
+        if ( e.monsterType == MONSTER_T_CAT ) {
         
-            // check if next to the PC
-            CGPoint basePos = e.positionOnMap;
-            CGPoint pcPos = pcEntity.positionOnMap;
-            CGPoint newPosition;
-        
-            CGPoint p1, p2, p3, p4, p5, p6, p7, p8;
-            p1 = ccp( basePos.x - 1, basePos.y - 1);
-            p2 = ccp( basePos.x, basePos.y - 1);
-            p3 = ccp( basePos.x + 1, basePos.y - 1);
-            p4 = ccp( basePos.x - 1, basePos.y );
-            p5 = ccp( basePos.x + 1, basePos.y );
-            p6 = ccp( basePos.x - 1, basePos.y + 1 );
-            p7 = ccp( basePos.x, basePos.y + 1 );
-            p8 = ccp( basePos.x + 1, basePos.y + 1 );
-        
-            BOOL isNextToPC = NO;
-        
-            isNextToPC =    ccpFuzzyEqual(pcPos, p1, 0) ||
-                            ccpFuzzyEqual(pcPos, p2, 0) ||
-                            ccpFuzzyEqual(pcPos, p3, 0) ||
-                            ccpFuzzyEqual(pcPos, p4, 0) ||
-                            ccpFuzzyEqual(pcPos, p5, 0) ||
-                            ccpFuzzyEqual(pcPos, p6, 0) ||
-                            ccpFuzzyEqual(pcPos, p7, 0) ||
-                            ccpFuzzyEqual(pcPos, p8, 0);
-
-            if ( isNextToPC ) {
-                // do nothing
+            if ( ! e.wasBumped ) {
+                // calculate newPosition
+                
+                // check if next to the PC
+                CGPoint basePos = e.positionOnMap;
+                CGPoint pcPos = pcEntity.positionOnMap;
+                CGPoint newPosition;
+                
+                CGPoint p1, p2, p3, p4, p5, p6, p7, p8;
+                p1 = ccp( basePos.x - 1, basePos.y - 1);
+                p2 = ccp( basePos.x, basePos.y - 1);
+                p3 = ccp( basePos.x + 1, basePos.y - 1);
+                p4 = ccp( basePos.x - 1, basePos.y );
+                p5 = ccp( basePos.x + 1, basePos.y );
+                p6 = ccp( basePos.x - 1, basePos.y + 1 );
+                p7 = ccp( basePos.x, basePos.y + 1 );
+                p8 = ccp( basePos.x + 1, basePos.y + 1 );
+                
+                BOOL isNextToPC = NO;
+                
+                isNextToPC =    ccpFuzzyEqual(pcPos, p1, 0) ||
+                ccpFuzzyEqual(pcPos, p2, 0) ||
+                ccpFuzzyEqual(pcPos, p3, 0) ||
+                ccpFuzzyEqual(pcPos, p4, 0) ||
+                ccpFuzzyEqual(pcPos, p5, 0) ||
+                ccpFuzzyEqual(pcPos, p6, 0) ||
+                ccpFuzzyEqual(pcPos, p7, 0) ||
+                ccpFuzzyEqual(pcPos, p8, 0);
+                
+                if ( isNextToPC ) {
+                    // do nothing
+                }
+                
+                else {
+                    CGPoint nearest;
+                    nearest = [ self nearestNonVoidCGPointFromCGPoint:basePos toCGPoint:pcPos ];
+                    newPosition = nearest;
+                    
+                    Tile *oldTile = [ self getTileForCGPoint:basePos        forFloor:[dungeon objectAtIndex:floorNumber ] ];
+                    Tile *newTile = [ self getTileForCGPoint:newPosition    forFloor:[dungeon objectAtIndex:floorNumber ] ];
+                    
+                    if ( newTile.tileType != TILE_FLOOR_WATER ) {
+                        
+                        // if currently on a water tile
+                        // panic and do nothing until bumped
+                        if ( oldTile.tileType != TILE_FLOOR_WATER ) {
+                            [ self moveEntity:e toPosition:newPosition ];
+                        }
+                        else {
+                            // is water tile
+                            // cats hate water!
+                        }
+                    }
+                    else {
+                        // is water tile
+                        // cats hate water!
+                    }
+                    
+                
+                }
+                
             }
-        
             else {
-                CGPoint nearest;
-                nearest = [ self nearestNonVoidCGPointFromCGPoint:basePos toCGPoint:pcPos ];
-                newPosition = nearest;
-                [ self moveEntity:e toPosition:newPosition ];
+                // e was bumped
+                // perform a step as if smart-random
+                
+                BOOL rollIsUnacceptable = YES;
+                CGPoint newPosition;
+                
+                while ( rollIsUnacceptable )
+                {
+                    NSUInteger roll = [Dice roll:8];
+                    MLOG(@"Rolled: %d", roll);
+                    
+                    CGFloat x = -1;
+                    CGFloat y = -1;
+                    
+                    //MLOG( @"rolled %d", roll );
+                    
+                    // UDLR UL, UR, DL, DR
+                    if ( roll == 1 ) {
+                        x = 0;
+                        y = -1;
+                    }
+                    else if ( roll == 2 ) {
+                        x = 0;
+                        y = 1;
+                    }
+                    else if ( roll == 3) {
+                        x = -1;
+                        y = 0;
+                    }
+                    else if ( roll == 4) {
+                        x = 1;
+                        y = 0;
+                    }
+                    else if ( roll == 5) {
+                        x = -1;
+                        y = -1;
+                    }
+                    else if ( roll == 6) {
+                        x = 1;
+                        y = -1;
+                    }
+                    else if ( roll == 7) {
+                        x = -1;
+                        y = 1;
+                    }
+                    else if ( roll == 8) {
+                        x = 1;
+                        y = 1;
+                    }
+                    
+                    newPosition.x = e.positionOnMap.x + x;
+                    newPosition.y = e.positionOnMap.y + y;
+                    
+                    MLOG(@"Getting tile...");
+                    
+                    Tile *tile = [ self getTileForCGPoint: newPosition ];
+                    if ( tile.tileType == TILE_FLOOR_VOID ) {
+                        rollIsUnacceptable = TRUE;
+                    } else {
+                        rollIsUnacceptable = FALSE;
+                    }
+                }
+                // try to move the entity to the new position
+                MLOG(@"Moving entity to newPosition (%.0f,%.0f)", newPosition.x, newPosition.y);
+                [ self moveEntity:e toPosition: newPosition ];
+                
+                // reset wasBumped
+                e.wasBumped = NO;
             }
+            
+        }
         
-        }
-        else {
-            // e was bumped
-            // perform a step as if smart-random
-            
-            BOOL rollIsUnacceptable = YES;
-            CGPoint newPosition;
-            
-            while ( rollIsUnacceptable )
-            {
-                NSUInteger roll = [Dice roll:8];
-                MLOG(@"Rolled: %d", roll);
-                
-                CGFloat x = -1;
-                CGFloat y = -1;
-                
-                //MLOG( @"rolled %d", roll );
-                
-                // UDLR UL, UR, DL, DR
-                if ( roll == 1 ) {
-                    x = 0;
-                    y = -1;
-                }
-                else if ( roll == 2 ) {
-                    x = 0;
-                    y = 1;
-                }
-                else if ( roll == 3) {
-                    x = -1;
-                    y = 0;
-                }
-                else if ( roll == 4) {
-                    x = 1;
-                    y = 0;
-                }
-                else if ( roll == 5) {
-                    x = -1;
-                    y = -1;
-                }
-                else if ( roll == 6) {
-                    x = 1;
-                    y = -1;
-                }
-                else if ( roll == 7) {
-                    x = -1;
-                    y = 1;
-                }
-                else if ( roll == 8) {
-                    x = 1;
-                    y = 1;
-                }
-                
-                newPosition.x = e.positionOnMap.x + x;
-                newPosition.y = e.positionOnMap.y + y;
-                
-                MLOG(@"Getting tile...");
-                
-                Tile *tile = [ self getTileForCGPoint: newPosition ];
-                if ( tile.tileType == TILE_FLOOR_VOID ) {
-                    rollIsUnacceptable = TRUE;
-                } else {
-                    rollIsUnacceptable = FALSE;
-                }
-            }
-            // try to move the entity to the new position
-            MLOG(@"Moving entity to newPosition (%.0f,%.0f)", newPosition.x, newPosition.y);
-            [ self moveEntity:e toPosition: newPosition ];
-            
-            // reset wasBumped
-            e.wasBumped = NO;
-        }
     }
     
     MLOG(@"End of handle entity step");
