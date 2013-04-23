@@ -152,9 +152,9 @@
         
         maxhp   = 0;
         hitDie  = 12;
+        NSInteger conMod    = [ GameRenderer modifierForNumber: constitution ];
         
-        while ( maxhp == 0 ) {
-            NSInteger conMod    = [ GameRenderer modifierForNumber: constitution ];
+        while ( maxhp <= 0 ) {
             maxhp               = [Dice roll:hitDie] + conMod;
             hp                  = maxhp;
             //MLOG(@"conMod = %d,  maxhp = %d", conMod, maxhp);
@@ -199,8 +199,8 @@
     Entity *e   = [[Entity alloc] init];
     maxhp       = 0;
     hitDie      = hd;
-    while ( maxhp == 0 ) {
-        NSInteger conMod    = [ GameRenderer modifierForNumber: e.constitution ];
+    NSInteger conMod    = [ GameRenderer modifierForNumber: e.constitution ];
+    while ( maxhp <= 0 ) {
         maxhp               = [Dice roll:hitDie] + conMod;
         hp                  = maxhp;
     }
@@ -476,7 +476,7 @@
     
     // lets up our hp
     NSInteger conMod = [ GameRenderer modifierForNumber: constitution ];
-    maxhp = maxhp + [Dice roll: hitDie ] + conMod;
+    maxhp = (conMod > 0) ? (maxhp + [Dice roll: hitDie ] + conMod) : (maxhp + [Dice roll: hitDie]);
     hp = maxhp;
 }
 
@@ -526,7 +526,7 @@
     // 250 = dead
     
     isAlive = ( ! hunger >= maxHunger );
-    hp = ( hunger >= maxHunger ? 0 : hp);
+    hp = ( isAlive ? hp : 0 );
     
 
 }

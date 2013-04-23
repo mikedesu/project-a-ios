@@ -1289,14 +1289,21 @@ static NSString  * const notifications[] = {
                 Entity *e = [[ t contents ] objectAtIndex: 0];
                 NSString *str = @"";
                 if ( e.entityType == ENTITY_T_NPC || e.entityType == ENTITY_T_PC ) {
-                    str = [ NSString stringWithFormat: @"Lv: %d  Name: %@\nHP: %d/%d  AC: %d\nHunger: %d  Kills: %d\n",
+                    str = [ NSString stringWithFormat: @"Lv: %d  Name: %@\nHP: %d/%d  AC: %d\nHunger: %d  Kills: %d\nSt:%d Dx:%d Cn:%d In:%d Wi:%d Ch:%d\n",
                            e.level,
                            e.name,
                            e.hp,
                            e.maxhp,
                            e.totalac,
                            e.hunger,
-                           e.totalKills
+                           e.totalKills,
+                           
+                           e.strength,
+                           e.dexterity,
+                           e.constitution,
+                           e.intelligence,
+                           e.wisdom,
+                           e.charisma
                            ];
                 }
                 else if ( e.entityType == ENTITY_T_ITEM ) {
@@ -3333,6 +3340,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     hero.level = 1;
     
+    /*
     hero.strength       = [Dice roll:6 nTimes:3];
     hero.dexterity      = [Dice roll:6 nTimes:3];
     hero.constitution   = [Dice roll:6 nTimes:3];
@@ -3344,6 +3352,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     hero.maxhp = [Dice roll:12] + conMod;
     hero.hp = hero.maxhp;
+    */
     
     hero.ac = 10;
     
@@ -3426,7 +3435,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         for(Entity*e in pcEntity.inventoryArray){if(e.itemType==E_ITEM_T_BOOK&&[e.name isEqualToString:@"Book of All-Knowing"]){hasTheBook=YES;break;}}
         
         // check player's hunger
-        if ( ! pcEntity.isAlive ) {
+        if ( pcEntity.isAlive ) {
             if ( pcEntity.hunger >= 250 ) {
                 MLOG(@"You starved to death...");
                 [ self addMessage: [NSString stringWithFormat:@"You starved to death.\nYou killed %d monsters.\n",
@@ -3887,8 +3896,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                                     e.name, totaldamage, target.level, target.name ]];
                 
                 [ self addMessageWindowString: [ NSString stringWithFormat:@"%@%@ dealt %d damage to Lv%d %@",
-                                    isCritical ? @"Critical! " : @"",
-                                    e.name, totaldamage, target.level, target.name ]];
+                                                isCritical ? @"Critical! " : @"",
+                                                e.name, totaldamage, target.level, target.name ]];
                 
                 
                 
@@ -3924,6 +3933,11 @@ NSUInteger getMagicY( NSUInteger y ) {
                 target.hp -= totaldamage;
                 
                 
+                [ self addMessageWindowString: [ NSString stringWithFormat:@"%@%@ dealt %d damage to Lv%d %@",
+                                                isCritical ? @"Critical! " : @"",
+                                                e.name, totaldamage, target.level, target.name ]];
+                
+                
                 if (target.hp <= 0 ) {
                     // increase entity xp
                     [ e gainXP: target.level*4 + e.level ];
@@ -3931,6 +3945,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     
                     // remove target from t.contents
                     [t removeObjectFromContents: target];
+                    [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
                     target.isAlive = NO;
                 }
             }
