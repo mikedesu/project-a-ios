@@ -45,6 +45,7 @@
 
 @synthesize money;
 @synthesize hunger;
+@synthesize maxHunger;
 
 @synthesize healingBonus;
 @synthesize healingRollBase;
@@ -163,6 +164,20 @@
         
         hunger  = 0;
         money   = 0;
+        
+        // set maxHunger based on entity and monsterTypes
+        if ( entityType == ENTITY_T_PC ) {
+            maxHunger = 250;
+        }
+        else if ( entityType == ENTITY_T_NPC ) {
+            switch (monsterType) {
+                case MONSTER_T_GHOUL:   maxHunger = 250; break;
+                case MONSTER_T_CAT:     maxHunger = 250; break;
+                default:                maxHunger = 250; break;
+            }
+        }
+        
+        
         
         inventoryArray      = [ [ NSMutableArray alloc ] init ];
         equippedArmsLeft    = nil;
@@ -510,11 +525,10 @@
     // 200 = starving
     // 250 = dead
     
-    if ( hunger >= 250 ) {
-        hp = 0;
-        isAlive = NO;
-        
-    }
+    isAlive = ( ! hunger >= maxHunger );
+    hp = ( hunger >= maxHunger ? 0 : hp);
+    
+
 }
 
 

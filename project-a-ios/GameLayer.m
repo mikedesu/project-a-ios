@@ -1289,12 +1289,13 @@ static NSString  * const notifications[] = {
                 Entity *e = [[ t contents ] objectAtIndex: 0];
                 NSString *str = @"";
                 if ( e.entityType == ENTITY_T_NPC || e.entityType == ENTITY_T_PC ) {
-                    str = [ NSString stringWithFormat: @"Lv: %d  Name: %@\nHP: %d/%d  AC: %d\nKills: %d\n",
+                    str = [ NSString stringWithFormat: @"Lv: %d  Name: %@\nHP: %d/%d  AC: %d\nHunger: %d  Kills: %d\n",
                            e.level,
                            e.name,
                            e.hp,
                            e.maxhp,
                            e.totalac,
+                           e.hunger,
                            e.totalKills
                            ];
                 }
@@ -3580,10 +3581,6 @@ NSUInteger getMagicY( NSUInteger y ) {
             }
         }
         
-        
-        //MLOG( @"(%.0f,%.0f)", e.positionOnMap.x, e.positionOnMap.y );
-        //MLOG( @"(%.0f,%.0f)", newPosition.x, newPosition.y );
-        
         // try to move the entity to the new position
         // TODO: move movEntity to GameRenderer
         MLOG(@"Moving entity to newPosition (%.0f,%.0f)", newPosition.x, newPosition.y);
@@ -3605,7 +3602,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         if ( e.monsterType == MONSTER_T_CAT ) {
         
             if ( ! e.wasBumped ) {
-                // calculate newPosition
+        
+                // calculate move for turn
                 
                 // check if next to the PC
                 CGPoint basePos = e.positionOnMap;

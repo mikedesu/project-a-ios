@@ -87,6 +87,7 @@
     NSMutableArray *pathTaken;
     
     NSInteger hunger;
+    NSInteger maxHunger;
     
     
     // for potions/wands/healing items/etc 
@@ -163,6 +164,7 @@
 
 @property (atomic, assign) NSUInteger money;
 @property (atomic, assign) NSInteger hunger;
+@property (atomic, assign) NSInteger maxHunger;
 @property (atomic) NSMutableArray *inventoryArray;
 
 @property (atomic) Entity *equippedArmsLeft;
