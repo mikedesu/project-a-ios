@@ -36,6 +36,7 @@
 #import "MessageWindow.h"
 #import "MLog.h"
 #import "Monsters.h"
+#import "NameEngine.h"
 #import "PlayerHUD.h"
 #import "PlayerMenu.h"
 #import "Prefix_t.h"

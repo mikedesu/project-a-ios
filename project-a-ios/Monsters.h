@@ -115,7 +115,7 @@ nil))
 
 #define Cat \
 (Monster(\
-@"Cat", \
+[[NameEngine sharedEngine] getNextCatName], \
 [NSArray arrayWithObject: [Prefix_t noPrefix]], \
 THREAT_T_FRIENDLY, \
 MONSTER_T_CAT, \

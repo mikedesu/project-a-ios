@@ -52,7 +52,8 @@ unsigned get_memory_mb(void) {
     
     [s setObject:[Drawer heroForPC:pcEntity]                                forKey: @"Hero"];
     
-    [s setObject:[Drawer cat:black eyes:red]                               forKey: @"Cat"];
+    //[s setObject:[Drawer cat:black eyes:red]                               forKey: @"Cat"];
+    [s setObject:[Drawer cat:black eyes:yellow]                               forKey: @"Cat"];
     
     [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
     [s setObject:[Drawer stoneTile]                                         forKey: @"StoneTile"];
