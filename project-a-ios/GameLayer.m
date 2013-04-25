@@ -212,6 +212,8 @@ unsigned get_memory_mb(void) {
 
 -(void) cleanupGame {
     
+    [[KarmaEngine sharedEngine] zeroOutKarma];
+    
     gameState = 0;
     turnCounter = 0;
     selectedTilePoint = ccp(0,0);
@@ -1791,7 +1793,9 @@ static NSString  * const notifications[] = {
       
       [NSString stringWithFormat:@"Money: %d\n", pcEntity.money],
       
-      @"(empty)",
+      [NSString stringWithFormat:@"Karma: %d\n", [[KarmaEngine sharedEngine] getKarma]],
+      
+      //@"(empty)",
       
       /*
       [NSString stringWithFormat:@"L.Arm: %@\nChest: %@\nLegs: %@\n" ,
@@ -3826,6 +3830,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                 //target.positionOnMap = tmpPos;
                 
                 target.wasBumped = YES;
+                
+                [[KarmaEngine sharedEngine] increaseKarma];
                 
                 return;
             }

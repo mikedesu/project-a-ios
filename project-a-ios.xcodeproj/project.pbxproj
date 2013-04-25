@@ -161,6 +161,7 @@
 		27E1924D171EBA9100AA3F25 /* MessageWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E1924C171EBA9000AA3F25 /* MessageWindow.m */; };
 		27E192501721C72A00AA3F25 /* Maybe.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E1924F1721C72900AA3F25 /* Maybe.m */; };
 		27E192531729158E00AA3F25 /* NameEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E192521729158D00AA3F25 /* NameEngine.m */; };
+		27E192561729BBBE00AA3F25 /* KarmaEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E192551729BBBE00AA3F25 /* KarmaEngine.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -493,6 +494,8 @@
 		27E1924F1721C72900AA3F25 /* Maybe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Maybe.m; sourceTree = "<group>"; };
 		27E192511729158A00AA3F25 /* NameEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameEngine.h; sourceTree = "<group>"; };
 		27E192521729158D00AA3F25 /* NameEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameEngine.m; sourceTree = "<group>"; };
+		27E192541729BBBD00AA3F25 /* KarmaEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KarmaEngine.h; sourceTree = "<group>"; };
+		27E192551729BBBE00AA3F25 /* KarmaEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KarmaEngine.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -603,6 +606,8 @@
 				2721D6FD16EEBA610051352D /* InventoryMenu.m */,
 				2767E0C916E83FA500013CBE /* Items.h */,
 				2767E0CA16E83FA500013CBE /* Items.m */,
+				27E192541729BBBD00AA3F25 /* KarmaEngine.h */,
+				27E192551729BBBE00AA3F25 /* KarmaEngine.m */,
 				27DFEA16170515A500933C8A /* MaterialTypes.h */,
 				27E1924E1721C72900AA3F25 /* Maybe.h */,
 				27E1924F1721C72900AA3F25 /* Maybe.m */,
@@ -1199,6 +1204,7 @@
 				27E1924D171EBA9100AA3F25 /* MessageWindow.m in Sources */,
 				27E192501721C72A00AA3F25 /* Maybe.m in Sources */,
 				27E192531729158E00AA3F25 /* NameEngine.m in Sources */,
+				27E192561729BBBE00AA3F25 /* KarmaEngine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
