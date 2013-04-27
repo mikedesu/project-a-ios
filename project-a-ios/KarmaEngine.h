@@ -6,6 +6,7 @@
 
 @interface KarmaEngine : NSObject {
     NSInteger karmaLevel;
+    NSMutableArray *karma;
 }
 
 +(KarmaEngine *) sharedEngine;
@@ -14,5 +15,8 @@
 -(void) decreaseKarma;
 -(void) zeroOutKarma;
 -(NSInteger) getKarma;
+-(void) addKarma: (NSInteger) k;
+-(void) subKarma: (NSInteger) k;
+
 
 @end

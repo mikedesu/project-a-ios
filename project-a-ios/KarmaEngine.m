@@ -23,28 +23,46 @@ static KarmaEngine *_sharedEngine;
 -(id) init {
     if ((self=[super init])) {
         karmaLevel = 0;
+        karma = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 
 -(void) increaseKarma {
-    karmaLevel++;
+    //karmaLevel++;
+    //[karma addObject: [NSNumber numberWithInt:1]];
+    [self addKarma:1];
 }
 
 
 -(void) decreaseKarma {
-    karmaLevel--;
+    //karmaLevel--;
+    //[karma addObject: [NSNumber numberWithInt:-1]];
+    [self subKarma:1];
 }
 
 
 -(void) zeroOutKarma {
     karmaLevel = 0;
+    [karma removeAllObjects];
 }
 
 
 -(NSInteger) getKarma {
     return karmaLevel;
+}
+
+
+-(void) addKarma:(NSInteger)k {
+    karmaLevel += k;
+    [karma addObject: [NSNumber numberWithInt:k]];
+}
+
+
+-(void) subKarma:(NSInteger)k {
+    karmaLevel -= k;
+    [karma addObject: [NSNumber numberWithInt:-k]];
 }
 
 @end
