@@ -3811,6 +3811,9 @@ NSUInteger getMagicY( NSUInteger y ) {
         if ( tileHasEntities ) {
             // attacking an entity
             
+            //BOOL gotKarma = NO;
+            //NSInteger totalKarmaForTurn = 0;
+            
             Entity *target = [ self npcEntityAtPosition: pos ];
             
             if ( target == nil ) {
@@ -3822,16 +3825,13 @@ NSUInteger getMagicY( NSUInteger y ) {
             if ( target.threatLevel == THREAT_T_FRIENDLY  && e.isPC ) {
                 [self addMessageWindowString: [NSString stringWithFormat:@"You bump into a friendly %@", target.name] ];
                 
-                //[ GameRenderer setEntity:e      onTile: [self getTileForCGPoint:target.positionOnMap    forFloor:[dungeon objectAtIndex: floorNumber]] ];
-                //[ GameRenderer setEntity:target onTile: [self getTileForCGPoint:e.positionOnMap         forFloor:[dungeon objectAtIndex: floorNumber]] ];
-                //CGPoint tmpPos;
-                //tmpPos = e.positionOnMap;
-                //e.positionOnMap = target.positionOnMap;
-                //target.positionOnMap = tmpPos;
                 
                 target.wasBumped = YES;
                 
-                [[KarmaEngine sharedEngine] increaseKarma];
+                gotKarmaThisTurn = YES;
+                totalKarmaThisTurn += 1;
+                
+                //[[KarmaEngine sharedEngine] increaseKarma];
                 
                 return;
             }
@@ -3890,6 +3890,9 @@ NSUInteger getMagicY( NSUInteger y ) {
             
             
             if ( victory && e.isPC ) {
+                
+                gotKarmaThisTurn = YES;
+                totalKarmaThisTurn -= 1;
  
                 NSInteger totaldamage = e.damageRoll;
                 totaldamage += isCritical       ? e.damageRoll  : 0;
@@ -3918,6 +3921,9 @@ NSUInteger getMagicY( NSUInteger y ) {
                     [ self addMessage: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
                     [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
                     target.isAlive = NO;
+                    
+                    //gotKarma = YES;
+                    //totalKarmaForTurn -= 1;
                 }
             }
             
@@ -4116,6 +4122,11 @@ NSUInteger getMagicY( NSUInteger y ) {
                 }
                  */
                 
+                if ( entity == pcEntity ) {
+                    gotKarmaThisTurn = YES;
+                    totalKarmaThisTurn += 1;
+                }
+                
                 [[ entity inventoryArray ] addObject: item ];
                 [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
                 [ self addMessageWindowString: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
@@ -4306,7 +4317,17 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) incrementTurn {
+    
+    // post available karma
+    if ( gotKarmaThisTurn ) {
+        [[KarmaEngine sharedEngine] addKarma: totalKarmaThisTurn];
+    }
+    
     turnCounter++;
+    
+    // reset the karma for turn
+    gotKarmaThisTurn = NO;
+    totalKarmaThisTurn = 0;
 }
 
 

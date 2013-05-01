@@ -106,6 +106,10 @@ typedef enum {
     BOOL autostepGameLogic;
     
     BOOL needsRedraw;
+    
+    
+    BOOL gotKarmaThisTurn;
+    NSInteger totalKarmaThisTurn;
 }
 
 @property (nonatomic, assign) NSUInteger turnCounter;
