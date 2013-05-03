@@ -890,13 +890,13 @@ NSInteger getMod( NSInteger n ) {
         
         NSUInteger m0 = [Dice roll: 2];
         e =     ( m0 == 1 ) ? Cat :
-                ( m0 == 2 ) ? Cat :
+                ( m0 == 2 ) ? Ghoul :
                 Cat;
         
         
         MLOG(@"Spawned %@", e.name);
         
-        // level up ghoul appropriately
+        // level up monster appropriately
         
         NSInteger levelRoll = [Dice roll: floor.floorNumber + 1];
         for (int i=e.level; i<levelRoll; i++)

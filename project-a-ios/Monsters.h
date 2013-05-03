@@ -97,7 +97,21 @@ withIPA: i \
 withDamageRollBase: d \
 withAttacks: a])
 
+// Monster(
+// name,
+// prefix array,
+// entity type,
+// threat,
+// monster type,
+// item type,
+// level,
+// hit die,
+// path finding algorithm,
+// item pickup algorithm,
+// damage roll base,
+// attacks)
 #define Monster(n,r,t,m,l,h,p,i,d,a) MONSTER(n,r,t,m,l,h,p,i,d,a)
+
 
 #define Ghoul \
 (Monster(\
@@ -125,5 +139,3 @@ ENTITYPATHFINDINGALGORITHM_T_FRIENDLY_FOLLOW_PC_STRICT, \
 ENTITYITEMPICKUPALGORITHM_T_NONE, \
 4, \
 nil))
-
-
