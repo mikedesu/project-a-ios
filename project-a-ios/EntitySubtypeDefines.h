@@ -42,6 +42,8 @@ typedef enum {
     E_ITEM_T_FISHING_LURE,
     E_ITEM_T_FISHING_BAIT,
     
+    E_ITEM_T_FISH,
+    
     // Armor Types - for each slot
     E_ITEM_T_ARMOR,
     E_ITEM_T_HELMET,

@@ -11,4 +11,8 @@
 +(Entity *) bookOfAllKnowing;
 +(Entity *) potionOfLightHealing:(NSInteger) bonus;
 +(Entity *) greenBlob;
+
+// Fishing
++(Entity *) catfish;
++(Entity *) woodenFishingRod;
 @end

@@ -28,6 +28,7 @@ unsigned get_memory_mb(void) {
 
 @implementation GameLayer
 
+@synthesize gameState;
 @synthesize turnCounter;
 
 /*
@@ -79,6 +80,11 @@ unsigned get_memory_mb(void) {
     
     [s setObject:[Drawer bookOfAllKnowing]                                  forKey: @"BookOfAllKnowing"];
     [s setObject:[Drawer smallBlob:green]                                   forKey: @"SmallBlob"];
+    
+    
+    [s setObject:[Drawer smallFish:brown eyeColor:black]                    forKey:@"Catfish"];
+    
+    [s setObject:[Drawer fishingRod:brown]                                 forKey:@"WoodenFishingRod"];
     
     
 }
@@ -2096,6 +2102,7 @@ static NSString  * const notifications[] = {
     
     // valid selected point
     BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
+    BOOL validMapPoint      = mapPoint.x >= 0          && mapPoint.y >= 0;
     
     
     if ( messageWindowIsVisible ) {
@@ -2108,82 +2115,98 @@ static NSString  * const notifications[] = {
     
     else {
         
-        // something was previously selected
-        if ( validSelectedPoint ) {
-        
-            MLOG( @"ccTouchEnded: valid point selected" );
-            // check if we hit the same tile again
-        
-            Tile *a = [ self getTileForCGPoint: mapPoint ];
-            Tile *b = [ self getTileForCGPoint: selectedTilePoint ];
-        
-            if ( a==b ) {
+        if ( gameState == GAMESTATE_T_GAME_PC_FISHING_PRECAST ) {
             
-                // check distance from pcEntity
-                Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
+            // [ self addMessageWindowString: @"Fishing not yet implemented!" ];
+ 
+            // check tile cast on
             
-                NSInteger distance = [ self distanceFromTile:a toTile: pcTile ];
             
-                if ( distance <= pcEntity.movement ) {
-                    // valid quick-move
-                    MLOG(@"valid quick-move");
+            if ( validMapPoint ) {
+                Tile *a = [ self getTileForCGPoint: mapPoint ];
                 
-                    // deselect the tile
-                    [ self selectTileAtPosition: mapPoint ];
-                
-                    // move the pcEntity to the tile
-                
-                    if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y )
-                        [ self moveEntity:pcEntity toPosition:mapPoint ];
-                    else {
-                        // rest
-                        MLOG(@"%.0f %.0f %.0f %.0f", pcEntity.positionOnMap.x, mapPoint.x, pcEntity.positionOnMap.y, mapPoint.y);
-                        [self addMessage:@"You rest..."];
-                        [self addMessageWindowString:@"You rest..."];
-                        
-                        pcEntity.hp++;
-                        if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
-                        [pcEntity getHungry];
-                    }
-                
-                    // step game logic
-                    //if ( gameLogicIsOn ) {
-                    //    [ self stepGameLogic ];
-                    //}
-                
-                    gameLogicIsOn ? [self stepGameLogic] : 0;
-                
-                
-                    [ self resetCameraPosition ];
-                
+                if ( a.tileType != TILE_FLOOR_WATER ) {
+                    [ self addMessageWindowString: @"That is not a water tile..." ];
+                } else {
+                    // water
+                    //[ self addMessageWindowString: @"That IS a water tile!" ];
+                    // add a fish to your inventory
+                    [ self addMessageWindowString: @"You catch a fish!" ];
+                    [self handleItemPickup:[Items catfish] forEntity:pcEntity];
                 }
-                else {
-                    // invalid quick-move
-                    // possibly other quick-action
-                    MLOG(@"invalid quick-move");
+            }
                 
-                    // deselect the tile
+            
+            gameState = GAMESTATE_T_MAINMENU;
+            gameLogicIsOn ? [self stepGameLogic] : 0;
+        }
+        
+        else {
+        
+        
+            // something was previously selected
+            if ( validSelectedPoint ) {
+            
+                MLOG( @"ccTouchEnded: valid point selected" );
+                // check if we hit the same tile again
+            
+                Tile *a = [ self getTileForCGPoint: mapPoint ];
+                Tile *b = [ self getTileForCGPoint: selectedTilePoint ];
+            
+                if ( a==b ) {
+                
+                    // check distance from pcEntity
+                    Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
+                
+                    NSInteger distance = [ self distanceFromTile:a toTile: pcTile ];
+                
+                    if ( distance <= pcEntity.movement ) {
+                        // valid quick-move
+                        MLOG(@"valid quick-move");
+                    
+                        // deselect the tile
+                        [ self selectTileAtPosition: mapPoint ];
+                    
+                        // move the pcEntity to the tile
+                    
+                        if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y )
+                            [ self moveEntity:pcEntity toPosition:mapPoint ];
+                        else {
+                            // rest
+                            MLOG(@"%.0f %.0f %.0f %.0f", pcEntity.positionOnMap.x, mapPoint.x, pcEntity.positionOnMap.y, mapPoint.y);
+                            [self addMessage:@"You rest..."];
+                            [self addMessageWindowString:@"You rest..."];
+                            
+                            pcEntity.hp++;
+                            if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
+                            [pcEntity getHungry];
+                        }
+                        gameLogicIsOn ? [self stepGameLogic] : 0;
+                        [ self resetCameraPosition ];
+                    }
+                    else {
+                        // invalid quick-move
+                        // possibly other quick-action
+                        MLOG(@"invalid quick-move");
+                    
+                        // deselect the tile
+                        [ self selectTileAtPosition: mapPoint ];
+                    }
+                }
+            
+                else {
                     [ self selectTileAtPosition: mapPoint ];
                 }
             }
-        
+    
+            // something was not prev. selected
             else {
+                MLOG( @"ccTouchEnded: not prev. selected" );
                 [ self selectTileAtPosition: mapPoint ];
             }
-        
-           // [ self selectTileAtPosition: mapPoint ];
-        }
-    
-        // something was not prev. selected
-        else {
-  
-            MLOG( @"ccTouchEnded: not prev. selected" );
-            [ self selectTileAtPosition: mapPoint ];
-        
         }
     
         needsRedraw = YES;
-        //[ self updateMonitorLabel ];
     }
 }
 
@@ -3391,6 +3414,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     else if ( state == GAMESTATE_T_GAME_PC_DEAD ) {
         retval =@"GAMESTATE_T_GAME_PC_DEAD";
+    }
+    
+    else if ( state == GAMESTATE_T_GAME_PC_FISHING_PRECAST ) {
+        retval =@"GAMESTATE_T_GAME_PC_FISHING_PRECAST";
     }
     
     else {

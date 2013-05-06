@@ -39,12 +39,25 @@
                 [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ recovered %d hp", pc.name, total]];
             }
         }
-        else if ( eItem.itemType == E_ITEM_T_FOOD ) {
+        else if ( eItem.itemType == E_ITEM_T_FOOD ||
+                  eItem.itemType == E_ITEM_T_FISH ) {
             pc.hunger -= eItem.foodBase;
             [gameLayer addMessage:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
             [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
             
         }
+        
+        // fishing
+        else if ( eItem.itemType == E_ITEM_T_FISHING_ROD ) {
+            //[gameLayer addMessage: [NSString stringWithFormat:@"Cast your %@ where?", eItem.name]];
+            [gameLayer addMessageWindowString: [NSString stringWithFormat:@"Cast your %@ where?", eItem.name]];
+            [gameLayer setGameState: GAMESTATE_T_GAME_PC_FISHING_PRECAST];
+            // do not remove fishing rod from inventory
+            //handled = NO;
+        }
+        
+        
+        
         else {
             MLOG(@"Not handled!");
             [gameLayer addMessage:[NSString stringWithFormat:@"%@-use not handled yet!", eItem.name]];
@@ -56,7 +69,9 @@
         
         if (handled) {
             [gameLayer stepGameLogic];
-            [inventory      removeObjectAtIndex: sender.tag];
+            ( eItem.itemType != E_ITEM_T_FISHING_ROD ) ? [gameLayer stepGameLogic] : 0 ;
+            // dont remove fishing rods (or other things...)
+            ( eItem.itemType != E_ITEM_T_FISHING_ROD ) ? [inventory      removeObjectAtIndex: sender.tag] : 0 ;
             [sender.parent  removeChild:sender   cleanup:YES];
         }
     };

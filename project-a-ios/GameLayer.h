@@ -12,6 +12,7 @@ typedef enum {
     GAMESTATE_T_GAME_PC_SELECTMOVE,
     GAMESTATE_T_GAME_PC_STEP,
     GAMESTATE_T_GAME_PC_DEAD,
+    GAMESTATE_T_GAME_PC_FISHING_PRECAST,
 } GameState_t;
 
 @class Maybe;
@@ -112,6 +113,7 @@ typedef enum {
     NSInteger totalKarmaThisTurn;
 }
 
+@property (nonatomic, assign) GameState_t gameState;
 @property (nonatomic, assign) NSUInteger turnCounter;
 
 

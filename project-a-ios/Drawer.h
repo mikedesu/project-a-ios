@@ -43,6 +43,9 @@
 +(CCMutableTexture2D *) statusIcon;
 +(CCMutableTexture2D *) itemIcon;
 
++(CCMutableTexture2D *) smallFish: (Color_t) body eyeColor: (Color_t) eyeColor;
++(CCMutableTexture2D *) fishingRod: (Color_t) rod;
+
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c;
 +(NSArray *) codeForTexture: (CCMutableTexture2D *) t;
 

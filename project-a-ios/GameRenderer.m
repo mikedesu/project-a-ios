@@ -245,6 +245,34 @@ NSInteger getMod( NSInteger n ) {
                 }
                 [texture apply];
             }
+            
+            // fish
+            else if ( entity.itemType == E_ITEM_T_FISH ) {
+                // draw sprite on top of cell, w/o black background
+ 
+                if ( [entity.name isEqualToString:@"Catfish"] ) {
+                    CCMutableTexture2D *t = [sprites objectForKey:@"Catfish"];
+                    for ( int i = 0; i < 16; i++ ) {
+                        for ( int j = 0; j < 16; j++ ) {
+                            //if ( [t pixelAt:ccp(i,j)].a != 0 )
+                            //    [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
+                            ( [t pixelAt:ccp(i,j)].a != 0 ) ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
+                        }
+                    }
+                    [texture apply];
+                }
+            }
+            
+            else if ( entity.itemType == E_ITEM_T_FISHING_ROD ) {
+                if ( [entity.name isEqualToString:@"Wooden Fishing Rod"] ) {
+                    CCMutableTexture2D *t = [sprites objectForKey:@"WoodenFishingRod"];
+                    for ( int i = 0; i < 16; i++ )
+                        for ( int j = 0; j < 16; j++ )
+                            ( [t pixelAt:ccp(i,j)].a != 0 ) ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
+                    [texture apply];
+                }
+            }
+            
         }
     }
     
