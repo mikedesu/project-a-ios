@@ -39,8 +39,13 @@
                 [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ recovered %d hp", pc.name, total]];
             }
         }
-        else if ( eItem.itemType == E_ITEM_T_FOOD ||
-                  eItem.itemType == E_ITEM_T_FISH ) {
+        else if ( eItem.itemType == E_ITEM_T_FOOD ) {
+            pc.hunger -= eItem.foodBase;
+            [gameLayer addMessage:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
+            [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
+        }
+        
+        else if ( eItem.itemType == E_ITEM_T_FISH ) {
             pc.hunger -= eItem.foodBase;
             [gameLayer addMessage:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
             [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];

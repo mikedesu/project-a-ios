@@ -1866,7 +1866,13 @@ static NSString  * const notifications[] = {
 
     // only if we need redraw, really...
     if ( needsRedraw ) {
-        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint withSprites: sprites ];
+        
+        //if ( gameState == GAMESTATE_T_GAME_PC_SAFEROOM ) {
+         //   [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: safeRoom withCamera:cameraAnchorPoint withSprites: sprites ];
+        //} else {
+            [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint withSprites: sprites ];
+        //}
+        
         
         if ( editorHUDIsVisible )
             [ self updateEditorHUDLabel ];
@@ -1914,8 +1920,8 @@ static NSString  * const notifications[] = {
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = YES;
     
-    CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
-    CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
+    //CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
+    //CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
     
     // valid selected point
     BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
@@ -2125,12 +2131,10 @@ static NSString  * const notifications[] = {
             if ( validMapPoint ) {
                 Tile *a = [ self getTileForCGPoint: mapPoint ];
                 
+                // check tiletype...
                 if ( a.tileType != TILE_FLOOR_WATER ) {
                     [ self addMessageWindowString: @"That is not a water tile..." ];
                 } else {
-                    // water
-                    //[ self addMessageWindowString: @"That IS a water tile!" ];
-                    // add a fish to your inventory
                     [ self addMessageWindowString: @"You catch a fish!" ];
                     [self handleItemPickup:[Items catfish] forEntity:pcEntity];
                 }
@@ -2375,47 +2379,6 @@ static NSString  * const notifications[] = {
  ====================
  */
 
-/*
--( void ) initializeTileData {
-    //MLOG(@"initializeTileData");
-    tileDataArray = [ [ NSMutableArray alloc ] init ];
-    for ( int j = 0 ; j < NUMBER_OF_TILES_ONSCREEN_Y ; j++ ) {
-        for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
-            Tile *tile = [ [ Tile alloc ] init ];
-            tile->tileType = TILE_DEFAULT;
-            tile->position = ccp( i, j );
-            [ tileDataArray addObject: tile ];
-        }
-    }
-    [ GameRenderer setAllTiles: tileArray toTileType: TILE_DEFAULT ];
-    [ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_FLOOR_STONE withLevel: 2 ];
-    [ GameRenderer setTileArrayBoundary: tileDataArray toTileType: TILE_VOID withLevel: 1 ];
-    MLOG(@"End initializeTileData");
-}
- */
-
-
-
-//-( void ) drawDungeonFloor: ( DungeonFloor * ) dungeonFloor toTileArray: ( NSArray * ) tileArray {
-
-/*
--( void ) drawDungeonFloor {
-    CGPoint c = cameraAnchorPoint;
-    for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
-    //for ( int j = 0; j < floor.height; j++ ) {
-        for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
-        //for ( int i = 0; i < floor.width; i++ ) {
-            // grab the tile at ( i+c.x, j+c.y )
-            Tile *tile = [ self getTileForCGPoint: ccp(i+c.x, j+c.y) ];
-            [ Tile renderTextureForTile: tile ];
-            
-            CCSprite *sprite = [ self getTileSpriteForCGPoint: ccp(i, j) ];
-            sprite.texture = tile.texture;
-        }
-    }
-}
- */
-
 
 -( Tile * ) getTileForCGPoint: ( CGPoint ) p  {
     Tile *tile = nil;
@@ -2429,9 +2392,6 @@ static NSString  * const notifications[] = {
     tile = [[_floor tileDataArray] objectAtIndex: p.x + ( p.y * _floor.width ) ];
     return tile;
 }
-
-
-
 
 
 -( CCSprite * ) getTileSpriteForCGPoint: ( CGPoint ) p {
@@ -2478,7 +2438,6 @@ static NSString  * const notifications[] = {
 }
 
 
-
 /*
  ====================
  getTileIndexForTouch
@@ -2486,7 +2445,6 @@ static NSString  * const notifications[] = {
  */
 
 // magic numbers below are for 16x16 tiles w/ 150 tiles on-screen
-
 static BOOL isMagicXArrayInitialized = NO;
 static BOOL isMagicYArrayInitialized = NO;
 
@@ -2512,7 +2470,6 @@ void initializeMagicYArray() {
         counter--;
     }
 }
-
 
 
 NSUInteger getMagicX( NSUInteger x ) {
@@ -2548,25 +2505,6 @@ NSUInteger getMagicY( NSUInteger y ) {
         isMagicYArrayInitialized = YES;
     }
     return magicYArray[ y ];
-    
-    /*
-    return
-        ( y < 32 ) ? 14 :
-        ( y < 64 ) ? 13 :
-        ( y < 96 ) ? 12 :
-        ( y < 128 ) ? 11 :
-        ( y < 150 ) ? 10 :
-        ( y < 192 ) ? 9 :
-        ( y < 224 ) ? 8 :
-        ( y < 256 ) ? 7 :
-        ( y < 288 ) ? 6 :
-        ( y < 320 ) ? 5 :
-        ( y < 352 ) ? 4 :
-        ( y < 384 ) ? 3 :
-        ( y < 416 ) ? 2 :
-        ( y < 448 ) ? 1 :
-        ( y < 480 ) ? 0 : -1;
-     */
 }
 
 
@@ -2760,7 +2698,6 @@ NSUInteger getMagicY( NSUInteger y ) {
                 isMoveValid = YES;
                 itemExists  = YES;
             }
-            
         }
         
         if ( isMoveValid ) {
@@ -2820,28 +2757,13 @@ NSUInteger getMagicY( NSUInteger y ) {
             }
             
             else if ( entity.entityType == ENTITY_T_NPC ) {
-                
                 // not handling NPCs going up/downstairs yet...
-                /*
-                if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
-                    //[ self addMessage: @"Entity Going downstairs..." ];
-                    //[ self goingDownstairs ];
-                    //[ self entityGoingDownstairs: entity ];
-                    
-                }
-                else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
-                    //[ self goingUpstairs ];
-                    //[ self entityGoingUpstairs: entity ];
-                }
-                 */
             }
         }
         
         else if ( npcExists ) {
             // moving into npc
-            
             // check npc hostility
-            
             [ self handleAttackForEntity:entity toPosition:position];
         }
         
@@ -3014,12 +2936,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         if ( drd <= min ) { min = drd; nearest = dr; }
         
     }
-    
     return nearest;
-    
 }
-
-
 
 
 /*
@@ -3066,16 +2984,6 @@ NSUInteger getMagicY( NSUInteger y ) {
                 nearest = points[i];
             }
         }
-        /*
-        if ( uld <= min ) { min = uld; nearest = ul; }
-        if ( ud  <= min ) { min = ud;  nearest = u;  }
-        if ( urd <= min ) { min = urd; nearest = ur; }
-        if ( ld  <= min ) { min = ld;  nearest = l;  }
-        if ( rd  <= min ) { min = rd;  nearest = r;  }
-        if ( dld <= min ) { min = dld; nearest = dl; }
-        if ( dd  <= min ) { min = dd;  nearest = d;  }
-        if ( drd <= min ) { min = drd; nearest = dr; }
-        */
     }
     
     return nearest;
@@ -3136,6 +3044,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:40 andHeight:40 andFloorNumber: i ];
         if ( i != numberOfFloors - 1 ) {
             [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
+            //[ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_SMALLROOM ];
         }
         else {
             [ GameRenderer generateDungeonFloor:newFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ];
@@ -3144,6 +3053,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     floorNumber = 0;
     
+    //safeRoom = [DungeonFloor newFloorWidth:40 andHeight:40];
+    //[GameRenderer generateDungeonFloor:safeRoom withAlgorithm:DF_ALGORITHM_T_SMALLROOM];
 }
 
 
@@ -3167,6 +3078,25 @@ NSUInteger getMagicY( NSUInteger y ) {
         needsRedraw = YES;
     }
 }
+
+
+
+/*
+ ====================
+ goToSafeRoom
+ ====================
+ */
+/*
+-( void ) goToSafeRoom {
+    // floorNumber remains unchanged
+    gameState = GAMESTATE_T_GAME_PC_SAFEROOM;
+    [[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: pcEntity];
+    [self setEntity:pcEntity onRandomTileForFloor:safeRoom];
+    [[safeRoom entityArray] addObject: pcEntity];
+    needsRedraw = YES;
+}
+*/
+
 
 
 /*
@@ -3231,6 +3161,28 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     [ GameRenderer setEntity:entity onTile:tile];
 }
+
+
+
+/*
+ ====================
+ setEntity: entity onRandomTileForFloor: floor
+ ====================
+ */
+-( void ) setEntity: (Entity *) entity onRandomTileForFloor: (DungeonFloor *) _floor {
+    CGPoint startPoint = ccp( 10, 10 );
+    Tile *tile = nil;
+    for ( Tile *t in [ _floor tileDataArray ] ) {
+        if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
+            tile = t;
+            break;
+        }
+    }
+    [GameRenderer setEntity:entity onTile:tile];
+}
+
+
+
 
 
 /*
@@ -3341,9 +3293,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     [self initMessageWindow];
     
     [self addMessageWindowString: [NSString stringWithFormat: @"Welcome to Project-A %@", GAME_VERSION]];
-    //[self addMessageWindowString: @"This seems to be a better solution than our original messaging system..."];
-    //[self addMessageWindowString: @"Testing multiple-paged messages"];
-    //[self addMessageWindowString: @"If this works, I am so awesome :)"];
     [self displayMessageWindow];
     
 }

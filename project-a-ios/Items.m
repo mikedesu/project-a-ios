@@ -11,7 +11,7 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    NSUInteger roll = [Dice roll:3];
+    NSUInteger roll = [Dice roll:4];
     if (roll==1)
         e = [Items potionOfLightHealing:1];
     else if (roll==2)

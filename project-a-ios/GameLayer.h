@@ -13,6 +13,7 @@ typedef enum {
     GAMESTATE_T_GAME_PC_STEP,
     GAMESTATE_T_GAME_PC_DEAD,
     GAMESTATE_T_GAME_PC_FISHING_PRECAST,
+    //GAMESTATE_T_GAME_PC_SAFEROOM,
 } GameState_t;
 
 @class Maybe;
@@ -42,6 +43,7 @@ typedef enum {
     NSUInteger floorNumber;
     DungeonFloor *floor;
     
+   // DungeonFloor *safeRoom;
     NSMutableArray *dungeon;
     NSMutableArray *tileArray;
     NSMutableArray *tileDataArray;
@@ -115,6 +117,7 @@ typedef enum {
 
 @property (nonatomic, assign) GameState_t gameState;
 @property (nonatomic, assign) NSUInteger turnCounter;
+//@property (nonatomic) DungeonFloor *safeRoom;
 
 
 +(CCScene *) scene;
@@ -231,13 +234,15 @@ typedef enum {
 
 -( void ) goingUpstairs;
 -( void ) goingDownstairs;
+//-( void ) goToSafeRoom;
 
 -( void ) setEntityOnUpstairs:(Entity *)entity;
 -( void ) setEntityOnDownstairs:(Entity *)entity;
 
--( void ) setEntityOnUpstairs:(Entity *)entity forFloor: (DungeonFloor *) floor;
--( void ) setEntityOnDownstairs:(Entity *)entity forFloor: (DungeonFloor *) floor;
+-( void ) setEntityOnUpstairs:(Entity *)entity forFloor: (DungeonFloor *) _floor;
+-( void ) setEntityOnDownstairs:(Entity *)entity forFloor: (DungeonFloor *) _floor;
 
+-( void ) setEntity: (Entity *) entity onRandomTileForFloor: (DungeonFloor *) _floor;
 
 
     -( void ) initializeNotifications;
