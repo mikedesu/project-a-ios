@@ -202,6 +202,4 @@
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuEntityInfoNotification"  object:self];
 }
 
-
-
 @end

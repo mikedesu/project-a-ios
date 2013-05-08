@@ -66,6 +66,10 @@ typedef enum {
     E_ITEM_T_SCROLL,
     E_ITEM_T_NOTE,
     
+    // Boulders
+    E_ITEM_T_BASICBOULDER,
+    
+    
     E_ITEM_T_NUMTYPES
 } EntityItemTypes_t;
 

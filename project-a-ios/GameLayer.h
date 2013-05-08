@@ -223,7 +223,10 @@ typedef enum {
 
 -( Entity * ) getEntityForName: ( NSString * ) name;
 
--( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position;
+-( BOOL ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position;
+-( BOOL ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) _floor;
+    
+
 -( void ) selectTileAtPosition: ( CGPoint ) position;
 -( void ) resetCameraPosition;
 
@@ -257,6 +260,9 @@ typedef enum {
 -( NSString * ) getGameStateString: ( GameState_t ) state;
 -( void ) stepGameLogic;
 -( void ) handleEntityStep: ( Entity * ) e;
+
+-( Entity * ) getEntityForPosition: (CGPoint) p;
+
 
 -( void ) scheduledStepAction;
 -( void ) scheduleStepAction;

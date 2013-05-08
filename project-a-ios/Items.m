@@ -11,15 +11,18 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    NSUInteger roll = [Dice roll:4];
+    NSUInteger numItems = 5;
+    NSUInteger roll = [Dice roll:numItems];
     if (roll==1)
         e = [Items potionOfLightHealing:1];
     else if (roll==2)
         e = [Items greenBlob];
     else if (roll==3)
         e = [Items woodenFishingRod];
-    else
+    else if (roll==4)
         e = [Items catfish];
+    else
+        e = [Items basicBoulder];
     
     NSAssert( e!=nil, @"Random Item: roll failed to set entity" );
     
@@ -128,6 +131,22 @@
     return e;
 
 }
+
+
++(Entity *) basicBoulder {
+    Entity *e = [[Entity alloc] init];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_BASICBOULDER;
+    [e.name setString:@"Basic Boulder"];
+    e.isPC                  = NO;
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    e.weight            = 1;
+    e.durability        = 100;
+    e.totalDurability   = 100;
+    return e;
+}
+
 
 
 @end

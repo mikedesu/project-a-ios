@@ -1,0 +1,20 @@
+#!/bin/bash
+# This is Mike Bell's "quickupdate" script
+# usage: ./quickupdate  
+
+echo "running quickupdate2..."
+
+#./checkout_uistate
+
+#echo "updating git repos..."
+
+#git ci -a
+#git push origin master
+#git push origin dev
+#./update_dropbox
+
+#echo "repo update successful :)"
+
+./make_targz
+./update_server_targz
+echo "quickupdate script successful :)"

@@ -669,6 +669,36 @@
 }
 
 
++(CCMutableTexture2D *) boulder: (Color_t) body {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     ................
+     ..            ..
+     .              .
+     .              .
+     .              .
+     .              .
+     .              .
+     .              .
+     .              .
+     .              .
+     .              .
+     .              .
+     .              .
+     .              .
+     ..            ..
+     ................
+     */
+    for (int y=1; y<14; y++)
+        for (int x=2; x<13; x++)
+            [t setPixelAt:ccp(x,y) rgba:body];
+    for (int y=2; y<13; y++)
+        for (int x=1; x<14; x++)
+            [t setPixelAt:ccp(x,y) rgba:body];
+    return t;
+}
+
 
 
 

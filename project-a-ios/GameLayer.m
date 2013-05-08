@@ -62,7 +62,6 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer downstairsTile]                                    forKey: @"DownstairsTile"];
     [s setObject:[Drawer flatTile: blue]                                    forKey: @"WaterTile"];
     
-    
     [s setObject:[Drawer ghoulWithBody: green]                              forKey: @"Ghoul"];
     [s setObject:[Drawer ghoulWithBody: red]                                forKey: @"FireGhoul"];
     [s setObject:[Drawer ghoulWithBody: blue]                               forKey: @"IceGhoul"];
@@ -70,23 +69,19 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer ghoulWithBody: lightblue]                          forKey: @"WaterGhoul"];
     [s setObject:[Drawer ghoulWithBody: brown]                              forKey: @"EarthGhoul"];
     
-    
-    
     [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:blue]     forKey: @"ShortSword"];
     [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];
     
     [s setObject:[Drawer basicPotionWithColor:red]                          forKey: @"PotionOfLightHealing"];
     
-    
     [s setObject:[Drawer bookOfAllKnowing]                                  forKey: @"BookOfAllKnowing"];
     [s setObject:[Drawer smallBlob:green]                                   forKey: @"SmallBlob"];
     
-    
     [s setObject:[Drawer smallFish:brown eyeColor:black]                    forKey:@"Catfish"];
     
-    [s setObject:[Drawer fishingRod:brown]                                 forKey:@"WoodenFishingRod"];
+    [s setObject:[Drawer fishingRod:brown]                                  forKey:@"WoodenFishingRod"];
     
-    
+    [s setObject:[Drawer boulder:darkgray]                                  forKey:@"BasicBoulder"];
 }
 
 
@@ -1916,7 +1911,7 @@ static NSString  * const notifications[] = {
     //if ( gameState == GAMESTATE_T_GAME_PC_DEAD ) { return; }
     
     
-	UITouch *touch=[touches anyObject];
+	//UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = YES;
     
@@ -2145,6 +2140,7 @@ static NSString  * const notifications[] = {
             gameLogicIsOn ? [self stepGameLogic] : 0;
         }
         
+        // not fishing, going for quick-move
         else {
         
         
@@ -2173,8 +2169,80 @@ static NSString  * const notifications[] = {
                     
                         // move the pcEntity to the tile
                     
-                        if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y )
-                            [ self moveEntity:pcEntity toPosition:mapPoint ];
+                        if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y ) {
+                            
+                            // check if there is boulder we are moving to
+                            Maybe *maybeBoulder = [Maybe something:[self getEntityForPosition:mapPoint]];
+                            if ( [maybeBoulder hasSomething] ) {
+                                // check if it's a boulder
+                                
+                                Entity *tmp_e = (Entity *) maybeBoulder.something;
+                                if ( tmp_e.itemType == E_ITEM_T_BASICBOULDER ) {
+                                    
+                                    // not handled
+                                    //[ self addMessageWindowString: @"Moving boulders not handled yet!" ];
+                                    
+                                    /*
+                                     to handle boulders, 
+                                     
+                                     i need to know which direction the player is coming from
+                                     this will simply require comparing player position to boulder position
+                                     
+                                     1.     2.    3. o   4.o  5.o    6.    7.    8.
+                                        p     po    p      p     p     op    p      p
+                                         o                                  o       o
+                                     
+                                     o.x=p.x+1,  p.x+1,  p.x+1,    p.x,    p.x-1,  p.x-1,  p.x-1,  p.x,
+                                     o.y=p.y+1   p.y,    p.y-1,    p.y-1,  p.y-1,  p.y,    p.y+1,  p.y+1
+                                     */
+                                    
+                                    CGPoint p = pcEntity.positionOnMap;
+                                    CGPoint o = tmp_e.positionOnMap; // should be == mapPoint
+                                    
+                                    BOOL boulderMoved = NO;
+                                    
+                                    if ( o.x == p.x + 1 && o.y == p.y + 1 ) {
+                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x+1, o.y+1) ];
+                                    }
+                                    else if ( o.x == p.x + 1 && o.y == p.y ) {
+                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x+1, o.y) ];
+                                    }
+                                    else if ( o.x == p.x + 1 && o.y == p.y - 1 ) {
+                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x+1, o.y-1) ];
+                                    }
+                                    else if ( o.x == p.x && o.y == p.y - 1 ) {
+                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x, o.y-1) ];
+                                    }
+                                    else if ( o.x == p.x - 1 && o.y == p.y - 1 ) {
+                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x-1, o.y-1) ];
+                                    }
+                                    else if ( o.x == p.x - 1 && o.y == p.y ) {
+                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x-1, o.y) ];
+                                    }
+                                    else if ( o.x == p.x - 1 && o.y == p.y + 1 ) {
+                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x-1, o.y+1) ];
+                                    }
+                                    else if ( o.x == p.x && o.y == p.y + 1 ) {
+                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x, o.y+1) ];
+                                    }
+                                    
+                                    boulderMoved ? [ self moveEntity:pcEntity toPosition:mapPoint ] : 0;
+                                    
+                                }
+                                // anything else is cool
+                                else {
+                                    [ self moveEntity:pcEntity toPosition:mapPoint ];
+                                }
+                                
+                            }
+                            // empty is also cool
+                            else {
+                                [ self moveEntity:pcEntity toPosition:mapPoint ];
+                            }
+                            
+                            //[ self moveEntity:pcEntity toPosition:mapPoint ];
+                        
+                        }
                         else {
                             // rest
                             MLOG(@"%.0f %.0f %.0f %.0f", pcEntity.positionOnMap.x, mapPoint.x, pcEntity.positionOnMap.y, mapPoint.y);
@@ -2649,14 +2717,34 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 /*
  ====================
+ getEntityForPosition: p
+ 
+ returns the entity for the given position on the current floor
+ ====================
+ */
+-( Entity * ) getEntityForPosition: (CGPoint) p {
+    Entity *entity = nil;
+    for ( Entity *e in [[dungeon objectAtIndex:floorNumber] entityArray] ) {
+        if ( e.positionOnMap.x == p.x && e.positionOnMap.y == p.y ) {
+            entity = e;
+            break;
+        }
+    }
+    return entity;
+}
+
+
+
+/*
+ ====================
  moveEntity: entity toPosition: position
  
  moves the entity on the map to position
  ====================
  */
 
--( void ) moveEntity:(Entity *)entity toPosition:(CGPoint)position {
-    [ self moveEntity: entity toPosition:position onFloor:[dungeon objectAtIndex:floorNumber ] ];
+-( BOOL ) moveEntity:(Entity *)entity toPosition:(CGPoint)position {
+    return [ self moveEntity: entity toPosition:position onFloor:[dungeon objectAtIndex:floorNumber ] ];
 }
 
 
@@ -2668,9 +2756,9 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 
--( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) _floor {
-//-( void ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position {
+-( BOOL ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) _floor {
     //MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
+    BOOL retVal = FALSE;
     
     Tile *tile = [ self getMapTileFromPoint: position forFloor: _floor ];
     if ( tile.tileType != TILE_FLOOR_VOID ) {
@@ -2686,17 +2774,20 @@ NSUInteger getMagicY( NSUInteger y ) {
                 isMoveValid = NO;
                 npcExists   = YES;
                 pcExists    = NO;
+                retVal      = FALSE;
                 break;
             }
             else if ( e.entityType == ENTITY_T_PC ) {
                 isMoveValid = NO;
                 npcExists   = NO;
                 pcExists    = YES;
+                retVal      = FALSE;
                 break;
             }
             else if ( e.entityType == ENTITY_T_ITEM ) {
                 isMoveValid = YES;
                 itemExists  = YES;
+                retVal      = TRUE;
             }
         }
         
@@ -2777,8 +2868,13 @@ NSUInteger getMagicY( NSUInteger y ) {
             //[ self addMessage: @"Can't move there!" ];
         }
     }
-    [entity getHungry];
+    else {
+        retVal = FALSE;
+    }
     
+    entity.itemType != E_ITEM_T_BASICBOULDER ? [entity getHungry] : 0;
+    
+    return retVal;
 }
 
 

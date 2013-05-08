@@ -273,6 +273,16 @@ NSInteger getMod( NSInteger n ) {
                 }
             }
             
+            else if ( entity.itemType == E_ITEM_T_BASICBOULDER ) {
+                CCMutableTexture2D *t = [sprites objectForKey:@"BasicBoulder"];
+                for ( int i = 0; i < 16; i++ )
+                    for ( int j = 0; j < 16; j++ )
+                        ( [t pixelAt:ccp(i,j)].a != 0 ) ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
+                [texture apply];
+            }
+            
+            
+            
         }
     }
     
