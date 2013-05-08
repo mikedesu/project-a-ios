@@ -2226,7 +2226,9 @@ static NSString  * const notifications[] = {
                                         boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x, o.y+1) ];
                                     }
                                     
-                                    boulderMoved ? [ self moveEntity:pcEntity toPosition:mapPoint ] : 0;
+                                    if ( boulderMoved ) {
+                                        [ self moveEntity:pcEntity toPosition:mapPoint ];
+                                    }
                                     
                                 }
                                 // anything else is cool
@@ -2792,6 +2794,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
         
         if ( isMoveValid ) {
+            retVal = TRUE;
             Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
             [prevTile removeObjectFromContents:entity];
             
@@ -2855,12 +2858,15 @@ NSUInteger getMagicY( NSUInteger y ) {
         else if ( npcExists ) {
             // moving into npc
             // check npc hostility
-            [ self handleAttackForEntity:entity toPosition:position];
+            
+            if ( entity.itemType != E_ITEM_T_BASICBOULDER )
+                [ self handleAttackForEntity:entity toPosition:position];
         }
         
         else if ( pcExists ) {
             // moving into pc
-            [ self handleAttackForEntity:entity toPosition:position];
+            if ( entity.itemType != E_ITEM_T_BASICBOULDER )
+                [ self handleAttackForEntity:entity toPosition:position];
         }
         
         else {
