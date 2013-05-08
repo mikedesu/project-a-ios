@@ -2172,6 +2172,8 @@ static NSString  * const notifications[] = {
                         if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y ) {
                             
                             // check if there is boulder we are moving to
+                           
+                            /*
                             Maybe *maybeBoulder = [Maybe something:[self getEntityForPosition:mapPoint]];
                             if ( [maybeBoulder hasSomething] ) {
                                 // check if it's a boulder
@@ -2195,7 +2197,8 @@ static NSString  * const notifications[] = {
                                      o.x=p.x+1,  p.x+1,  p.x+1,    p.x,    p.x-1,  p.x-1,  p.x-1,  p.x,
                                      o.y=p.y+1   p.y,    p.y-1,    p.y-1,  p.y-1,  p.y,    p.y+1,  p.y+1
                                      */
-                                    
+                            
+                            /*
                                     CGPoint p = pcEntity.positionOnMap;
                                     CGPoint o = tmp_e.positionOnMap; // should be == mapPoint
                                     
@@ -2241,8 +2244,9 @@ static NSString  * const notifications[] = {
                             else {
                                 [ self moveEntity:pcEntity toPosition:mapPoint ];
                             }
+                             */
                             
-                            //[ self moveEntity:pcEntity toPosition:mapPoint ];
+                            [ self moveEntity:pcEntity toPosition:mapPoint ];
                         
                         }
                         else {
@@ -2769,6 +2773,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         BOOL npcExists      = NO;
         BOOL pcExists       = NO;
         BOOL itemExists     = NO;
+        BOOL boulderExists  = NO;
+        BOOL boulderMoved = NO;
         // check if there is an NPC...
         
         for ( Entity *e in [tile contents] ) {
@@ -2776,6 +2782,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 isMoveValid = NO;
                 npcExists   = YES;
                 pcExists    = NO;
+                boulderExists = NO;
                 retVal      = FALSE;
                 break;
             }
@@ -2783,6 +2790,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 isMoveValid = NO;
                 npcExists   = NO;
                 pcExists    = YES;
+                boulderExists = NO;
                 retVal      = FALSE;
                 break;
             }
@@ -2790,81 +2798,155 @@ NSUInteger getMagicY( NSUInteger y ) {
                 isMoveValid = YES;
                 itemExists  = YES;
                 retVal      = TRUE;
+                
+                if ( e.itemType == E_ITEM_T_BASICBOULDER ) {
+                    itemExists = NO;
+                    boulderExists = YES;
+                }
             }
         }
         
         if ( isMoveValid ) {
             retVal = TRUE;
-            Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
-            [prevTile removeObjectFromContents:entity];
             
-            [ GameRenderer setEntity: entity onTile:tile ];
-            
-            if ( entity == pcEntity ) {
-                if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
-                    [ self addMessage: @"Going downstairs..." ];
-                    [ self addMessageWindowString: @"Going downstairs..." ];
-                    //MLOG(@"Going downstairs...");
-                    [ self goingDownstairs ];
+            if ( boulderExists ) {
+                
+                // check if there is boulder we are moving to
+                Entity *boulder = [self getEntityForPosition:position];
+                
+                /*
+                 to handle boulders,
+                 
+                 i need to know which direction the player is coming from
+                 this will simply require comparing player position to boulder position
+                 
+                 1.     2.    3. o   4.o  5.o    6.    7.    8.
+                 p     po    p      p     p     op    p      p
+                 o                                  o       o
+                 
+                 o.x=p.x+1,  p.x+1,  p.x+1,    p.x,    p.x-1,  p.x-1,  p.x-1,  p.x,
+                 o.y=p.y+1   p.y,    p.y-1,    p.y-1,  p.y-1,  p.y,    p.y+1,  p.y+1
+                 */
+                
+                CGPoint p = entity.positionOnMap;
+                CGPoint o = boulder.positionOnMap; // should be == position
+                
+                
+                if ( o.x == p.x + 1 && o.y == p.y + 1 ) {
+                    boulderMoved = [ self moveEntity:boulder toPosition:ccp(o.x+1, o.y+1) ];
                 }
-                else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
-                    if ( floorNumber != 0 ) {
-                        [ self addMessage: @"Going upstairs..." ];
-                        [ self addMessageWindowString: @"Going upstairs..." ];
-                        //MLOG(@"Going upstairs...");
-                    }
-                    [ self goingUpstairs ];
+                else if ( o.x == p.x + 1 && o.y == p.y ) {
+                    boulderMoved = [ self moveEntity:boulder toPosition:ccp(o.x+1, o.y) ];
+                }
+                else if ( o.x == p.x + 1 && o.y == p.y - 1 ) {
+                    boulderMoved = [ self moveEntity:boulder toPosition:ccp(o.x+1, o.y-1) ];
+                }
+                else if ( o.x == p.x && o.y == p.y - 1 ) {
+                    boulderMoved = [ self moveEntity:boulder toPosition:ccp(o.x, o.y-1) ];
+                }
+                else if ( o.x == p.x - 1 && o.y == p.y - 1 ) {
+                    boulderMoved = [ self moveEntity:boulder toPosition:ccp(o.x-1, o.y-1) ];
+                }
+                else if ( o.x == p.x - 1 && o.y == p.y ) {
+                    boulderMoved = [ self moveEntity:boulder toPosition:ccp(o.x-1, o.y) ];
+                }
+                else if ( o.x == p.x - 1 && o.y == p.y + 1 ) {
+                    boulderMoved = [ self moveEntity:boulder toPosition:ccp(o.x-1, o.y+1) ];
+                }
+                else if ( o.x == p.x && o.y == p.y + 1 ) {
+                    boulderMoved = [ self moveEntity:boulder toPosition:ccp(o.x, o.y+1) ];
                 }
                 
-                else if ( itemExists ) {
-                    // list all items on the tile
-                    
-                    if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
-                        for ( Entity *e in [tile contents] ) {
-                            if ( e.entityType == ENTITY_T_ITEM ) {
-                                MLOG( @"There is a %@ here", e.name );
-                                [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
-                                [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
-                            }
-                        }
-                    }
-                    
-                    
-                    else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
-                        Entity *item = nil;
-                        for ( Entity *e in [tile contents] ) {
-                            if ( e.entityType == ENTITY_T_ITEM ) {
-                                MLOG( @"There is a %@ here", e.name );
-                                [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
-                                [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
-                                item = e;
-                                break;
-                            }
-                        }
-                        if ( item != nil ) {
-                            // add the item to your inventory
-                            [ self handleItemPickup: item forEntity: entity ];
-                        }
-                    }
-                    
+                
+                if ( boulderMoved ) {
+                    retVal = [ self moveEntity:entity toPosition:position ];
                 }
+                else {
+                    retVal = FALSE;
+                }
+                
             }
             
-            else if ( entity.entityType == ENTITY_T_NPC ) {
-                // not handling NPCs going up/downstairs yet...
-            }
-        }
+            else {
+            
+                Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
+                [prevTile removeObjectFromContents:entity];
+            
+                [ GameRenderer setEntity: entity onTile:tile ];
+            
+                if ( entity == pcEntity ) {
+                    if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
+                        [ self addMessage: @"Going downstairs..." ];
+                        [ self addMessageWindowString: @"Going downstairs..." ];
+                        //MLOG(@"Going downstairs...");
+                        [ self goingDownstairs ];
+                    }
+                    else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
+                        if ( floorNumber != 0 ) {
+                            [ self addMessage: @"Going upstairs..." ];
+                            [ self addMessageWindowString: @"Going upstairs..." ];
+                            //MLOG(@"Going upstairs...");
+                        }
+                        [ self goingUpstairs ];
+                    }
+                    
+                    else if ( itemExists ) {
+                        // list all items on the tile
+                    
+                        if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
+                            for ( Entity *e in [tile contents] ) {
+                                if ( e.entityType == ENTITY_T_ITEM ) {
+                                    MLOG( @"There is a %@ here", e.name );
+                                    [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                    [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                }
+                            }
+                        }
+                    
+                    
+                        else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
+                            Entity *item = nil;
+                            for ( Entity *e in [tile contents] ) {
+                                if ( e.entityType == ENTITY_T_ITEM ) {
+                                    MLOG( @"There is a %@ here", e.name );
+                                    [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                    [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                    item = e;
+                                    break;
+                                }
+                            }
+                            if ( item != nil ) {
+                                // add the item to your inventory
+                                [ self handleItemPickup: item forEntity: entity ];
+                            }
+                        }
+                    
+                    }
+                }
+            
+                else if ( entity.entityType == ENTITY_T_NPC ) {
+                    // not handling NPCs going up/downstairs yet...
+                }
+            
         
+         
+            }
+         
+        }
         else if ( npcExists ) {
             // moving into npc
             // check npc hostility
             
+            // without this check, boulders can 'attack' when moved into an enemy
+            // this might be cool...
             if ( entity.itemType != E_ITEM_T_BASICBOULDER )
                 [ self handleAttackForEntity:entity toPosition:position];
         }
         
         else if ( pcExists ) {
             // moving into pc
+            // without this check, boulders can 'attack' when moved into an enemy
+            // this might be cool...
             if ( entity.itemType != E_ITEM_T_BASICBOULDER )
                 [ self handleAttackForEntity:entity toPosition:position];
         }
@@ -2878,7 +2960,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         retVal = FALSE;
     }
     
-    entity.itemType != E_ITEM_T_BASICBOULDER ? [entity getHungry] : 0;
+    [entity getHungry];
     
     return retVal;
 }
