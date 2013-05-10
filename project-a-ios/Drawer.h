@@ -48,6 +48,9 @@
 
 +(CCMutableTexture2D *) boulder: (Color_t) body;
 
++(CCMutableTexture2D *) totoro: (Color_t) body eyes: (Color_t) eyes;
+
+
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c;
 +(NSArray *) codeForTexture: (CCMutableTexture2D *) t;
 

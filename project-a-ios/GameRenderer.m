@@ -166,6 +166,13 @@ NSInteger getMod( NSInteger n ) {
                 
             }
             
+            else if ( entity.monsterType == MONSTER_T_TOTORO ) {
+                t = [sprites objectForKey:@"Totoro"];
+                
+            }
+            
+            
+            
             
             
             for ( int i = 0; i < 16; i++ )
@@ -926,10 +933,12 @@ NSInteger getMod( NSInteger n ) {
     if ( diceroll <= spawnChancePercent ) {
         Entity *e;
         
-        NSUInteger m0 = [Dice roll: 2];
-        e =     ( m0 == 1 ) ? Cat :
-                ( m0 == 2 ) ? Ghoul :
-                Cat;
+        NSUInteger m0 = [Dice roll: 3];
+        e =
+        ( m0 == 1 ) ? Cat :
+        ( m0 == 2 ) ? Ghoul :
+        ( m0 == 3 ) ? Totoro :
+        Cat;
         
         
         MLOG(@"Spawned %@", e.name);

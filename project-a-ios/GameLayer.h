@@ -39,6 +39,7 @@ typedef enum {
     CGPoint selectedTilePoint;
     
     Entity *pcEntity;
+    NSMutableArray *killList;
     
     NSUInteger floorNumber;
     DungeonFloor *floor;

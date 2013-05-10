@@ -186,9 +186,9 @@
 -(Entity *) initWithLevel: (NSInteger) _level;
 -(Entity *) initWithHitDie: (NSInteger) hd ;
 -(Entity *) initWithLevel:(NSInteger)_level withHitDie: (NSInteger) hd ;
--(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat
-         withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
+-(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
 
+-(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withStrength: (NSInteger) _str withDexterity: (NSInteger) _dex withConstitution: (NSInteger) _con withIntelligence: (NSInteger) _int withWisdom: (NSInteger) _wis withCharisma: (NSInteger) _cha withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
 
 -( NSInteger ) attackBonus;
 -( NSInteger ) attackRoll;

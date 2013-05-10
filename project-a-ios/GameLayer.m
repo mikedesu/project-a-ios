@@ -53,8 +53,7 @@ unsigned get_memory_mb(void) {
     
     [s setObject:[Drawer heroForPC:pcEntity]                                forKey: @"Hero"];
     
-    //[s setObject:[Drawer cat:black eyes:red]                               forKey: @"Cat"];
-    [s setObject:[Drawer cat:black eyes:yellow]                               forKey: @"Cat"];
+    // Tiles
     
     [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
     [s setObject:[Drawer stoneTile]                                         forKey: @"StoneTile"];
@@ -62,12 +61,22 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer downstairsTile]                                    forKey: @"DownstairsTile"];
     [s setObject:[Drawer flatTile: blue]                                    forKey: @"WaterTile"];
     
+    // Monsters
+    [s setObject:[Drawer cat:black eyes:yellow]                               forKey: @"Cat"];
+ 
+    
     [s setObject:[Drawer ghoulWithBody: green]                              forKey: @"Ghoul"];
     [s setObject:[Drawer ghoulWithBody: red]                                forKey: @"FireGhoul"];
     [s setObject:[Drawer ghoulWithBody: blue]                               forKey: @"IceGhoul"];
     [s setObject:[Drawer ghoulWithBody: yellow]                             forKey: @"LightningGhoul"];
     [s setObject:[Drawer ghoulWithBody: lightblue]                          forKey: @"WaterGhoul"];
     [s setObject:[Drawer ghoulWithBody: brown]                              forKey: @"EarthGhoul"];
+ 
+    
+    [s setObject:[Drawer totoro:green eyes:black]                              forKey: @"Totoro"];
+    
+    
+    //
     
     [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:blue]     forKey: @"ShortSword"];
     [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];
@@ -103,6 +112,8 @@ unsigned get_memory_mb(void) {
     
     // set up our 'hero'
     [ self initializePCEntity ];
+    
+    killList = [NSMutableArray array];
     
     [self loadSprites];
     
@@ -219,6 +230,9 @@ unsigned get_memory_mb(void) {
     turnCounter = 0;
     selectedTilePoint = ccp(0,0);
     pcEntity = nil;
+    
+    if (killList!=nil) [killList removeAllObjects];
+    killList = nil;
     
     floorNumber = 0;
     floor = nil;
@@ -2171,81 +2185,6 @@ static NSString  * const notifications[] = {
                     
                         if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y ) {
                             
-                            // check if there is boulder we are moving to
-                           
-                            /*
-                            Maybe *maybeBoulder = [Maybe something:[self getEntityForPosition:mapPoint]];
-                            if ( [maybeBoulder hasSomething] ) {
-                                // check if it's a boulder
-                                
-                                Entity *tmp_e = (Entity *) maybeBoulder.something;
-                                if ( tmp_e.itemType == E_ITEM_T_BASICBOULDER ) {
-                                    
-                                    // not handled
-                                    //[ self addMessageWindowString: @"Moving boulders not handled yet!" ];
-                                    
-                                    /*
-                                     to handle boulders, 
-                                     
-                                     i need to know which direction the player is coming from
-                                     this will simply require comparing player position to boulder position
-                                     
-                                     1.     2.    3. o   4.o  5.o    6.    7.    8.
-                                        p     po    p      p     p     op    p      p
-                                         o                                  o       o
-                                     
-                                     o.x=p.x+1,  p.x+1,  p.x+1,    p.x,    p.x-1,  p.x-1,  p.x-1,  p.x,
-                                     o.y=p.y+1   p.y,    p.y-1,    p.y-1,  p.y-1,  p.y,    p.y+1,  p.y+1
-                                     */
-                            
-                            /*
-                                    CGPoint p = pcEntity.positionOnMap;
-                                    CGPoint o = tmp_e.positionOnMap; // should be == mapPoint
-                                    
-                                    BOOL boulderMoved = NO;
-                                    
-                                    if ( o.x == p.x + 1 && o.y == p.y + 1 ) {
-                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x+1, o.y+1) ];
-                                    }
-                                    else if ( o.x == p.x + 1 && o.y == p.y ) {
-                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x+1, o.y) ];
-                                    }
-                                    else if ( o.x == p.x + 1 && o.y == p.y - 1 ) {
-                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x+1, o.y-1) ];
-                                    }
-                                    else if ( o.x == p.x && o.y == p.y - 1 ) {
-                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x, o.y-1) ];
-                                    }
-                                    else if ( o.x == p.x - 1 && o.y == p.y - 1 ) {
-                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x-1, o.y-1) ];
-                                    }
-                                    else if ( o.x == p.x - 1 && o.y == p.y ) {
-                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x-1, o.y) ];
-                                    }
-                                    else if ( o.x == p.x - 1 && o.y == p.y + 1 ) {
-                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x-1, o.y+1) ];
-                                    }
-                                    else if ( o.x == p.x && o.y == p.y + 1 ) {
-                                        boulderMoved = [ self moveEntity:tmp_e toPosition:ccp(o.x, o.y+1) ];
-                                    }
-                                    
-                                    if ( boulderMoved ) {
-                                        [ self moveEntity:pcEntity toPosition:mapPoint ];
-                                    }
-                                    
-                                }
-                                // anything else is cool
-                                else {
-                                    [ self moveEntity:pcEntity toPosition:mapPoint ];
-                                }
-                                
-                            }
-                            // empty is also cool
-                            else {
-                                [ self moveEntity:pcEntity toPosition:mapPoint ];
-                            }
-                             */
-                            
                             [ self moveEntity:pcEntity toPosition:mapPoint ];
                         
                         }
@@ -2939,16 +2878,15 @@ NSUInteger getMagicY( NSUInteger y ) {
             
             // without this check, boulders can 'attack' when moved into an enemy
             // this might be cool...
-            if ( entity.itemType != E_ITEM_T_BASICBOULDER )
-                [ self handleAttackForEntity:entity toPosition:position];
+            entity.itemType != E_ITEM_T_BASICBOULDER ? [ self handleAttackForEntity:entity toPosition:position] : 0;
+            
         }
         
         else if ( pcExists ) {
             // moving into pc
             // without this check, boulders can 'attack' when moved into an enemy
             // this might be cool...
-            if ( entity.itemType != E_ITEM_T_BASICBOULDER )
-                [ self handleAttackForEntity:entity toPosition:position];
+            entity.itemType != E_ITEM_T_BASICBOULDER ? [ self handleAttackForEntity:entity toPosition:position] : 0;
         }
         
         else {
@@ -4115,6 +4053,11 @@ NSUInteger getMagicY( NSUInteger y ) {
                     // increase entity xp
                     [ e gainXP: target.level*4 + e.level ];
                     e.totalKills++;
+                    
+                    [ killList addObject: target.name];
+                    
+                    // we lose karma for killing
+                    [[KarmaEngine sharedEngine] decreaseKarma];
                     
                     // remove target from t.contents
                     [t removeObjectFromContents: target];

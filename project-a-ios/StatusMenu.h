@@ -13,6 +13,6 @@
 }
 @property (atomic) CCLabelTTF *content;
 @property (atomic) NSString *contentStr;
--(id) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h;
+//-(id) initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h;
 
 @end

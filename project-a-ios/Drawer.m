@@ -701,6 +701,56 @@
 
 
 
++(CCMutableTexture2D *) totoro: (Color_t) body eyes: (Color_t) eyes {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     ................
+     .... ...... ....
+     ...   ....   ...
+     ..     ..     ..
+     ..            ..
+     ..            ..
+     ..   .    .   ..
+     ..            ..
+     ..            ..
+     ..            ..
+     ..            ..
+     ..            ..
+     ..            ..
+     ..            ..
+     ..            ..
+     ..            ..
+     ..            ..
+     ..            ..
+     ................
+     ................
+     
+     */
+    [t setPixelAt:ccp(4,1) rgba:body];
+    [t setPixelAt:ccp(11,1) rgba:body];
+    for (int x=3; x<6; x++) {
+        [t setPixelAt:ccp(x,2) rgba:body];
+        [t setPixelAt:ccp(x+7,2) rgba:body];
+    }
+    for (int x=2; x<7; x++) {
+        [t setPixelAt:ccp(x,3) rgba:body];
+        [t setPixelAt:ccp(x+7,3) rgba:body];
+    }
+    for (int y=4; y<14; y++)
+        for (int x=2; x<14; x++)
+            [t setPixelAt:ccp(x,y) rgba:body];
+    [t setPixelAt:ccp(5,6) rgba:eyes];
+    [t setPixelAt:ccp(10,6) rgba:eyes];
+    return t;
+}
+
+
+
+
+
+
+
 
 
 
