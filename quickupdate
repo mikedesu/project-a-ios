@@ -11,6 +11,7 @@ echo "updating git repos..."
 git ci -a
 git push origin master
 git push origin dev
+git push origin dev-fix
 ./update_dropbox
 
 echo "repo update successful :)"
