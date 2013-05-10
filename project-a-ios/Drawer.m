@@ -747,6 +747,158 @@
 
 
 
++(CCMutableTexture2D *) wyvern: (Color_t) body eyes: (Color_t) eyes {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     0123456789ABCDEF
+     ................ 0
+     .........   .... 1
+     ..        ..  .. 2
+     .    .  ..... .. 3
+     ..      ........ 4
+     ..  .   ........ 5
+     .....   ........ 6
+     ....   ......... 7
+     ...   ...    ... 8
+     ..   ...      .. 9
+     ...       .    . A
+     ...      ..    . B
+     ...      .    .. C
+     ..           ... D
+     ................ E
+     ................ F
+     
+     */
+    
+    
+    Color_t horns = white;
+    int x=0, y=1;
+    
+    x=2; y=3; [t setPixelAt:ccp(x,y) rgba:eyes];
+    x=3; y=3; [t setPixelAt:ccp(x,y) rgba:eyes];
+    
+    x=5; y=3; [t setPixelAt:ccp(x,y) rgba:eyes];
+    x=6; y=3; [t setPixelAt:ccp(x,y) rgba:eyes];
+    y=1;
+    for (x=9; x<0xD; x++) [t setPixelAt:ccp(x,y) rgba:horns];
+    y=2;
+    for (x=2; x<0x8; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    x=8;   [t setPixelAt:ccp(x,y) rgba:horns];
+    x=9;   [t setPixelAt:ccp(x,y) rgba:horns];
+    x=0xC; [t setPixelAt:ccp(x,y) rgba:horns];
+    x=0xD; [t setPixelAt:ccp(x,y) rgba:horns];
+    y=3;
+    for (x=1; x<8; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    x=0xD;
+    [t setPixelAt:ccp(x,y) rgba:horns];
+    y=4;
+    for (x=2; x<8; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    y=5;
+    for (x=2; x<8; x++) if (x!=4) [t setPixelAt:ccp(x,y) rgba:body];
+    y=6;
+    for (x=5; x<8; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    y=7;
+    for (x=4; x<7; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    y=8;
+    for (x=3; x<6; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    for (x=9; x<13; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    y=9;
+    for (x=2; x<5; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    for (x=8; x<14; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    y=10;
+    for (x=3; x<10; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    for (x=11; x<15; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    y=11;
+    for (x=3; x<9; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    for (x=11; x<15; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    y=12;
+    for (x=3; x<9; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    for (x=10; x<14; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    y=13;
+    for (x=2; x<13; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    
+    return t;
+}
+
+
+
++(CCMutableTexture2D *) gelatinousCube: (Color_t) body {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     0123456789ABCDEF
+     ................ 0
+     ................ 1
+     ..            .. 2
+     ..            .. 3
+     ..            .. 4
+     ..            .. 5
+     ..            .. 6
+     ..            .. 7
+     ..            .. 8
+     ..            .. 9
+     ..            .. A
+     ..            .. B
+     ..            .. C
+     ..            .. D
+     ................ E
+     ................ F
+     */
+    int x=0, y=0, x0=2, y0=2, x1=0xE, y1=0xE;
+    for (y=y0; y<y1; y++)
+        for (x=x0; x<x1; x++)
+            [t setPixelAt:ccp(x,y) rgba:body];
+    return t;
+}
+
+
+
++(CCMutableTexture2D *) triangle: (Color_t) body {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     0123456789ABCDEF
+     ................ 0
+     ................ 1
+     ................ 2
+     ....... ........ 3
+     ......   ....... 4
+     .....     ...... 5
+     ....       ..... 6
+     ...         .... 7
+     ..           ... 8
+     .             .. 9
+                    . A
+     ................ B
+     ................ C
+     ................ D
+     ................ E
+     ................ F
+     */
+    int x = 0, y = 0, x0 = 7, y0 = 3, x1 = 7, y1 = 0xB;
+    
+    for (y = y0; y <= y1; y++) {
+        for (x = x0; x <= x1; x++)
+            [t setPixelAt:ccp(x,y) rgba:body];
+        x0--;
+        x1++;
+    }
+    
+    return t;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

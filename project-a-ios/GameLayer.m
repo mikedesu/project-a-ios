@@ -62,8 +62,13 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer flatTile: blue]                                    forKey: @"WaterTile"];
     
     // Monsters
+    
+    // unused...yet...
+    //[s setObject:[Drawer wyvern:orange eyes:black]                               forKey: @"Cat"];
+    //[s setObject:[Drawer gelatinousCube:orange]                               forKey: @"Cat"];
+    //[s setObject:[Drawer triangle:orange]                               forKey: @"Cat"];
+    
     [s setObject:[Drawer cat:black eyes:yellow]                               forKey: @"Cat"];
- 
     
     [s setObject:[Drawer ghoulWithBody: green]                              forKey: @"Ghoul"];
     [s setObject:[Drawer ghoulWithBody: red]                                forKey: @"FireGhoul"];
@@ -74,9 +79,9 @@ unsigned get_memory_mb(void) {
  
     
     [s setObject:[Drawer totoro:green eyes:black]                              forKey: @"Totoro"];
+ 
     
-    
-    //
+    // Items
     
     [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:blue]     forKey: @"ShortSword"];
     [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];

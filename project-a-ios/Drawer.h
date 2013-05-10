@@ -50,6 +50,10 @@
 
 +(CCMutableTexture2D *) totoro: (Color_t) body eyes: (Color_t) eyes;
 
++(CCMutableTexture2D *) wyvern: (Color_t) body eyes: (Color_t) eyes;
++(CCMutableTexture2D *) gelatinousCube: (Color_t) body;
++(CCMutableTexture2D *) triangle: (Color_t) body;
+
 
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c;
 +(NSArray *) codeForTexture: (CCMutableTexture2D *) t;
