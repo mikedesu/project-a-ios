@@ -363,10 +363,9 @@
     prefixBonus  += [self prefixDamageSum];
     effectsBonus += [self effectsDamageSum];
     
+    MLOG(@"%@.attackBonus = %d", self.name, strengthBonus + gearBonus);
     return strengthBonus + gearBonus;
 }
-
-
 
 
 /*
@@ -377,7 +376,6 @@
  ====================
  */
 -( NSInteger ) attackRoll {
-    //return rollDiceOnceWithModifier(20, self.attackBonus );
     return [Dice roll: 20] + self.attackBonus;
 }
 
