@@ -142,10 +142,6 @@ ENTITYITEMPICKUPALGORITHM_T_NONE, \
 nil))
 
 
-
-
-
-
 #define Cat \
 (Monster(\
 [[NameEngine sharedEngine] getNextCatName], \
