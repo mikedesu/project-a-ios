@@ -69,6 +69,9 @@ typedef enum {
     // Boulders
     E_ITEM_T_BASICBOULDER,
     
+    // Doors
+    E_ITEM_T_DOOR_SIMPLE,
+    
     
     E_ITEM_T_NUMTYPES
 } EntityItemTypes_t;

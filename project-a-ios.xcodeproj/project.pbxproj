@@ -10,6 +10,7 @@
 		2721D02116EAD57200C26F9E /* Drawer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D02016EAD57100C26F9E /* Drawer.m */; };
 		2721D6F516EEB9CD0051352D /* StatusMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D6F416EEB9CC0051352D /* StatusMenu.m */; };
 		2721D6FE16EEBA620051352D /* InventoryMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D6FD16EEBA610051352D /* InventoryMenu.m */; };
+		27286DCE174105250044C371 /* TODO in Resources */ = {isa = PBXBuildFile; fileRef = 27286DCD174105250044C371 /* TODO */; };
 		272EF4CA16C5695D005DF231 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 272EF4C916C5695D005DF231 /* QuartzCore.framework */; };
 		272EF4CC16C5695D005DF231 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 272EF4CB16C5695D005DF231 /* OpenGLES.framework */; };
 		272EF4CE16C5695D005DF231 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 272EF4CD16C5695D005DF231 /* OpenAL.framework */; };
@@ -173,6 +174,7 @@
 		2721D6FC16EEBA610051352D /* InventoryMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InventoryMenu.h; sourceTree = "<group>"; };
 		2721D6FD16EEBA610051352D /* InventoryMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InventoryMenu.m; sourceTree = "<group>"; };
 		2721D6FF16F078FC0051352D /* EntitySubtypeDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EntitySubtypeDefines.h; sourceTree = "<group>"; };
+		27286DCD174105250044C371 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		272EF4C616C5695D005DF231 /* project-a-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "project-a-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		272EF4C916C5695D005DF231 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		272EF4CB16C5695D005DF231 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -628,6 +630,7 @@
 				27E192461714C3F800AA3F25 /* Threat_t.h */,
 				27C4145316C804E300BE09F9 /* Tile.h */,
 				27C4145416C804E300BE09F9 /* Tile.m */,
+				27286DCD174105250044C371 /* TODO */,
 				27E19247171EB12000AA3F25 /* Version.h */,
 				2767E0CC16E8596900013CBE /* Weapons.h */,
 				2767E0CD16E8596900013CBE /* Weapons.m */,
@@ -1063,6 +1066,7 @@
 				272EF62C16C5695F005DF231 /* ChangeLog in Resources */,
 				27C88FE016C57607004AB4D8 /* ground_vertical.png in Resources */,
 				27DFEA1517039B2000933C8A /* tile.png in Resources */,
+				27286DCE174105250044C371 /* TODO in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

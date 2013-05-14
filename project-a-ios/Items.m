@@ -11,7 +11,7 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    NSUInteger numItems = 5;
+    NSUInteger numItems = 6;
     NSUInteger roll = [Dice roll:numItems];
     if (roll==1)
         e = [Items potionOfLightHealing:1];
@@ -21,6 +21,8 @@
         e = [Items woodenFishingRod];
     else if (roll==4)
         e = [Items catfish];
+    else if (roll==5)
+        e = [Items simpleDoor];
     else
         e = [Items basicBoulder];
     
@@ -146,6 +148,22 @@
     e.totalDurability   = 100;
     return e;
 }
+
+
++(Entity *) simpleDoor {
+    Entity *e = [[Entity alloc] init];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_DOOR_SIMPLE;
+    [e.name setString:@"Door, Simple"];
+    e.isPC                  = NO;
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    e.weight            = 1;
+    e.durability        = 100;
+    e.totalDurability   = 100;
+    return e;    
+}
+
 
 
 

@@ -53,6 +53,8 @@ unsigned get_memory_mb(void) {
     
     [s setObject:[Drawer heroForPC:pcEntity]                                forKey: @"Hero"];
     
+    [s setObject:[Drawer door:brown knob:yellow]                               forKey: @"SimpleDoor"];
+    
     // Tiles
     
     [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
@@ -2108,6 +2110,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         BOOL pcExists       = NO;
         BOOL itemExists     = NO;
         BOOL boulderExists  = NO;
+        BOOL doorExists     = NO;
         BOOL boulderMoved = NO;
         // check if there is an NPC...
         
@@ -2117,6 +2120,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 npcExists   = YES;
                 pcExists    = NO;
                 boulderExists = NO;
+                doorExists  = NO;
                 retVal      = FALSE;
                 break;
             }
@@ -2125,22 +2129,32 @@ NSUInteger getMagicY( NSUInteger y ) {
                 npcExists   = NO;
                 pcExists    = YES;
                 boulderExists = NO;
+                doorExists  = NO;
                 retVal      = FALSE;
                 break;
             }
             else if ( e.entityType == ENTITY_T_ITEM ) {
+                
                 isMoveValid = YES;
                 itemExists  = YES;
+                doorExists  = NO;
                 retVal      = TRUE;
                 
                 if ( e.itemType == E_ITEM_T_BASICBOULDER ) {
                     itemExists = NO;
                     boulderExists = YES;
                 }
+                else if ( e.itemType == E_ITEM_T_DOOR_SIMPLE ) {
+                    isMoveValid = NO;
+                    itemExists = NO;
+                    doorExists = YES;
+                    
+                }
             }
         }
         if ( isMoveValid ) {
             retVal = TRUE;
+            
             if ( boulderExists ) {
                 // check if there is boulder we are moving to
                 Entity *boulder = [self getEntityForPosition:position];
@@ -2180,12 +2194,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                     boulderMoved = [ self moveEntity:boulder toPosition:ccp(o.x, o.y+1) ];
                 }
                 
-                if ( boulderMoved ) {
-                    retVal = [ self moveEntity:entity toPosition:position ];
-                }
-                else {
-                    retVal = FALSE;
-                }
+                retVal = boulderExists ? [self moveEntity:entity toPosition:position] : FALSE;
+
             } else {
                 Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
                 [prevTile removeObjectFromContents:entity];
@@ -2231,7 +2241,6 @@ NSUInteger getMagicY( NSUInteger y ) {
                                 [ self handleItemPickup: item forEntity: entity ];
                             }
                         }
-                    
                     }
                 } else if ( entity.entityType == ENTITY_T_NPC ) {
                     // not handling NPCs going up/downstairs yet...
@@ -2250,9 +2259,11 @@ NSUInteger getMagicY( NSUInteger y ) {
             // without this check, boulders can 'attack' when moved into an enemy
             // this might be cool...
             entity.itemType != E_ITEM_T_BASICBOULDER ? [ self handleAttackForEntity:entity toPosition:position] : 0;
+        } else if ( doorExists ) {
+            [self addMessageWindowString: @"There is a door here" ];
+            
         } else {
             //MLOG( @"Attempting to move into NPC." );
-            //[ self addMessage: @"Can't move there!" ];
         }
     } else {
         retVal = FALSE;

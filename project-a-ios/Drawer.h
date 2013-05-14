@@ -54,6 +54,7 @@
 +(CCMutableTexture2D *) gelatinousCube: (Color_t) body;
 +(CCMutableTexture2D *) triangle: (Color_t) body;
 
++(CCMutableTexture2D *) door: (Color_t) body knob: (Color_t) knob;
 
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c;
 +(NSArray *) codeForTexture: (CCMutableTexture2D *) t;

@@ -869,7 +869,7 @@
      ...         .... 7
      ..           ... 8
      .             .. 9
-                    . A
+     . A
      ................ B
      ................ C
      ................ D
@@ -890,21 +890,37 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
++(CCMutableTexture2D *) door: (Color_t) body knob: (Color_t) knob {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     0123456789ABCDEF
+     ................ 0
+     ................ 1
+     ................ 2
+     ................ 3
+     ................ 4
+     ................ 5
+     ................ 6
+     ................ 7
+     ................ 8
+     ................ 9
+     ................ A
+     ................ B
+     ................ C
+     ................ D
+     ................ E
+     ................ F
+     */
+    [t fill:body];
+    
+    for (int y=6; y<8; y++ )
+        for (int x=2; x<4; x++)
+            [t setPixelAt:ccp(x,y) rgba:knob];
+    
+    return t;
+    
+}
 
 
 #pragma mark - Experimental code/drawing stuff
@@ -912,8 +928,6 @@
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c {
     return [NSString stringWithFormat:@"setPixel %.0f %.0f %d %d %d %d", p.x, p.y, c.r, c.g, c.b, c.a];
 }
-
-
 
 +(NSArray *) codeForTexture: (CCMutableTexture2D *) t {
     NSMutableArray *array = [NSMutableArray array];
@@ -927,8 +941,6 @@
     
     return array;
 }
-
-
 
 +(void) executeCodeForTexture: (CCMutableTexture2D *) t code: (NSString *) code {
     // setPixel
@@ -948,12 +960,10 @@
     }
 }
 
-
 +(void) executeCodesForTexture: (CCMutableTexture2D *) t codes: (NSArray *) codes {
     for (NSString *code in codes) {
         [self executeCodeForTexture:t code:code];
     }
 }
-
 
 @end

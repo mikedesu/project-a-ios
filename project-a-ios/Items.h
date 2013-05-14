@@ -15,4 +15,7 @@
 // Fishing
 +(Entity *) catfish;
 +(Entity *) woodenFishingRod;
+
+// Doors
++(Entity *) simpleDoor;
 @end

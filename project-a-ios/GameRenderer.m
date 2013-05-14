@@ -95,6 +95,8 @@ NSInteger getMod( NSInteger n ) {
     }
     [ texture apply ];
     
+    CCMutableTexture2D *t = nil;
+    
     for (Entity *entity in [data contents]) {
         // Below, we define the draw routines for each entity-type
         // We are starting with solid colors
@@ -102,24 +104,14 @@ NSInteger getMod( NSInteger n ) {
         // Last, we will upgrade to multi-layer drawings
         
         if ( entity.entityType == ENTITY_T_PC ) {
-            // draw on the texture
-            // draw sprite on top of cell, w/o black background
-            CCMutableTexture2D *t = [sprites objectForKey: @"Hero"];
-            for ( int i = 0; i < 16; i++ )
-                for ( int j = 0; j < 16; j++ )
-                    if ( [t pixelAt:ccp(i,j)].a != 0 )
-                        [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
-            [texture apply];
+            t = [sprites objectForKey: @"Hero"];
         } else if ( [ [entity name] isEqualToString: @"Test1" ] ) {
             // Test1 will get rendered as colorFuzz
-            for ( int i = 0; i < 16; i++ ) {
-                for ( int j = 0; j < 16; j++ ) {
+            for ( int i = 0; i < 16; i++ )
+                for ( int j = 0; j < 16; j++ )
                     [ texture setPixelAt: ccp(i, j) rgba: random_color ];
-                }
-            }
             [ texture apply ];
         } else if ( entity.entityType == ENTITY_T_NPC ) {
-            CCMutableTexture2D *t;
             
             if (entity.monsterType == MONSTER_T_GHOUL) {
                 t = [sprites objectForKey: @"Ghoul"];
@@ -151,101 +143,56 @@ NSInteger getMod( NSInteger n ) {
                         [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
             [texture apply];
         } else if ( entity.entityType == ENTITY_T_ITEM ) {
+            
             if ( entity.itemType == E_ITEM_T_WEAPON ) {
-                // draw sprite on top of cell, w/o black background
-                //CCMutableTexture2D *t = [Drawer basicSwordWithColor:white withHandleColor:blue];
-                CCMutableTexture2D *t = [sprites objectForKey:@"ShortSword"];
-                for ( int i = 0; i < 16; i++ ) {
-                    for ( int j = 0; j < 16; j++ ) {
-                        [t pixelAt:ccp(i,j)].a != 0 ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
-                    }
-                }
-                [texture apply];
+                t = [sprites objectForKey:@"ShortSword"];
             } else if ( entity.itemType == E_ITEM_T_ARMOR ) {
-                // draw sprite on top of cell, w/o black background
-                //CCMutableTexture2D *t = [Drawer basicShieldWithColor:darkgray withEmblemColor:yellow];
-                CCMutableTexture2D *t = [sprites objectForKey:@"LeatherArmor"];
-                for ( int i = 0; i < 16; i++ ) {
-                    for ( int j = 0; j < 16; j++ ) {
-                        [t pixelAt:ccp(i,j)].a != 0 ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
-                    }
-                }
-                [texture apply];
+                t = [sprites objectForKey:@"LeatherArmor"];
             }
             
             // only one book so far...
             else if ( entity.itemType == E_ITEM_T_BOOK ) {
-                // draw sprite on top of cell, w/o black background
-                //CCMutableTexture2D *t = [Drawer bookOfAllKnowing];
-                CCMutableTexture2D *t = [sprites objectForKey:@"BookOfAllKnowing"];
-                for ( int i = 0; i < 16; i++ ) {
-                    for ( int j = 0; j < 16; j++ ) {
-                        [t pixelAt:ccp(i,j)].a != 0 ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
-                    }
-                }
-                [texture apply];
+                t = [sprites objectForKey:@"BookOfAllKnowing"];
             }
             
             // potions
             else if ( entity.itemType == E_ITEM_T_POTION ) {
-                // draw sprite on top of cell, w/o black background
-                
-                //CCMutableTexture2D *t = [Drawer basicPotionWithColor: yellow];
-                CCMutableTexture2D *t = [sprites objectForKey:@"PotionOfLightHealing"];
-                for ( int i = 0; i < 16; i++ )
-                    for ( int j = 0; j < 16; j++ ) {
-                        [t pixelAt:ccp(i,j)].a != 0 ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
-                    }
-                [texture apply];
+                t = [sprites objectForKey:@"PotionOfLightHealing"];
             }
             
             // food
             else if ( entity.itemType == E_ITEM_T_FOOD ) {
-                // draw sprite on top of cell, w/o black background
-                
-                //CCMutableTexture2D *t = [Drawer basicPotionWithColor: red];
-                CCMutableTexture2D *t = [sprites objectForKey:@"SmallBlob"];
-                for ( int i = 0; i < 16; i++ ) {
-                    for ( int j = 0; j < 16; j++ ) {
-                        [t pixelAt:ccp(i,j)].a != 0 ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
-                    }
-                }
-                [texture apply];
+                t = [sprites objectForKey:@"SmallBlob"];
             }
             
             // fish
             else if ( entity.itemType == E_ITEM_T_FISH ) {
-                // draw sprite on top of cell, w/o black background
- 
                 if ( [entity.name isEqualToString:@"Catfish"] ) {
-                    CCMutableTexture2D *t = [sprites objectForKey:@"Catfish"];
-                    for ( int i = 0; i < 16; i++ ) {
-                        for ( int j = 0; j < 16; j++ ) {
-                            ( [t pixelAt:ccp(i,j)].a != 0 ) ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
-                        }
-                    }
-                    [texture apply];
+                    t = [sprites objectForKey:@"Catfish"];
                 }
             }
             
             else if ( entity.itemType == E_ITEM_T_FISHING_ROD ) {
                 if ( [entity.name isEqualToString:@"Wooden Fishing Rod"] ) {
-                    CCMutableTexture2D *t = [sprites objectForKey:@"WoodenFishingRod"];
-                    for ( int i = 0; i < 16; i++ )
-                        for ( int j = 0; j < 16; j++ )
-                            ( [t pixelAt:ccp(i,j)].a != 0 ) ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
-                    [texture apply];
+                    t = [sprites objectForKey:@"WoodenFishingRod"];
                 }
             }
             
             else if ( entity.itemType == E_ITEM_T_BASICBOULDER ) {
-                CCMutableTexture2D *t = [sprites objectForKey:@"BasicBoulder"];
-                for ( int i = 0; i < 16; i++ )
-                    for ( int j = 0; j < 16; j++ )
-                        ( [t pixelAt:ccp(i,j)].a != 0 ) ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
-                [texture apply];
+                t = [sprites objectForKey:@"BasicBoulder"];
+            }
+            
+            else if ( entity.itemType == E_ITEM_T_DOOR_SIMPLE ) {
+                t = [sprites objectForKey:@"SimpleDoor"];
             }
         }
+    }
+ 
+    if ( t != nil ) {
+        for ( int i = 0; i < 16; i++ )
+            for ( int j = 0; j < 16; j++ )
+                ( [t pixelAt:ccp(i,j)].a != 0 ) ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
+        [texture apply];
     }
     
     // handle selected tiles
@@ -439,10 +386,13 @@ NSInteger getMod( NSInteger n ) {
         
         for ( int i = numTilesPlaced; i < numTiles; i++ ) {
             BOOL willReroll = NO;
-            roll = [Dice roll:4];
-            totalRolls++;
+            
+            
+            //roll = [Dice roll:4];
+            //roll = [Dice roll:8];
             
             // handle the roll
+            /*
             if ( roll == 1) {
                 xo += 0;
                 yo += -1;
@@ -455,7 +405,68 @@ NSInteger getMod( NSInteger n ) {
             } else if ( roll == 4) {
                 xo += 1;
                 yo += 0;
+            } else if ( roll == 5 ) {
+                xo += -1;
+                yo += -1;
+            } else if ( roll == 6 ) {
+                xo += 1;
+                yo += -1;
+            } else if ( roll == 7 ) {
+                xo += -1;
+                yo += 1;
+            } else if ( roll == 8 ) {
+                xo += 1;
+                yo += 1;
             }
+             */
+            
+            // direction type
+            // 0 = standard : ULDR
+            // 1 = cross    : UL UR DL DR
+            // 2 = mix      : 0 + 1
+            NSInteger dirType = 1;
+            //NSInteger dirType = [Dice roll:3];
+            if ( dirType == 1 ) {
+                roll = [Dice roll:4];
+                xo +=
+                roll == 1 || roll == 2  ?  0  :
+                roll == 3               ? -1  :
+                roll == 4               ?  1  :
+                0;
+                
+                yo +=
+                roll == 1              ? -1  :
+                roll == 2              ?  1  :
+                roll == 3 || roll == 4 ?  0  :
+                0;
+                
+            } else if ( dirType == 2 ) {
+                roll = [Dice roll:4];
+                xo +=
+                roll == 1 || roll == 3 ? -1  :
+                roll == 2 || roll == 4 ?  1  :
+                0;
+                
+                yo +=
+                roll == 1 || roll == 2 ? -1  :
+                roll == 3 || roll == 4 ?  1  :
+                0;
+                
+            } else if ( dirType == 3 ) {
+                roll = [Dice roll:8];
+                xo +=
+                roll == 1 || roll == 2              ?  0  :
+                roll == 3 || roll == 5 || roll == 7 ? -1  :
+                roll == 4 || roll == 6 || roll == 8 ?  1  :
+                0;
+                
+                yo +=
+                roll == 1 || roll == 5 || roll == 6 ? -1  :
+                roll == 2 || roll == 7 || roll == 8 ?  1  :
+                roll == 3 || roll == 4              ?  0  :
+                0;
+            }
+            totalRolls++;
             
             CGPoint point = ccp( x+xo, y+yo );
             // roll-checking
