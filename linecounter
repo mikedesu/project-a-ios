@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+VAR1=$(cat project-a-ios/*.h | sed '/^\s*$/d' | wc -l)
+VAR2=$(cat project-a-ios/*.m | sed '/^\s*$/d' | wc -l)
+
+echo $VAR1 + $VAR2 | bc
+
