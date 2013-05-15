@@ -101,6 +101,9 @@
     NSMutableArray *effects;
     
     BOOL wasBumped;
+    
+    BOOL doorOpen;
+    BOOL doorLocked;
 }
 
 @property (atomic, assign) BOOL wasBumped;
@@ -181,6 +184,9 @@
 @property (atomic, assign) NSInteger foodBase;
 @property (atomic, assign) NSInteger healingRollBase;
 @property (atomic, assign) NSInteger healingBonus;
+
+@property (atomic, assign) BOOL doorOpen;
+@property (atomic, assign) BOOL doorLocked;
 
 -(Entity *) init;
 -(Entity *) initWithLevel: (NSInteger) _level;

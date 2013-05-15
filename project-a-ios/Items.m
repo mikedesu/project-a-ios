@@ -11,6 +11,7 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
+    /*
     NSUInteger numItems = 6;
     NSUInteger roll = [Dice roll:numItems];
     if (roll==1)
@@ -25,6 +26,9 @@
         e = [Items simpleDoor];
     else
         e = [Items basicBoulder];
+    */
+    
+    e = [Items simpleDoor];
     
     NSAssert( e!=nil, @"Random Item: roll failed to set entity" );
     
@@ -155,6 +159,8 @@
     e.entityType    = ENTITY_T_ITEM;
     e.itemType      = E_ITEM_T_DOOR_SIMPLE;
     [e.name setString:@"Door, Simple"];
+    e.doorOpen              = NO;
+    e.doorLocked            = YES;
     e.isPC                  = NO;
     e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
     e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;

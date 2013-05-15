@@ -30,10 +30,7 @@
 
 +(CCMutableTexture2D *) bookOfAllKnowing;
 
-//+(CCMutableTexture2D *) mario;
 +(CCMutableTexture2D *) marioWithSuitColor: (Color_t) suitColor     skinColor: (Color_t) skinColor;
-
-//+(CCMutableTexture2D *) hero;
 
 +(CCMutableTexture2D *) heroForPC: (Entity *) pc ;
 
@@ -55,7 +52,8 @@
 +(CCMutableTexture2D *) triangle: (Color_t) body;
 
 +(CCMutableTexture2D *) door: (Color_t) body knob: (Color_t) knob;
-
++(CCMutableTexture2D *) opendoor: (Color_t) body knob: (Color_t) knob;
+    
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c;
 +(NSArray *) codeForTexture: (CCMutableTexture2D *) t;
 

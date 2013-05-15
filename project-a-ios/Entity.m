@@ -81,6 +81,9 @@
 @synthesize prefixes;
 @synthesize effects;
 
+@synthesize doorOpen;
+@synthesize doorLocked;
+
 //@synthesize monsterPrefixGroup;
 //@synthesize itemPrefixGroup;
 
@@ -100,6 +103,9 @@
         positionOnMap.x = 0;
         positionOnMap.y = 0;
         texture         = nil;
+        
+        doorOpen        = NO;
+        doorLocked      = NO;
         
         name        = [ [ NSMutableString alloc ] init ];
         level       = 1;

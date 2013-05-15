@@ -53,7 +53,8 @@ unsigned get_memory_mb(void) {
     
     [s setObject:[Drawer heroForPC:pcEntity]                                forKey: @"Hero"];
     
-    [s setObject:[Drawer door:brown knob:yellow]                               forKey: @"SimpleDoor"];
+    [s setObject:[Drawer door:brown knob:yellow]                               forKey: @"SimpleDoorClosed"];
+    [s setObject:[Drawer opendoor:brown knob:yellow]                               forKey: @"SimpleDoorOpen"];
     
     // Tiles
     
@@ -2145,7 +2146,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     boulderExists = YES;
                 }
                 else if ( e.itemType == E_ITEM_T_DOOR_SIMPLE ) {
-                    isMoveValid = NO;
+                    isMoveValid = e.doorOpen;
                     itemExists = NO;
                     doorExists = YES;
                     
@@ -2241,6 +2242,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                                 [ self handleItemPickup: item forEntity: entity ];
                             }
                         }
+                    } else if ( doorExists ) {
+                        [self addMessageWindowString: @"There is an open door here"];
                     }
                 } else if ( entity.entityType == ENTITY_T_NPC ) {
                     // not handling NPCs going up/downstairs yet...
@@ -2259,8 +2262,22 @@ NSUInteger getMagicY( NSUInteger y ) {
             // without this check, boulders can 'attack' when moved into an enemy
             // this might be cool...
             entity.itemType != E_ITEM_T_BASICBOULDER ? [ self handleAttackForEntity:entity toPosition:position] : 0;
+            
         } else if ( doorExists ) {
-            [self addMessageWindowString: @"There is a door here" ];
+            
+            Entity *door = [self getEntityForPosition:position];
+            
+            if ( door.doorLocked )
+                [self addMessageWindowString: @"The door is locked" ];
+            else {
+                
+                if ( ! door.doorOpen ) {
+                    door.doorOpen = YES;
+                    
+                    [self addMessageWindowString:@"The door is now open"];
+                }
+                
+            }
             
         } else {
             //MLOG( @"Attempting to move into NPC." );

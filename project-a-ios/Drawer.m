@@ -913,14 +913,53 @@
      ................ F
      */
     [t fill:body];
+    for (int y=6; y<8; y++ )
+        for (int x=12; x<14; x++)
+            [t setPixelAt:ccp(x,y) rgba:knob];
+    return t;
+}
+
+
+
++(CCMutableTexture2D *) opendoor: (Color_t) body knob: (Color_t) knob {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     0123456789ABCDEF
+     ................ 0
+     ................ 1
+     ................ 2
+     ................ 3
+     ................ 4
+     ................ 5
+     ................ 6
+     ................ 7
+     ................ 8
+     ................ 9
+     ................ A
+     ................ B
+     ................ C
+     ................ D
+     ................ E
+     ................ F
+     */
+    for (int y=0; y<16; y++)
+        for (int x=0; x<6; x++)
+            [t setPixelAt:ccp(x,y) rgba:body];
     
     for (int y=6; y<8; y++ )
-        for (int x=2; x<4; x++)
+        for (int x=4; x<6; x++)
             [t setPixelAt:ccp(x,y) rgba:knob];
-    
     return t;
-    
 }
+
+
+
+
+
+
+
+
 
 
 #pragma mark - Experimental code/drawing stuff
