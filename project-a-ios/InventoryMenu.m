@@ -35,37 +35,37 @@
                 NSInteger total = [Dice roll: eItem.healingRollBase] + eItem.healingBonus;
                 pc.hp += total;
                 if ( pc.hp > pc.maxhp ) pc.hp = pc.maxhp;
-                [gameLayer addMessage:[NSString stringWithFormat:@"%@ recovered %d hp", pc.name, total]];
                 [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ recovered %d hp", pc.name, total]];
             }
         }
+        
         else if ( eItem.itemType == E_ITEM_T_FOOD ) {
             pc.hunger -= eItem.foodBase;
-            [gameLayer addMessage:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
             [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
         }
         
         else if ( eItem.itemType == E_ITEM_T_FISH ) {
             pc.hunger -= eItem.foodBase;
-            [gameLayer addMessage:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
             [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ ate a %@", pc.name, eItem.name]];
-            
         }
         
         // fishing
         else if ( eItem.itemType == E_ITEM_T_FISHING_ROD ) {
-            //[gameLayer addMessage: [NSString stringWithFormat:@"Cast your %@ where?", eItem.name]];
             [gameLayer addMessageWindowString: [NSString stringWithFormat:@"Cast your %@ where?", eItem.name]];
             [gameLayer setGameState: GAMESTATE_T_GAME_PC_FISHING_PRECAST];
             // do not remove fishing rod from inventory
             //handled = NO;
         }
         
-        
+        else if ( eItem.itemType == E_ITEM_T_KEY_SIMPLE ) {
+            [gameLayer addMessageWindowString: @"Unlock which door?"];
+            [gameLayer setGameState: GAMESTATE_T_GAME_PC_KEY_PREUSE];
+            // do not remove simple key from inventory
+            //handled = NO;
+        }
         
         else {
             MLOG(@"Not handled!");
-            [gameLayer addMessage:[NSString stringWithFormat:@"%@-use not handled yet!", eItem.name]];
             [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@-use not handled yet!", eItem.name]];
             handled = NO;
         }
@@ -74,9 +74,16 @@
         
         if (handled) {
             [gameLayer stepGameLogic];
-            ( eItem.itemType != E_ITEM_T_FISHING_ROD ) ? [gameLayer stepGameLogic] : 0 ;
+            ( eItem.itemType != E_ITEM_T_FISHING_ROD &&
+              eItem.itemType != E_ITEM_T_KEY_SIMPLE )
+            ? [gameLayer stepGameLogic] : 0 ;
+            
             // dont remove fishing rods (or other things...)
-            ( eItem.itemType != E_ITEM_T_FISHING_ROD ) ? [inventory      removeObjectAtIndex: sender.tag] : 0 ;
+            ( eItem.itemType != E_ITEM_T_FISHING_ROD && 
+              eItem.itemType != E_ITEM_T_KEY_SIMPLE )
+            ? [inventory removeObjectAtIndex: sender.tag] : 0 ;
+            
+            
             [sender.parent  removeChild:sender   cleanup:YES];
         }
     };

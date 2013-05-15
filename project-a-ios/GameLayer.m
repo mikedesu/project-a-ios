@@ -56,6 +56,8 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer door:brown knob:yellow]                               forKey: @"SimpleDoorClosed"];
     [s setObject:[Drawer opendoor:brown knob:yellow]                               forKey: @"SimpleDoorOpen"];
     
+    [s setObject:[Drawer key: yellow]                               forKey: @"SimpleKey"];
+    
     // Tiles
     
     [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
@@ -195,20 +197,17 @@ unsigned get_memory_mb(void) {
     
     needsRedraw = YES;
     
+    // populate treasure
     // generate and scatter some treasure
     for ( int i = 0; i < [dungeon count]; i++ ) {
         NSInteger treasureCount = [Dice roll:6] + 1;
         for ( int j = 0; j < treasureCount; j++ ) {
-            NSInteger roll = [Dice roll:4];
-            if ( roll == 1 ) {
-                [ GameRenderer spawnEntityAtRandomLocation:[Weapons shortSword: i] onFloor:[dungeon objectAtIndex:i]];
-            }
-            else if ( roll == 2 ) {
-                [ GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: i] onFloor:[dungeon objectAtIndex:i]];
-            }
-            else if ( roll == 3 || roll == 4 ) {
-                [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
-            }
+            NSInteger roll = [Dice roll:3];
+            
+            roll == 1 ? [ GameRenderer spawnEntityAtRandomLocation:[Weapons shortSword: i] onFloor:[dungeon objectAtIndex:i]] :
+            roll == 2 ? [ GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: i] onFloor:[dungeon objectAtIndex:i]] :
+            roll == 3 ? [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]] :
+            0;
         }
     }
     
@@ -1629,6 +1628,33 @@ static NSString  * const notifications[] = {
             gameLogicIsOn ? [self stepGameLogic] : 0;
         }
         
+        else if ( gameState == GAMESTATE_T_GAME_PC_KEY_PREUSE ) {
+            // check tile for locked door
+            
+            if ( validMapPoint ) {
+                Tile *a = [self getTileForCGPoint: mapPoint];
+                
+                Entity *door = nil;
+                for (Entity *e in a.contents) {
+                    if (e.itemType == E_ITEM_T_DOOR_SIMPLE) {
+                        door = e;
+                        break;
+                    }
+                }
+                
+                if ( door != nil ) {
+                    door.doorLocked = NO;
+                    [self addMessageWindowString: @"Door unlocked"];
+                }
+                else {
+                    [self addMessageWindowString: @"No door here"];
+                }
+            }
+            
+            gameState = GAMESTATE_T_MAINMENU;
+            gameLogicIsOn ? [self stepGameLogic] : 0;
+        }
+        
         // not fishing, going for quick-move
         else {
             // something was previously selected
@@ -2100,7 +2126,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( BOOL ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) _floor {
-    //MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
+    MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
     BOOL retVal = FALSE;
     
     Tile *tile = [ self getMapTileFromPoint: position forFloor: _floor ];
@@ -2141,15 +2167,22 @@ NSUInteger getMagicY( NSUInteger y ) {
                 doorExists  = NO;
                 retVal      = TRUE;
                 
+                // moving into boulder
                 if ( e.itemType == E_ITEM_T_BASICBOULDER ) {
                     itemExists = NO;
                     boulderExists = YES;
                 }
+                // boulder moving into door
+                else if ( entity.itemType == E_ITEM_T_BASICBOULDER && e.itemType == E_ITEM_T_DOOR_SIMPLE ) {
+                    isMoveValid = NO;
+                    itemExists = NO;
+                    doorExists = YES;
+                }
+                // moving into door
                 else if ( e.itemType == E_ITEM_T_DOOR_SIMPLE ) {
                     isMoveValid = e.doorOpen;
                     itemExists = NO;
                     doorExists = YES;
-                    
                 }
             }
         }
@@ -2195,14 +2228,16 @@ NSUInteger getMagicY( NSUInteger y ) {
                     boulderMoved = [ self moveEntity:boulder toPosition:ccp(o.x, o.y+1) ];
                 }
                 
-                retVal = boulderExists ? [self moveEntity:entity toPosition:position] : FALSE;
-
+                //retVal = boulderExists ? [self moveEntity:entity toPosition:position] : FALSE;
+                retVal = boulderMoved ? [self moveEntity:entity toPosition:position] : FALSE;
+                
             } else {
+                
+                // perform the entity placement-swap
                 Tile *prevTile = [ self getTileForCGPoint: entity.positionOnMap ];
                 [prevTile removeObjectFromContents:entity];
-            
                 [ GameRenderer setEntity: entity onTile:tile ];
-            
+                    
                 if ( entity == pcEntity ) {
                     if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
                         [ self addMessage: @"Going downstairs..." ];
@@ -2239,11 +2274,13 @@ NSUInteger getMagicY( NSUInteger y ) {
                             }
                             if ( item != nil ) {
                                 // add the item to your inventory
-                                [ self handleItemPickup: item forEntity: entity ];
+                                if ( item.itemType != E_ITEM_T_DOOR_SIMPLE ) {
+                                    [ self handleItemPickup: item forEntity: entity ];
+                                }
                             }
                         }
                     } else if ( doorExists ) {
-                        [self addMessageWindowString: @"There is an open door here"];
+                        //[self addMessageWindowString: @"There is an open door here"];
                     }
                 } else if ( entity.entityType == ENTITY_T_NPC ) {
                     // not handling NPCs going up/downstairs yet...
@@ -2265,19 +2302,26 @@ NSUInteger getMagicY( NSUInteger y ) {
             
         } else if ( doorExists ) {
             
-            Entity *door = [self getEntityForPosition:position];
-            
-            if ( door.doorLocked )
-                [self addMessageWindowString: @"The door is locked" ];
-            else {
-                
-                if ( ! door.doorOpen ) {
-                    door.doorOpen = YES;
-                    
-                    [self addMessageWindowString:@"The door is now open"];
+            //MLOG(@"%@: door exists", entity.name);
+            // to fix crashing when moving boulders into doors
+            if ( entity.itemType != E_ITEM_T_BASICBOULDER ) {
+                Entity *door = [self getEntityForPosition:position];
+                if ( door!=nil && door.itemType == E_ITEM_T_DOOR_SIMPLE) {
+                    if ( door.doorLocked )
+                        [self addMessageWindowString: @"The door is locked" ];
+                    else {
+                        if ( ! door.doorOpen ) {
+                            door.doorOpen = YES;
+                            [self addMessageWindowString:@"The door is now open"];
+                        }
+                    }
                 }
-                
             }
+            else {
+                //[self addMessageWindowString:@"Boulder cannot move into door!"];
+                retVal = FALSE;
+            }
+            
             
         } else {
             //MLOG( @"Attempting to move into NPC." );
@@ -2285,7 +2329,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     } else {
         retVal = FALSE;
     }
-    [entity getHungry];
+    
+    if ( entity.isPC || entity.entityType == ENTITY_T_NPC) {
+        [entity getHungry];
+    }
     return retVal;
 }
 

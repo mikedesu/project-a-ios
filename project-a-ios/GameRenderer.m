@@ -185,6 +185,10 @@ NSInteger getMod( NSInteger n ) {
             else if ( entity.itemType == E_ITEM_T_DOOR_SIMPLE ) {
                 t = (! entity.doorOpen) ? [sprites objectForKey:@"SimpleDoorClosed"] : [sprites objectForKey:@"SimpleDoorOpen"];
             }
+            
+            else if ( entity.itemType == E_ITEM_T_KEY_SIMPLE ) {
+                t = [sprites objectForKey:@"SimpleKey"];
+            }
         }
     }
  

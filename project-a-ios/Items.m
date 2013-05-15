@@ -11,8 +11,7 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    /*
-    NSUInteger numItems = 6;
+    NSUInteger numItems = 7;
     NSUInteger roll = [Dice roll:numItems];
     if (roll==1)
         e = [Items potionOfLightHealing:1];
@@ -24,11 +23,12 @@
         e = [Items catfish];
     else if (roll==5)
         e = [Items simpleDoor];
+    else if (roll==6)
+        e = [Items simpleKey];
     else
         e = [Items basicBoulder];
-    */
     
-    e = [Items simpleDoor];
+    //e = [Items simpleKey];
     
     NSAssert( e!=nil, @"Random Item: roll failed to set entity" );
     
@@ -167,8 +167,26 @@
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
-    return e;    
+    return e;
 }
+
+
++(Entity *) simpleKey {
+    Entity *e = [[Entity alloc] init];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_KEY_SIMPLE;
+    [e.name setString:@"Key, Simple"];
+    e.isPC                  = NO;
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    e.weight            = 1;
+    e.durability        = 100;
+    e.totalDurability   = 100;
+    return e;
+}
+
+
+
 
 
 

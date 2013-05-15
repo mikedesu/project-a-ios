@@ -72,6 +72,9 @@ typedef enum {
     // Doors
     E_ITEM_T_DOOR_SIMPLE,
     
+    // Keys
+    E_ITEM_T_KEY_SIMPLE,
+    
     
     E_ITEM_T_NUMTYPES
 } EntityItemTypes_t;

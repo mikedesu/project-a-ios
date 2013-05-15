@@ -53,7 +53,9 @@
 
 +(CCMutableTexture2D *) door: (Color_t) body knob: (Color_t) knob;
 +(CCMutableTexture2D *) opendoor: (Color_t) body knob: (Color_t) knob;
-    
+
++(CCMutableTexture2D *) key: (Color_t) body;
+
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c;
 +(NSArray *) codeForTexture: (CCMutableTexture2D *) t;
 

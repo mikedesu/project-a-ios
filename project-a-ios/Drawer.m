@@ -955,6 +955,77 @@
 
 
 
++(CCMutableTexture2D *) key: (Color_t) body {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     0123456789ABCDEF
+     ................ 0
+     ................ 1
+     ................ 2
+     ................ 3
+     ............ ... 4
+     ...........   .. 5
+     .           .  . 6
+     .           .  . 7
+     . ... .....   .. 8
+     . ... .......... 9
+     . ... .......... A
+     . ... .......... B
+     ................ C
+     ................ D
+     ................ E
+     ................ F
+     */
+    
+    int x=0, y=0;
+    
+    x=12, y=4;  [t setPixelAt:ccp(x,y) rgba:body];
+    
+    x=11, y=5;  [t setPixelAt:ccp(x,y) rgba:body];
+    x=12, y=5;  [t setPixelAt:ccp(x,y) rgba:body];
+    x=13, y=5;  [t setPixelAt:ccp(x,y) rgba:body];
+    
+    x=1, y=6;
+    for (x=1;  x<12; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    for (x=13; x<15; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    
+    x=1, y=7;
+    for (x=1;  x<12; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    for (x=13; x<15; x++) [t setPixelAt:ccp(x,y) rgba:body];
+    
+    x=1, y=8;  [t setPixelAt:ccp(x,y) rgba:body];
+    x=5, y=8;  [t setPixelAt:ccp(x,y) rgba:body];
+    
+    x=11, y=8;  [t setPixelAt:ccp(x,y) rgba:body];
+    x=12, y=8;  [t setPixelAt:ccp(x,y) rgba:body];
+    x=13, y=8;  [t setPixelAt:ccp(x,y) rgba:body];
+    
+    x=12, y=9;  [t setPixelAt:ccp(x,y) rgba:body];
+    
+    x=1, y=9;  [t setPixelAt:ccp(x,y) rgba:body];
+    x=5, y=9;  [t setPixelAt:ccp(x,y) rgba:body];
+    x=1, y=10;  [t setPixelAt:ccp(x,y) rgba:body];
+    x=5, y=10;  [t setPixelAt:ccp(x,y) rgba:body];
+    x=1, y=11;  [t setPixelAt:ccp(x,y) rgba:body];
+    x=5, y=11;  [t setPixelAt:ccp(x,y) rgba:body];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    return t;
+}
+
+
+
+
+
+
 
 
 

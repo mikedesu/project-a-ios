@@ -18,4 +18,6 @@
 
 // Doors
 +(Entity *) simpleDoor;
++(Entity *) simpleKey;
++(Entity *) basicBoulder;
 @end
