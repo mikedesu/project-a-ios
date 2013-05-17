@@ -80,11 +80,17 @@ NSInteger getMod( NSInteger n ) {
  
     CCMutableTexture2D *tileTexture =
     tileType == TILE_FLOOR_STONE          ? [sprites objectForKey:@"StoneTile"]      :
+    tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
     tileType == TILE_FLOOR_VOID           ? [sprites objectForKey:@"VoidTile"]       :
     tileType == TILE_FLOOR_UPSTAIRS       ? [sprites objectForKey:@"UpstairsTile"]   :
     tileType == TILE_FLOOR_DOWNSTAIRS     ? [sprites objectForKey:@"DownstairsTile"] :
     tileType == TILE_FLOOR_WATER          ? [sprites objectForKey:@"WaterTile"]      :
                                              nil;
+    if ( tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 && data.trapIsSet ) {
+        tileTexture = [sprites objectForKey:@"StoneTile"];
+    } else if ( tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 && ! data.trapIsSet ) {
+        tileTexture = [sprites objectForKey:@"StoneTileTrap"];
+    }
     
     // in most cases, we will fill our texture
     CCMutableTexture2D *texture = ( CCMutableTexture2D * ) tileSprite.texture;
@@ -286,8 +292,12 @@ NSInteger getMod( NSInteger n ) {
  ====================
  */
 +(void) setTileAtPosition: (CGPoint) position onFloor: (DungeonFloor *) floor toType: (Tile_t) tileType {
-    [((Tile *)[floor.tileDataArray objectAtIndex: position.x + ( position.y * floor.width) ]) setTileType: tileType ];
+    Tile *t = ((Tile *)[floor.tileDataArray objectAtIndex: position.x + ( position.y * floor.width) ]);
+    [t setTileType: tileType ];
+    [t handleTileType: tileType];
 }
+
+
 
 /*
  ====================
@@ -505,6 +515,11 @@ NSInteger getMod( NSInteger n ) {
                 NSInteger tileRoll = [Dice roll:100];
                 NSInteger waterChance = 5;
                 tileType = (tileRoll <= waterChance) ? TILE_FLOOR_WATER : tileType;
+                
+ 
+                // override - setting tileType to trap
+                tileType = TILE_FLOOR_STONE_TRAP_SPIKES_D6;
+                
                 
                 
                 [ self setTileAtPosition:point onFloor:floor toType:tileType ];

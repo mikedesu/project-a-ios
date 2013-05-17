@@ -225,7 +225,7 @@
 
 +(CCMutableTexture2D *) stoneTile {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
-     [t fill:black_alpha(0)];
+    [t fill:black_alpha(0)];
     
     Color_t c0 = gray;
     Color_t c1 = darkgray;
@@ -241,6 +241,7 @@
     
     return t;
 }
+
 
 
 +(CCMutableTexture2D *) heartWithColors: (Color_t) c0 c1: (Color_t) c1 c2: (Color_t) c2 {
@@ -1009,20 +1010,34 @@
     x=5, y=10;  [t setPixelAt:ccp(x,y) rgba:body];
     x=1, y=11;  [t setPixelAt:ccp(x,y) rgba:body];
     x=5, y=11;  [t setPixelAt:ccp(x,y) rgba:body];
-    
-    
-    
-    
-    
-    
-    
-    
-    
     return t;
 }
 
 
 
++(CCMutableTexture2D *) stoneTileTrap {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    
+    Color_t c0 = gray;
+    Color_t c1 = darkgray;
+    
+    [t fill:c0];
+    for (int j=0; j<16; j+=2)
+        for (int i=0; i<16; i++)
+            [t setPixelAt:ccp(i,j) rgba:c1];
+    for (int i=0; i<16; i+=2)
+        for (int j=0; j<16; j++)
+            [t setPixelAt:ccp(i,j) rgba:c1];
+    
+    for (int j=7; j<11; j++)
+        for (int i=7; i<11; i++)
+            [t setPixelAt:ccp(i,j) rgba:c0];
+    
+    [ t apply ];
+    
+    return t;
+}
 
 
 

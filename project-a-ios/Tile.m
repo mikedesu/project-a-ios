@@ -11,7 +11,10 @@
 @synthesize tileType;
 @synthesize isSelected;
 @synthesize needsRedraw;
+@synthesize trapIsSet;
 @synthesize position;
+@synthesize tripDamageBase;
+@synthesize tripDamageMod;
 
 /*
  ====================
@@ -23,6 +26,7 @@
         tileType    = TILE_FLOOR_DEFAULT;
         isSelected  = NO;
         needsRedraw = YES;
+        trapIsSet   = NO;
         position    = ccp( 0, 0 );
         contents    = nil;
     }
@@ -40,11 +44,38 @@
         tileType    = _tileType;
         isSelected  = NO;
         needsRedraw = YES;
+        
+        [self handleTileType:_tileType];
+        
         position    = ccp( 0, 0 );
         contents    = nil;
     }
     return self;
 }
+
+/*
+ ====================
+ handleTiletype: _tileType
+ 
+ for use at initialization of tile 
+ sets the trap vars
+ ====================
+ */
+-( void ) handleTileType: (Tile_t) _tileType {
+    // handle trapIsSet based on tile type
+    if ( _tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 ) {
+        trapIsSet = YES;
+        tripDamageBase = 6;
+        tripDamageMod = 0;
+    } else {
+        trapIsSet = NO;
+        tripDamageBase = 0;
+        tripDamageMod = 0;
+    }
+}
+
+
+
 
 
 /*

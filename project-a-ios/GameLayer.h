@@ -277,4 +277,9 @@ typedef enum {
 
 -( void ) swapAutostep;
 
+
+-( BOOL ) didPCDieJustNow;
+-( void ) handleTrapSetOffPC;
+
+
 @end

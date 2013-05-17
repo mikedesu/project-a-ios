@@ -62,6 +62,7 @@ unsigned get_memory_mb(void) {
     
     [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
     [s setObject:[Drawer stoneTile]                                         forKey: @"StoneTile"];
+    [s setObject:[Drawer stoneTileTrap]                                         forKey: @"StoneTileTrap"];
     [s setObject:[Drawer upstairsTile]                                      forKey: @"UpstairsTile"];
     [s setObject:[Drawer downstairsTile]                                    forKey: @"DownstairsTile"];
     [s setObject:[Drawer flatTile: blue]                                    forKey: @"WaterTile"];
@@ -2251,7 +2252,27 @@ NSUInteger getMagicY( NSUInteger y ) {
                             //MLOG(@"Going upstairs...");
                         }
                         [ self goingUpstairs ];
-                    } else if ( itemExists ) {
+                    }
+                    
+                    else if ( tile.tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 ) {
+                        
+                        if ( tile.trapIsSet ) {
+                            
+                            [self addMessageWindowString:@"You walk onto a trap!"];
+                            tile.trapIsSet = NO;
+                            [self handleTrapSetOffPC];
+                            
+                        } else {
+                            
+                            [self addMessageWindowString:@"There is a disarmed trap here"];
+                            
+                        }
+                        
+                    }
+                    
+                    
+                    
+                    else if ( itemExists ) {
                         // list all items on the tile
                         if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
                             for ( Entity *e in [tile contents] ) {
@@ -2335,6 +2356,85 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     return retVal;
 }
+
+
+/*
+ ====================
+ handleTrapSetOffPC
+ 
+ handles when a tile trap is set off by the pc
+ ====================
+ */
+-( void ) handleTrapSetOffPC {
+    CGPoint pcPos = pcEntity.positionOnMap;
+    
+    Tile *t = [self getMapTileFromPoint:pcPos];
+    
+    if ( t.tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 ) {
+        
+        // chance to set trap off
+        NSInteger chanceToSetOffTrap = 10;
+        NSInteger roll = [Dice roll:100];
+ 
+        [self addMessageWindowString: [NSString stringWithFormat:@"Trap! Saving throw...%d!", roll]];
+        
+        // set off trap
+        if (roll < chanceToSetOffTrap) {
+            // deal damage to pc
+            NSInteger totaldamage = [Dice roll:6];
+            totaldamage = (totaldamage > 0) ? totaldamage : 0;
+            pcEntity.hp -= totaldamage;
+            
+            [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ took %d damage", pcEntity.name, totaldamage ]];
+            
+            [self didPCDieJustNow];
+        }
+        else {
+            [ self addMessageWindowString: [ NSString stringWithFormat:@"Success!" ]];
+        }
+    }
+}
+
+
+/*
+ ====================
+ didPCDieJustNow
+ 
+ checks to see if the PC is alive / has hp
+ ====================
+ */
+-( BOOL ) didPCDieJustNow {
+    BOOL retVal = NO;
+    if ( pcEntity.hp <= 0 ) {
+        retVal = YES;
+        // check if they got the book of all-knowing
+        BOOL hasBook = NO;
+        for ( Entity *e in pcEntity.inventoryArray ) {
+            if ( e.itemType == E_ITEM_T_BOOK ) {
+                hasBook = YES;
+                break;
+            }
+        }
+        [ self addMessage: [NSString stringWithFormat:@"You died.\nYou killed %d monsters.\nYou %@ the Book of All-Knowing.\n",
+                            pcEntity.totalKills,
+                            hasBook ? @"got" : @"did not get" ] ];
+        [ self addMessageWindowString: [NSString stringWithFormat:@"You died.\nYou killed %d monsters.\nYou %@ the Book of All-Knowing.\n",
+                                        pcEntity.totalKills,
+                                        hasBook ? @"got" : @"did not get" ] ];
+        
+        for ( NSString *_name in killList )
+            [ self addMessageWindowString: [NSString stringWithFormat:@"You killed a %@", _name]];
+        
+        pcEntity.isAlive = NO;
+        gameLogicIsOn = YES;
+        autostepGameLogic = NO;
+        gameState = GAMESTATE_T_GAME_PC_DEAD;
+        [ self unscheduleStepAction ];
+    }
+    
+    return retVal;
+}
+
 
 
 /*
