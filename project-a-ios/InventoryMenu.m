@@ -37,6 +37,14 @@
                 if ( pc.hp > pc.maxhp ) pc.hp = pc.maxhp;
                 [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ recovered %d hp", pc.name, total]];
             }
+            
+            else if ( eItem.potionType == POTION_T_POISON_ANTIDOTE ) {
+                
+                // for now - instant-cure
+                pc.status = [Status normal];
+                [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ is cured of poison!", pc.name]];
+                
+            }
         }
         
         else if ( eItem.itemType == E_ITEM_T_FOOD ) {

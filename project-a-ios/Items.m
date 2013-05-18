@@ -11,7 +11,7 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    NSUInteger numItems = 7;
+    NSUInteger numItems = 8;
     NSUInteger roll = [Dice roll:numItems];
     if (roll==1)
         e = [Items potionOfLightHealing:1];
@@ -25,6 +25,8 @@
         e = [Items simpleDoor];
     else if (roll==6)
         e = [Items simpleKey];
+    else if (roll==7)
+        e = [Items poisonAntidote];
     else
         e = [Items basicBoulder];
     
@@ -68,6 +70,27 @@
     e.durability        = 1;
     e.totalDurability   = 1;
     
+    return e;
+}
+
+
++(Entity *) poisonAntidote {
+    Entity *e = [[Entity alloc] init];
+    
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_POTION;
+    e.potionType    = POTION_T_POISON_ANTIDOTE;
+    e.isPC          = NO;
+    [e.name setString:@"Potion of Antidote"];
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    
+    // now to define the effects of the potion when used
+    e.healingRollBase   = 0;
+    e.healingBonus      = 0;
+    e.weight            = 0.1;
+    e.durability        = 1;
+    e.totalDurability   = 1;
     return e;
 }
 

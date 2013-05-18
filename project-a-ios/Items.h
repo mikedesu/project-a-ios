@@ -10,6 +10,7 @@
 +(Entity *) randomItem;
 +(Entity *) bookOfAllKnowing;
 +(Entity *) potionOfLightHealing:(NSInteger) bonus;
++(Entity *) poisonAntidote;
 +(Entity *) greenBlob;
 
 // Fishing

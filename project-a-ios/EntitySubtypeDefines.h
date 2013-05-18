@@ -99,6 +99,7 @@ typedef NSInteger ItemPrefixGroup_t;
 typedef enum {
     POTION_T_NONE,
     POTION_T_HEALING,
+    POTION_T_POISON_ANTIDOTE,
     POTION_T_NUMTYPES
 } PotionTypes_t;
 

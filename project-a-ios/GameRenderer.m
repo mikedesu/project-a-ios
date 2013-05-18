@@ -178,8 +178,12 @@ NSInteger getMod( NSInteger n ) {
             
             // potions
             else if ( entity.itemType == E_ITEM_T_POTION ) {
-                t = [sprites objectForKey:@"PotionOfLightHealing"];
+                if ( entity.potionType == POTION_T_HEALING )
+                    t = [sprites objectForKey:@"PotionOfLightHealing"];
+                else if ( entity.potionType == POTION_T_POISON_ANTIDOTE )
+                    t = [sprites objectForKey:@"PotionOfAntidote"];
             }
+            
             
             // food
             else if ( entity.itemType == E_ITEM_T_FOOD ) {
@@ -529,18 +533,21 @@ NSInteger getMod( NSInteger n ) {
                 
                 NSInteger tileRoll = [Dice roll:100];
                 NSInteger waterChance = 5;
+                NSInteger spikeChance = 5;
+                NSInteger poisnChance = 5;
                 tileType = (tileRoll <= waterChance) ? TILE_FLOOR_WATER : tileType;
+                tileRoll = [Dice roll:100];
+                tileType = (tileRoll <= spikeChance) ? TILE_FLOOR_STONE_TRAP_SPIKES_D6 : tileType;
+                tileRoll = [Dice roll:100];
+                tileType = (tileRoll <= poisnChance) ? TILE_FLOOR_STONE_TRAP_POISON_D6 : tileType;
                 
- 
                 // override - setting tileType to trap
                 //tileType = TILE_FLOOR_STONE_TRAP_SPIKES_D6;
-                tileType = TILE_FLOOR_STONE_TRAP_POISON_D6;
+                //tileType = TILE_FLOOR_STONE_TRAP_POISON_D6;
                 
-                
-                
-                
-                
+                // setTileAtPosition will call handleTile and set if trapped
                 [ self setTileAtPosition:point onFloor:floor toType:tileType ];
+                
                 [ placedTilesArray addObject: v ];
                 [ triedTilesArray removeAllObjects ];
                 numTilesPlaced++;

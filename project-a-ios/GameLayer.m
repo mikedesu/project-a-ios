@@ -93,6 +93,7 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];
     
     [s setObject:[Drawer basicPotionWithColor:red]                          forKey: @"PotionOfLightHealing"];
+    [s setObject:[Drawer basicPotionWithColor:blue]                          forKey: @"PotionOfAntidote"];
     
     [s setObject:[Drawer bookOfAllKnowing]                                  forKey: @"BookOfAllKnowing"];
     [s setObject:[Drawer smallBlob:green]                                   forKey: @"SmallBlob"];
