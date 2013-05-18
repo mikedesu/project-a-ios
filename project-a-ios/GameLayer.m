@@ -2254,23 +2254,19 @@ NSUInteger getMagicY( NSUInteger y ) {
                         [ self goingUpstairs ];
                     }
                     
-                    else if ( tile.tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 ) {
+                    else if ( tile.tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 ||
+                              tile.tileType == TILE_FLOOR_STONE_TRAP_POISON_D6
+                             ) {
                         
                         if ( tile.trapIsSet ) {
                             
                             [self addMessageWindowString:@"You walk onto a trap!"];
                             tile.trapIsSet = NO;
                             [self handleTrapSetOffPC];
-                            
                         } else {
-                            
                             [self addMessageWindowString:@"There is a disarmed trap here"];
-                            
                         }
-                        
                     }
-                    
-                    
                     
                     else if ( itemExists ) {
                         // list all items on the tile
@@ -2375,8 +2371,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         // chance to set trap off
         NSInteger chanceToSetOffTrap = 10;
         NSInteger roll = [Dice roll:100];
- 
-        [self addMessageWindowString: [NSString stringWithFormat:@"Trap! Saving throw...%d!", roll]];
+        
+        [self addMessageWindowString: [NSString stringWithFormat:@"Trap! Saving throw 1d100...%d!", roll]];
         
         // set off trap
         if (roll < chanceToSetOffTrap) {
@@ -2388,6 +2384,28 @@ NSUInteger getMagicY( NSUInteger y ) {
             [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ took %d damage", pcEntity.name, totaldamage ]];
             
             [self didPCDieJustNow];
+        }
+        else {
+            [ self addMessageWindowString: [ NSString stringWithFormat:@"Success!" ]];
+        }
+    }
+    
+    // poison trap tile
+    else if ( t.tileType == TILE_FLOOR_STONE_TRAP_POISON_D6 ) {
+        
+        // chance to set trap off
+        NSInteger challengeRating = 10;
+        // 1d20 + conMod
+        NSInteger roll = [Dice roll:20] + [GameRenderer modifierForNumber: pcEntity.constitution];
+        
+        [self addMessageWindowString: [NSString stringWithFormat:@"Trap! Saving throw 1d20+conMod...%d!", roll]];
+        
+        // set off trap
+        if (roll > challengeRating) {
+            // poison pc
+            [self setEntityStatus:pcEntity status:[Status simplePoison]];
+            [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ is poisoned!", pcEntity.name]];
+            
         }
         else {
             [ self addMessageWindowString: [ NSString stringWithFormat:@"Success!" ]];
@@ -2986,6 +3004,19 @@ NSUInteger getMagicY( NSUInteger y ) {
                 [ self unscheduleStepAction ];
             }
         }
+        
+        
+        // deal pc poison damage
+        if ( pcEntity.status.base == STATUS_T_POISON ) {
+            
+            NSInteger pzndmg = [Dice roll: pcEntity.status.poisonDamageBase] + pcEntity.status.poisonDamageMod;
+            
+            pcEntity.hp -= pzndmg;
+            
+            [self didPCDieJustNow];
+        }
+        
+        
         
         [ self cleanupEntityArray ];
         

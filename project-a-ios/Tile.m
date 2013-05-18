@@ -67,7 +67,13 @@
         trapIsSet = YES;
         tripDamageBase = 6;
         tripDamageMod = 0;
-    } else {
+    }
+    else if ( _tileType == TILE_FLOOR_STONE_TRAP_POISON_D6 ) {
+        trapIsSet = YES;
+        tripDamageBase = 0;
+        tripDamageMod = 0;
+    }
+    else {
         trapIsSet = NO;
         tripDamageBase = 0;
         tripDamageMod = 0;

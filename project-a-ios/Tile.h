@@ -15,6 +15,7 @@ typedef enum {
     
     // Trapped Tile-types
     TILE_FLOOR_STONE_TRAP_SPIKES_D6,
+    TILE_FLOOR_STONE_TRAP_POISON_D6,
     
 } Tile_t;
 
