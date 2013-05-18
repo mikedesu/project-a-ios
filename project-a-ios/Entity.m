@@ -84,6 +84,8 @@
 @synthesize doorOpen;
 @synthesize doorLocked;
 
+@synthesize status;
+
 //@synthesize monsterPrefixGroup;
 //@synthesize itemPrefixGroup;
 
@@ -194,6 +196,8 @@
         
         pathFindingAlgorithm    = ENTITYPATHFINDINGALGORITHM_T_RANDOM;
         itemPickupAlgorithm     = ENTITYITEMPICKUPALGORITHM_T_NONE;
+        
+        status = [Status normal];
         
     }
     return self;

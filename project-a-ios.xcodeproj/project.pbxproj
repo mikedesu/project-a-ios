@@ -145,6 +145,7 @@
 		2773F29516C949C4001C3E83 /* PlayerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29416C949C4001C3E83 /* PlayerHUD.m */; };
 		2773F29816C94DA3001C3E83 /* PlayerMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29716C94DA3001C3E83 /* PlayerMenu.m */; };
 		27A1A5A71709711E002C3A4A /* Attack_t.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A1A5A61709711E002C3A4A /* Attack_t.m */; };
+		27BAC985174760B70046B1EC /* Status.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BAC984174760B70046B1EC /* Status.m */; };
 		27C0C2EA16FAA12D00AF1208 /* HelpMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C0C2E916FAA12D00AF1208 /* HelpMenu.m */; };
 		27C26D8416CAFDBE008B0E29 /* DungeonFloor.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C26D8316CAFDBE008B0E29 /* DungeonFloor.m */; };
 		27C26D8716CAFF66008B0E29 /* Dungeon.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C26D8616CAFF66008B0E29 /* Dungeon.m */; };
@@ -458,6 +459,8 @@
 		27A1A5A817097387002C3A4A /* AttackStatus_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttackStatus_t.h; sourceTree = "<group>"; };
 		27A1A5AB1709745D002C3A4A /* AttackElement_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttackElement_t.h; sourceTree = "<group>"; };
 		27A1A5AE170B9C94002C3A4A /* Prefix_t.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix_t.h; sourceTree = "<group>"; };
+		27BAC983174760B70046B1EC /* Status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Status.h; sourceTree = "<group>"; };
+		27BAC984174760B70046B1EC /* Status.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Status.m; sourceTree = "<group>"; };
 		27C0C2E816FAA12D00AF1208 /* HelpMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpMenu.h; sourceTree = "<group>"; };
 		27C0C2E916FAA12D00AF1208 /* HelpMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpMenu.m; sourceTree = "<group>"; };
 		27C26D8216CAFDBE008B0E29 /* DungeonFloor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DungeonFloor.h; sourceTree = "<group>"; };
@@ -625,6 +628,8 @@
 				2773F29716C94DA3001C3E83 /* PlayerMenu.m */,
 				27A1A5AE170B9C94002C3A4A /* Prefix_t.h */,
 				27E19244170D760600AA3F25 /* Prefix_t.m */,
+				27BAC983174760B70046B1EC /* Status.h */,
+				27BAC984174760B70046B1EC /* Status.m */,
 				2721D6F316EEB9CC0051352D /* StatusMenu.h */,
 				2721D6F416EEB9CC0051352D /* StatusMenu.m */,
 				27E192461714C3F800AA3F25 /* Threat_t.h */,
@@ -1209,6 +1214,7 @@
 				27E192501721C72A00AA3F25 /* Maybe.m in Sources */,
 				27E192531729158E00AA3F25 /* NameEngine.m in Sources */,
 				27E192561729BBBE00AA3F25 /* KarmaEngine.m in Sources */,
+				27BAC985174760B70046B1EC /* Status.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

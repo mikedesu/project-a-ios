@@ -28,6 +28,7 @@ typedef enum {
 @class MessageWindow;
 @class PlayerHUD;
 @class PlayerMenu;
+@class Status;
 @class StatusMenu;
 @class Tile;
 
@@ -280,6 +281,8 @@ typedef enum {
 
 -( BOOL ) didPCDieJustNow;
 -( void ) handleTrapSetOffPC;
+
+-(void) setEntityStatus: (Entity *) entity status: (Status *) status;
 
 
 @end

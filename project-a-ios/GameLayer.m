@@ -3592,4 +3592,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
+-(void) setEntityStatus: (Entity *) entity status: (Status *) status {
+    entity.status = status;
+}
+
 @end

@@ -12,6 +12,7 @@
 
 @class CCMutableTexture2D;
 @class Attack_t;
+@class Status;
 
 @interface Entity : NSObject {
     BOOL isPC;
@@ -104,6 +105,9 @@
     
     BOOL doorOpen;
     BOOL doorLocked;
+    
+    
+    Status *status;
 }
 
 @property (atomic, assign) BOOL wasBumped;
@@ -187,6 +191,8 @@
 
 @property (atomic, assign) BOOL doorOpen;
 @property (atomic, assign) BOOL doorLocked;
+
+@property (nonatomic) Status *status;
 
 -(Entity *) init;
 -(Entity *) initWithLevel: (NSInteger) _level;
