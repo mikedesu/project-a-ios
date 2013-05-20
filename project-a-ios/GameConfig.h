@@ -41,6 +41,7 @@
 #import "PlayerHUD.h"
 #import "PlayerMenu.h"
 #import "Prefix_t.h"
+#import "Spell.h"
 #import "Status.h"
 #import "StatusMenu.h"
 #import "Threat_t.h"

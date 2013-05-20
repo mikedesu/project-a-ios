@@ -333,7 +333,7 @@ unsigned get_memory_mb(void) {
 
 #pragma mark - Notification code
 
-static const NSUInteger notificationsCount = 22;
+static const NSUInteger notificationsCount = 23;
 static NSString  * const notifications[] = {
     /*0*/ @"TestNotification1",
     /*1*/ @"TestNotification2",
@@ -356,7 +356,8 @@ static NSString  * const notifications[] = {
     /*18*/ @"PlayerMenuEntityInfoNotification",
     /*19*/ @"PlayerMenuPickupNotification",
     /*20*/ @"PlayerMenuEquipNotification",
-    /*21*/ @"EquipMenuReturnNotification"
+    /*21*/ @"EquipMenuReturnNotification",
+    /*22*/ @"PlayerMenuCastNotification",
 };
 
 
@@ -380,7 +381,7 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) removeNotifications {
-    for (int i=0; i<notificationsCount; i++)
+     for (int i=0; i<notificationsCount; i++)
         [[ NSNotificationCenter defaultCenter ] removeObserver:self name:notifications[i] object:nil];
 }
 
@@ -819,13 +820,66 @@ static NSString  * const notifications[] = {
         ! equipMenuIsVisible ? [self addEquipMenu] : [self removeEquipMenu];
     }
     
+    
+#pragma mark - Handle PlayerMenu Notification - Cast
+    else if ( [notification.name isEqualToString: @"PlayerMenuCastNotification" ]) {
+        MLOG(@"Cast pressed");
+        
+        // lets figure out the spell casting procedure
+        // for instance, let us do a test
+        
+        /* 
+         when 'cast' is pressed,
+            cast 'cure light wounds' on self
+        */
+        
+        Spell *spell = [Spell cureLightWounds];
+        
+        if ( spell.name == SPELLNAME_T_CURELIGHTWOUNDS ) {
+            
+            [self addMessageWindowString:[NSString stringWithFormat:@"%@ casts %@", pcEntity.name, @"Cure Light Wounds..."]];
+            
+            // roll for chance
+            NSInteger roll = [Dice roll:100];
+            NSInteger chance = 90;
+            NSInteger adjustedChance = chance + [GameRenderer modifierForNumber: pcEntity.intelligence];
+            
+            MLOG(@"Rolled %d / %d", roll, adjustedChance);
+            
+            //success
+            if ( roll <= adjustedChance ) {
+                // pc heals 1d6 hp
+                
+                NSInteger total = [Dice roll:6];
+                pcEntity.hp += total;
+                if (pcEntity.hp >= pcEntity.maxhp)
+                    pcEntity.hp = pcEntity.maxhp;
+                
+                [self addMessageWindowString:[NSString stringWithFormat:@"%@ recovers %d hp", pcEntity.name, total]];
+            }
+            
+            //failure
+            else {
+                [self addMessageWindowString:@"Failed to cast spell!"];
+            }
+        }
+        
+        gameLogicIsOn   ? [self stepGameLogic] : 0;
+
+    }
+    
+    
 #pragma mark - Handle EquipMenu Notification - Return
     else if ( [notification.name isEqualToString: @"EquipMenuReturnNotification" ]) {
         [self removeEquipMenu];
         
         // update our hero sprite
         [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
-    } else {
+    }
+    
+
+    
+    else {
         MLOG( @"Notification not handled: %@", notification.name );
     }
     
@@ -2845,7 +2899,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     monitorIsVisible = NO;
     [ self initMonitor ];
-    [ self addMonitor: monitor ];    
+    //[ self addMonitor: monitor ];
     
     playerMenuIsVisible = NO;
     [ self initPlayerMenu ];

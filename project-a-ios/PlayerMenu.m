@@ -33,6 +33,11 @@
         CCLabelTTF *menuItemLabelEquip          = [[CCLabelTTF alloc] initWithString:   @"Equip"       fontName:@"Courier New" fontSize:16 ];
         menuItemLabelEquip.color                = fontColor;
         
+        CCLabelTTF *menuItemLabelCast           = [[CCLabelTTF alloc] initWithString:   @"Cast"       fontName:@"Courier New" fontSize:16 ];
+        menuItemLabelCast.color                 = fontColor;
+        
+        
+        
         CCLabelTTF *menuItemLabelInventory      = [[CCLabelTTF alloc] initWithString:   @"Inventory"    fontName:@"Courier New" fontSize:16 ];
         menuItemLabelInventory.color            = fontColor;
         
@@ -73,6 +78,11 @@
         CCMenuItem *menuItemEquip       = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelEquip target:self selector:@selector(menuItemEquipPressed) ];
         menuItemEquip.position          = ccp( 0 + menuItemEquip.contentSize.width/2, h - p*k++);
         
+        CCMenuItem *menuItemCast       = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelCast target:self selector:@selector(menuItemCastPressed) ];
+        menuItemCast.position          = ccp( 0 + menuItemCast.contentSize.width/2, h - p*k++);
+        
+        
+        
         CCMenuItem *menuItemInventory   = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelInventory target:self selector:@selector(menuItemInventoryPressed) ];
         menuItemInventory.position      = ccp( 0 + menuItemInventory.contentSize.width/2, h - p*k++ );
         
@@ -104,6 +114,7 @@
                                                          menuItemMinimize,
                                                          menuItemStatus,
                                                          menuItemEquip,
+                                                         menuItemCast,
                                                          menuItemInventory,
                                                          menuItemPickup,
                                                          menuItemStep,
@@ -199,6 +210,10 @@
 
 -(void) menuItemEntityInfoPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuEntityInfoNotification"  object:self];
+}
+
+-(void) menuItemCastPressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuCastNotification"  object:self];
 }
 
 @end
