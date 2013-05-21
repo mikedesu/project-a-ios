@@ -833,21 +833,40 @@ static NSString  * const notifications[] = {
             cast 'cure light wounds' on self
         */
         
+        /*
+         spell targets:
+         
+         self
+         one adjacent tile
+         4 adjacent tiles UDLR
+         8 adjacent tiles UDLR UL-DL-UR-DR
+         one tile up to N distance away
+         one central tile up to N distance away with 4-8 adjacent tiles
+         
+         if target != self
+            change gamestate to handle for spell pre-cast
+         
+         for now, all spells are instantaneous
+         eventually they will take multiple turns to cast
+         */
+        
         Spell *spell = [Spell cureLightWounds];
         
-        if ( spell.name == SPELLNAME_T_CURELIGHTWOUNDS ) {
-            
-            [self addMessageWindowString:[NSString stringWithFormat:@"%@ casts %@", pcEntity.name, @"Cure Light Wounds..."]];
-            
-            // roll for chance
-            NSInteger roll = [Dice roll:100];
-            NSInteger chance = 90;
-            NSInteger adjustedChance = chance + [GameRenderer modifierForNumber: pcEntity.intelligence];
-            
-            MLOG(@"Rolled %d / %d", roll, adjustedChance);
-            
-            //success
-            if ( roll <= adjustedChance ) {
+        // roll for chance
+        NSInteger roll = [Dice roll:100];
+        NSInteger chance = 90;
+        NSInteger adjustedChance = chance + [GameRenderer modifierForNumber: pcEntity.intelligence];
+        
+        MLOG(@"Rolled %d / %d", roll, adjustedChance);
+        
+        //success
+        if ( roll <= adjustedChance ) {
+
+            // handle each spell in it's own if-block
+            if ( spell.name == SPELLNAME_T_CURELIGHTWOUNDS ) {
+                
+                [self addMessageWindowString:[NSString stringWithFormat:@"%@ casts %@", pcEntity.name, @"Cure Light Wounds..."]];
+                
                 // pc heals 1d6 hp
                 
                 NSInteger total = [Dice roll:6];
@@ -857,11 +876,12 @@ static NSString  * const notifications[] = {
                 
                 [self addMessageWindowString:[NSString stringWithFormat:@"%@ recovers %d hp", pcEntity.name, total]];
             }
-            
-            //failure
-            else {
-                [self addMessageWindowString:@"Failed to cast spell!"];
-            }
+        
+        }
+        
+        //failure
+        else {
+            [self addMessageWindowString:@"Failed to cast spell!"];
         }
         
         gameLogicIsOn   ? [self stepGameLogic] : 0;
