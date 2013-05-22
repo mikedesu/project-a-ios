@@ -106,6 +106,7 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer boulder:darkgray]                                  forKey:@"BasicBoulder"];
     
     [s setObject:[Drawer scroll:white] forKey:@"MagicScroll"];
+    [s setObject:[Drawer wand:brown marking:white] forKey:@"MagicWand"];
 }
 
 

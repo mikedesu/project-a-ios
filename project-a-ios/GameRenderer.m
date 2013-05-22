@@ -219,7 +219,9 @@ NSInteger getMod( NSInteger n ) {
                 t = [sprites objectForKey:@"MagicScroll"];
             }
             
-            
+            else if ( entity.itemType == E_ITEM_T_WAND ) {
+                t = [sprites objectForKey:@"MagicWand"];
+            }
         }
     }
  

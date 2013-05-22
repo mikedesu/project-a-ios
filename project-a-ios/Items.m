@@ -11,7 +11,7 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    NSUInteger numItems = 9;
+    NSUInteger numItems = 10;
     NSUInteger roll = [Dice roll:numItems];
     
     if (roll==1)
@@ -30,11 +30,14 @@
         e = [Items poisonAntidote];
     else if (roll==8)
         e = [Items scrollOfCureLightWounds];
+    else if (roll==9)
+        e = [Items wandOfCureLightWounds];
+    
      
     else
         e = [Items basicBoulder];
     
-    //e = [Items scrollOfCureLightWounds];
+    e = [Items wandOfCureLightWounds];
     
     NSAssert( e!=nil, @"Random Item: roll failed to set entity" );
     
@@ -225,9 +228,38 @@
     e.totalDurability   = 100;
     e.spell             = SPELL_T_CURELIGHTWOUNDS;
     [e.name setString:  [NSString stringWithFormat:@"Scroll of %@",
-                        [SpellTools stringForSpell:e.spell]
-    ]];
+                         [SpellTools stringForSpell:e.spell]
+                         ]];
     return e;
 }
+
+
++(Entity *) wandOfCureLightWounds {
+    Entity *e = [[Entity alloc] init];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_WAND;
+    e.isPC                  = NO;
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    e.weight            = 1;
+    e.durability        = 100;
+    e.totalDurability   = 100;
+    
+    e.spell             = SPELL_T_CURELIGHTWOUNDS;
+    e.charges           = 5;
+    e.maxCharges        = 5;
+    
+    [e.name setString:  [NSString stringWithFormat:@"Wand of %@",
+                         [SpellTools stringForSpell:e.spell]
+                         ]];
+    return e;
+}
+
+
+
+
+
+
+
 
 @end

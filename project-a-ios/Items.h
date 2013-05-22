@@ -23,4 +23,5 @@
 +(Entity *) basicBoulder;
 
 +(Entity *) scrollOfCureLightWounds;
++(Entity *) wandOfCureLightWounds;
 @end

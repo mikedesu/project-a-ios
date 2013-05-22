@@ -79,6 +79,19 @@
             
         }
         
+        else if ( eItem.itemType == E_ITEM_T_WAND ) {
+            
+            if ( eItem.charges > 0 ) {
+                gameLayer.currentSpellBeingCast = eItem.spell;
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayerMenuCastNotification" object:nil];
+            }
+            else {
+                [gameLayer addMessageWindowString:@"No charges remain in wand!"];
+            }
+        }
+        
+        
+        
         
         else {
             MLOG(@"Not handled!");
@@ -96,9 +109,16 @@
             
             // dont remove fishing rods (or other things...)
             ( eItem.itemType != E_ITEM_T_FISHING_ROD && 
-              eItem.itemType != E_ITEM_T_KEY_SIMPLE )
+              eItem.itemType != E_ITEM_T_KEY_SIMPLE  &&
+              eItem.itemType != E_ITEM_T_WAND )
             ? [inventory removeObjectAtIndex: sender.tag] : 0 ;
             
+            
+            if ( eItem.itemType == E_ITEM_T_WAND ) {
+                // decrease charges
+                if ( eItem.charges > 0 )
+                    eItem.charges--;
+            }
             
             [sender.parent  removeChild:sender   cleanup:YES];
         }

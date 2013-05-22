@@ -110,8 +110,12 @@
     
     Status *status;
     
-    // for scrolls
+    // for scrolls and wands
     Spell_t spell;
+    NSInteger charges;
+    NSInteger maxCharges;
+    
+    
 }
 
 @property (atomic, assign) BOOL wasBumped;
@@ -199,6 +203,8 @@
 @property (nonatomic) Status *status;
 
 @property (atomic, assign) Spell_t spell;
+@property (atomic, assign) NSInteger charges;
+@property (atomic, assign) NSInteger maxCharges;
 
 -(Entity *) init;
 -(Entity *) initWithLevel: (NSInteger) _level;

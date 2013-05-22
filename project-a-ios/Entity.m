@@ -86,6 +86,8 @@
 
 @synthesize status;
 @synthesize spell;
+@synthesize charges;
+@synthesize maxCharges;
 
 //@synthesize monsterPrefixGroup;
 //@synthesize itemPrefixGroup;
@@ -201,6 +203,8 @@
         status = [Status normal];
         
         spell = SPELL_T_NONE;
+        charges = 0;
+        maxCharges = 0;
         
     }
     return self;
