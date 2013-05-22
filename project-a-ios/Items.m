@@ -223,22 +223,11 @@
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
-    
     e.spell             = SPELL_T_CURELIGHTWOUNDS;
-    
     [e.name setString:  [NSString stringWithFormat:@"Scroll of %@",
                         [SpellTools stringForSpell:e.spell]
     ]];
-    
-    
     return e;
 }
-
-
-
-
-
-
-
 
 @end

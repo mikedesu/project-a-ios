@@ -66,6 +66,9 @@ typedef enum {
     E_ITEM_T_SCROLL,
     E_ITEM_T_NOTE,
     
+    // Wands
+    E_ITEM_T_WAND,
+    
     // Boulders
     E_ITEM_T_BASICBOULDER,
     

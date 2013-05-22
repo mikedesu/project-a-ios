@@ -957,6 +957,7 @@
 
 
 
+
 +(CCMutableTexture2D *) key: (Color_t) body {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill: black_alpha(0)];
@@ -1078,7 +1079,55 @@
 
 
 
-
++(CCMutableTexture2D *) wand: (Color_t) body marking: (Color_t) marking {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     0123456789ABCDEF
+     ................ 0
+     ................ 1
+     ................ 2
+     ...  ........... 3
+     ...  ........... 4
+     .....  ......... 5
+     .....  ......... 6
+     ......  ........ 7
+     ......  ........ 8
+     ........  ...... 9
+     ........  ...... 10
+     .........  ..... 11
+     .........  ..... 12
+     ................ 13
+     ................ 14
+     ................ 15
+     */
+    int x = 3;
+    for (int y=3; y<5; y++) {
+        [t setPixelAt:ccp(x,y) rgba:body];
+        [t setPixelAt:ccp(x+1,y) rgba:body];
+    }
+    x=5;
+    for (int y=5; y<7; y++) {
+        [t setPixelAt:ccp(x,y) rgba:body];
+        [t setPixelAt:ccp(x+1,y) rgba:body];
+    }
+    x=7;
+    for (int y=7; y<9; y++) {
+        [t setPixelAt:ccp(x,y) rgba:body];
+        [t setPixelAt:ccp(x+1,y) rgba:body];
+    }
+    x=9;
+    for (int y=9; y<11; y++) {
+        [t setPixelAt:ccp(x,y) rgba:body];
+        [t setPixelAt:ccp(x+1,y) rgba:body];
+    }
+    x=11;
+    for (int y=11; y<13; y++) {
+        [t setPixelAt:ccp(x,y) rgba:body];
+        [t setPixelAt:ccp(x+1,y) rgba:body];
+    }
+    return t;
+}
 
 
 #pragma mark - Experimental code/drawing stuff
