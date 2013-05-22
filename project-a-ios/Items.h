@@ -21,4 +21,6 @@
 +(Entity *) simpleDoor;
 +(Entity *) simpleKey;
 +(Entity *) basicBoulder;
+
++(Entity *) scrollOfCureLightWounds;
 @end

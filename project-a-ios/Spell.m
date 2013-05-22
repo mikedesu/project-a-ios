@@ -3,8 +3,25 @@
 //
 //  Created by Mike Bell on 5/20/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
-
 #import "Spell.h"
+
+@implementation SpellTools
+
++(NSString *) stringForSpell: (Spell_t) spell {
+    NSString *string = @"";
+    if ( spell == SPELL_T_CURELIGHTWOUNDS ) {
+        string = @"Cure Light Wounds";
+    }
+    else {
+        string = @"Unknown Name";
+    }
+    return string;
+}
+
+@end
+
+
+/*
 
 @implementation Spell
 
@@ -51,3 +68,4 @@
 }
 
 @end
+*/

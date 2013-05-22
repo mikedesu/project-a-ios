@@ -57,6 +57,8 @@
 
 +(CCMutableTexture2D *) key: (Color_t) body;
 
++(CCMutableTexture2D *) scroll: (Color_t) body;
+
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c;
 +(NSArray *) codeForTexture: (CCMutableTexture2D *) t;
 

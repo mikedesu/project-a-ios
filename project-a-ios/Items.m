@@ -11,8 +11,9 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    NSUInteger numItems = 8;
+    NSUInteger numItems = 9;
     NSUInteger roll = [Dice roll:numItems];
+    
     if (roll==1)
         e = [Items potionOfLightHealing:1];
     else if (roll==2)
@@ -27,10 +28,13 @@
         e = [Items simpleKey];
     else if (roll==7)
         e = [Items poisonAntidote];
+    else if (roll==8)
+        e = [Items scrollOfCureLightWounds];
+     
     else
         e = [Items basicBoulder];
     
-    //e = [Items simpleKey];
+    //e = [Items scrollOfCureLightWounds];
     
     NSAssert( e!=nil, @"Random Item: roll failed to set entity" );
     
@@ -207,6 +211,29 @@
     e.totalDurability   = 100;
     return e;
 }
+
+
++(Entity *) scrollOfCureLightWounds {
+    Entity *e = [[Entity alloc] init];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_SCROLL;
+    e.isPC                  = NO;
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    e.weight            = 1;
+    e.durability        = 100;
+    e.totalDurability   = 100;
+    
+    e.spell             = SPELL_T_CURELIGHTWOUNDS;
+    
+    [e.name setString:  [NSString stringWithFormat:@"Scroll of %@",
+                        [SpellTools stringForSpell:e.spell]
+    ]];
+    
+    
+    return e;
+}
+
 
 
 

@@ -214,6 +214,12 @@ NSInteger getMod( NSInteger n ) {
             else if ( entity.itemType == E_ITEM_T_KEY_SIMPLE ) {
                 t = [sprites objectForKey:@"SimpleKey"];
             }
+            
+            else if ( entity.itemType == E_ITEM_T_SCROLL ) {
+                t = [sprites objectForKey:@"MagicScroll"];
+            }
+            
+            
         }
     }
  

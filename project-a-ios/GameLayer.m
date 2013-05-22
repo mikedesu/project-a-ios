@@ -30,6 +30,7 @@ unsigned get_memory_mb(void) {
 
 @synthesize gameState;
 @synthesize turnCounter;
+@synthesize currentSpellBeingCast;
 
 /*
  ====================
@@ -103,6 +104,8 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer fishingRod:brown]                                  forKey:@"WoodenFishingRod"];
     
     [s setObject:[Drawer boulder:darkgray]                                  forKey:@"BasicBoulder"];
+    
+    [s setObject:[Drawer scroll:white] forKey:@"MagicScroll"];
 }
 
 
@@ -232,6 +235,8 @@ unsigned get_memory_mb(void) {
     turnCounter = 0;
     selectedTilePoint = ccp(0,0);
     pcEntity = nil;
+    
+    currentSpellBeingCast = SPELL_T_NONE;
     
     killList != nil ? [killList removeAllObjects] : 0;
     killList = nil;
@@ -850,7 +855,11 @@ static NSString  * const notifications[] = {
          eventually they will take multiple turns to cast
          */
         
-        Spell *spell = [Spell cureLightWounds];
+ //       Spell *spell = [Spell cureLightWounds];
+        
+        Spell_t spell = self.currentSpellBeingCast;
+        
+        spell = spell == SPELL_T_NONE ? SPELL_T_CURELIGHTWOUNDS : SPELL_T_CURELIGHTWOUNDS;
         
         // roll for chance
         NSInteger roll = [Dice roll:100];
@@ -863,7 +872,7 @@ static NSString  * const notifications[] = {
         if ( roll <= adjustedChance ) {
 
             // handle each spell in it's own if-block
-            if ( spell.name == SPELLNAME_T_CURELIGHTWOUNDS ) {
+            if ( spell == SPELL_T_CURELIGHTWOUNDS ) {
                 
                 [self addMessageWindowString:[NSString stringWithFormat:@"%@ casts %@", pcEntity.name, @"Cure Light Wounds..."]];
                 

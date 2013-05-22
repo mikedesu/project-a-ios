@@ -72,6 +72,14 @@
             //handled = NO;
         }
         
+        else if ( eItem.itemType == E_ITEM_T_SCROLL ) {
+            
+            gameLayer.currentSpellBeingCast = eItem.spell;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayerMenuCastNotification" object:nil];
+            
+        }
+        
+        
         else {
             MLOG(@"Not handled!");
             [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@-use not handled yet!", eItem.name]];

@@ -855,6 +855,7 @@
 
 
 
+
 +(CCMutableTexture2D *) triangle: (Color_t) body {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill: black_alpha(0)];
@@ -1039,6 +1040,38 @@
     return t;
 }
 
+
+
+
+
++(CCMutableTexture2D *) scroll: (Color_t) body {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     0123456789ABCDEF
+     ................ 0
+     ................ 1
+     ................ 2
+     ................ 3
+     ................ 4
+     ................ 5
+     ................ 6
+     ..            .. 7
+     ..            .. 8
+     ................ 9
+     ................ A
+     ................ B
+     ................ B
+     ................ B
+     ................ B
+     ................ B
+     */
+    int x=0, y=0, x0=2, y0=7, x1=0xE, y1=9;
+    for (y=y0; y<y1; y++)
+        for (x=x0; x<x1; x++)
+            [t setPixelAt:ccp(x,y) rgba:body];
+    return t;
+}
 
 
 

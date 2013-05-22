@@ -5,6 +5,7 @@
 //  Copyright __MyCompanyName__ 2013. All rights reserved.
 
 #import "GameConfig.h"
+#import "Spell.h"
 
 typedef enum {
     GAMESTATE_T_MAINMENU=0,
@@ -116,10 +117,14 @@ typedef enum {
     
     BOOL gotKarmaThisTurn;
     NSInteger totalKarmaThisTurn;
+    
+    
+    Spell_t currentSpellBeingCast;
 }
 
 @property (nonatomic, assign) GameState_t gameState;
 @property (nonatomic, assign) NSUInteger turnCounter;
+@property (nonatomic, assign) Spell_t currentSpellBeingCast;
 //@property (nonatomic) DungeonFloor *safeRoom;
 
 

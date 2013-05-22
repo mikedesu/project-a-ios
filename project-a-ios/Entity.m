@@ -85,6 +85,7 @@
 @synthesize doorLocked;
 
 @synthesize status;
+@synthesize spell;
 
 //@synthesize monsterPrefixGroup;
 //@synthesize itemPrefixGroup;
@@ -198,6 +199,8 @@
         itemPickupAlgorithm     = ENTITYITEMPICKUPALGORITHM_T_NONE;
         
         status = [Status normal];
+        
+        spell = SPELL_T_NONE;
         
     }
     return self;

@@ -9,6 +9,7 @@
 #import "Attack_t.h"
 #import "Monsters.h"
 #import "Threat_t.h"
+#import "Spell.h"
 
 @class CCMutableTexture2D;
 @class Attack_t;
@@ -108,6 +109,9 @@
     
     
     Status *status;
+    
+    // for scrolls
+    Spell_t spell;
 }
 
 @property (atomic, assign) BOOL wasBumped;
@@ -193,6 +197,8 @@
 @property (atomic, assign) BOOL doorLocked;
 
 @property (nonatomic) Status *status;
+
+@property (atomic, assign) Spell_t spell;
 
 -(Entity *) init;
 -(Entity *) initWithLevel: (NSInteger) _level;
