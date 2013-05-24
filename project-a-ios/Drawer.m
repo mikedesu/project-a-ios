@@ -923,6 +923,7 @@
 
 
 
+
 +(CCMutableTexture2D *) opendoor: (Color_t) body knob: (Color_t) knob {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill: black_alpha(0)];
@@ -1128,6 +1129,56 @@
     }
     return t;
 }
+
+
+
+
++(CCMutableTexture2D *) ring: (Color_t) body {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     0123456789ABCDEF
+     ................ 0
+     ................ 1
+     ................ 2
+     ................ 3
+     .....      ..... 4
+     ....  ....  .... 5
+     ...  ......  ... 6
+     ...  ......  ... 7
+     ....  ....  .... 8
+     .....      ..... 9
+     ................ A
+     ................ B
+     ................ C
+     ................ D
+     ................ E
+     ................ F
+     */
+    
+    int x = 0, y = 0;
+    
+    y=4;    for (x=5;  x<11; x++)    [t setPixelAt:ccp(x,y) rgba:body];
+    
+    y=5;    for (x=4;  x<6;  x++)    [t setPixelAt:ccp(x,y) rgba:body];
+    y=5;    for (x=10; x<12; x++)    [t setPixelAt:ccp(x,y) rgba:body];
+    
+    y=6;    for (x=3;  x<5;  x++)    [t setPixelAt:ccp(x,y) rgba:body];
+    y=6;    for (x=11; x<13; x++)    [t setPixelAt:ccp(x,y) rgba:body];
+    
+    y=7;    for (x=3;  x<5;  x++)    [t setPixelAt:ccp(x,y) rgba:body];
+    y=7;    for (x=11; x<13; x++)    [t setPixelAt:ccp(x,y) rgba:body];
+    
+    y=8;    for (x=4;  x<6;  x++)    [t setPixelAt:ccp(x,y) rgba:body];
+    y=8;    for (x=10; x<12; x++)    [t setPixelAt:ccp(x,y) rgba:body];
+    
+    y=9;    for (x=5;  x<11; x++)    [t setPixelAt:ccp(x,y) rgba:body];
+    
+    return t;
+}
+
+
+
 
 
 #pragma mark - Experimental code/drawing stuff

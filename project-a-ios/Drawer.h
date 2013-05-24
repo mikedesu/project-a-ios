@@ -59,6 +59,7 @@
 
 +(CCMutableTexture2D *) scroll: (Color_t) body;
 +(CCMutableTexture2D *) wand: (Color_t) body marking: (Color_t) marking;
++(CCMutableTexture2D *) ring: (Color_t) body;
 
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c;
 +(NSArray *) codeForTexture: (CCMutableTexture2D *) t;

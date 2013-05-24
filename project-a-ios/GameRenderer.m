@@ -222,6 +222,12 @@ NSInteger getMod( NSInteger n ) {
             else if ( entity.itemType == E_ITEM_T_WAND ) {
                 t = [sprites objectForKey:@"MagicWand"];
             }
+            
+            else if ( entity.itemType == E_ITEM_T_RING ) {
+                t = [sprites objectForKey:@"MagicRing"];
+            }
+            
+            
         }
     }
  

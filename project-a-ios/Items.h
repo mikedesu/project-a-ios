@@ -24,4 +24,6 @@
 
 +(Entity *) scrollOfCureLightWounds;
 +(Entity *) wandOfCureLightWounds;
+
++(Entity *) ringOfRegeneration;
 @end

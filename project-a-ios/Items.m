@@ -11,7 +11,7 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    NSUInteger numItems = 10;
+    NSUInteger numItems = 11;
     NSUInteger roll = [Dice roll:numItems];
     
     if (roll==1)
@@ -32,12 +32,14 @@
         e = [Items scrollOfCureLightWounds];
     else if (roll==9)
         e = [Items wandOfCureLightWounds];
-    
-     
+    else if (roll==10)
+        e = [Items ringOfRegeneration];
+
     else
         e = [Items basicBoulder];
     
-    e = [Items wandOfCureLightWounds];
+    //e = [Items wandOfCureLightWounds];
+    e = [Items ringOfRegeneration];
     
     NSAssert( e!=nil, @"Random Item: roll failed to set entity" );
     
@@ -254,6 +256,25 @@
                          ]];
     return e;
 }
+
+
+
++(Entity *) ringOfRegeneration {
+    Entity *e = [[Entity alloc] init];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_RING;
+    e.isPC                  = NO;
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    e.weight            = 1;
+    e.durability        = 100;
+    e.totalDurability   = 100;
+    
+    [e.name setString:  [NSString stringWithFormat:@"Ring of Regeneration"]];
+    
+    return e;
+}
+
 
 
 
