@@ -39,7 +39,7 @@
         e = [Items basicBoulder];
     
     //e = [Items wandOfCureLightWounds];
-    e = [Items ringOfRegeneration];
+    //e = [Items ringOfRegeneration];
     
     NSAssert( e!=nil, @"Random Item: roll failed to set entity" );
     
