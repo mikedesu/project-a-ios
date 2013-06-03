@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		271DE231175CF4CB00857118 /* TitleScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 271DE230175CF4CB00857118 /* TitleScreen.m */; };
+		271DE234175CF4EA00857118 /* MasterLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 271DE233175CF4EA00857118 /* MasterLayer.m */; };
+		271DE237175CF54C00857118 /* CharacterCreationScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 271DE236175CF54C00857118 /* CharacterCreationScreen.m */; };
 		2721D02116EAD57200C26F9E /* Drawer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D02016EAD57100C26F9E /* Drawer.m */; };
 		2721D6F516EEB9CD0051352D /* StatusMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D6F416EEB9CC0051352D /* StatusMenu.m */; };
 		2721D6FE16EEBA620051352D /* InventoryMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2721D6FD16EEBA610051352D /* InventoryMenu.m */; };
@@ -168,6 +171,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		271DE22F175CF4CB00857118 /* TitleScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScreen.h; sourceTree = "<group>"; };
+		271DE230175CF4CB00857118 /* TitleScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleScreen.m; sourceTree = "<group>"; };
+		271DE232175CF4EA00857118 /* MasterLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterLayer.h; sourceTree = "<group>"; };
+		271DE233175CF4EA00857118 /* MasterLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterLayer.m; sourceTree = "<group>"; };
+		271DE235175CF54C00857118 /* CharacterCreationScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterCreationScreen.h; sourceTree = "<group>"; };
+		271DE236175CF54C00857118 /* CharacterCreationScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CharacterCreationScreen.m; sourceTree = "<group>"; };
 		2721D01F16EAD57100C26F9E /* Drawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawer.h; sourceTree = "<group>"; };
 		2721D02016EAD57100C26F9E /* Drawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Drawer.m; sourceTree = "<group>"; };
 		2721D6F016EDE94F0051352D /* Monsters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Monsters.h; sourceTree = "<group>"; };
@@ -574,6 +583,8 @@
 				2767E0D016E85F1900013CBE /* Armor.m */,
 				27506B7616D7FF0200245F72 /* CCMutableTexture2D.h */,
 				27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */,
+				271DE235175CF54C00857118 /* CharacterCreationScreen.h */,
+				271DE236175CF54C00857118 /* CharacterCreationScreen.m */,
 				27C4144E16C7D32400BE09F9 /* Colors.h */,
 				27C26D8816CEE904008B0E29 /* Dice.h */,
 				27DCE95F16E2EA5000109F88 /* Dice.m */,
@@ -616,6 +627,8 @@
 				2767E0CA16E83FA500013CBE /* Items.m */,
 				27E192541729BBBD00AA3F25 /* KarmaEngine.h */,
 				27E192551729BBBE00AA3F25 /* KarmaEngine.m */,
+				271DE232175CF4EA00857118 /* MasterLayer.h */,
+				271DE233175CF4EA00857118 /* MasterLayer.m */,
 				27DFEA16170515A500933C8A /* MaterialTypes.h */,
 				27E1924E1721C72900AA3F25 /* Maybe.h */,
 				27E1924F1721C72900AA3F25 /* Maybe.m */,
@@ -640,6 +653,8 @@
 				27E192461714C3F800AA3F25 /* Threat_t.h */,
 				27C4145316C804E300BE09F9 /* Tile.h */,
 				27C4145416C804E300BE09F9 /* Tile.m */,
+				271DE22F175CF4CB00857118 /* TitleScreen.h */,
+				271DE230175CF4CB00857118 /* TitleScreen.m */,
 				27286DCD174105250044C371 /* TODO */,
 				27E19247171EB12000AA3F25 /* Version.h */,
 				2767E0CC16E8596900013CBE /* Weapons.h */,
@@ -1221,6 +1236,9 @@
 				27E192561729BBBE00AA3F25 /* KarmaEngine.m in Sources */,
 				27BAC985174760B70046B1EC /* Status.m in Sources */,
 				27B912A0174ACFFA008D221C /* Spell.m in Sources */,
+				271DE231175CF4CB00857118 /* TitleScreen.m in Sources */,
+				271DE234175CF4EA00857118 /* MasterLayer.m in Sources */,
+				271DE237175CF54C00857118 /* CharacterCreationScreen.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

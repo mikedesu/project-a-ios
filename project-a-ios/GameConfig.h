@@ -48,6 +48,10 @@
 #import "Tile.h"
 #import "Weapons.h"
 
+#import "MasterLayer.h"
+#import "CharacterCreationScreen.h"
+#import "TitleScreen.h"
+
 /*
 typedef struct {
     CGFloat x, y;

@@ -87,8 +87,9 @@
 	[CCTexture2D PVRImagesHavePremultipliedAlpha:YES];
 
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.
-	[director_ pushScene: [GameLayer scene]];
-
+	//[director_ pushScene: [GameLayer scene]];
+	[director_ pushScene: [MasterLayer scene]];
+    
 	return YES;
 }
 
