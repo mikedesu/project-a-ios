@@ -7,6 +7,8 @@
 
 #import "GameConfig.h"
 
+#import "AppDelegate.h"
+
 @implementation CharacterCreationScreen
 
 -(id) init {
@@ -35,6 +37,21 @@
         
         CCMenuItemLabel *enterButton = [[CCMenuItemLabel alloc] initWithLabel:enter block:^(id sender) {
             MLOG(@"Entering...");
+            
+            // stash stats in AppController (formerly AppDelegate)
+            //AppController *controller = [[AppController alloc] init];
+            AppController *controller = [MasterLayer sharedController];
+            
+            controller.strength     = strength;
+            controller.dexterity    = dexterity;
+            controller.constitution = constitution;
+            controller.intelligence = intelligence;
+            controller.wisdom       = wisdom;
+            controller.charisma     = charisma;
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"UnloadCC" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadGame" object:nil];
+            
         }];
         
         CCMenu *menu = [CCMenu menuWithItems:rerollButton, enterButton, nil];

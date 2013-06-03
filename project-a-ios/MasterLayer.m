@@ -15,6 +15,7 @@
 @synthesize characterCreationScreen;
 @synthesize gameLayer;
 
+
 +(CCScene *) scene {
 	CCScene *scene = [CCScene node];
 	MasterLayer *layer = [MasterLayer node];
@@ -33,7 +34,6 @@
         titleScreen = nil;
         characterCreationScreen = nil;
         gameLayer = nil;
-        
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:@"LoadTitle" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:@"UnloadTitle" object:nil];
@@ -98,6 +98,17 @@
         [self removeChild:gameLayer cleanup:YES];
         gameLayer = nil;
     }
+}
+
+static BOOL sharedControllerIsInitialized = NO;
+static AppController *_sharedController;
+
++(AppController *) sharedController {
+    if ( ! sharedControllerIsInitialized ) {
+        _sharedController = [[AppController alloc] init];
+        sharedControllerIsInitialized = YES;
+    }
+    return _sharedController;
 }
 
 @end

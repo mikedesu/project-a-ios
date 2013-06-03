@@ -15,6 +15,13 @@
 
 @synthesize window=window_, navController=navController_, director=director_;
 
+@synthesize strength;
+@synthesize dexterity;
+@synthesize constitution;
+@synthesize intelligence;
+@synthesize wisdom;
+@synthesize charisma;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	// Create the main window
@@ -88,6 +95,14 @@
 
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.
 	//[director_ pushScene: [GameLayer scene]];
+    
+    strength = -1;
+    dexterity = -1;
+    constitution = -1;
+    intelligence = -1;
+    wisdom = -1;
+    charisma = -1;
+    
 	[director_ pushScene: [MasterLayer scene]];
     
 	return YES;

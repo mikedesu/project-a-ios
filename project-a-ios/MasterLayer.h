@@ -8,6 +8,7 @@
 @class TitleScreen;
 @class CharacterCreationScreen;
 @class GameLayer;
+@class AppController;
 
 @interface MasterLayer : CCLayer {
     TitleScreen *titleScreen;
@@ -18,6 +19,8 @@
 @property (nonatomic) TitleScreen *titleScreen;
 @property (nonatomic) CharacterCreationScreen *characterCreationScreen;
 @property (nonatomic) GameLayer *gameLayer;
+
++(AppController *) sharedController;
 
 +(CCScene *) scene;
 -(void) handleNotification: (NSNotification *) notification;

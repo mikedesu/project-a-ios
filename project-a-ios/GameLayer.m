@@ -2993,14 +2993,37 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
     hero.level = 1;
-    hero.strength       = [Dice roll:6 nTimes:3];
-    hero.dexterity      = [Dice roll:6 nTimes:3];
-    hero.constitution   = [Dice roll:6 nTimes:3];
-    hero.intelligence   = [Dice roll:6 nTimes:3];
-    hero.wisdom         = [Dice roll:6 nTimes:3];
-    hero.charisma       = [Dice roll:6 nTimes:3];
+    
+    // pull stats down via controller
+    // if stats == -1, roll
+    AppController *controller = [MasterLayer sharedController];
+    
+    NSAssert(controller.strength > 0, @"Strength is negative");
+    
+    if ( controller.strength > 0) {
+        MLOG(@"STRENGTH IS POSITIVE");
+        
+        hero.strength       = controller.strength;
+        hero.dexterity      = controller.dexterity;
+        hero.constitution   = controller.constitution;
+        hero.intelligence   = controller.intelligence;
+        hero.wisdom         = controller.wisdom;
+        hero.charisma       = controller.charisma;
+    }
+    else {
+        MLOG(@"STRENGTH IS NEGATIVE");
+    
+        hero.strength       = [Dice roll:6 nTimes:3];
+        hero.dexterity      = [Dice roll:6 nTimes:3];
+        hero.constitution   = [Dice roll:6 nTimes:3];
+        hero.intelligence   = [Dice roll:6 nTimes:3];
+        hero.wisdom         = [Dice roll:6 nTimes:3];
+        hero.charisma       = [Dice roll:6 nTimes:3];
+        
+    }
     
     // stat tolerance
+    /*
     NSUInteger _tolerance = 12;
     while (hero.strength < _tolerance)      hero.strength       = [Dice roll:6 nTimes:3];
     while (hero.dexterity < _tolerance)     hero.dexterity      = [Dice roll:6 nTimes:3];
@@ -3008,6 +3031,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     while (hero.intelligence < _tolerance)  hero.intelligence   = [Dice roll:6 nTimes:3];
     while (hero.wisdom < _tolerance)        hero.wisdom         = [Dice roll:6 nTimes:3];
     while (hero.charisma < _tolerance)      hero.charisma       = [Dice roll:6 nTimes:3];
+    */
     
     NSInteger conMod = [GameRenderer modifierForNumber:hero.constitution];
     NSUInteger pcHD = 12;

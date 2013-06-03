@@ -15,10 +15,27 @@
 	UINavigationController *navController_;
 
 	CCDirectorIOS	*director_;							// weak ref
+    
+    
+    NSInteger strength;
+    NSInteger dexterity;
+    NSInteger constitution;
+    NSInteger intelligence;
+    NSInteger wisdom;
+    NSInteger charisma;
+    
 }
 
 @property (nonatomic, retain) UIWindow *window;
 @property (readonly) UINavigationController *navController;
 @property (readonly) CCDirectorIOS *director;
+
+@property (atomic, assign) NSInteger strength;
+@property (atomic, assign) NSInteger dexterity;
+@property (atomic, assign) NSInteger constitution;
+@property (atomic, assign) NSInteger intelligence;
+@property (atomic, assign) NSInteger wisdom;
+@property (atomic, assign) NSInteger charisma;
+
 
 @end
