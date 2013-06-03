@@ -949,7 +949,12 @@ static NSString  * const notifications[] = {
         messageWindowIsVisible = NO;
         if ( [messageQueue count] > 0 ) {
             [messageQueue removeObjectAtIndex:0];
-            [messageQueue count] > 0 ? [self displayMessageWindow] : 0;
+            
+            [messageQueue count] > 0  ? [self displayMessageWindow] : 0;
+            
+            [messageQueue count] == 0 && gameState == GAMESTATE_T_GAME_PC_DEAD ?
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UnloadGame" object:nil] : 0;
+            
         }
     }
 }

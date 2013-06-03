@@ -97,6 +97,8 @@
         
         [self removeChild:gameLayer cleanup:YES];
         gameLayer = nil;
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadTitle" object:nil];
     }
 }
 
