@@ -5,10 +5,21 @@
 
 #import "cocos2d.h"
 
+@class TitleScreen;
+@class CharacterCreationScreen;
+@class GameLayer;
+
 @interface MasterLayer : CCLayer {
-    
+    TitleScreen *titleScreen;
+    CharacterCreationScreen *characterCreationScreen;
+    GameLayer *gameLayer;
 }
 
+@property (nonatomic) TitleScreen *titleScreen;
+@property (nonatomic) CharacterCreationScreen *characterCreationScreen;
+@property (nonatomic) GameLayer *gameLayer;
+
 +(CCScene *) scene;
+-(void) handleNotification: (NSNotification *) notification;
 
 @end

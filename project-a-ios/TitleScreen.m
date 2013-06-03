@@ -38,6 +38,9 @@
         
         CCMenuItemLabel *startButton = [[CCMenuItemLabel alloc] initWithLabel:startButtonLabel block:^(id sender) {
             MLOG(@"Testing...");
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"UnloadTitle" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadCC" object:nil];
         }];
         //startButton.position = startButtonLabel.position;
         
