@@ -15,6 +15,7 @@ typedef enum {
     GAMESTATE_T_GAME_PC_DEAD,
     GAMESTATE_T_GAME_PC_FISHING_PRECAST,
     GAMESTATE_T_GAME_PC_KEY_PREUSE,
+    GAMESTATE_T_GAME_PC_LEVELED_UP,
     //GAMESTATE_T_GAME_PC_SAFEROOM,
 } GameState_t;
 
@@ -25,6 +26,7 @@ typedef enum {
 @class EntityInfoHUD;
 @class EquipMenu;
 @class HelpMenu;
+@class LevelUpWindow;
 @class InventoryMenu;
 @class MessageWindow;
 @class PlayerHUD;
@@ -100,6 +102,9 @@ typedef enum {
     
     BOOL equipMenuIsVisible;
     EquipMenu *equipMenu;
+    
+    BOOL levelUpWindowIsVisible;
+    LevelUpWindow *levelUpWindow;
     
     BOOL messageWindowIsVisible;
     MessageWindow *messageWindow;
@@ -197,8 +202,9 @@ typedef enum {
 -(void) removeInventoryMenu;
 -(void) updateInventoryMenu;
 
-
-
+-(void) initLevelUpWindow;
+-(void) addLevelUpWindow;
+-(void) removeLevelUpWindow;
 
 
 

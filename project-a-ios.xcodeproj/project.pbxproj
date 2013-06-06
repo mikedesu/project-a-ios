@@ -156,6 +156,7 @@
 		27C4145116C7FB1F00BE09F9 /* GameRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C4145016C7FB1F00BE09F9 /* GameRenderer.m */; };
 		27C4145516C804E400BE09F9 /* Tile.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C4145416C804E300BE09F9 /* Tile.m */; };
 		27C88FE016C57607004AB4D8 /* ground_vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 27C88FDF16C57607004AB4D8 /* ground_vertical.png */; };
+		27D0DC4117613DD600184312 /* LevelUpWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D0DC4017613DD600184312 /* LevelUpWindow.m */; };
 		27DCE96016E2EA5000109F88 /* Dice.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DCE95F16E2EA5000109F88 /* Dice.m */; };
 		27DCE96316E2FB3900109F88 /* EntityInfoHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */; };
 		27DFEA0F1701150A00933C8A /* EquipMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DFEA0E1701150A00933C8A /* EquipMenu.m */; };
@@ -488,6 +489,8 @@
 		27C4145416C804E300BE09F9 /* Tile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tile.m; sourceTree = "<group>"; };
 		27C88FDE16C573D4004AB4D8 /* MLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLog.h; sourceTree = "<group>"; };
 		27C88FDF16C57607004AB4D8 /* ground_vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_vertical.png; sourceTree = "<group>"; };
+		27D0DC3F17613DD600184312 /* LevelUpWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelUpWindow.h; sourceTree = "<group>"; };
+		27D0DC4017613DD600184312 /* LevelUpWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelUpWindow.m; sourceTree = "<group>"; };
 		27DCE95F16E2EA5000109F88 /* Dice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dice.m; sourceTree = "<group>"; };
 		27DCE96116E2FB3900109F88 /* EntityInfoHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityInfoHUD.h; sourceTree = "<group>"; };
 		27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityInfoHUD.m; sourceTree = "<group>"; };
@@ -627,6 +630,8 @@
 				2767E0CA16E83FA500013CBE /* Items.m */,
 				27E192541729BBBD00AA3F25 /* KarmaEngine.h */,
 				27E192551729BBBE00AA3F25 /* KarmaEngine.m */,
+				27D0DC3F17613DD600184312 /* LevelUpWindow.h */,
+				27D0DC4017613DD600184312 /* LevelUpWindow.m */,
 				271DE232175CF4EA00857118 /* MasterLayer.h */,
 				271DE233175CF4EA00857118 /* MasterLayer.m */,
 				27DFEA16170515A500933C8A /* MaterialTypes.h */,
@@ -1239,6 +1244,7 @@
 				271DE231175CF4CB00857118 /* TitleScreen.m in Sources */,
 				271DE234175CF4EA00857118 /* MasterLayer.m in Sources */,
 				271DE237175CF54C00857118 /* CharacterCreationScreen.m in Sources */,
+				27D0DC4117613DD600184312 /* LevelUpWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

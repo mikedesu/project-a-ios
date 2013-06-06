@@ -544,20 +544,30 @@
     xp = 0;
     nextLevelXP *= 2;
     
-    NSInteger r = [Dice roll:6];
+    // all entities leveling up get a random point into a stat
+    // player will get to choose their point
+    if ( ! self.isPC ) {
+        NSInteger r = [Dice roll:6];
     
-    r==1 ? strength++       :
-    r==2 ? dexterity++      :
-    r==3 ? constitution++   :
-    r==4 ? intelligence++   :
-    r==5 ? wisdom++         :
-    r==6 ? charisma++       :
-    0;
+        r==1 ? strength++       :
+        r==2 ? dexterity++      :
+        r==3 ? constitution++   :
+        r==4 ? intelligence++   :
+        r==5 ? wisdom++         :
+        r==6 ? charisma++       :
+        0;
+        
+        // lets up our hp
+        NSInteger conMod = [ GameRenderer modifierForNumber: constitution ];
+        maxhp = (conMod > 0) ? (maxhp + [Dice roll: hitDie ] + conMod) : (maxhp + [Dice roll: hitDie]);
+        hp = maxhp;
+        
+    }
     
-    // lets up our hp
-    NSInteger conMod = [ GameRenderer modifierForNumber: constitution ];
-    maxhp = (conMod > 0) ? (maxhp + [Dice roll: hitDie ] + conMod) : (maxhp + [Dice roll: hitDie]);
-    hp = maxhp;
+    else if ( self.isPC ) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayerLevelUpNotification" object:nil];
+    }
+    
 }
 
 

@@ -51,6 +51,7 @@
 #import "MasterLayer.h"
 #import "CharacterCreationScreen.h"
 #import "TitleScreen.h"
+#import "LevelUpWindow.h"
 
 /*
 typedef struct {

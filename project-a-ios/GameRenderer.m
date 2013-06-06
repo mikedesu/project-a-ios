@@ -547,12 +547,17 @@ NSInteger getMod( NSInteger n ) {
                 
                 NSInteger tileRoll = [Dice roll:100];
                 NSInteger waterChance = 5;
-                NSInteger spikeChance = 5;
-                NSInteger poisnChance = 5;
+                NSInteger spikeChance = 1;
+                NSInteger poisnChance = 1;
+                
+                tileRoll = [Dice roll:100];
                 tileType = (tileRoll <= waterChance) ? TILE_FLOOR_WATER : tileType;
+                
                 tileRoll = [Dice roll:100];
                 tileType = (tileRoll <= spikeChance) ? TILE_FLOOR_STONE_TRAP_SPIKES_D6 : tileType;
-                tileRoll = [Dice roll:100];
+                
+                // poison: 1/1000 chance
+                tileRoll = [Dice roll:1000];
                 tileType = (tileRoll <= poisnChance) ? TILE_FLOOR_STONE_TRAP_POISON_D6 : tileType;
                 
                 // override - setting tileType to trap

@@ -340,7 +340,7 @@ unsigned get_memory_mb(void) {
 
 #pragma mark - Notification code
 
-static const NSUInteger notificationsCount = 23;
+static const NSUInteger notificationsCount = 30;
 static NSString  * const notifications[] = {
     /*0*/ @"TestNotification1",
     /*1*/ @"TestNotification2",
@@ -365,6 +365,13 @@ static NSString  * const notifications[] = {
     /*20*/ @"PlayerMenuEquipNotification",
     /*21*/ @"EquipMenuReturnNotification",
     /*22*/ @"PlayerMenuCastNotification",
+    /*23*/ @"PlayerLevelUpNotification",
+    /*24*/ @"PlayerStatUpStrengthNotification",
+    /*25*/ @"PlayerStatUpDexterityNotification",
+    /*26*/ @"PlayerStatUpConstitutionNotification",
+    /*27*/ @"PlayerStatUpIntelligenceNotification",
+    /*28*/ @"PlayerStatUpWisdomNotification",
+    /*29*/ @"PlayerStatUpCharismaNotification",
 };
 
 
@@ -908,6 +915,72 @@ static NSString  * const notifications[] = {
         [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
     }
     
+    
+#pragma mark - Player Level Up Notifications
+    else if ( [notification.name isEqualToString: @"PlayerLevelUpNotification" ]) {
+        
+        MLOG(@"Player leveled up");
+        
+        // add the LevelUpWindow
+        [self addLevelUpWindow];
+    }
+    
+    else if ( [notification.name isEqualToString: @"PlayerStatUpStrengthNotification" ]) {
+        pcEntity.strength++;
+        // handle the HP increase
+        NSInteger conMod = [ GameRenderer modifierForNumber: pcEntity.constitution ];
+        pcEntity.maxhp = (conMod > 0) ? (pcEntity.maxhp + [Dice roll: pcEntity.hitDie ] + conMod) : (pcEntity.maxhp + [Dice roll: pcEntity.hitDie]);
+        pcEntity.hp = pcEntity.maxhp;
+        
+        [ self removeLevelUpWindow];
+    }
+    else if ( [notification.name isEqualToString: @"PlayerStatUpDexterityNotification" ]) {
+        pcEntity.dexterity++;
+        // handle the HP increase
+        NSInteger conMod = [ GameRenderer modifierForNumber: pcEntity.constitution ];
+        pcEntity.maxhp = (conMod > 0) ? (pcEntity.maxhp + [Dice roll: pcEntity.hitDie ] + conMod) : (pcEntity.maxhp + [Dice roll: pcEntity.hitDie]);
+        pcEntity.hp = pcEntity.maxhp;
+        
+        [ self removeLevelUpWindow];
+    }
+    else if ( [notification.name isEqualToString: @"PlayerStatUpConstitutionNotification" ]) {
+        pcEntity.constitution++;
+        
+        // handle the HP increase
+        NSInteger conMod = [ GameRenderer modifierForNumber: pcEntity.constitution ];
+        pcEntity.maxhp = (conMod > 0) ? (pcEntity.maxhp + [Dice roll: pcEntity.hitDie ] + conMod) : (pcEntity.maxhp + [Dice roll: pcEntity.hitDie]);
+        pcEntity.hp = pcEntity.maxhp;
+        
+        [ self removeLevelUpWindow];
+        
+    }
+    else if ( [notification.name isEqualToString: @"PlayerStatUpIntelligenceNotification" ]) {
+        pcEntity.intelligence++;
+        // handle the HP increase
+        NSInteger conMod = [ GameRenderer modifierForNumber: pcEntity.constitution ];
+        pcEntity.maxhp = (conMod > 0) ? (pcEntity.maxhp + [Dice roll: pcEntity.hitDie ] + conMod) : (pcEntity.maxhp + [Dice roll: pcEntity.hitDie]);
+        pcEntity.hp = pcEntity.maxhp;
+        
+        [ self removeLevelUpWindow];
+    }
+    else if ( [notification.name isEqualToString: @"PlayerStatUpWisdomNotification" ]) {
+        pcEntity.wisdom++;
+        // handle the HP increase
+        NSInteger conMod = [ GameRenderer modifierForNumber: pcEntity.constitution ];
+        pcEntity.maxhp = (conMod > 0) ? (pcEntity.maxhp + [Dice roll: pcEntity.hitDie ] + conMod) : (pcEntity.maxhp + [Dice roll: pcEntity.hitDie]);
+        pcEntity.hp = pcEntity.maxhp;
+        
+        [ self removeLevelUpWindow];
+    }
+    else if ( [notification.name isEqualToString: @"PlayerStatUpCharismaNotification" ]) {
+        pcEntity.charisma++;
+        // handle the HP increase
+        NSInteger conMod = [ GameRenderer modifierForNumber: pcEntity.constitution ];
+        pcEntity.maxhp = (conMod > 0) ? (pcEntity.maxhp + [Dice roll: pcEntity.hitDie ] + conMod) : (pcEntity.maxhp + [Dice roll: pcEntity.hitDie]);
+        pcEntity.hp = pcEntity.maxhp;
+        
+        [ self removeLevelUpWindow];
+    }
 
     
     else {
@@ -1591,6 +1664,30 @@ static NSString  * const notifications[] = {
 -(void) updateInventoryMenu {
     [inventoryMenu update];
 }
+
+
+
+#pragma mark - Level Up Window
+-(void) initLevelUpWindow {
+    levelUpWindow = [[LevelUpWindow alloc] init];
+    levelUpWindow.position = ccp( screenwidth/2 - levelUpWindow.contentSize.width/2, screenheight/2 - levelUpWindow.contentSize.height/2 );
+}
+
+-(void) addLevelUpWindow {
+    if ( !levelUpWindowIsVisible ) {
+        [self addChild: levelUpWindow];
+        levelUpWindowIsVisible = YES;
+    }
+}
+
+-(void) removeLevelUpWindow {
+    if ( levelUpWindowIsVisible ) {
+        [self removeChild:levelUpWindow cleanup:NO];
+        levelUpWindowIsVisible = NO;
+    }
+}
+
+
 
 #pragma mark - Update code
 
@@ -2973,6 +3070,13 @@ NSUInteger getMagicY( NSUInteger y ) {
     [self initEquipMenu];
     //[self addEquipMenu];
     
+    
+    levelUpWindowIsVisible = NO;
+    [self initLevelUpWindow];
+    //[self addLevelUpWindow];
+    
+    
+    
     messageWindowIsVisible = NO;
     [self initMessageWindow];
     
@@ -3471,9 +3575,26 @@ NSUInteger getMagicY( NSUInteger y ) {
                                                 isCritical ? @"Critical! " : @"",
                                                 e.name, totaldamage, target.level, target.name ]];
                 
+                
+                
                 if (target.hp <= 0 ) {
                     // increase entity xp
-                    [ e gainXP: target.level*4 + e.level ];
+                    // figure out the xp to gain
+                    // for right now, xp = target.level*4 + e.level
+                    NSInteger xpToGain = target.level*4 + e.level;
+                    NSInteger prevLevel = e.level;
+                    [ e gainXP: xpToGain ];
+                    
+                    // test if the pc leveled up
+                    if ( e.level > prevLevel ) {
+                        
+                        [self addMessageWindowString:@"You leveled up!"];
+                        
+                        // add the level-up window
+                        
+                    }
+                    
+                    
                     e.totalKills++;
                     [ killList addObject: target.name];
                     
