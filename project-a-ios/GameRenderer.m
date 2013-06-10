@@ -227,6 +227,12 @@ NSInteger getMod( NSInteger n ) {
                 t = [sprites objectForKey:@"MagicRing"];
             }
             
+            else if ( entity.itemType == E_ITEM_T_COIN ) {
+                t = [sprites objectForKey:@"Coin"];
+            }
+            
+            
+            
             
         }
     }

@@ -11,7 +11,7 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    NSUInteger numItems = 11;
+    NSUInteger numItems = 12;
     NSUInteger roll = [Dice roll:numItems];
     
     if (roll==1)
@@ -34,6 +34,8 @@
         e = [Items wandOfCureLightWounds];
     else if (roll==10)
         e = [Items ringOfRegeneration];
+    else if (roll==11)
+        e = [Items coin:[Dice roll:100]];
 
     else
         e = [Items basicBoulder];
@@ -274,6 +276,37 @@
     
     return e;
 }
+
+
+
++(Entity *) coin: (NSInteger) coinValue {
+    Entity *e = [[Entity alloc] init];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_COIN;
+    e.isPC                  = NO;
+    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
+    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    e.weight            = 1;
+    e.durability        = 100;
+    e.totalDurability   = 100;
+    
+    // coin has to have some value > 0
+    if ( coinValue <= 1 ) {
+        e.money = 1;
+        [e.name setString:  [NSString stringWithFormat:@"A coin"]];
+    }
+    else {
+        e.money = coinValue;
+        [e.name setString:  [NSString stringWithFormat:@"%d coins", coinValue]];
+    }
+    
+    
+    return e;
+}
+
+
+
+
 
 
 

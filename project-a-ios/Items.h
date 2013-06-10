@@ -7,6 +7,7 @@
 #import "GameConfig.h"
 
 @interface Items : NSObject { }
+
 +(Entity *) randomItem;
 +(Entity *) bookOfAllKnowing;
 +(Entity *) potionOfLightHealing:(NSInteger) bonus;
@@ -22,8 +23,11 @@
 +(Entity *) simpleKey;
 +(Entity *) basicBoulder;
 
+// Magic items
 +(Entity *) scrollOfCureLightWounds;
 +(Entity *) wandOfCureLightWounds;
 
 +(Entity *) ringOfRegeneration;
++(Entity *) coin: (NSInteger) coinValue;
+
 @end

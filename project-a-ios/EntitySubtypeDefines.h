@@ -78,6 +78,9 @@ typedef enum {
     // Keys
     E_ITEM_T_KEY_SIMPLE,
     
+    // Coins
+    E_ITEM_T_COIN,
+    
     
     E_ITEM_T_NUMTYPES
 } EntityItemTypes_t;

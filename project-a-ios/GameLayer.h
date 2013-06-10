@@ -293,7 +293,9 @@ typedef enum {
 -( BOOL ) didPCDieJustNow;
 -( void ) handleTrapSetOffPC;
 
--(void) setEntityStatus: (Entity *) entity status: (Status *) status;
+-(Entity *) itemDropForEntity: (Entity *) entity;
+-(void) handleItemDropForEntity: (Entity *) entity;
 
+-(void) setEntityStatus: (Entity *) entity status: (Status *) status;
 
 @end

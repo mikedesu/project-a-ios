@@ -108,6 +108,8 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer scroll:white] forKey:@"MagicScroll"];
     [s setObject:[Drawer wand:brown marking:white] forKey:@"MagicWand"];
     [s setObject:[Drawer ring:yellow] forKey:@"MagicRing"];
+    
+    [s setObject:[Drawer coin:yellow] forKey:@"Coin"];
 }
 
 
@@ -2461,9 +2463,16 @@ NSUInteger getMagicY( NSUInteger y ) {
                         if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
                             for ( Entity *e in [tile contents] ) {
                                 if ( e.entityType == ENTITY_T_ITEM ) {
-                                    MLOG( @"There is a %@ here", e.name );
-                                    [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
-                                    [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                    if ( e.itemType == E_ITEM_T_COIN ) {
+                                        MLOG( @"There is %@ here", e.name );
+                                        [ self addMessage: [NSString stringWithFormat:@"There is %@ here", e.name]];
+                                        [ self addMessageWindowString: [NSString stringWithFormat:@"There is %@ here", e.name]];
+                                    }
+                                    else {
+                                        MLOG( @"There is a %@ here", e.name );
+                                        [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                        [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                    }
                                 }
                             }
                         } else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
@@ -3679,9 +3688,26 @@ NSUInteger getMagicY( NSUInteger y ) {
                     totalKarmaThisTurn += 1;
                 }
                 
-                [[ entity inventoryArray ] addObject: item ];
-                [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
-                [ self addMessageWindowString: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                // if you pick up a coin, add it's money value to your money value
+                if ( item.itemType == E_ITEM_T_COIN ) {
+                    entity.money += item.money;
+                    
+                    if ( item.money == 1 ) {
+                        [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                        [ self addMessageWindowString: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                    }
+                    else if ( item.money > 1 ) {
+                        [ self addMessage: [NSString stringWithFormat:@"%@ picks up %@", entity.name, item.name]];
+                        [ self addMessageWindowString: [NSString stringWithFormat:@"%@ picks up %@", entity.name, item.name]];
+                    }
+                }
+                
+                // otherwise it's a normal item
+                else {
+                    [[ entity inventoryArray ] addObject: item ];
+                    [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                    [ self addMessageWindowString: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                }
                 
                 [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
                 [[ itemTile contents ] removeObject: item];
@@ -3843,21 +3869,55 @@ NSUInteger getMagicY( NSUInteger y ) {
     autostepGameLogic = ! autostepGameLogic;
 }
 
+
+
+
 -(void) cleanupEntityArray {
     // cleanup entityArray
     for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] entityArray] count]; i++ ) {
         Entity *e = [[[dungeon objectAtIndex:floorNumber] entityArray] objectAtIndex: i];
         if ( e.isAlive == NO ) {
-            CGPoint entityPos = e.positionOnMap;
+            //CGPoint entityPos = e.positionOnMap;
             
             // drop a green blob if they die
-            Entity *food = [Items greenBlob];
-            [GameRenderer spawnEntity:food onFloor:[dungeon objectAtIndex:floorNumber] atLocation:entityPos];
+            
+            // handle item drop for the entity
+ 
+            [self handleItemDropForEntity: e];
+ 
+            // remove the dead entity from the array
             [[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: e ];
             i = 0;
         }
     }
 }
+
+
+
+-(Entity *) itemDropForEntity: (Entity *) entity {
+    Entity *itemDrop = nil;
+    
+    // item-generation logic
+    NSInteger roll = [Dice roll:3];
+    itemDrop =
+    roll == 1 ? [Items greenBlob] :
+    roll == 2 ? [Items coin:1] :
+    roll == 3 ? [Items coin:5] :
+    [Items coin:1];
+    
+    return itemDrop;
+}
+
+-(void) handleItemDropForEntity: (Entity *) entity {
+    Entity *itemDrop = [self itemDropForEntity: entity];
+    [GameRenderer spawnEntity:itemDrop onFloor:[dungeon objectAtIndex:floorNumber] atLocation:entity.positionOnMap];
+}
+
+
+
+
+
+
 
 -(void) setEntityStatus: (Entity *) entity status: (Status *) status {
     entity.status = status;
