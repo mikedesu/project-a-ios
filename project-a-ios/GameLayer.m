@@ -793,7 +793,9 @@ static NSString  * const notifications[] = {
         [self removeInventoryMenu];
     } else if ( [notification.name isEqualToString: @"PlayerMenuResetNotification" ]) {
         MLOG(@"Reset...");
-        [ self bootGame ];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"UnloadGame" object:nil];
+        
+        //[ self bootGame ];
     } else if ( [notification.name isEqualToString: @"PlayerMenuHelpNotification" ]) {
         MLOG(@"Help pressed");
         ( ! helpMenuIsVisible ) ? [ self addHelpMenu] : [self removeHelpMenu];
@@ -1104,9 +1106,10 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) initPlayerMenu {
-    CGSize size = [[CCDirector sharedDirector] winSize];
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black width:100 height:300 ];
-    playerMenu.position = ccp( 0 , size.height - (playerMenu.contentSize.height) );
+    NSInteger width  = screenwidth;
+    NSInteger height = 50;
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black width:width height:height ];
+    playerMenu.position = ccp( 0 , playerHUD.contentSize.height);
 }
 
 
@@ -3154,6 +3157,11 @@ NSUInteger getMagicY( NSUInteger y ) {
     NSInteger conMod = [GameRenderer modifierForNumber:hero.constitution];
     NSUInteger pcHD = 12;
     hero.maxhp = [Dice roll:pcHD] + conMod;
+    
+    while (hero.maxhp <= 0)
+        hero.maxhp = [Dice roll:pcHD] + conMod;
+    
+    
     hero.hp = hero.maxhp;
     hero.ac = 10;
     

@@ -24,8 +24,8 @@
         //Color3_t fontColor = black3;
         Color3_t fontColor = white3;
         
-        CCLabelTTF *menuItemLabelMinimize       = [[CCLabelTTF alloc] initWithString:   @"Minimize"     fontName:@"Courier New" fontSize:16 ];
-        menuItemLabelMinimize.color             = fontColor;
+        //CCLabelTTF *menuItemLabelMinimize       = [[CCLabelTTF alloc] initWithString:   @"Minimize"     fontName:@"Courier New" fontSize:16 ];
+        //menuItemLabelMinimize.color             = fontColor;
         
         CCLabelTTF *menuItemLabelStatus         = [[CCLabelTTF alloc] initWithString:   @"Status"       fontName:@"Courier New" fontSize:16 ];
         menuItemLabelStatus.color               = fontColor;
@@ -67,51 +67,105 @@
         CCLabelTTF *menuItemLabelReset          = [[CCLabelTTF alloc] initWithString:   @"Reset"        fontName:@"Courier New" fontSize:16 ];
         menuItemLabelReset.color                = fontColor;
         
-        NSInteger p = 24;
-        NSInteger k = 1;
-        CCMenuItem *menuItemMinimize    = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelMinimize target:self selector:@selector(menuItemClosePressed) ];
-        menuItemMinimize.position       = ccp( 0 + menuItemMinimize.contentSize.width/2, h - p*k++ );
+        //NSInteger p = 24;
+        //NSInteger k = 1;
+        
+        NSInteger baseHeight = h;
+        NSInteger hPad = 5;
+        
+        NSInteger pad = 25;
+        NSInteger shiftLeft = -5;
+        
+        //CCMenuItem *menuItemMinimize    = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelMinimize target:self selector:@selector(menuItemClosePressed) ];
+        //menuItemMinimize.position       = ccp( 0 + menuItemMinimize.contentSize.width/2, h - p*k++ );
+        //menuItemMinimize.position       = ccp( 0 + menuItemMinimize.contentSize.width/2 , baseHeight - menuItemMinimize.contentSize.height/2 );
         
         CCMenuItem *menuItemStatus      = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelStatus target:self selector:@selector(menuItemStatusPressed) ];
-        menuItemStatus.position         = ccp( 0 + menuItemStatus.contentSize.width/2, h - p*k++);
+        //menuItemStatus.position         = ccp( 0 + menuItemStatus.contentSize.width/2, h - p*k++);
+        menuItemStatus.position         = ccp( menuItemStatus.contentSize.width/2 + pad + (5*shiftLeft),
+                                              baseHeight - menuItemStatus.contentSize.height/2 );
         
         CCMenuItem *menuItemEquip       = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelEquip target:self selector:@selector(menuItemEquipPressed) ];
-        menuItemEquip.position          = ccp( 0 + menuItemEquip.contentSize.width/2, h - p*k++);
+        //menuItemEquip.position          = ccp( 0 + menuItemEquip.contentSize.width/2, h - p*k++);
+        menuItemEquip.position          = ccp( menuItemStatus.contentSize.width +
+                                               menuItemEquip.contentSize.width/2 + pad + (4*shiftLeft),
+                                               baseHeight - menuItemEquip.contentSize.height/2 );
         
         CCMenuItem *menuItemCast       = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelCast target:self selector:@selector(menuItemCastPressed) ];
-        menuItemCast.position          = ccp( 0 + menuItemCast.contentSize.width/2, h - p*k++);
+        //menuItemCast.position          = ccp( 0 + menuItemCast.contentSize.width/2, h - p*k++);
+        menuItemCast.position          = ccp( menuItemStatus.contentSize.width +
+                                              menuItemEquip.contentSize.width +
+                                              menuItemCast.contentSize.width/2  + pad + (3*shiftLeft),
+                                              baseHeight - menuItemCast.contentSize.height/2 );
         
         
         
         CCMenuItem *menuItemInventory   = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelInventory target:self selector:@selector(menuItemInventoryPressed) ];
-        menuItemInventory.position      = ccp( 0 + menuItemInventory.contentSize.width/2, h - p*k++ );
+        menuItemInventory.position      = ccp( menuItemStatus.contentSize.width +
+                                              menuItemEquip.contentSize.width +
+                                              menuItemCast.contentSize.width +
+                                              menuItemInventory.contentSize.width/2  + pad + (2*shiftLeft),
+                                              baseHeight - menuItemInventory.contentSize.height/2 );
         
         CCMenuItem *menuItemPickup      = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelPickup target:self selector:@selector(menuItemPickupPressed) ];
-        menuItemPickup.position         = ccp( 0 + menuItemPickup.contentSize.width/2, h - p*k++ );
+        //menuItemPickup.position         = ccp( 0 + menuItemPickup.contentSize.width/2, h - p*k++ );
+        menuItemPickup.position         = ccp(menuItemStatus.contentSize.width +
+                                              menuItemEquip.contentSize.width +
+                                              menuItemCast.contentSize.width +
+                                              menuItemInventory.contentSize.width +
+                                              menuItemPickup.contentSize.width/2  + pad + (shiftLeft),
+                                              baseHeight - menuItemPickup.contentSize.height/2 );
         
+        /*
+         ####################
+             NEXT ROW!!!
+         ####################
+         */
+        
+        // drop the baseHeight so that calculations for height remain simple
+        baseHeight = baseHeight - menuItemStatus.contentSize.height - hPad;
+        pad = 20;
         
         CCMenuItem *menuItemStep        = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelStep target:self selector:@selector(menuItemStepPressed) ];
-        menuItemStep.position           = ccp( 0 + menuItemStep.contentSize.width/2, h - p*k++ );
+        //menuItemStep.position           = ccp( 0 + menuItemStep.contentSize.width/2, h - p*k++ );
+        menuItemStep.position           = ccp( menuItemStep.contentSize.width/2 + pad + (4*shiftLeft),
+                                              baseHeight - menuItemStep.contentSize.height/2 );
         
         //CCMenuItem *menuItemAutostep    = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelAutostep target:self selector:@selector(menuItemAutostepPressed) ];
         //menuItemAutostep.position       = ccp( 0 + menuItemAutostep.contentSize.width/2, h - p*k++ );
         
         CCMenuItem *menuItemMonitor     = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelMonitor target:self selector:@selector(menuItemMonitorPressed) ];
-        menuItemMonitor.position        = ccp( 0 + menuItemMonitor.contentSize.width/2, h - p*k++ );
+        //menuItemMonitor.position        = ccp( 0 + menuItemMonitor.contentSize.width/2, h - p*k++ );
+        menuItemMonitor.position        = ccp( menuItemStep.contentSize.width +
+                                              menuItemMonitor.contentSize.width/2 + pad + (3*shiftLeft),
+                                              baseHeight - menuItemMonitor.contentSize.height/2);
         
         CCMenuItem *menuItemHelp        = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelHelp target:self selector:@selector(menuItemHelpPressed) ];
-        menuItemHelp.position           = ccp( 0 + menuItemHelp.contentSize.width/2, h - p*k++ );
+        //menuItemHelp.position           = ccp( 0 + menuItemHelp.contentSize.width/2, h - p*k++ );
+        menuItemHelp.position           = ccp( menuItemStep.contentSize.width +
+                                              menuItemMonitor.contentSize.width +
+                                              menuItemHelp.contentSize.width/2 + pad + (2*shiftLeft),
+                                              baseHeight - menuItemHelp.contentSize.height/2 );
         
         CCMenuItem *menuItemEntityInfo  = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelEntityInfo target:self selector:@selector(menuItemEntityInfoPressed) ];
-        menuItemEntityInfo.position     = ccp( 0 + menuItemLabelEntityInfo.contentSize.width/2, h - p*k++ );
-        
-        
+        //menuItemEntityInfo.position     = ccp( 0 + menuItemLabelEntityInfo.contentSize.width/2, h - p*k++ );
+        menuItemEntityInfo.position     = ccp(  menuItemStep.contentSize.width +
+                                              menuItemMonitor.contentSize.width +
+                                              menuItemHelp.contentSize.width +
+                                              menuItemLabelEntityInfo.contentSize.width/2 + pad + (shiftLeft),
+                                              baseHeight - menuItemEntityInfo.contentSize.height/2 );
         
         CCMenuItem *menuItemReset       = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelReset target:self selector:@selector(menuItemResetPressed) ];
-        menuItemReset.position          = ccp( 0 + menuItemReset.contentSize.width/2, h -p*k++ );
+        //menuItemReset.position          = ccp( 0 + menuItemReset.contentSize.width/2, h -p*k++ );
+        menuItemReset.position          = ccp(  menuItemStep.contentSize.width +
+                                              menuItemMonitor.contentSize.width +
+                                              menuItemHelp.contentSize.width +
+                                              menuItemLabelEntityInfo.contentSize.width + 
+                                              menuItemReset.contentSize.width/2 + pad,
+                                              baseHeight - menuItemReset.contentSize.height/2 );
         
         CCMenu *menu = [[ CCMenu alloc ] initWithArray: [NSArray arrayWithObjects:
-                                                         menuItemMinimize,
+                                                         //menuItemMinimize,
                                                          menuItemStatus,
                                                          menuItemEquip,
                                                          menuItemCast,
