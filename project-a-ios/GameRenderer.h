@@ -53,6 +53,8 @@
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc withChanceDie: (NSInteger) chanceDie ;
 +( void ) spawnRandomItemAtRandomLocationOnFloor: (DungeonFloor *) floor;
 +( void ) spawnBookOfAllKnowingAtRandomLocationOnFloor: (DungeonFloor *) floor;
+
++(void) copyTexture: (CCMutableTexture2D *) texture0 ontoTexture: (CCMutableTexture2D *) texture1 ;
     
 
 @end

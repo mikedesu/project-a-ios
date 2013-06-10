@@ -117,12 +117,14 @@ NSInteger getMod( NSInteger n ) {
     [ texture apply ];
     
     CCMutableTexture2D *t = nil;
+ 
+    for ( int i = 0; i < data.contents.count; i++ ) {
     
-    for (Entity *entity in [data contents]) {
+        //for (Entity *entity in data.contents) {
         // Below, we define the draw routines for each entity-type
-        // We are starting with solid colors
-        // Next, we will upgrade to single-layer drawings
         // Last, we will upgrade to multi-layer drawings
+        
+        Entity *entity = [data.contents objectAtIndex:i];
         
         if ( entity.entityType == ENTITY_T_PC ) {
             t = [sprites objectForKey: @"Hero"];
@@ -230,24 +232,33 @@ NSInteger getMod( NSInteger n ) {
             else if ( entity.itemType == E_ITEM_T_COIN ) {
                 t = [sprites objectForKey:@"Coin"];
             }
-            
-            
-            
-            
         }
+        
+        // at this point, t is set to something from data.contents
+        // typically, we'd enumerate and the last thing in data.contents is what gets drawn on top
+        // since we're going numerically now, it should still be the same thing
+ 
+        // copy the texture over
+        [GameRenderer copyTexture:t ontoTexture:texture];
+        
     }
  
+    /*
     if ( t != nil ) {
         for ( int i = 0; i < 16; i++ )
             for ( int j = 0; j < 16; j++ )
                 ( [t pixelAt:ccp(i,j)].a != 0 ) ? [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]] : 0;
         [texture apply];
     }
+     */
+    
+    //[GameRenderer copyTexture:t ontoTexture:texture];
     
     // handle selected tiles
-    if ( data.isSelected && tileTexture != nil ) {
-        for ( int i = 0; i < 16; i++ )
-            for ( int j = 0; j < 16; j++ ) {
+    //if ( data.isSelected && tileTexture != nil ) {
+    if ( data.isSelected && [[Maybe something:tileTexture] hasSomething] ) {
+        for ( int i = 0; i < texture.contentSizeInPixels.width; i++ )
+            for ( int j = 0; j < texture.contentSizeInPixels.height; j++ ) {
                 Color_t px = [texture pixelAt:ccp(i,j)];
                 px.a = 128;
                 [texture setPixelAt:ccp(i,j) rgba:px];
@@ -255,6 +266,28 @@ NSInteger getMod( NSInteger n ) {
     }
     [texture apply];
 }
+
+
++(void) copyTexture: (CCMutableTexture2D *) texture0 ontoTexture: (CCMutableTexture2D *) texture1 {
+    if ( [[Maybe something: texture0] hasSomething] &&
+         [[Maybe something: texture1] hasSomething]) {
+        // assert that texture0 and texture1 have the same width and height in pixels
+        NSAssert( texture0.contentSizeInPixels.width  == texture1.contentSizeInPixels.width,  @"Content size in pixels must match!");
+        NSAssert( texture0.contentSizeInPixels.height == texture1.contentSizeInPixels.height, @"Content size in pixels must match!");
+        for ( int i = 0; i < texture0.contentSizeInPixels.width; i++ ) {
+            for ( int j = 0; j < texture0.contentSizeInPixels.height; j++ ) {
+                // test the pixel alpha at (i,j) on texture0
+                // if it isn't 0, copy it over. otherwise, do nothing
+                [texture0 pixelAt:ccp(i,j)].a != 0 ? [texture1 setPixelAt:ccp(i,j) rgba:[texture0 pixelAt:ccp(i,j)]] : 0;
+            }
+        }
+        [texture1 apply];
+    }
+}
+
+
+
+
 
 /*
  ====================
