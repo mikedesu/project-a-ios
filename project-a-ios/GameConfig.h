@@ -52,6 +52,7 @@
 #import "CharacterCreationScreen.h"
 #import "TitleScreen.h"
 #import "LevelUpWindow.h"
+#import "GameTools.h"
 
 /*
 typedef struct {

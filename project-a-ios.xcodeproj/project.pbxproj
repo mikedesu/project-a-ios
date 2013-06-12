@@ -147,6 +147,7 @@
 		2773F29216C85469001C3E83 /* EditorHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29116C85469001C3E83 /* EditorHUD.m */; };
 		2773F29516C949C4001C3E83 /* PlayerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29416C949C4001C3E83 /* PlayerHUD.m */; };
 		2773F29816C94DA3001C3E83 /* PlayerMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29716C94DA3001C3E83 /* PlayerMenu.m */; };
+		27896AD117691BDB00802FBA /* GameTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 27896AD017691BDB00802FBA /* GameTools.m */; };
 		27A1A5A71709711E002C3A4A /* Attack_t.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A1A5A61709711E002C3A4A /* Attack_t.m */; };
 		27B912A0174ACFFA008D221C /* Spell.m in Sources */ = {isa = PBXBuildFile; fileRef = 27B9129F174ACFFA008D221C /* Spell.m */; };
 		27BAC985174760B70046B1EC /* Status.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BAC984174760B70046B1EC /* Status.m */; };
@@ -465,6 +466,8 @@
 		2773F29416C949C4001C3E83 /* PlayerHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerHUD.m; sourceTree = "<group>"; };
 		2773F29616C94DA3001C3E83 /* PlayerMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerMenu.h; sourceTree = "<group>"; };
 		2773F29716C94DA3001C3E83 /* PlayerMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerMenu.m; sourceTree = "<group>"; };
+		27896ACF17691BDB00802FBA /* GameTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTools.h; sourceTree = "<group>"; };
+		27896AD017691BDB00802FBA /* GameTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameTools.m; sourceTree = "<group>"; };
 		27A1A5A51709711E002C3A4A /* Attack_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attack_t.h; sourceTree = "<group>"; };
 		27A1A5A61709711E002C3A4A /* Attack_t.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attack_t.m; sourceTree = "<group>"; };
 		27A1A5A817097387002C3A4A /* AttackStatus_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttackStatus_t.h; sourceTree = "<group>"; };
@@ -622,6 +625,8 @@
 				272EF65016C5695F005DF231 /* GameLayer.m */,
 				27C4144F16C7FB1E00BE09F9 /* GameRenderer.h */,
 				27C4145016C7FB1F00BE09F9 /* GameRenderer.m */,
+				27896ACF17691BDB00802FBA /* GameTools.h */,
+				27896AD017691BDB00802FBA /* GameTools.m */,
 				27C0C2E816FAA12D00AF1208 /* HelpMenu.h */,
 				27C0C2E916FAA12D00AF1208 /* HelpMenu.m */,
 				2721D6FC16EEBA610051352D /* InventoryMenu.h */,
@@ -1245,6 +1250,7 @@
 				271DE234175CF4EA00857118 /* MasterLayer.m in Sources */,
 				271DE237175CF54C00857118 /* CharacterCreationScreen.m in Sources */,
 				27D0DC4117613DD600184312 /* LevelUpWindow.m in Sources */,
+				27896AD117691BDB00802FBA /* GameTools.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

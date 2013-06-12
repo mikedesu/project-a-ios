@@ -5,6 +5,7 @@
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
 #import "Maybe.h"
+#import "MLog.h"
 
 @implementation Maybe
 

@@ -1507,8 +1507,13 @@ static NSString  * const notifications[] = {
 -( void ) updatePlayerHUDLabel {
     playerHUD.label.fontSize = 12;
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
-                                   [ NSString stringWithFormat: @"%@ - Hunger:%@ T:%d", pcEntity.name,
-                                        pcEntity.hunger < 50  ? @"Satiated" :
+                                   [ NSString stringWithFormat: @"%@:%@:%@ T:%d", pcEntity.name,
+                                    
+                                    pcEntity.status.base == STATUS_T_NORMAL ? @"Normal" :
+                                        pcEntity.status.base == STATUS_T_POISON ? @"Poisoned" :
+                                        [NSString stringWithFormat:@"Unknown(%d)", pcEntity.status.base],
+                                    
+                                    pcEntity.hunger < 50  ? @"Satiated" :
                                         pcEntity.hunger < 100 ? @"Mild Hunger" :
                                         pcEntity.hunger < 150 ? @"Hungry" :
                                         pcEntity.hunger < 200 ? @"Very Hungry" :
@@ -1863,7 +1868,9 @@ static NSString  * const notifications[] = {
                 if ( a==b ) {
                     // check distance from pcEntity
                     Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
-                    NSInteger distance = [ self distanceFromTile:a toTile: pcTile ];
+                    //NSInteger distance = [ self distanceFromTile:a toTile: pcTile ];
+                    NSInteger distance = [ GameTools distanceFromTile:a toTile: pcTile ];
+                    
                     if ( distance <= pcEntity.movement ) {
                         // valid quick-move
                         // deselect the tile
@@ -2716,11 +2723,10 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 /*
  ====================
- distanceFromTile: toTile:
+ distanceFromTile: toTile: (DEPRECATED!!! - use: [GameTools distanceFromTile: toTile:])
  
  returns distance from a tile to another
  ====================
- */
 -( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b {
     NSInteger ax = (NSInteger)a.position.x;
     NSInteger bx = (NSInteger)b.position.x;
@@ -2728,14 +2734,14 @@ NSUInteger getMagicY( NSUInteger y ) {
     NSInteger by = (NSInteger)b.position.y;
     return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
 }
+ */
 
 /*
  ====================
- distanceFromCGPoint: toCGPoint:
+ distanceFromCGPoint: toCGPoint: (DEPRECATED!!! - use: [GameTools distanceFromCGPoint: toCGPoint:])
  
  returns distance from a cgpoint to another
  ====================
- */
 -( NSInteger ) distanceFromCGPoint: (CGPoint) a toCGPoint: (CGPoint) b {
     //MLOG( @"distanceFromTile: a toTile: b" );
     NSInteger ax = (NSInteger)a.x;
@@ -2744,6 +2750,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     NSInteger by = (NSInteger)b.y;
     return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
 }
+ */
 
 /*
  ====================
@@ -2770,14 +2777,14 @@ NSUInteger getMagicY( NSUInteger y ) {
         d  = ccp( a.x+0, a.y+1 );
         dr = ccp( a.x+1, a.y+1 );
         
-        NSInteger uld = [ self distanceFromCGPoint:ul toCGPoint:b ];
-        NSInteger ud  = [ self distanceFromCGPoint:u  toCGPoint:b ];
-        NSInteger urd = [ self distanceFromCGPoint:ur toCGPoint:b ];
-        NSInteger ld  = [ self distanceFromCGPoint:l  toCGPoint:b ];
-        NSInteger rd  = [ self distanceFromCGPoint:r  toCGPoint:b ];
-        NSInteger dld = [ self distanceFromCGPoint:dl toCGPoint:b ];
-        NSInteger dd  = [ self distanceFromCGPoint:d  toCGPoint:b ];
-        NSInteger drd = [ self distanceFromCGPoint:dr toCGPoint:b ];
+        NSInteger uld = [ GameTools distanceFromCGPoint:ul toCGPoint:b ];
+        NSInteger ud  = [ GameTools distanceFromCGPoint:u  toCGPoint:b ];
+        NSInteger urd = [ GameTools distanceFromCGPoint:ur toCGPoint:b ];
+        NSInteger ld  = [ GameTools distanceFromCGPoint:l  toCGPoint:b ];
+        NSInteger rd  = [ GameTools distanceFromCGPoint:r  toCGPoint:b ];
+        NSInteger dld = [ GameTools distanceFromCGPoint:dl toCGPoint:b ];
+        NSInteger dd  = [ GameTools distanceFromCGPoint:d  toCGPoint:b ];
+        NSInteger drd = [ GameTools distanceFromCGPoint:dr toCGPoint:b ];
         
         NSInteger min = NSIntegerMax;
         if ( uld <= min ) { min = uld; nearest = ul; }
@@ -2815,14 +2822,14 @@ NSUInteger getMagicY( NSUInteger y ) {
         d  = ccp( a.x+0, a.y+1 );
         dr = ccp( a.x+1, a.y+1 );
         
-        NSInteger uld = [ self distanceFromCGPoint:ul toCGPoint:b ];
-        NSInteger ud  = [ self distanceFromCGPoint:u  toCGPoint:b ];
-        NSInteger urd = [ self distanceFromCGPoint:ur toCGPoint:b ];
-        NSInteger ld  = [ self distanceFromCGPoint:l  toCGPoint:b ];
-        NSInteger rd  = [ self distanceFromCGPoint:r  toCGPoint:b ];
-        NSInteger dld = [ self distanceFromCGPoint:dl toCGPoint:b ];
-        NSInteger dd  = [ self distanceFromCGPoint:d  toCGPoint:b ];
-        NSInteger drd = [ self distanceFromCGPoint:dr toCGPoint:b ];
+        NSInteger uld = [ GameTools distanceFromCGPoint:ul toCGPoint:b ];
+        NSInteger ud  = [ GameTools distanceFromCGPoint:u  toCGPoint:b ];
+        NSInteger urd = [ GameTools distanceFromCGPoint:ur toCGPoint:b ];
+        NSInteger ld  = [ GameTools distanceFromCGPoint:l  toCGPoint:b ];
+        NSInteger rd  = [ GameTools distanceFromCGPoint:r  toCGPoint:b ];
+        NSInteger dld = [ GameTools distanceFromCGPoint:dl toCGPoint:b ];
+        NSInteger dd  = [ GameTools distanceFromCGPoint:d  toCGPoint:b ];
+        NSInteger drd = [ GameTools distanceFromCGPoint:dr toCGPoint:b ];
         
         NSInteger min = NSIntegerMax;
         CGPoint points[ 8 ] = { ul, u, ur, l, r, dl, d, dr };

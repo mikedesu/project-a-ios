@@ -430,269 +430,342 @@ NSInteger getMod( NSInteger n ) {
 }
 
 +(void) algorithm0: (DungeonFloorAlgorithm_t) algorithm withFloor: (DungeonFloor *) floor {
-        // calc the top-left editable tile
-        NSUInteger x = floor.border/2;
-        NSUInteger y = floor.border/2;
-        NSUInteger w = floor.width - floor.border;
-        NSUInteger h = floor.height - floor.border;
-        
-        NSUInteger numTilesPlaced = 0;
-        NSUInteger maxTilesPlaced = 0;
-        NSUInteger numTiles = [Dice roll:10 nTimes:10] + 10;
+    // calc the top-left editable tile
+    NSUInteger x = floor.border/2;
+    NSUInteger y = floor.border/2;
+    NSUInteger w = floor.width - floor.border;
+    NSUInteger h = floor.height - floor.border;
     
-        NSUInteger xo = 0;
-        NSUInteger yo = 0;
+    NSUInteger numTilesPlaced = 0;
+    NSUInteger maxTilesPlaced = 0;
+    NSUInteger numTiles = [Dice roll:10 nTimes:10] + 10;
+
+    NSUInteger xo = 0;
+    NSUInteger yo = 0;
+    
+    NSUInteger roll;
+    NSUInteger totalRolls = 0;
+    
+    NSUInteger rerolls = 0;
+    NSUInteger totalRerolls = 0;
+    NSUInteger rerollTolerance = 100;
+    NSUInteger toleranceBreaks = 0;
+    
+    const NSUInteger MAX_REROLLS = 4;
+    NSUInteger prevroll[ MAX_REROLLS ];
+    for ( int i = 0; i < MAX_REROLLS; i++ ) { prevroll[ i ] = -1; }
+    
+    NSMutableArray *placedTilesArray = [[ NSMutableArray alloc ] init ];
+    NSMutableArray *triedTilesArray = [[ NSMutableArray alloc ] init ];
+    
+    BOOL doPrintMaxTiles = NO;
+    
+    // determine a tile-type as the base tile type to use
+    Tile_t baseTileType;
+    
+    baseTileType = TILE_FLOOR_STONE;
+    
+    CGPoint point = ccp( x, y );
+    [ self setTileAtPosition:point onFloor:floor toType:baseTileType ];
+    [ placedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
+    numTilesPlaced++;
+    
+    for ( int i = numTilesPlaced; i < numTiles; i++ ) {
+        BOOL willReroll = NO;
         
-        NSUInteger roll;
-        NSUInteger totalRolls = 0;
         
-        NSUInteger rerolls = 0;
-        NSUInteger totalRerolls = 0;
-        NSUInteger rerollTolerance = 100;
-        NSUInteger toleranceBreaks = 0;
+        //roll = [Dice roll:4];
+        //roll = [Dice roll:8];
         
-        const NSUInteger MAX_REROLLS = 4;
-        NSUInteger prevroll[ MAX_REROLLS ];
-        for ( int i = 0; i < MAX_REROLLS; i++ ) { prevroll[ i ] = -1; }
+        // handle the roll
+        /*
+        if ( roll == 1) {
+            xo += 0;
+            yo += -1;
+        } else if ( roll == 2) {
+            xo += 0;
+            yo += 1;
+        } else if ( roll == 3) {
+            xo += -1;
+            yo += 0;
+        } else if ( roll == 4) {
+            xo += 1;
+            yo += 0;
+        } else if ( roll == 5 ) {
+            xo += -1;
+            yo += -1;
+        } else if ( roll == 6 ) {
+            xo += 1;
+            yo += -1;
+        } else if ( roll == 7 ) {
+            xo += -1;
+            yo += 1;
+        } else if ( roll == 8 ) {
+            xo += 1;
+            yo += 1;
+        }
+         */
         
-        NSMutableArray *placedTilesArray = [[ NSMutableArray alloc ] init ];
-        NSMutableArray *triedTilesArray = [[ NSMutableArray alloc ] init ];
-        
-        BOOL doPrintMaxTiles = NO;
-        
-        // determine a tile-type as the base tile type to use
-        Tile_t baseTileType;
-        
-        baseTileType = TILE_FLOOR_STONE;
-        
-        CGPoint point = ccp( x, y );
-        [ self setTileAtPosition:point onFloor:floor toType:baseTileType ];
-        [ placedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
-        numTilesPlaced++;
-        
-        for ( int i = numTilesPlaced; i < numTiles; i++ ) {
-            BOOL willReroll = NO;
+        // direction type
+        // 0 = standard : ULDR
+        // 1 = cross    : UL UR DL DR
+        // 2 = mix      : 0 + 1
+        NSInteger dirType = 1;
+        //NSInteger dirType = [Dice roll:3];
+        if ( dirType == 1 ) {
+            roll = [Dice roll:4];
+            xo +=
+            roll == 1 || roll == 2  ?  0  :
+            roll == 3               ? -1  :
+            roll == 4               ?  1  :
+            0;
             
+            yo +=
+            roll == 1              ? -1  :
+            roll == 2              ?  1  :
+            roll == 3 || roll == 4 ?  0  :
+            0;
             
-            //roll = [Dice roll:4];
-            //roll = [Dice roll:8];
+        } else if ( dirType == 2 ) {
+            roll = [Dice roll:4];
+            xo +=
+            roll == 1 || roll == 3 ? -1  :
+            roll == 2 || roll == 4 ?  1  :
+            0;
             
-            // handle the roll
-            /*
-            if ( roll == 1) {
-                xo += 0;
-                yo += -1;
-            } else if ( roll == 2) {
-                xo += 0;
-                yo += 1;
-            } else if ( roll == 3) {
-                xo += -1;
-                yo += 0;
-            } else if ( roll == 4) {
-                xo += 1;
-                yo += 0;
-            } else if ( roll == 5 ) {
-                xo += -1;
-                yo += -1;
-            } else if ( roll == 6 ) {
-                xo += 1;
-                yo += -1;
-            } else if ( roll == 7 ) {
-                xo += -1;
-                yo += 1;
-            } else if ( roll == 8 ) {
-                xo += 1;
-                yo += 1;
+            yo +=
+            roll == 1 || roll == 2 ? -1  :
+            roll == 3 || roll == 4 ?  1  :
+            0;
+            
+        } else if ( dirType == 3 ) {
+            roll = [Dice roll:8];
+            xo +=
+            roll == 1 || roll == 2              ?  0  :
+            roll == 3 || roll == 5 || roll == 7 ? -1  :
+            roll == 4 || roll == 6 || roll == 8 ?  1  :
+            0;
+            
+            yo +=
+            roll == 1 || roll == 5 || roll == 6 ? -1  :
+            roll == 2 || roll == 7 || roll == 8 ?  1  :
+            roll == 3 || roll == 4              ?  0  :
+            0;
+        }
+        totalRolls++;
+        
+        CGPoint point = ccp( x+xo, y+yo );
+        // roll-checking
+        // check if this value exists in our placedTilesArray
+        NSValue *v = [ NSValue valueWithCGPoint: point ];
+        
+        for ( NSValue *p in triedTilesArray ) {
+            if ( [p isEqualToValue: v ] ) {
+                willReroll = YES;
+                break;
             }
-             */
-            
-            // direction type
-            // 0 = standard : ULDR
-            // 1 = cross    : UL UR DL DR
-            // 2 = mix      : 0 + 1
-            NSInteger dirType = 1;
-            //NSInteger dirType = [Dice roll:3];
-            if ( dirType == 1 ) {
-                roll = [Dice roll:4];
-                xo +=
-                roll == 1 || roll == 2  ?  0  :
-                roll == 3               ? -1  :
-                roll == 4               ?  1  :
-                0;
-                
-                yo +=
-                roll == 1              ? -1  :
-                roll == 2              ?  1  :
-                roll == 3 || roll == 4 ?  0  :
-                0;
-                
-            } else if ( dirType == 2 ) {
-                roll = [Dice roll:4];
-                xo +=
-                roll == 1 || roll == 3 ? -1  :
-                roll == 2 || roll == 4 ?  1  :
-                0;
-                
-                yo +=
-                roll == 1 || roll == 2 ? -1  :
-                roll == 3 || roll == 4 ?  1  :
-                0;
-                
-            } else if ( dirType == 3 ) {
-                roll = [Dice roll:8];
-                xo +=
-                roll == 1 || roll == 2              ?  0  :
-                roll == 3 || roll == 5 || roll == 7 ? -1  :
-                roll == 4 || roll == 6 || roll == 8 ?  1  :
-                0;
-                
-                yo +=
-                roll == 1 || roll == 5 || roll == 6 ? -1  :
-                roll == 2 || roll == 7 || roll == 8 ?  1  :
-                roll == 3 || roll == 4              ?  0  :
-                0;
-            }
-            totalRolls++;
-            
-            CGPoint point = ccp( x+xo, y+yo );
-            // roll-checking
-            // check if this value exists in our placedTilesArray
-            NSValue *v = [ NSValue valueWithCGPoint: point ];
-            
-            for ( NSValue *p in triedTilesArray ) {
-                if ( [p isEqualToValue: v ] ) {
+        }
+        
+        if ( !willReroll ) {
+            for ( NSValue *p in placedTilesArray ) {
+                if ( [p isEqualToValue:v ] ) {
                     willReroll = YES;
                     break;
                 }
             }
+        }
+        
+        // check to see if we are going out-of-bounds
+        if ( !willReroll ) {
+            willReroll = willReroll || (x+xo < x || y+yo < y) || (x+xo >= w+x || y+yo >= h+y );
+        }
+        
+        if ( ! willReroll ) {
             
-            if ( !willReroll ) {
-                for ( NSValue *p in placedTilesArray ) {
-                    if ( [p isEqualToValue:v ] ) {
-                        willReroll = YES;
-                        break;
-                    }
-                }
+            Tile_t tileType = baseTileType;
+            
+            NSInteger tileRoll = [Dice roll:100];
+            NSInteger waterChance = 5;
+            NSInteger spikeChance = 1;
+            NSInteger poisnChance = 1;
+            
+            tileRoll = [Dice roll:100];
+            tileType = (tileRoll <= waterChance) ? TILE_FLOOR_WATER : tileType;
+            
+            tileRoll = [Dice roll:100];
+            tileType = (tileRoll <= spikeChance) ? TILE_FLOOR_STONE_TRAP_SPIKES_D6 : tileType;
+            
+            // poison: 1/1000 chance
+            tileRoll = [Dice roll:1000];
+            tileType = (tileRoll <= poisnChance) ? TILE_FLOOR_STONE_TRAP_POISON_D6 : tileType;
+            
+            // override - setting tileType to trap
+            //tileType = TILE_FLOOR_STONE_TRAP_SPIKES_D6;
+            //tileType = TILE_FLOOR_STONE_TRAP_POISON_D6;
+            
+            // setTileAtPosition will call handleTile and set if trapped
+            [ self setTileAtPosition:point onFloor:floor toType:tileType ];
+            
+            [ placedTilesArray addObject: v ];
+            [ triedTilesArray removeAllObjects ];
+            numTilesPlaced++;
+            if ( maxTilesPlaced > numTilesPlaced ) {
+                maxTilesPlaced = maxTilesPlaced;
             }
-            
-            // check to see if we are going out-of-bounds
-            if ( !willReroll ) {
-                willReroll = willReroll || (x+xo < x || y+yo < y) || (x+xo >= w+x || y+yo >= h+y );
+            else {
+                maxTilesPlaced = numTilesPlaced;
+                doPrintMaxTiles = YES;
             }
+        } else if ( willReroll ) {
+            [ triedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
             
-            if ( ! willReroll ) {
+            // undo the roll
+            roll == 1 ? yo++ :
+            roll == 2 ? yo-- :
+            roll == 3 ? xo++ :
+            roll == 4 ? xo-- : 0;
+            
+            rerolls++;
+            totalRerolls++;
+            i--;
+            
+            // check reroll tolerance
+            if ( totalRerolls >= rerollTolerance ) {
+                xo = 0;
+                yo = 0;
                 
-                Tile_t tileType = baseTileType;
-                
-                NSInteger tileRoll = [Dice roll:100];
-                NSInteger waterChance = 5;
-                NSInteger spikeChance = 1;
-                NSInteger poisnChance = 1;
-                
-                tileRoll = [Dice roll:100];
-                tileType = (tileRoll <= waterChance) ? TILE_FLOOR_WATER : tileType;
-                
-                tileRoll = [Dice roll:100];
-                tileType = (tileRoll <= spikeChance) ? TILE_FLOOR_STONE_TRAP_SPIKES_D6 : tileType;
-                
-                // poison: 1/1000 chance
-                tileRoll = [Dice roll:1000];
-                tileType = (tileRoll <= poisnChance) ? TILE_FLOOR_STONE_TRAP_POISON_D6 : tileType;
-                
-                // override - setting tileType to trap
-                //tileType = TILE_FLOOR_STONE_TRAP_SPIKES_D6;
-                //tileType = TILE_FLOOR_STONE_TRAP_POISON_D6;
-                
-                // setTileAtPosition will call handleTile and set if trapped
-                [ self setTileAtPosition:point onFloor:floor toType:tileType ];
-                
-                [ placedTilesArray addObject: v ];
+                [ placedTilesArray removeAllObjects ];
                 [ triedTilesArray removeAllObjects ];
+                
+                numTilesPlaced = 0;
+                
+                CGPoint point = ccp( x, y );
+                [ self setTileAtPosition:point onFloor:floor toType:baseTileType ];
+                [ placedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
                 numTilesPlaced++;
-                if ( maxTilesPlaced > numTilesPlaced ) {
-                    maxTilesPlaced = maxTilesPlaced;
-                }
-                else {
-                    maxTilesPlaced = numTilesPlaced;
-                    doPrintMaxTiles = YES;
-                }
-            } else if ( willReroll ) {
-                [ triedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
                 
-                // undo the roll
-                roll == 1 ? yo++ :
-                roll == 2 ? yo-- :
-                roll == 3 ? xo++ :
-                roll == 4 ? xo-- : 0;
+                i = numTilesPlaced;
                 
-                rerolls++;
-                totalRerolls++;
-                i--;
-                
-                // check reroll tolerance
-                if ( totalRerolls >= rerollTolerance ) {
-                    xo = 0;
-                    yo = 0;
-                    
-                    [ placedTilesArray removeAllObjects ];
-                    [ triedTilesArray removeAllObjects ];
-                    
-                    numTilesPlaced = 0;
-                    
-                    CGPoint point = ccp( x, y );
-                    [ self setTileAtPosition:point onFloor:floor toType:baseTileType ];
-                    [ placedTilesArray addObject: [NSValue valueWithCGPoint:point] ];
-                    numTilesPlaced++;
-                    
-                    i = numTilesPlaced;
-                    
-                    totalRerolls = 0;
-                    toleranceBreaks++;
-                }
+                totalRerolls = 0;
+                toleranceBreaks++;
             }
         }
-    
+    }
+
+/*
+    MLOG( @"total tiles placed: %d" , numTilesPlaced );
+    MLOG( @"total rolls: %d", totalRolls );
+    MLOG( @"total rerolls: %d", totalRerolls );
+    MLOG( @"total tolerance breaks: %d", toleranceBreaks );
+  */
+
+    // place the upstairs/downstairs tiles
+    //BOOL isDownstairsPlaced = NO;
+    BOOL isUpstairsPlaced = NO;
+
+
     /*
-        MLOG( @"total tiles placed: %d" , numTilesPlaced );
-        MLOG( @"total rolls: %d", totalRolls );
-        MLOG( @"total rerolls: %d", totalRerolls );
-        MLOG( @"total tolerance breaks: %d", toleranceBreaks );
-      */
+     Upstairs algorithm:
+        for each tile on this floor,
+          roll 1d100. 
+          if roll <= 5
+            place upstairs
+     */
+    while ( !isUpstairsPlaced ) {
+        for ( NSValue *p in placedTilesArray ) {
+            // roll dice
+            roll = [Dice roll:100];
+            NSUInteger percentage = 5;
+            if ( roll <= percentage ) {
+                [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_UPSTAIRS ];
+                isUpstairsPlaced = YES;
+                break;
+            }
+        }
+    }
+
+    /*
+     with the upstairs-tile places, it is time to place the downstairs.
+     we grab the upstairsPoint for comparison. make sure that:
+        -The upstairsPoint is NOT equal to the downstairsPoint
+        -The upstairsPoint is a total [M,N] distance away from the downstairsPoint
+     
+     The old algorithm:
+        for each tile on this floor,
+          roll 1d100. 
+          if roll <= 5
+            check tile validity
+            if valid
+              place tile
+     
+     The new algorithm:
+       for each tile on this floor,
+         check candidacy for downstairsTile
+         if candidate,
+           add to candidate array
+       roll 1dN where N=candidateArray.count
+       use the tile at location roll-1 in the candidateArray
+     */
+
+
+    CGPoint upstairsPoint = [ self getUpstairsTileForFloor: floor ];
+ 
     
-        // place the upstairs/downstairs tiles
-        BOOL isDownstairsPlaced = NO;
-        BOOL isUpstairsPlaced = NO;
+    // compute the downstairs probability-space incrementally
+    NSMutableArray *candidateArray = [NSMutableArray array];
+    //BOOL edgeFound = NO;
+    NSInteger distanceMin = 5;
+    NSInteger distanceMax = 20;
+    
+    //NSInteger edgeMax = distanceMax;
+    
+    if ( algorithm != DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ) {
+        // define the "buildCandidateArray" function block
         
-        while ( !isUpstairsPlaced ) {
-            for ( NSValue *p in placedTilesArray ) {
-                // roll dice
-                roll = [Dice roll:100];
-                NSUInteger percentage = 5;
-                if ( roll <= percentage ) {
-                    [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_UPSTAIRS ];
-                    isUpstairsPlaced = YES;
-                    break;
-                }
+        void (^buildCandidateArray)(int,int) = ^(int _min,int _max) {
+            // NEW ALGORITHM
+            // start with a full array - everything is candidate
+            for ( Tile *object in floor.tileDataArray ) {
+                [candidateArray addObject: object];
             }
-        }
-        
-        CGPoint upstairsPoint = [ self getUpstairsTileForFloor: floor ];
-        
-        if ( algorithm != DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ) {
-            while ( !isDownstairsPlaced ) {
-                for ( NSValue *p in placedTilesArray ) {
-                    roll = [Dice roll:100];
-                    NSUInteger percentage = 5;
-                    if ( roll <= percentage ) {
-                        if ( ! CGPointEqualToPoint(upstairsPoint, p.CGPointValue) ) {
-                            [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
-                            isDownstairsPlaced = YES;
-                            break;
-                        }
-                    }
+            
+            // copy the array into a backup
+            //NSMutableArray *backupCandidates = [candidateArray copy];
+            
+            // now, remove items based on the checks
+            for (int i=0; i < candidateArray.count; i++) {
+                Tile *possibleCandidateTile     = [candidateArray objectAtIndex:i];
+                //NSValue *possibleCandidateTile  = ;
+                CGPoint thePoint                = [possibleCandidateTile position];
+                Tile *theTile                   = [self getTileForFloor:floor forCGPoint:thePoint];
+                    
+                BOOL check0 = ( !CGPointEqualToPoint(upstairsPoint, thePoint ) );
+                BOOL check1 = [ GameTools distanceFromCGPoint:upstairsPoint toCGPoint:thePoint ] >= _min;
+                BOOL check2 = [ GameTools distanceFromCGPoint:upstairsPoint toCGPoint:thePoint ] <  _max;
+                BOOL check3 = theTile.tileType != TILE_FLOOR_VOID;
+                    
+                if ( !(check0 && check1 && check2 && check3) ) {
+                    [candidateArray removeObjectAtIndex: i];
+                    i = 0;
                 }
+                    
             }
-        }
+                
+        };
+ 
+        
+        // bootstrap the candidate array
+        [ candidateArray removeAllObjects ];
+        buildCandidateArray( distanceMin, distanceMax );
+        MLOG(@"Candidates this pass [%d,%d]: %d", distanceMin, distanceMax, candidateArray.count);
+        
+        // rebuild candidateArray with new minimum and maximum
+        //distanceMin = distanceMax / 2;
+        
+        NSInteger roll = [Dice roll: candidateArray.count];
+        CGPoint downstairsPoint = ((Tile *)[candidateArray objectAtIndex:roll-1]).position;
+        [ self setTileAtPosition:ccp(downstairsPoint.x, downstairsPoint.y) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS ];
+    }
 }
 
 /*
@@ -730,11 +803,14 @@ NSInteger getMod( NSInteger n ) {
 /*
  ====================
  getTileForFloor: floor forCGPoint: p
+ returns a tile on the given floor for a given p. returns nil
  ====================
  */
 +( Tile * ) getTileForFloor: (DungeonFloor *) floor forCGPoint: (CGPoint) p {
     Tile *tile = nil;
-    tile = [ floor.tileDataArray objectAtIndex: p.x + ( p.y * floor.width ) ];
+    CGFloat calcedArrayIndex = p.x + ( p.y * floor.width );
+    if ( calcedArrayIndex >= 0 && calcedArrayIndex < floor.tileDataArray.count )
+        tile = [ floor.tileDataArray objectAtIndex: calcedArrayIndex ];
     return tile;
 }
 
