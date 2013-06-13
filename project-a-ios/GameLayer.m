@@ -1323,10 +1323,15 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) initMonitor {
-    CGSize size = [[CCDirector sharedDirector] winSize];
-    monitor = [[ EditorHUD alloc ] initWithColor:black width:250 height:100 ];
+    //CGSize size = [[CCDirector sharedDirector] winSize];
+    NSInteger width = 250,
+              height = 100;
+    monitor = [[ EditorHUD alloc ] initWithColor:black width:width height:height ];
     monitor.label.fontSize = 12;
-    monitor.position = ccp(  size.width - monitor.contentSize.width , 0 + playerHUD.contentSize.height );
+    
+    CGFloat x = 0,
+            y = screenheight - monitor.contentSize.height;
+    monitor.position = ccp( x , y );
     [ self updateMonitorLabel ];
 }
 
