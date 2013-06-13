@@ -641,6 +641,8 @@ NSInteger getMod( NSInteger n ) {
             }
         }
     }
+    
+    
 
     /*
      with the upstairs-tile places, it is time to place the downstairs.
@@ -666,17 +668,22 @@ NSInteger getMod( NSInteger n ) {
      */
 
 
-    CGPoint upstairsPoint = [ self getUpstairsTileForFloor: floor ];
+   // CGPoint upstairsPoint = [ self getUpstairsTileForFloor: floor ];
  
     // compute the downstairs probability-space and select a tile
+    /*
     NSMutableArray *candidateArray = [NSMutableArray array];
     NSInteger distanceMin = 5;
     NSInteger distanceMax = 20;
+    */
     
     // only add downstairs-tile if this isn't the final floor
     if ( algorithm != DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ) {
         
         // define the "buildCandidateArray" function block
+        
+        
+        /*
         void (^buildCandidateArray)(int,int) = ^(int _min,int _max) {
             // start with a full array - everything is candidate
             for ( Tile *object in floor.tileDataArray ) {
@@ -693,7 +700,7 @@ NSInteger getMod( NSInteger n ) {
                 BOOL check1 = [ GameTools distanceFromCGPoint:upstairsPoint toCGPoint:thePoint ] >= _min;
                 BOOL check2 = [ GameTools distanceFromCGPoint:upstairsPoint toCGPoint:thePoint ] <  _max;
                 BOOL check3 = theTile.tileType != TILE_FLOOR_VOID;
-                    
+                
                 if ( !(check0 && check1 && check2 && check3) ) {
                     [candidateArray removeObjectAtIndex: i];
                     i = 0;
@@ -712,6 +719,38 @@ NSInteger getMod( NSInteger n ) {
         NSInteger roll = [Dice roll: candidateArray.count];
         CGPoint downstairsPoint = ((Tile *)[candidateArray objectAtIndex:roll-1]).position;
         [ self setTileAtPosition:ccp(downstairsPoint.x, downstairsPoint.y) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS ];
+        
+         */
+        
+        BOOL isDownstairsPlaced = NO;
+        CGPoint upstairsPoint = [ self getUpstairsTileForFloor: floor ];
+        int _min = 5;
+        int _max = 20;
+        
+        while ( ! isDownstairsPlaced ) {
+            for ( NSValue *p in placedTilesArray ) {
+                //
+                Tile *theTile = [ self getTileForFloor:floor forCGPoint:p.CGPointValue ];
+                
+                BOOL check0 = ( !CGPointEqualToPoint(upstairsPoint, p.CGPointValue ) );
+                BOOL check1 = [ GameTools distanceFromCGPoint:upstairsPoint toCGPoint:p.CGPointValue ] >= _min;
+                BOOL check2 = [ GameTools distanceFromCGPoint:upstairsPoint toCGPoint:p.CGPointValue ] <  _max;
+                BOOL check3 = theTile.tileType != TILE_FLOOR_VOID;
+                
+                if ( check0 && check1 && check2 && check3 ) {
+                    
+                    // theTile is a candidate, roll for placement
+                    roll = [Dice roll:100];
+                    NSUInteger percentage = 5;
+                    if ( roll <= percentage ) {
+                        [ self setTileAtPosition:ccp(p.CGPointValue.x, p.CGPointValue.y) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS];
+                        isDownstairsPlaced = YES;
+                        break;
+                    }
+                    
+                }
+            }
+        }
         
     }
     
