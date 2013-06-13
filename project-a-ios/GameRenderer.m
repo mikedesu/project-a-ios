@@ -473,39 +473,7 @@ NSInteger getMod( NSInteger n ) {
     for ( int i = numTilesPlaced; i < numTiles; i++ ) {
         BOOL willReroll = NO;
         
-        
-        //roll = [Dice roll:4];
-        //roll = [Dice roll:8];
-        
         // handle the roll
-        /*
-        if ( roll == 1) {
-            xo += 0;
-            yo += -1;
-        } else if ( roll == 2) {
-            xo += 0;
-            yo += 1;
-        } else if ( roll == 3) {
-            xo += -1;
-            yo += 0;
-        } else if ( roll == 4) {
-            xo += 1;
-            yo += 0;
-        } else if ( roll == 5 ) {
-            xo += -1;
-            yo += -1;
-        } else if ( roll == 6 ) {
-            xo += 1;
-            yo += -1;
-        } else if ( roll == 7 ) {
-            xo += -1;
-            yo += 1;
-        } else if ( roll == 8 ) {
-            xo += 1;
-            yo += 1;
-        }
-         */
-        
         // direction type
         // 0 = standard : ULDR
         // 1 = cross    : UL UR DL DR
@@ -652,17 +620,8 @@ NSInteger getMod( NSInteger n ) {
         }
     }
 
-/*
-    MLOG( @"total tiles placed: %d" , numTilesPlaced );
-    MLOG( @"total rolls: %d", totalRolls );
-    MLOG( @"total rerolls: %d", totalRerolls );
-    MLOG( @"total tolerance breaks: %d", toleranceBreaks );
-  */
-
     // place the upstairs/downstairs tiles
-    //BOOL isDownstairsPlaced = NO;
     BOOL isUpstairsPlaced = NO;
-
 
     /*
      Upstairs algorithm:
@@ -673,7 +632,6 @@ NSInteger getMod( NSInteger n ) {
      */
     while ( !isUpstairsPlaced ) {
         for ( NSValue *p in placedTilesArray ) {
-            // roll dice
             roll = [Dice roll:100];
             NSUInteger percentage = 5;
             if ( roll <= percentage ) {
@@ -710,32 +668,24 @@ NSInteger getMod( NSInteger n ) {
 
     CGPoint upstairsPoint = [ self getUpstairsTileForFloor: floor ];
  
-    
-    // compute the downstairs probability-space incrementally
+    // compute the downstairs probability-space and select a tile
     NSMutableArray *candidateArray = [NSMutableArray array];
-    //BOOL edgeFound = NO;
     NSInteger distanceMin = 5;
     NSInteger distanceMax = 20;
     
-    //NSInteger edgeMax = distanceMax;
-    
+    // only add downstairs-tile if this isn't the final floor
     if ( algorithm != DF_ALGORITHM_T_ALGORITHM0_FINALFLOOR ) {
-        // define the "buildCandidateArray" function block
         
+        // define the "buildCandidateArray" function block
         void (^buildCandidateArray)(int,int) = ^(int _min,int _max) {
-            // NEW ALGORITHM
             // start with a full array - everything is candidate
             for ( Tile *object in floor.tileDataArray ) {
                 [candidateArray addObject: object];
             }
             
-            // copy the array into a backup
-            //NSMutableArray *backupCandidates = [candidateArray copy];
-            
             // now, remove items based on the checks
             for (int i=0; i < candidateArray.count; i++) {
                 Tile *possibleCandidateTile     = [candidateArray objectAtIndex:i];
-                //NSValue *possibleCandidateTile  = ;
                 CGPoint thePoint                = [possibleCandidateTile position];
                 Tile *theTile                   = [self getTileForFloor:floor forCGPoint:thePoint];
                     
@@ -748,11 +698,8 @@ NSInteger getMod( NSInteger n ) {
                     [candidateArray removeObjectAtIndex: i];
                     i = 0;
                 }
-                    
             }
-                
         };
- 
         
         // bootstrap the candidate array
         [ candidateArray removeAllObjects ];
@@ -765,7 +712,9 @@ NSInteger getMod( NSInteger n ) {
         NSInteger roll = [Dice roll: candidateArray.count];
         CGPoint downstairsPoint = ((Tile *)[candidateArray objectAtIndex:roll-1]).position;
         [ self setTileAtPosition:ccp(downstairsPoint.x, downstairsPoint.y) onFloor:floor toType:TILE_FLOOR_DOWNSTAIRS ];
+        
     }
+    
 }
 
 /*

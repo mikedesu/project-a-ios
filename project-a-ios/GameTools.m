@@ -16,13 +16,6 @@
  ====================
  */
 +( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b {
-    /*
-     NSInteger ax = (NSInteger)a.position.x;
-    NSInteger bx = (NSInteger)b.position.x;
-    NSInteger ay = (NSInteger)a.position.y;
-    NSInteger by = (NSInteger)b.position.y;
-     */
-    //return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
     return [GameTools distanceFromCGPoint:a.position toCGPoint:b.position];
 }
 
@@ -34,14 +27,6 @@
  ====================
  */
 +( NSInteger ) distanceFromCGPoint: (CGPoint) a toCGPoint: (CGPoint) b {
-    //MLOG( @"distanceFromTile: a toTile: b" );
-    /*
-    NSInteger ax = (NSInteger)a.x;
-    NSInteger bx = (NSInteger)b.x;
-    NSInteger ay = (NSInteger)a.y;
-    NSInteger by = (NSInteger)b.y;
-     */
-    //return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
     return ccpDistance(a, b);
 }
 
