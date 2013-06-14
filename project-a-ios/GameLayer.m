@@ -957,6 +957,11 @@ static NSString  * const notifications[] = {
         
         // update our hero sprite
         [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
+        
+        
+        // step game logic
+        gameLogicIsOn ? [self stepGameLogic] : 0;
+        [ self resetCameraPosition ];
     }
     
     

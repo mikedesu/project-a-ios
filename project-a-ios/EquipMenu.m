@@ -424,10 +424,17 @@
             [self addChild: equipSubmenu];
             equipSubmenuIsVisible = YES;
         } else {
+        
+            /*
             [self removeChild:equipSubmenu cleanup:NO];
             equipSubmenuIsVisible = NO;
             [self update];
+             */
+            
+            [self returnPressed];
+        
         }
+     
         
     }
     
