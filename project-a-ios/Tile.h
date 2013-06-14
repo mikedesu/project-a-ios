@@ -8,10 +8,12 @@ typedef enum {
     TILE_FLOOR_VOID=0,
     TILE_FLOOR_UPSTAIRS,
     TILE_FLOOR_DOWNSTAIRS,
-    TILE_FLOOR_GRASS,
     TILE_FLOOR_STONE,
-    TILE_FLOOR_ICE,
     TILE_FLOOR_WATER,
+    
+    // un-implemented
+    TILE_FLOOR_GRASS,
+    TILE_FLOOR_ICE,
     
     // Trapped Tile-types
     TILE_FLOOR_STONE_TRAP_SPIKES_D6,

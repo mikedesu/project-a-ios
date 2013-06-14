@@ -44,7 +44,7 @@ NSInteger getMod( NSInteger n ) {
  */
 +( void ) colorScrambleTile: ( CCSprite * ) tileSprite {
     CCMutableTexture2D *tileTex = ( CCMutableTexture2D * ) tileSprite.texture;
-    srand( time( NULL ) );
+    //srand( time( NULL ) );
     for ( int i = 0; i < TILE_SIZE; i++ ) {
         for ( int j = 0; j < TILE_SIZE; j++ ) {
             //Color_t randomColor = random_color;
@@ -69,6 +69,14 @@ NSInteger getMod( NSInteger n ) {
 }
 
 
++( void) renderTileColorFuzz: (CCMutableTexture2D *) texture {
+    for (int i=0; i<texture.contentSizeInPixels.width; i++)
+        for (int j=0; j<texture.contentSizeInPixels.height; j++)
+            [texture setPixelAt:ccp(i,j) rgba:random_color];
+    [texture apply];
+}
+
+
 /*
  ====================
  setTile
@@ -80,6 +88,7 @@ NSInteger getMod( NSInteger n ) {
  
     CCMutableTexture2D *tileTexture =
     tileType == TILE_FLOOR_STONE          ? [sprites objectForKey:@"StoneTile"]      :
+    tileType == TILE_FLOOR_GRASS          ? [sprites objectForKey:@"GrassTile"]      :
     tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
     tileType == TILE_FLOOR_STONE_TRAP_POISON_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
     tileType == TILE_FLOOR_VOID           ? [sprites objectForKey:@"VoidTile"]       :
@@ -102,22 +111,19 @@ NSInteger getMod( NSInteger n ) {
     }
     
     
-    
-    
-    
-    
-    
     // in most cases, we will fill our texture
     CCMutableTexture2D *texture = ( CCMutableTexture2D * ) tileSprite.texture;
     for ( int i = 0; i < 16; i++ ) {
         for ( int j = 0; j < 16; j++ ) {
+            //tileTexture != nil ? [texture setPixelAt:ccp(i,j) rgba:[tileTexture pixelAt:ccp(i,j)]] : 0;
+            //[[Maybe something:tileTexture] hasSomething] ? [texture setPixelAt:ccp(i,j) rgba:[tileTexture pixelAt:ccp(i,j)]] : 0;
             tileTexture != nil ? [texture setPixelAt:ccp(i,j) rgba:[tileTexture pixelAt:ccp(i,j)]] : 0;
         }
     }
     [ texture apply ];
     
     CCMutableTexture2D *t = nil;
- 
+    
     for ( int i = 0; i < data.contents.count; i++ ) {
     
         //for (Entity *entity in data.contents) {
@@ -125,15 +131,13 @@ NSInteger getMod( NSInteger n ) {
         // Last, we will upgrade to multi-layer drawings
         
         Entity *entity = [data.contents objectAtIndex:i];
+        MLOG(@"%@:%d", entity.name, entity.name.length);
         
         if ( entity.entityType == ENTITY_T_PC ) {
             t = [sprites objectForKey: @"Hero"];
         } else if ( [ [entity name] isEqualToString: @"Test1" ] ) {
             // Test1 will get rendered as colorFuzz
-            for ( int i = 0; i < 16; i++ )
-                for ( int j = 0; j < 16; j++ )
-                    [ texture setPixelAt: ccp(i, j) rgba: random_color ];
-            [ texture apply ];
+            [self renderTileColorFuzz:texture];
         } else if ( entity.entityType == ENTITY_T_NPC ) {
             
             if (entity.monsterType == MONSTER_T_GHOUL) {
@@ -165,12 +169,33 @@ NSInteger getMod( NSInteger n ) {
                     if ( [t pixelAt:ccp(i,j)].a != 0 )
                         [texture setPixelAt:ccp(i,j) rgba:[t pixelAt:ccp(i,j)]];
             [texture apply];
+            
         } else if ( entity.entityType == ENTITY_T_ITEM ) {
             
             if ( entity.itemType == E_ITEM_T_WEAPON ) {
-                t = [sprites objectForKey:@"ShortSword"];
+                
+                MLOG(@"");
+                
+                
+                
+                
+                if ( entity.name.length >= @"Short Sword".length &&
+                    [[entity.name substringToIndex:@"Short Sword".length ] isEqualToString: @"Short Sword"] ) {
+                    t = [sprites objectForKey:@"ShortSword"];
+                    
+                } else if ( entity.name.length >= @"Asura".length &&
+                    [[entity.name substringToIndex:@"Asura".length ] isEqualToString: @"Asura"] ) {
+                    t = [sprites objectForKey:@"AsuraSword"];
+                    
+                } else {
+                    [GameRenderer renderTileColorFuzz: texture];
+                }
+                MLOG(@"");
+                
             } else if ( entity.itemType == E_ITEM_T_ARMOR ) {
+                
                 t = [sprites objectForKey:@"LeatherArmor"];
+                
             }
             
             // only one book so far...
@@ -239,6 +264,10 @@ NSInteger getMod( NSInteger n ) {
         // since we're going numerically now, it should still be the same thing
  
         // copy the texture over
+        
+        //if ( [[Maybe something:t] hasSomething] )
+        //if ( t != nil )
+        
         [GameRenderer copyTexture:t ontoTexture:texture];
         
     }
@@ -256,7 +285,8 @@ NSInteger getMod( NSInteger n ) {
     
     // handle selected tiles
     //if ( data.isSelected && tileTexture != nil ) {
-    if ( data.isSelected && [[Maybe something:tileTexture] hasSomething] ) {
+    //if ( data.isSelected && [[Maybe something:tileTexture] hasSomething] ) {
+    if ( data.isSelected && tileTexture != nil ) {
         for ( int i = 0; i < texture.contentSizeInPixels.width; i++ )
             for ( int j = 0; j < texture.contentSizeInPixels.height; j++ ) {
                 Color_t px = [texture pixelAt:ccp(i,j)];
@@ -270,7 +300,13 @@ NSInteger getMod( NSInteger n ) {
 
 +(void) copyTexture: (CCMutableTexture2D *) texture0 ontoTexture: (CCMutableTexture2D *) texture1 {
     if ( [[Maybe something: texture0] hasSomething] &&
-         [[Maybe something: texture1] hasSomething]) {
+        [[Maybe something: texture1] hasSomething]) {
+    
+    /*
+    if ( texture0 != nil &&
+         texture1 != nil ) {
+      */
+            
         // assert that texture0 and texture1 have the same width and height in pixels
         NSAssert( texture0.contentSizeInPixels.width  == texture1.contentSizeInPixels.width,  @"Content size in pixels must match!");
         NSAssert( texture0.contentSizeInPixels.height == texture1.contentSizeInPixels.height, @"Content size in pixels must match!");
@@ -550,26 +586,24 @@ NSInteger getMod( NSInteger n ) {
         
         if ( ! willReroll ) {
             
+            // Programmatically set the tile type
+            
             Tile_t tileType = baseTileType;
             
-            NSInteger tileRoll = [Dice roll:100];
-            NSInteger waterChance = 5;
-            NSInteger spikeChance = 1;
-            NSInteger poisnChance = 1;
             
-            tileRoll = [Dice roll:100];
-            tileType = (tileRoll <= waterChance) ? TILE_FLOOR_WATER : tileType;
+            /*
+             
+             stone:     60%  1-6
+             water:     10%  7
+             ...grass?: 30%  8-10
+             
+             */
             
-            tileRoll = [Dice roll:100];
-            tileType = (tileRoll <= spikeChance) ? TILE_FLOOR_STONE_TRAP_SPIKES_D6 : tileType;
-            
-            // poison: 1/1000 chance
-            tileRoll = [Dice roll:1000];
-            tileType = (tileRoll <= poisnChance) ? TILE_FLOOR_STONE_TRAP_POISON_D6 : tileType;
-            
-            // override - setting tileType to trap
-            //tileType = TILE_FLOOR_STONE_TRAP_SPIKES_D6;
-            //tileType = TILE_FLOOR_STONE_TRAP_POISON_D6;
+            NSInteger tileRoll = [Dice roll:10];
+            tileType =
+                ((tileRoll >= 1) && (tileRoll <= 6))    ? TILE_FLOOR_STONE :
+                tileRoll == 7                           ? TILE_FLOOR_WATER :
+                                                          TILE_FLOOR_GRASS;
             
             // setTileAtPosition will call handleTile and set if trapped
             [ self setTileAtPosition:point onFloor:floor toType:tileType ];
@@ -928,12 +962,12 @@ NSInteger getMod( NSInteger n ) {
         
         Tile *tile = [[ floor tileDataArray ] objectAtIndex: diceroll ];
         if ( tile.tileType != TILE_FLOOR_VOID &&
-                 tile.tileType != TILE_FLOOR_UPSTAIRS &&
-                 tile.tileType != TILE_FLOOR_DOWNSTAIRS
-                ) {
+            tile.tileType != TILE_FLOOR_UPSTAIRS &&
+            tile.tileType != TILE_FLOOR_DOWNSTAIRS
+            ) {
             
             BOOL tileIsFree = YES;
-                
+            
             // check if a pc/npc occupies the tile contents
             for ( Entity *e in tile.contents ) {
                 if ( e.entityType == ENTITY_T_PC ||
@@ -956,6 +990,61 @@ NSInteger getMod( NSInteger n ) {
         [[ floor entityArray ] addObject: entity];
     }
 }
+
+
+
+
+/*
+ ====================
+ spawnEntityAtRandomLocation: entity onFloor: floor onTileType: tileType
+ ====================
+ */
++( void ) spawnEntityAtRandomLocation: (Entity *) entity onFloor: (DungeonFloor *) floor onTileType: (Tile_t) tileType {
+    BOOL locationIsAcceptable = NO;
+    Tile *spawnTile = nil;
+    
+    while ( ! locationIsAcceptable ) {
+        NSUInteger diceroll = [Dice roll: [[floor tileDataArray] count]] - 1;
+        
+        Tile *tile = [[ floor tileDataArray ] objectAtIndex: diceroll ];
+        if ( tile.tileType != TILE_FLOOR_VOID &&
+            tile.tileType != TILE_FLOOR_UPSTAIRS &&
+            tile.tileType != TILE_FLOOR_DOWNSTAIRS
+            ) {
+            
+            BOOL tileIsFree = YES;
+            
+            // check if a pc/npc occupies the tile contents
+            for ( Entity *e in tile.contents ) {
+                if ( e.entityType == ENTITY_T_PC ||
+                    e.entityType == ENTITY_T_NPC ) {
+                    tileIsFree = NO;
+                    break;
+                }
+            }
+            
+            if ( tileIsFree && tile.tileType == tileType ) {
+                spawnTile = tile;
+                locationIsAcceptable = YES;
+                break;
+            }
+        }
+    }
+    
+    if ( spawnTile != nil ) {
+        [ GameRenderer setEntity: entity onTile: spawnTile ];
+        [[ floor entityArray ] addObject: entity];
+    }
+}
+
+
+
+
+
+
+
+
+
 
 +( void ) spawnEntity: (Entity *) entity onFloor: (DungeonFloor *) floor atLocation: (CGPoint) location {
     Tile *tile = nil;
@@ -1010,13 +1099,15 @@ NSInteger getMod( NSInteger n ) {
         ( m0 == 3 ) ? Totoro :
         Cat;
         
-        //MLOG(@"Spawned %@", e.name);
         // level up monster appropriately
         NSInteger levelRoll = [Dice roll: floor.floorNumber + 1];
         for (int i=e.level; i<levelRoll; i++)
             [e handleLevelUp];
         
-        [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor ];
+        
+        // spawn monsters on grass tiles
+        
+        [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor onTileType:TILE_FLOOR_GRASS ];
     }
 }
 

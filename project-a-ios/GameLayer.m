@@ -67,6 +67,7 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer upstairsTile]                                      forKey: @"UpstairsTile"];
     [s setObject:[Drawer downstairsTile]                                    forKey: @"DownstairsTile"];
     [s setObject:[Drawer flatTile: blue]                                    forKey: @"WaterTile"];
+    [s setObject:[Drawer flatTile: green]                                    forKey: @"GrassTile"];
     
     // Monsters
     
@@ -90,7 +91,9 @@ unsigned get_memory_mb(void) {
     
     // Items
     
-    [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:blue]     forKey: @"ShortSword"];
+    [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:brown ]     forKey: @"ShortSword"];
+    [s setObject:[Drawer basicSwordWithColor:red withHandleColor:darkgray ]     forKey: @"AsuraSword"];
+    
     [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];
     
     [s setObject:[Drawer basicPotionWithColor:red]                          forKey: @"PotionOfLightHealing"];
@@ -134,9 +137,13 @@ unsigned get_memory_mb(void) {
     // set up our 'hero'
     [ self initializePCEntity ];
     
+    MLOG(@"");
+    
     killList = [NSMutableArray array];
     
     [self loadSprites];
+    
+    MLOG(@"");
     
     // set the camera anchor point
     cameraAnchorPoint = ccp( 7, 5 );
@@ -152,6 +159,8 @@ unsigned get_memory_mb(void) {
             break;
         }
     }
+    
+    MLOG(@"");
     
     
     [ GameRenderer setEntity:pcEntity onTile:startTile ];
@@ -183,6 +192,8 @@ unsigned get_memory_mb(void) {
     // first turn
     turnCounter = 1;
     
+    
+    MLOG(@"");
     // initialize our notifications
     [ self initializeNotifications ];
     
@@ -213,16 +224,38 @@ unsigned get_memory_mb(void) {
         for ( int j = 0; j < treasureCount; j++ ) {
             NSInteger roll = [Dice roll:3];
             
-            roll == 1 ? [ GameRenderer spawnEntityAtRandomLocation:[Weapons shortSword: i] onFloor:[dungeon objectAtIndex:i]] :
-            roll == 2 ? [ GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: i] onFloor:[dungeon objectAtIndex:i]] :
-            roll == 3 ? [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]] :
-            0;
+            // weapons
+            if ( roll == 1 ) {
+                NSInteger _roll = [Dice roll: 10];
+                
+                /*
+                 short sword: 90%
+                 asura:       10%
+                 */
+                if ( _roll <= 9 )
+                    [GameRenderer spawnEntityAtRandomLocation:[Weapons shortSword: i] onFloor:[dungeon objectAtIndex:i]];
+                else
+                    [GameRenderer spawnEntityAtRandomLocation:[Weapons Asura] onFloor:[dungeon objectAtIndex:i]];
+            }
+            
+            // armor
+            else if ( roll == 2 ) {
+                [GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: i] onFloor:[dungeon objectAtIndex:i]];
+            }
+            
+            // random items
+            else if ( roll == 3 ) {
+                [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
+                
+            }
+        
         }
     }
     
     //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
     [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
- 
+    MLOG(@"");
+    
     /*
     MLOG(@"INSTRUCTIONS");
     for ( NSString *s in [Drawer codeForTexture:[sprites objectForKey:@"BookOfAllKnowing"]]) MLOG(@"%@", s);
@@ -323,7 +356,14 @@ unsigned get_memory_mb(void) {
  ====================
  */
 -(id) init {
-    ((self=[super init])) ? [self bootGame] : 0;
+    if ((self=[super init])) {
+        @try {
+            [self bootGame];
+        } @catch (NSException *e) {
+            MLOG(@"Exception caught: %@", e);
+        }
+    }
+
 	return self;
 }
 
@@ -3134,7 +3174,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     NSAssert(controller.strength > 0, @"Strength is negative");
     
     if ( controller.strength > 0) {
-        MLOG(@"STRENGTH IS POSITIVE");
+        //MLOG(@"STRENGTH IS POSITIVE");
         
         hero.strength       = controller.strength;
         hero.dexterity      = controller.dexterity;
@@ -3144,7 +3184,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         hero.charisma       = controller.charisma;
     }
     else {
-        MLOG(@"STRENGTH IS NEGATIVE");
+        //MLOG(@"STRENGTH IS NEGATIVE");
     
         hero.strength       = [Dice roll:6 nTimes:3];
         hero.dexterity      = [Dice roll:6 nTimes:3];
@@ -3180,6 +3220,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     //using fists...
     hero.damageRollBase = 6;
     pcEntity = hero;
+    
+    MLOG(@"");
 }
 
 /*

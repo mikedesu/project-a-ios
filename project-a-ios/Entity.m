@@ -131,7 +131,7 @@
         equipment = [NSMutableArray array];
         // add the 19 entity pointers
  
-        MLOG(@"setting equipment...");
+        //MLOG(@"setting equipment...");
         for (int i=0; i<numEquipSlots; i++)
             //[equipment setObject:e atIndexedSubscript:i];
             [equipment addObject: [NSNull null] ];
@@ -273,6 +273,7 @@
     }
     
     // handle the prefix processing...
+    MLOG(@"%@", e.name);
     
     
     
@@ -340,7 +341,7 @@
     }
     
     // handle the prefix processing...
-    
+    MLOG(@"%@", e.name);
     
     return e;
 }

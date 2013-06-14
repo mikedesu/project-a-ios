@@ -498,18 +498,30 @@
     
     BOOL hasChestArmor   = [[pc.equipment objectAtIndex: EQUIPSLOT_T_CHEST] isKindOfClass:NSClassFromString(@"Entity")],
     hasLeftArmTool       = [[pc.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity")];
+    
  
     Color_t pants = gray;
     
     CCMutableTexture2D *hero = [Drawer guy:skincolor0 body:skincolor0 pants: pants];
     
     if ( hasChestArmor )
+        
         hero = [Drawer guy:skincolor0 body:brown pants: pants];
+    
     if ( hasLeftArmTool ) {
+        
+        Entity *leftArmTool  = [pc.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL];
+        //Entity *chest        = [pc.equipment objectAtIndex: EQUIPSLOT_T_CHEST];
+        
         // draw a tiny sword since thats all we have right now
         Color_t sword = white;
+        
+        sword = [leftArmTool.name isEqualToString:@"Asura"] ? red : white;
+        
+        
         Color_t arm = hasChestArmor ? brown : skincolor0;
         for (int i=8; i<11; i++) [hero setPixelAt:ccp(i,7) rgba:arm];
+        
         
         for (int j=0; j<10; j++) [hero setPixelAt:ccp(11,j) rgba:sword];
         for (int i=10; i<13; i++) [hero setPixelAt:ccp(i,6) rgba:sword];
