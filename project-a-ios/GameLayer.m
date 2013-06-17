@@ -1557,7 +1557,8 @@ static NSString  * const notifications[] = {
 -( void ) updatePlayerHUDLabel {
     playerHUD.label.fontSize = 12;
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
-                                   [ NSString stringWithFormat: @"%@:%@:%@ T:%d", pcEntity.name,
+                                    
+                                   [ NSString stringWithFormat: @"%@:%@:%@:T:%d", pcEntity.name,
                                     
                                     pcEntity.status.base == STATUS_T_NORMAL ? @"Normal" :
                                         pcEntity.status.base == STATUS_T_POISON ? @"Poisoned" :
@@ -1570,7 +1571,7 @@ static NSString  * const notifications[] = {
                                         pcEntity.hunger < 250 ? @"Starving" :
                                         @"Dead"
                                     ,
-                                    turnCounter ],
+                                    turnCounter],
                                    [ NSString stringWithFormat: @"St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d",
                                     pcEntity.strength,
                                     pcEntity.dexterity,
@@ -1579,8 +1580,9 @@ static NSString  * const notifications[] = {
                                     pcEntity.wisdom,
                                     pcEntity.charisma
                                     ],
-                                   [ NSString stringWithFormat: @"Dlvl:%d $:0 HP:%d/%d AC:%d Lv:%d Xp:%u",
+                                   [ NSString stringWithFormat: @"Dlvl:%d $:%d HP:%d/%d AC:%d Lv:%d Xp:%u",
                                     floorNumber,
+                                    pcEntity.money,
                                     pcEntity.hp,
                                     pcEntity.maxhp,
                                     pcEntity.totalac,

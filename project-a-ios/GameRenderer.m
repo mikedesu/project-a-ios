@@ -82,7 +82,7 @@ NSInteger getMod( NSInteger n ) {
  setTile
  ====================
  */
-+( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data withSprites: (NSDictionary *) sprites {
++( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data withSprites: (NSDictionary *) sprites withFloor: (DungeonFloor *) floor {
 //+( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data {
     Tile_t tileType = data.tileType;
  
@@ -286,16 +286,39 @@ NSInteger getMod( NSInteger n ) {
     // handle selected tiles
     //if ( data.isSelected && tileTexture != nil ) {
     //if ( data.isSelected && [[Maybe something:tileTexture] hasSomething] ) {
+    
+    [GameRenderer setLightTileForTexture:texture withData:data withFloor:floor];
+    
     if ( data.isSelected && tileTexture != nil ) {
-        for ( int i = 0; i < texture.contentSizeInPixels.width; i++ )
+        
+        [ GameRenderer setTileIsSelected: texture];
+        
+        /*
+        for ( int i = 0; i < texture.contentSizeInPixels.width; i++ ) {
             for ( int j = 0; j < texture.contentSizeInPixels.height; j++ ) {
                 Color_t px = [texture pixelAt:ccp(i,j)];
                 px.a = 128;
                 [texture setPixelAt:ccp(i,j) rgba:px];
             }
+        }
+         */
+        
     }
     [texture apply];
 }
+
+
+
++(void) setTileIsSelected: (CCMutableTexture2D *) texture {
+    for ( int i = 0; i < texture.contentSizeInPixels.width; i++ ) {
+        for ( int j = 0; j < texture.contentSizeInPixels.height; j++ ) {
+            Color_t px = [texture pixelAt:ccp(i,j)];
+            px.a = px.a > 0 ? 255 : 0;
+            [texture setPixelAt:ccp(i,j) rgba:px];
+        }
+    }
+}
+
 
 
 +(void) copyTexture: (CCMutableTexture2D *) texture0 ontoTexture: (CCMutableTexture2D *) texture1 {
@@ -337,6 +360,93 @@ NSInteger getMod( NSInteger n ) {
     }
 }
 
+
++( void ) setTile: (CCSprite *) sprite toAlpha: (GLubyte) alpha {
+    CCMutableTexture2D *texture = (CCMutableTexture2D *) sprite.texture;
+    for (int _i=0; _i<texture.contentSizeInPixels.width; _i++) {
+        for (int _j=0; _j<texture.contentSizeInPixels.height; _j++) {
+            
+            Color_t pixelColor = [texture pixelAt:ccp(_i,_j)];
+            pixelColor.a = alpha;
+            [texture setPixelAt:ccp(_i,_j) rgba:pixelColor];
+            
+        }
+    }
+    [texture apply];
+}
+
+
++( void ) setLightTile:(CCSprite *) sprite withData:(Tile *) tile withFloor: (DungeonFloor *) floor {
+    // calculate alpha value (light)
+    CCMutableTexture2D *texture;
+    Color_t pixelColor;
+    
+    // grab the pc
+    Entity *pc;
+    for (Entity *e in floor.entityArray) {
+        if ( e.isPC ) {
+            pc = e;
+            break;
+        }
+    }
+    
+    int distance = [GameTools distanceFromCGPoint:pc.positionOnMap toCGPoint:tile.position];
+    int factor = 64;
+    
+    // crude light calculation - 4 distances away from PC, nothing else (yet)
+    GLubyte newAlpha =
+        distance == 0 ? 255 :
+        distance == 1 ||
+        distance == 2 ||
+        distance == 3 ? 255 - factor * distance : 0;
+    
+    [ GameRenderer setTile: sprite toAlpha: newAlpha ];
+}
+
+
++( void) setLightTileForTexture: (CCMutableTexture2D *) texture withData:(Tile *) tile withFloor: (DungeonFloor *) floor {
+    // calculate alpha value (light)
+    //CCMutableTexture2D *texture;
+    Color_t pixelColor;
+    
+    // grab the pc
+    Entity *pc;
+    for (Entity *e in floor.entityArray) {
+        if ( e.isPC ) {
+            pc = e;
+            break;
+        }
+    }
+    
+    int distance = [GameTools distanceFromCGPoint:pc.positionOnMap toCGPoint:tile.position];
+    int factor = 64;
+    
+    // crude light calculation - 4 distances away from PC, nothing else (yet)
+    GLubyte newAlpha =
+    distance == 0 ? 255 :
+    distance == 1 ||
+    distance == 2 ||
+    distance == 3 ? 255 - factor * distance : 0;
+    
+    [ GameRenderer setTileForTexture:texture toAlpha:newAlpha ];
+}
+
+
++( void ) setTileForTexture: (CCMutableTexture2D *) texture toAlpha: (GLubyte) alpha {
+    for (int _i=0; _i<texture.contentSizeInPixels.width; _i++) {
+        for (int _j=0; _j<texture.contentSizeInPixels.height; _j++) {
+            Color_t pixelColor = [texture pixelAt:ccp(_i,_j)];
+            pixelColor.a = alpha;
+            [texture setPixelAt:ccp(_i,_j) rgba:pixelColor];
+        }
+    }
+    [texture apply];
+}
+
+
+
+
+
 /*
  ====================
  setAllVisibleTiles: tileArray withDungeonFloor: floor withCamera: camera
@@ -347,7 +457,11 @@ NSInteger getMod( NSInteger n ) {
     for ( int j = 0; j < NUMBER_OF_TILES_ONSCREEN_Y; j++ ) {
         for ( int i = 0; i < NUMBER_OF_TILES_ONSCREEN_X; i++ ) {
             CCSprite *sprite = [ tileArray objectAtIndex: i+j*NUMBER_OF_TILES_ONSCREEN_X ];
-            [ GameRenderer setTile: sprite withData: [ [floor tileDataArray] objectAtIndex: (i+c.x)+((j+c.y)*[floor width]) ] withSprites: sprites ];
+            Tile *tile = [ [floor tileDataArray] objectAtIndex: (i+c.x)+((j+c.y)*[floor width]) ];
+            
+            [ GameRenderer setTile: sprite withData: tile withSprites: sprites withFloor: floor ];
+            
+            //[ GameRenderer setLightTile: sprite withData: tile withFloor: floor ];
         }
     }
 }

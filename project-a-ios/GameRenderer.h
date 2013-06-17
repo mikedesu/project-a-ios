@@ -16,6 +16,11 @@
 +( void ) colorScrambleTile: ( CCSprite * ) tileSprite;
 +( void ) colorScrambleAllTiles: ( NSArray * ) tileArray;
 +( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data;
+
++( void ) setLightTile:(CCSprite *) sprite withData:(Tile *) tile withFloor: (DungeonFloor *) floor;
++( void ) setTile: (CCSprite *) sprite toAlpha: (GLubyte) alpha ;
++( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data withSprites: (NSDictionary *) sprites withFloor: (DungeonFloor *) floor;
+    
 +( void ) setAllTiles: ( NSArray * ) tileArray withData: ( NSArray * ) data;
 
 +( void ) setAllVisibleTiles: ( NSArray * ) tileArray withDungeonFloor: ( DungeonFloor * ) floor withCamera: ( CGPoint ) camera withSprites: (NSDictionary *) sprites;
