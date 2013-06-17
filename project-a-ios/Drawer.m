@@ -33,40 +33,43 @@
 +(CCMutableTexture2D *) guy: (Color_t) head body: (Color_t) body pants: (Color_t) pants {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     
+    // pad everything over
+    int pad = 3;
+    
     // need head
-    int x0 = 2, y0 = 0;
-    int x1 = 7, y1 = 5;
+    int x0 = 2+pad, y0 = 0;
+    int x1 = 7+pad, y1 = 5;
     
     for (int i=x0; i<x1; i++)
         for (int j=y0; j<y1; j++)
             [t setPixelAt:ccp(i,j) rgba:head];
     
     // need eyes
-    x0 = 3, y0 = 2;
-    x1 = 5, y1 = 2;
+    x0 = 3+pad, y0 = 2;
+    x1 = 5+pad, y1 = 2;
     [t setPixelAt:ccp(x0,y0) rgba:black];
     [t setPixelAt:ccp(x1,y1) rgba:black];
     
     
     // need body
-    x0 = 1, y0 = 5;
-    x1 = 8, y1 = 12;
+    x0 = 1+pad, y0 = 5;
+    x1 = 8+pad, y1 = 12;
     
     for (int i=x0; i<x1; i++)
         for (int j=y0; j<y1; j++)
             [t setPixelAt:ccp(i,j) rgba:body];
     
     // need legs
-    x0 = 1, y0 = 12;
-    x1 = 8, y1 = 16;
+    x0 = 1+pad, y0 = 12;
+    x1 = 8+pad, y1 = 16;
     
     for (int i=x0; i<x1; i++)
         for (int j=y0; j<y1; j++)
             [t setPixelAt:ccp(i,j) rgba:pants];
     
     // need split in legs
-    x0 = 4, y0 = 14;
-    x1 = 5, y1 = 16;
+    x0 = 4+pad, y0 = 14;
+    x1 = 5+pad, y1 = 16;
     
     for (int i=x0; i<x1; i++)
         for (int j=y0; j<y1; j++)
@@ -499,6 +502,7 @@
     BOOL hasChestArmor   = [[pc.equipment objectAtIndex: EQUIPSLOT_T_CHEST] isKindOfClass:NSClassFromString(@"Entity")],
     hasLeftArmTool       = [[pc.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity")];
     
+    int pad = 2;
  
     Color_t pants = gray;
     
@@ -520,11 +524,13 @@
         
         
         Color_t arm = hasChestArmor ? brown : skincolor0;
-        for (int i=8; i<11; i++) [hero setPixelAt:ccp(i,7) rgba:arm];
         
+        for (int i=9+pad; i<11+pad; i++) [hero setPixelAt:ccp(i,7) rgba:arm];
         
-        for (int j=0; j<10; j++) [hero setPixelAt:ccp(11,j) rgba:sword];
-        for (int i=10; i<13; i++) [hero setPixelAt:ccp(i,6) rgba:sword];
+        for (int j=0; j<10; j++) [hero setPixelAt:ccp(11+pad,j) rgba:sword];
+        
+        for (int i=10+pad; i<13+pad; i++) [hero setPixelAt:ccp(i,6) rgba:sword];
+        
         [hero apply];
     }
     return hero;

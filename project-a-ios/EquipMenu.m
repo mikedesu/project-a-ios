@@ -34,7 +34,7 @@
         equipSubmenu.equipSlot = sender.tag;
         [equipSubmenu.title setString: [NSString stringWithFormat:@"Equipment - %@", EquipSlotToStr(sender.tag)]];
         [equipSubmenu update];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotification" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationShow" object:self];
     };
 }
 
@@ -410,7 +410,9 @@
 
 
 -( void ) registerNotifications {
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuNotification" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuNotificationReturn" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuNotificationUpdateReturn" object:nil];
+    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuNotificationShow" object:nil];
     //[[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuReturnNotification" object:nil];
 }
 
@@ -418,24 +420,30 @@
 -( void ) receiveNotification: ( NSNotification * ) notification {
     MLOG(@"Notification received: %@", notification);
     
-    if ( [notification.name isEqualToString:@"EquipSubmenuNotification"] ) {
+    if ( [notification.name isEqualToString:@"EquipSubmenuNotificationShow"] ) {
         
         if ( ! equipSubmenuIsVisible ) {
             [self addChild: equipSubmenu];
             equipSubmenuIsVisible = YES;
-        } else {
+        }
         
-            /*
+    }
+    else if ( [notification.name isEqualToString:@"EquipSubmenuNotificationReturn"] ) {
+        if ( equipSubmenuIsVisible ) {
+            [self removeChild:equipSubmenu cleanup:NO];
+            equipSubmenuIsVisible = NO;
+        }
+        //[self update];
+        //[self returnPressed];
+    }
+    
+    else if ( [notification.name isEqualToString:@"EquipSubmenuNotificationUpdateReturn"] ) {
+        if ( equipSubmenuIsVisible ) {
             [self removeChild:equipSubmenu cleanup:NO];
             equipSubmenuIsVisible = NO;
             [self update];
-             */
-            
             [self returnPressed];
-        
         }
-     
-        
     }
     
 }

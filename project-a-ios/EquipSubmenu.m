@@ -25,7 +25,8 @@
         [self.pc equipItem:item forEquipSlot: equipSlot];
         
         // return to equipMenu
-        [self returnPressed];
+        //[self returnPressed];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationUpdateReturn" object:self];
         
     };
 }
@@ -139,6 +140,6 @@
 
 -(void) returnPressed {
     MLOG(@"Return pressed");
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotification" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationReturn" object:self];
 }
 @end
