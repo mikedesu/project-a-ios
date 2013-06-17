@@ -202,7 +202,15 @@
     for (int i = 0; i < inventory.count; i++) {
         Entity *e = [inventory objectAtIndex:i];
         
-        CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:e.name fontName:@"Courier New" fontSize:14]
+        NSString *nameToDisplay;
+        
+        if ( e.itemType == E_ITEM_T_WAND ) {
+            nameToDisplay = [NSString stringWithFormat:@"%@ %d:%d", e.name, e.charges, e.maxCharges];
+        } else {
+            nameToDisplay = e.name;
+        }
+        
+        CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:nameToDisplay fontName:@"Courier New" fontSize:14]
                                                          block:menuControlBlock];
         
         x = 0 + item.contentSize.width /2 ;
