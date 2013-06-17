@@ -406,8 +406,6 @@ NSInteger getMod( NSInteger n ) {
 
 +( void) setLightTileForTexture: (CCMutableTexture2D *) texture withData:(Tile *) tile withFloor: (DungeonFloor *) floor {
     // calculate alpha value (light)
-    //CCMutableTexture2D *texture;
-    Color_t pixelColor;
     
     // grab the pc
     Entity *pc;
@@ -418,18 +416,24 @@ NSInteger getMod( NSInteger n ) {
         }
     }
     
-    int distance = [GameTools distanceFromCGPoint:pc.positionOnMap toCGPoint:tile.position];
-    int factor = 64;
+    int distance, factor, lightValue, lightBase, itemsInInventory;
+    GLubyte newAlpha;
     
-    // crude light calculation - 4 distances away from PC, nothing else (yet)
-    GLubyte newAlpha =
-    distance == 0 ? 255 :
-    distance == 1 ||
-    distance == 2 ||
-    distance == 3 ? 255 - factor * distance : 0;
+    distance = [GameTools distanceFromCGPoint:pc.positionOnMap toCGPoint:tile.position];
+    
+    // crude light calculation
+    lightBase = 3;
+    itemsInInventory = pc.inventoryArray.count;
+    lightValue = lightBase + itemsInInventory;
+    factor = 256 / lightValue;
+    
+    newAlpha =  distance == 0 ? 255 :
+    distance < lightValue ? 255 - factor * distance : 0;
     
     [ GameRenderer setTileForTexture:texture toAlpha:newAlpha ];
 }
+
+
 
 
 +( void ) setTileForTexture: (CCMutableTexture2D *) texture toAlpha: (GLubyte) alpha {
