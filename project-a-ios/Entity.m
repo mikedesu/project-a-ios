@@ -77,6 +77,7 @@
 
 @synthesize potionType;
 @synthesize monsterType;
+@synthesize armorType;
 
 @synthesize prefixes;
 @synthesize effects;
@@ -115,27 +116,22 @@
         name        = [ [ NSMutableString alloc ] init ];
         level       = 1;
         threatLevel = THREAT_T_NONE;
+        
         entityType  = ENTITY_T_VOID;
         potionType  = POTION_T_NONE;
         monsterType = MONSTER_T_NONE;
         itemType    = E_ITEM_T_NONE;
+        armorType   = ARMOR_T_NONE;
         
         prefixes    = [[NSMutableArray alloc] init];
         effects     = [[NSMutableArray alloc] init];
         
-        //monsterPrefixGroup  = MonsterPrefixGroup(0, 0, 0, 0);
-        //itemPrefixGroup     = ItemPrefixGroup(0, 0, 0, 0);
-        
         NSInteger numEquipSlots = 19;
-        //equipment = [NSMutableArray arrayWithCapacity: numEquipSlots];
         equipment = [NSMutableArray array];
-        // add the 19 entity pointers
- 
-        //MLOG(@"setting equipment...");
-        for (int i=0; i<numEquipSlots; i++)
-            //[equipment setObject:e atIndexedSubscript:i];
-            [equipment addObject: [NSNull null] ];
         
+        // add the 19 entity pointers
+        for (int i=0; i<numEquipSlots; i++)
+            [equipment addObject: [NSNull null] ];
         
         totalKills  = 0;
         
@@ -168,7 +164,6 @@
         while ( maxhp <= 0 ) {
             maxhp               = [Dice roll:hitDie] + conMod;
             hp                  = maxhp;
-            //MLOG(@"conMod = %d,  maxhp = %d", conMod, maxhp);
         }
         
         ac = 10; // the higher the better
@@ -187,8 +182,6 @@
                 default:                maxHunger = 250; break;
             }
         }
-        
-        
         
         inventoryArray      = [ [ NSMutableArray alloc ] init ];
         equippedArmsLeft    = nil;
@@ -265,7 +258,7 @@
     // see Monsters.h and later Items/EntitySubtypeDefines
     
     //NSString *prefix = [_prefixes objectAtIndex:0];
-    MLOG(@"Prefix: '%@'", e.prefixes);
+    //MLOG(@"Prefix: '%@'", e.prefixes);
     
     // currently not setting attack_t objects yet
     for (int i=e.level; i<_level; i++) {
@@ -273,9 +266,7 @@
     }
     
     // handle the prefix processing...
-    MLOG(@"%@", e.name);
-    
-    
+    //MLOG(@"%@", e.name);
     
     return e;
 }
@@ -333,7 +324,7 @@
     // see Monsters.h and later Items/EntitySubtypeDefines
     
     //NSString *prefix = [_prefixes objectAtIndex:0];
-    MLOG(@"Prefix: '%@'", e.prefixes);
+   // MLOG(@"Prefix: '%@'", e.prefixes);
     
     // currently not setting attack_t objects yet
     for (int i=e.level; i<_level; i++) {
@@ -341,7 +332,7 @@
     }
     
     // handle the prefix processing...
-    MLOG(@"%@", e.name);
+ //   MLOG(@"%@", e.name);
     
     return e;
 }
@@ -375,8 +366,18 @@
     
     // any items / equipped gear would be counted here
     if ( [[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity") ] ) {
-        gearBonus += [(Entity *)[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] attackBonus];
+        Entity *larmTool = [self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL];
+        if ( larmTool.itemType == E_ITEM_T_WEAPON ) {
+            gearBonus += [larmTool attackBonus];
+        }
     }
+    if ( [[self.equipment objectAtIndex: EQUIPSLOT_T_RARMTOOL] isKindOfClass:NSClassFromString(@"Entity") ] ) {
+        Entity *rarmTool = [self.equipment objectAtIndex: EQUIPSLOT_T_RARMTOOL];
+        if ( rarmTool.itemType == E_ITEM_T_WEAPON ) {
+            gearBonus += [rarmTool attackBonus];
+        }
+    }
+    
     
     prefixBonus  += [self prefixDamageSum];
     effectsBonus += [self effectsDamageSum];
@@ -492,14 +493,34 @@
 -( NSInteger ) totalac {
     NSInteger dexterityBonus = [ GameRenderer modifierForNumber: dexterity ];
     NSInteger armorBonus = 0;
-//    if ( equippedArmorChest != nil ) armorBonus = equippedArmorChest.ac;
     
+    // check chest for chest armor
     if ( [[self.equipment objectAtIndex: EQUIPSLOT_T_CHEST] isKindOfClass:NSClassFromString(@"Entity") ] ) {
-        armorBonus = [(Entity *) [self.equipment objectAtIndex: EQUIPSLOT_T_CHEST] ac];
+        Entity *armor = [self.equipment objectAtIndex: EQUIPSLOT_T_CHEST];
+        armorBonus += [armor ac];
     }
     
-    NSInteger total = ac + dexterityBonus + armorBonus;
-    return total ;
+    // check left arm for shield
+    if ( [[self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity") ] ) {
+        Entity *larmTool = [self.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL];
+        if ( larmTool.itemType == E_ITEM_T_ARMOR ) {
+            if ( larmTool.armorType == ARMOR_T_SHIELD ) {
+                armorBonus += [larmTool ac];
+            }
+        }
+    }
+    
+    // check right arm for shield
+    if ( [[self.equipment objectAtIndex: EQUIPSLOT_T_RARMTOOL] isKindOfClass:NSClassFromString(@"Entity") ] ) {
+        Entity *rarmTool = [self.equipment objectAtIndex: EQUIPSLOT_T_RARMTOOL];
+        if ( rarmTool.itemType == E_ITEM_T_ARMOR ) {
+            if ( rarmTool.armorType == ARMOR_T_SHIELD ) {
+                armorBonus += [rarmTool ac];
+            }
+        }
+    }
+    
+    return ac + dexterityBonus + armorBonus;
 }
 
 
@@ -629,7 +650,7 @@
  ====================
  */
 -(void) equipItem: (Entity *) item forEquipSlot: (EquipSlot_t) equipSlot {
-    MLOG(@"equipItem: %@ forEquipSlot: %@", item.name, EquipSlotToStr(equipSlot));
+   // MLOG(@"equipItem: %@ forEquipSlot: %@", item.name, EquipSlotToStr(equipSlot));
     [self.equipment setObject: item atIndexedSubscript: equipSlot];
 }
 

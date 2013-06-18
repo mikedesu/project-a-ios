@@ -94,7 +94,9 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:brown ]     forKey: @"ShortSword"];
     [s setObject:[Drawer basicSwordWithColor:red withHandleColor:darkgray ]     forKey: @"AsuraSword"];
     
-    [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"LeatherArmor"];
+    [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"SmallShield"];
+    [s setObject:[Drawer vest:brown]                                        forKey: @"LeatherArmor"];
+    
     
     [s setObject:[Drawer basicPotionWithColor:red]                          forKey: @"PotionOfLightHealing"];
     [s setObject:[Drawer basicPotionWithColor:blue]                          forKey: @"PotionOfAntidote"];
@@ -232,15 +234,24 @@ unsigned get_memory_mb(void) {
                  short sword: 90%
                  asura:       10%
                  */
-                if ( _roll <= 9 )
-                    [GameRenderer spawnEntityAtRandomLocation:[Weapons shortSword: i] onFloor:[dungeon objectAtIndex:i]];
-                else
-                    [GameRenderer spawnEntityAtRandomLocation:[Weapons Asura] onFloor:[dungeon objectAtIndex:i]];
+                Entity *itemToSpawn =
+                _roll <= 9 ? [Weapons shortSword:i] : [Weapons Asura];
+                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
             
             // armor
             else if ( roll == 2 ) {
-                [GameRenderer spawnEntityAtRandomLocation:[Armor leatherArmor: i] onFloor:[dungeon objectAtIndex:i]];
+                
+                NSInteger _roll = [Dice roll: 2];
+                
+                /*
+                 shield:        100%
+                 leather armor: 0%
+                 */
+                
+                //Entity *itemToSpawn = _roll == 1 ? [Armor smallShield:i] : [Armor leatherArmor:i];
+                Entity *itemToSpawn = [Armor smallShield:i];
+                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
             
             // random items

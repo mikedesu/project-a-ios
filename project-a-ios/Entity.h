@@ -7,9 +7,12 @@
 #import "EntitySubtypeDefines.h"
 #import "EquipDefines.h"
 #import "Attack_t.h"
+#import "Armor.h"
 #import "Monsters.h"
 #import "Threat_t.h"
 #import "Spell.h"
+
+#import "GameConfig.h"
 
 @class CCMutableTexture2D;
 @class Attack_t;
@@ -62,6 +65,8 @@
     Monster_t monsterType;
     
     PotionTypes_t potionType;
+    
+    Armor_t armorType;
     
     
     NSInteger damageRollBase; // x, where 1dx = damage roll
@@ -167,6 +172,7 @@
 @property (atomic, assign) EntityItemTypes_t itemType;
 @property (atomic, assign) PotionTypes_t potionType;
 @property (atomic, assign) Monster_t monsterType;
+@property (atomic, assign) Armor_t armorType;
 
 @property (atomic, assign) NSInteger damageRollBase;
 @property (atomic, assign) NSInteger damageBonus;

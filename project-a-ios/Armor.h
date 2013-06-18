@@ -9,7 +9,9 @@
 #import "GameConfig.h"
 
 /*
+ // moved to EntitySubtypeDefines.h
 typedef enum {
+    ARMOR_T_NONE,
     ARMOR_T_HELMET,
     ARMOR_T_NECKLACE,
     ARMOR_T_SHOULDERGUARD,
@@ -31,7 +33,11 @@ typedef enum {
 
 @class Entity;
 @interface Armor : NSObject {}
++(Entity *) smallShield: (NSInteger) bonus;
+
 +(Entity *) leatherArmor: (NSInteger) bonus;
-+(Entity *) plateArmor: (NSInteger) bonus;
-+(Entity *) GodArmor: (NSInteger) bonus;
+
+//+(Entity *) plateArmor: (NSInteger) bonus;
+
+//+(Entity *) GodArmor: (NSInteger) bonus;
 @end

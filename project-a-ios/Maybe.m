@@ -11,7 +11,9 @@
 
 -(id) initWithSomething:(NSObject *)_something {
     if ((self=[super init])) {
-        if ( _something != nil ) {
+        if ( _something != nil &&
+             ! [_something isEqual: [NSNull null]]
+            ) {
             something = YES;
             just = _something;
         }

@@ -62,7 +62,9 @@
 +(CCMutableTexture2D *) ring: (Color_t) body;
 
 +(CCMutableTexture2D *) coin: (Color_t) body;
-    
+
++(CCMutableTexture2D *) vest: (Color_t) body;
+
 +(NSString *) codeForPos: (CGPoint) p color: (Color_t) c;
 +(NSArray *) codeForTexture: (CCMutableTexture2D *) t;
 

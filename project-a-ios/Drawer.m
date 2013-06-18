@@ -500,39 +500,109 @@
 +(CCMutableTexture2D *) heroForPC: (Entity *) pc {
     
     BOOL hasChestArmor   = [[pc.equipment objectAtIndex: EQUIPSLOT_T_CHEST] isKindOfClass:NSClassFromString(@"Entity")],
-    hasLeftArmTool       = [[pc.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity")];
+    hasLeftArmTool       = [[pc.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity")],
+    hasRightArmTool      = [[pc.equipment objectAtIndex: EQUIPSLOT_T_RARMTOOL] isKindOfClass:NSClassFromString(@"Entity")];
     
     int pad = 2;
  
-    Color_t pants = gray;
+    Color_t armorColor = hasChestArmor ? brown : skincolor0;
+    Color_t pantsColor = gray;
     
-    CCMutableTexture2D *hero = [Drawer guy:skincolor0 body:skincolor0 pants: pants];
-    
-    if ( hasChestArmor )
-        
-        hero = [Drawer guy:skincolor0 body:brown pants: pants];
+    CCMutableTexture2D *hero = [Drawer guy:armorColor body:skincolor0 pants: pantsColor];
     
     if ( hasLeftArmTool ) {
         
         Entity *leftArmTool  = [pc.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL];
-        //Entity *chest        = [pc.equipment objectAtIndex: EQUIPSLOT_T_CHEST];
+        
+        if ( leftArmTool.itemType == E_ITEM_T_WEAPON ) {
         
         // draw a tiny sword since thats all we have right now
-        Color_t sword = white;
+        Color_t swordColor = white;
+        swordColor = [leftArmTool.name isEqualToString:@"Asura"] ? red : white;
+        Color_t armColor = armorColor;
+        for (int i=9+pad; i<11+pad; i++) [hero setPixelAt:ccp(i,7) rgba:armColor];
+        for (int j=0; j<10; j++) [hero setPixelAt:ccp(11+pad,j) rgba:swordColor];
+        for (int i=10+pad; i<13+pad; i++) [hero setPixelAt:ccp(i,6) rgba:swordColor];
+        //[hero apply];
+        }
         
-        sword = [leftArmTool.name isEqualToString:@"Asura"] ? red : white;
+        else if ( leftArmTool.itemType == E_ITEM_T_ARMOR ) {
+            
+            if ( leftArmTool.armorType == ARMOR_T_SHIELD ) {
+                
+                Color_t shieldColor = brown;
+                Color_t emblemColor = yellow;
+                
+                int pad_x = 7;
+                int start_x = 3+pad_x,  start_y = 4;
+                int end_x   = 7+pad_x,  end_y   = 12;
+                
+                // shield body
+                for (int i=start_x; i<end_x; i++) {
+                    for (int j=start_y; j<end_y; j++) {
+                        [hero setPixelAt:ccp(i,j) rgba:shieldColor];
+                    }
+                }
+                
+                // emblem
+                for (int j=start_y; j<end_y; j++)
+                    [hero setPixelAt:ccp((start_x+end_x)/2,j) rgba:emblemColor];
+                for (int i=start_x; i<end_x; i++)
+                    [hero setPixelAt:ccp(i,(start_y+end_y)/2) rgba:emblemColor];
+                
+                //[hero apply];
+            }
+        }
         
         
-        Color_t arm = hasChestArmor ? brown : skincolor0;
-        
-        for (int i=9+pad; i<11+pad; i++) [hero setPixelAt:ccp(i,7) rgba:arm];
-        
-        for (int j=0; j<10; j++) [hero setPixelAt:ccp(11+pad,j) rgba:sword];
-        
-        for (int i=10+pad; i<13+pad; i++) [hero setPixelAt:ccp(i,6) rgba:sword];
-        
-        [hero apply];
     }
+    
+    if ( hasRightArmTool ) {
+        
+        Entity *rightArmTool  = [pc.equipment objectAtIndex: EQUIPSLOT_T_RARMTOOL];
+        // draw a tiny sword since thats all we have right now
+        
+        if ( rightArmTool.itemType == E_ITEM_T_WEAPON ) {
+            
+            Color_t swordColor = white;
+            swordColor = [rightArmTool.name isEqualToString:@"Asura"] ? red : white;
+            Color_t armColor = armorColor;
+            for (int i=0+pad; i<2+pad; i++) [hero setPixelAt:ccp(i,7) rgba:armColor];
+            for (int j=0; j<10; j++) [hero setPixelAt:ccp(0+pad,j) rgba:swordColor];
+            for (int i=1; i<4; i++) [hero setPixelAt:ccp(i,6) rgba:swordColor];
+          //  [hero apply];
+            
+        }
+        
+        else if ( rightArmTool.itemType == E_ITEM_T_ARMOR ) {
+            
+            if ( rightArmTool.armorType == ARMOR_T_SHIELD ) {
+                
+                Color_t shieldColor = brown;
+                Color_t emblemColor = yellow;
+                
+                int start_x = 3,  start_y = 4;
+                int end_x   = 7,  end_y   = 12;
+                
+                // shield body
+                for (int i=start_x; i<end_x; i++) {
+                    for (int j=start_y; j<end_y; j++) {
+                        [hero setPixelAt:ccp(i,j) rgba:shieldColor];
+                    }
+                }
+                
+                // emblem
+                for (int j=start_y; j<end_y; j++)
+                    [hero setPixelAt:ccp((start_x+end_x)/2,j) rgba:emblemColor];
+                for (int i=start_x; i<end_x; i++)
+                    [hero setPixelAt:ccp(i,(start_y+end_y)/2) rgba:emblemColor];
+                
+                //[hero apply];
+            }
+        }
+        
+    }
+    [hero apply];
     return hero;
 }
 
@@ -1230,7 +1300,15 @@
 }
 
 
-
++(CCMutableTexture2D *) vest: (Color_t) body {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    for (int i=2; i<14; i++)
+        for (int j=2; j<14; j++)
+            [t setPixelAt:ccp(i,j) rgba:body];
+    [ t apply ];
+    return t;
+}
 
 
 

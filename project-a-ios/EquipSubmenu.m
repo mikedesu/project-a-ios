@@ -101,16 +101,47 @@
             
             CCMenuItemLabel *item;
             BOOL itemIsSet =
-            ((self.equipSlot == EQUIPSLOT_T_LARMTOOL || self.equipSlot == EQUIPSLOT_T_RARMTOOL) && e.itemType == E_ITEM_T_WEAPON) ||
-            (self.equipSlot == EQUIPSLOT_T_CHEST                                               && e.itemType == E_ITEM_T_ARMOR)   ||
+            ((self.equipSlot == EQUIPSLOT_T_LARMTOOL || self.equipSlot == EQUIPSLOT_T_RARMTOOL) && (e.itemType == E_ITEM_T_WEAPON || e.armorType == ARMOR_T_SHIELD)) ||
+            //(self.equipSlot == EQUIPSLOT_T_CHEST                                               && e.itemType == E_ITEM_T_ARMOR)   ||
+            (self.equipSlot == EQUIPSLOT_T_CHEST                                               && e.armorType == ARMOR_T_VEST)   ||
             ((self.equipSlot == EQUIPSLOT_T_LRING || self.equipSlot == EQUIPSLOT_T_RRING) && e.itemType == E_ITEM_T_RING);
+            
             
             for (int j=0; j < pc.equipment.count; j++ ) {
                 Entity *equipment = [pc.equipment objectAtIndex:j];
-                if ( [equipment isKindOfClass:NSClassFromString(@"Entity")] ) {
+                BOOL equipmentIsEntity = NO;
+                if ( [[Maybe something:equipment] hasSomething] ) {
+                    equipmentIsEntity = [equipment isKindOfClass:NSClassFromString(@"Entity")];
+                }
+                if ( equipmentIsEntity ) {
                     BOOL isSameName = [e.name isEqualToString: equipment.name];
                     itemIsSet = itemIsSet && !(isSameName);
                 }
+            }
+            
+            // fix a bug where if leftarmtool equipped with X, X wont show up in rightarmtool's list
+            // same for viceversa
+            // will probably affect anything with dual sides
+            Entity *larmTool = [pc.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL];
+            Entity *rarmTool = [pc.equipment objectAtIndex: EQUIPSLOT_T_RARMTOOL];
+            
+            BOOL larmToolIsEntity = NO;
+            BOOL rarmToolIsEntity = NO;
+            
+            if ( [[Maybe something:larmTool] hasSomething] ) {
+                larmToolIsEntity = [larmTool isKindOfClass:NSClassFromString(@"Entity")];
+            }
+            if ( [[Maybe something:rarmTool] hasSomething] ) {
+                rarmToolIsEntity = [rarmTool isKindOfClass:NSClassFromString(@"Entity")];
+            }
+            
+            
+            
+            if ( self.equipSlot == EQUIPSLOT_T_LARMTOOL && rarmToolIsEntity && ([[rarmTool name] isEqualToString:e.name]) ) {
+                itemIsSet = YES;
+            }
+            else if (  self.equipSlot == EQUIPSLOT_T_RARMTOOL && larmToolIsEntity && ([[larmTool name] isEqualToString:e.name]) ) {
+                itemIsSet = YES;
             }
             
             

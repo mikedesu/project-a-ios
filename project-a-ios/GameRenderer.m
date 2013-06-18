@@ -193,8 +193,13 @@ NSInteger getMod( NSInteger n ) {
                 
             } else if ( entity.itemType == E_ITEM_T_ARMOR ) {
                 
-                t = [sprites objectForKey:@"LeatherArmor"];
-                
+                if ( entity.armorType == ARMOR_T_SHIELD ) {
+                    t = [sprites objectForKey:@"SmallShield"];
+                }
+                else if ( entity.armorType == ARMOR_T_VEST ) {
+                    t = [sprites objectForKey:@"LeatherArmor"];
+                }
+            
             }
             
             // only one book so far...
