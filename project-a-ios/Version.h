@@ -1,6 +1,6 @@
 // Version.h 
 // project-a-ios 
 // 
-// Created by Mike Bell on Mon Jun 17 14:17:56 2013
+// Created by Mike Bell on Tue Jun 18 12:47:51 2013
 
-#define GAME_VERSION @"v0.2.1"
+#define GAME_VERSION @"v0.2.2"
