@@ -28,6 +28,7 @@ typedef enum {
 @class HelpMenu;
 @class LevelUpWindow;
 @class InventoryMenu;
+@class DropMenu;
 @class MessageWindow;
 @class PlayerHUD;
 @class PlayerMenu;
@@ -96,6 +97,9 @@ typedef enum {
     
     BOOL inventoryMenuIsVisible;
     InventoryMenu *inventoryMenu;
+    
+    BOOL dropMenuIsVisible;
+    DropMenu *dropMenu;
     
     BOOL helpMenuIsVisible;
     HelpMenu *helpMenu;
@@ -201,6 +205,11 @@ typedef enum {
 -(void) addInventoryMenu;
 -(void) removeInventoryMenu;
 -(void) updateInventoryMenu;
+
+-(void) initDropMenu;
+-(void) addDropMenu;
+-(void) removeDropMenu;
+
 
 -(void) initLevelUpWindow;
 -(void) addLevelUpWindow;

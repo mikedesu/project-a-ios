@@ -1,24 +1,23 @@
-//  InventoryMenu.h
+//  DropMenu.h
 //  project-a-ios
 //
-//  Created by Mike Bell on 3/11/13.
-//  Copyright 2013 __MyCompanyName__. All rights reserved.
+//  Created by Mike Bell on 6/18/13.
 
 #import "cocos2d.h"
 #import "GameConfig.h"
 
-typedef void (^InventoryMenuControlBlock)(CCMenuItemLabel *);
+typedef void (^DropMenuControlBlock)(CCMenuItemLabel *);
 
 @class GameLayer;
 
-@interface InventoryMenu : CCLayerColor {
+@interface DropMenu : CCLayerColor {
     NSMutableArray *inventory;
     CCMenu *menu;
     Entity *pc;
     DungeonFloor *floor;
     GameLayer *gameLayer;
     
-    InventoryMenuControlBlock menuControlBlock;
+    DropMenuControlBlock menuControlBlock;
 }
 
 @property (atomic) NSMutableArray *inventory;
@@ -27,10 +26,9 @@ typedef void (^InventoryMenuControlBlock)(CCMenuItemLabel *);
 @property (atomic) DungeonFloor *floor;
 @property (atomic) GameLayer *gameLayer;
 
-@property (readwrite, copy) InventoryMenuControlBlock menuControlBlock;
+@property (readwrite, copy) DropMenuControlBlock menuControlBlock;
 
 -(void) defineMenuControlBlock;
 -(id)   initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) _gameLayer;
 -(void) update;
 @end
-

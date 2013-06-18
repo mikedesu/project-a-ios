@@ -382,7 +382,7 @@ unsigned get_memory_mb(void) {
 
 #pragma mark - Notification code
 
-static const NSUInteger notificationsCount = 30;
+static const NSUInteger notificationsCount = 32;
 static NSString  * const notifications[] = {
     /*0*/ @"TestNotification1",
     /*1*/ @"TestNotification2",
@@ -414,6 +414,8 @@ static NSString  * const notifications[] = {
     /*27*/ @"PlayerStatUpIntelligenceNotification",
     /*28*/ @"PlayerStatUpWisdomNotification",
     /*29*/ @"PlayerStatUpCharismaNotification",
+    /*30*/ @"PlayerMenuDropNotification",
+    /*31*/ @"PlayerMenuDropReturnNotification",
 };
 
 
@@ -820,12 +822,34 @@ static NSString  * const notifications[] = {
             MLOG(@"Unscheduling step action...");
             [ self unscheduleStepAction ];
         }
-    } else if ( [notification.name isEqualToString: @"PlayerMenuInventoryNotification" ]) {
+    }
+    
+    
+    else if ( [notification.name isEqualToString: @"PlayerMenuInventoryNotification" ]) {
         MLOG(@"Inventory menu");
-        autostepGameLogic = NO;
-        [self unscheduleStepAction];
+        //autostepGameLogic = NO;
+        //[self unscheduleStepAction];
         [self addInventoryMenu];
-    } else if ( [notification.name isEqualToString: @"StatusMenuReturnNotification" ]) {
+    }
+    
+    else if ( [notification.name isEqualToString: @"PlayerMenuDropNotification" ]) {
+        MLOG(@"Drop Item menu");
+        //autostepGameLogic = NO;
+        //[self unscheduleStepAction];
+        [self addDropMenu];
+    }
+    
+    else if ( [notification.name isEqualToString: @"PlayerMenuDropReturnNotification" ]) {
+        MLOG(@"Drop Item menu");
+        //autostepGameLogic = NO;
+        //[self unscheduleStepAction];
+        [self removeDropMenu];
+    }
+    
+    
+    
+    
+    else if ( [notification.name isEqualToString: @"StatusMenuReturnNotification" ]) {
         MLOG(@"Status menu");
         [self removeStatusMenu];
     } else if ( [notification.name isEqualToString: @"InventoryMenuReturnNotification" ]) {
@@ -1727,6 +1751,31 @@ static NSString  * const notifications[] = {
     [inventoryMenu update];
 }
 
+-(void) updateDropMenu {
+    [dropMenu update];
+}
+
+# pragma mark - Drop Menu
+
+-(void) initDropMenu {
+    dropMenu = [[DropMenu alloc] initWithPC:pcEntity withFloor:[dungeon objectAtIndex:floorNumber] withGameLayer:self];
+    dropMenu.position = ccp(0,0);
+}
+
+-(void) addDropMenu {
+    if ( ! dropMenuIsVisible ) {
+        [self addChild: dropMenu];
+        dropMenuIsVisible = YES;
+    }
+}
+
+-(void) removeDropMenu {
+    if ( dropMenuIsVisible ) {
+        [self removeChild:dropMenu cleanup:NO];
+        dropMenuIsVisible = NO;
+    }
+}
+
 
 
 #pragma mark - Level Up Window
@@ -1774,6 +1823,7 @@ static NSString  * const notifications[] = {
         gearHUDIsVisible ? [ self updateGearHUDLabel ] : 0;
         statusMenuIsVisible ? [ self updateStatusMenu ] : 0;
         inventoryMenuIsVisible ? [ self updateInventoryMenu ] : 0;
+        dropMenuIsVisible ? [ self updateDropMenu ] : 0;
         equipMenuIsVisible ? [self updateEquipMenu] : 0;
         
         [ self resetCameraPosition ];
@@ -3133,6 +3183,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     [self initInventoryMenu];
     //[self addInventoryMenu];
     
+    dropMenuIsVisible = NO;
+    [self initDropMenu];
+    //[self addDropMenu];
+    
     helpMenuIsVisible = NO;
     [self initHelpMenu];
     //[self addHelpMenu];
@@ -3852,15 +3906,25 @@ NSUInteger getMagicY( NSUInteger y ) {
  ================
  */
 -( void ) handleDropItem: (Entity *) item forEntity: (Entity *) entity {
-    if ( item != nil && entity != nil ) {
+    if ( [[Maybe something:item] hasSomething] && [[Maybe something:entity] hasSomething] ) {
         // get the entity's tile
         Tile *entityTile = [ self getTileForCGPoint: entity.positionOnMap ];
-        if ( entityTile != nil ) {
-            [ self addMessage: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
-            [ self addMessageWindowString: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
-            [ GameRenderer setEntity:item onTile:entityTile ];
-            // remove the item from the entity's inventory
-            [[entity inventoryArray] removeObject: item];
+        if ( [[Maybe something:entityTile] hasSomething] ) {
+            
+            // verify that 'item' is in 'entity's inventory
+            if ( [entity.inventoryArray containsObject: item] ) {
+            
+                //[ self addMessage: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
+                [ self addMessageWindowString: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
+                [ GameRenderer setEntity:item onTile:entityTile ];
+                // remove the item from the entity's inventory
+                [[entity inventoryArray] removeObject: item];
+                
+            }
+            
+            else {
+                [ self addMessageWindowString: [NSString stringWithFormat:@"ERROR: [%@] is not in [%@].inventory", item.name, entity.name] ];
+            }
         }
     }
 }

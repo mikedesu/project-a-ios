@@ -136,6 +136,7 @@
 		272EF64B16C5695F005DF231 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF64A16C5695F005DF231 /* main.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		272EF64E16C5695F005DF231 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF64D16C5695F005DF231 /* AppDelegate.m */; };
 		272EF65116C5695F005DF231 /* GameLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF65016C5695F005DF231 /* GameLayer.m */; };
+		274701601770CA5B00988419 /* DropMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2747015F1770CA5B00988419 /* DropMenu.m */; };
 		27506B7216D7599700245F72 /* DungeonTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7116D7599700245F72 /* DungeonTree.m */; };
 		27506B7516D759E900245F72 /* DungeonTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7416D759E900245F72 /* DungeonTreeNode.m */; };
 		27506B7816D7FF0200245F72 /* CCMutableTexture2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -444,6 +445,8 @@
 		272EF64D16C5695F005DF231 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		272EF64F16C5695F005DF231 /* GameLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameLayer.h; sourceTree = "<group>"; };
 		272EF65016C5695F005DF231 /* GameLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameLayer.m; sourceTree = "<group>"; };
+		2747015E1770CA5B00988419 /* DropMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropMenu.h; sourceTree = "<group>"; };
+		2747015F1770CA5B00988419 /* DropMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropMenu.m; sourceTree = "<group>"; };
 		27506B7016D7599700245F72 /* DungeonTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DungeonTree.h; sourceTree = "<group>"; };
 		27506B7116D7599700245F72 /* DungeonTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DungeonTree.m; sourceTree = "<group>"; };
 		27506B7316D759E900245F72 /* DungeonTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DungeonTreeNode.h; sourceTree = "<group>"; };
@@ -596,6 +599,8 @@
 				27DCE95F16E2EA5000109F88 /* Dice.m */,
 				2721D01F16EAD57100C26F9E /* Drawer.h */,
 				2721D02016EAD57100C26F9E /* Drawer.m */,
+				2747015E1770CA5B00988419 /* DropMenu.h */,
+				2747015F1770CA5B00988419 /* DropMenu.m */,
 				27C26D8516CAFF66008B0E29 /* Dungeon.h */,
 				27C26D8616CAFF66008B0E29 /* Dungeon.m */,
 				27C26D8216CAFDBE008B0E29 /* DungeonFloor.h */,
@@ -1251,6 +1256,7 @@
 				271DE237175CF54C00857118 /* CharacterCreationScreen.m in Sources */,
 				27D0DC4117613DD600184312 /* LevelUpWindow.m in Sources */,
 				27896AD117691BDB00802FBA /* GameTools.m in Sources */,
+				274701601770CA5B00988419 /* DropMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

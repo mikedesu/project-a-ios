@@ -45,9 +45,11 @@
         menuItemLabelPickup.color               = fontColor;
         
         
+        //CCLabelTTF *menuItemLabelStep           = [[CCLabelTTF alloc] initWithString:   @"Step"         fontName:@"Courier New" fontSize:16 ];
+        //menuItemLabelStep.color                 = fontColor;
         
-        CCLabelTTF *menuItemLabelStep           = [[CCLabelTTF alloc] initWithString:   @"Step"         fontName:@"Courier New" fontSize:16 ];
-        menuItemLabelStep.color                 = fontColor;
+        CCLabelTTF *menuItemLabelDrop           = [[CCLabelTTF alloc] initWithString:   @"Drop"         fontName:@"Courier New" fontSize:16 ];
+        menuItemLabelDrop.color                 = fontColor;
         
         CCLabelTTF *menuItemLabelAutostep       = [[CCLabelTTF alloc] initWithString:   @"Autostep"     fontName:@"Courier New" fontSize:16 ];
         menuItemLabelAutostep.color             = fontColor;
@@ -126,30 +128,30 @@
         baseHeight = baseHeight - menuItemStatus.contentSize.height - hPad;
         pad = 20;
         
-        CCMenuItem *menuItemStep        = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelStep target:self selector:@selector(menuItemStepPressed) ];
+        CCMenuItem *menuItemDrop        = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelDrop target:self selector:@selector(menuItemDropPressed) ];
         //menuItemStep.position           = ccp( 0 + menuItemStep.contentSize.width/2, h - p*k++ );
-        menuItemStep.position           = ccp( menuItemStep.contentSize.width/2 + pad + (4*shiftLeft),
-                                              baseHeight - menuItemStep.contentSize.height/2 );
+        menuItemDrop.position           = ccp( menuItemDrop.contentSize.width/2 + pad + (4*shiftLeft),
+                                              baseHeight - menuItemDrop.contentSize.height/2 );
         
         //CCMenuItem *menuItemAutostep    = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelAutostep target:self selector:@selector(menuItemAutostepPressed) ];
         //menuItemAutostep.position       = ccp( 0 + menuItemAutostep.contentSize.width/2, h - p*k++ );
         
         CCMenuItem *menuItemMonitor     = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelMonitor target:self selector:@selector(menuItemMonitorPressed) ];
         //menuItemMonitor.position        = ccp( 0 + menuItemMonitor.contentSize.width/2, h - p*k++ );
-        menuItemMonitor.position        = ccp( menuItemStep.contentSize.width +
+        menuItemMonitor.position        = ccp( menuItemDrop.contentSize.width +
                                               menuItemMonitor.contentSize.width/2 + pad + (3*shiftLeft),
                                               baseHeight - menuItemMonitor.contentSize.height/2);
         
         CCMenuItem *menuItemHelp        = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelHelp target:self selector:@selector(menuItemHelpPressed) ];
         //menuItemHelp.position           = ccp( 0 + menuItemHelp.contentSize.width/2, h - p*k++ );
-        menuItemHelp.position           = ccp( menuItemStep.contentSize.width +
+        menuItemHelp.position           = ccp( menuItemDrop.contentSize.width +
                                               menuItemMonitor.contentSize.width +
                                               menuItemHelp.contentSize.width/2 + pad + (2*shiftLeft),
                                               baseHeight - menuItemHelp.contentSize.height/2 );
         
         CCMenuItem *menuItemEntityInfo  = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelEntityInfo target:self selector:@selector(menuItemEntityInfoPressed) ];
         //menuItemEntityInfo.position     = ccp( 0 + menuItemLabelEntityInfo.contentSize.width/2, h - p*k++ );
-        menuItemEntityInfo.position     = ccp(  menuItemStep.contentSize.width +
+        menuItemEntityInfo.position     = ccp(  menuItemDrop.contentSize.width +
                                               menuItemMonitor.contentSize.width +
                                               menuItemHelp.contentSize.width +
                                               menuItemLabelEntityInfo.contentSize.width/2 + pad + (shiftLeft),
@@ -157,7 +159,7 @@
         
         CCMenuItem *menuItemReset       = [ [ CCMenuItemLabel alloc ] initWithLabel:menuItemLabelReset target:self selector:@selector(menuItemResetPressed) ];
         //menuItemReset.position          = ccp( 0 + menuItemReset.contentSize.width/2, h -p*k++ );
-        menuItemReset.position          = ccp(  menuItemStep.contentSize.width +
+        menuItemReset.position          = ccp(  menuItemDrop.contentSize.width +
                                               menuItemMonitor.contentSize.width +
                                               menuItemHelp.contentSize.width +
                                               menuItemLabelEntityInfo.contentSize.width + 
@@ -171,8 +173,9 @@
                                                          menuItemCast,
                                                          menuItemInventory,
                                                          menuItemPickup,
-                                                         menuItemStep,
+                                                         //menuItemStep,
                                                          //menuItemAutostep,
+                                                         menuItemDrop,
                                                          menuItemMonitor,
                                                          menuItemHelp,
                                                          menuItemEntityInfo,
@@ -233,9 +236,16 @@
 }
 
 
+-( void ) menuItemDropPressed {
+    [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuDropNotification"  object:self];
+}
+
+
 -( void ) menuItemStepPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuStepNotification"  object:self];
 }
+
+
 
 -( void ) menuItemAutostepPressed {
     [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuAutostepNotification"  object:self];
