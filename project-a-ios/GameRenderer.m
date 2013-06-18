@@ -126,7 +126,6 @@ NSInteger getMod( NSInteger n ) {
     
     for ( int i = 0; i < data.contents.count; i++ ) {
     
-        //for (Entity *entity in data.contents) {
         // Below, we define the draw routines for each entity-type
         // Last, we will upgrade to multi-layer drawings
         
@@ -378,8 +377,8 @@ NSInteger getMod( NSInteger n ) {
 
 +( void ) setLightTile:(CCSprite *) sprite withData:(Tile *) tile withFloor: (DungeonFloor *) floor {
     // calculate alpha value (light)
-    CCMutableTexture2D *texture;
-    Color_t pixelColor;
+    //CCMutableTexture2D *texture;
+    //Color_t pixelColor;
     
     // grab the pc
     Entity *pc;
@@ -416,15 +415,16 @@ NSInteger getMod( NSInteger n ) {
         }
     }
     
-    int distance, factor, lightValue, lightBase, itemsInInventory;
+    int distance, factor, lightValue, lightBase;
+    //itemsInInventory;
     GLubyte newAlpha;
     
     distance = [GameTools distanceFromCGPoint:pc.positionOnMap toCGPoint:tile.position];
     
     // crude light calculation
-    lightBase = 3;
-    itemsInInventory = pc.inventoryArray.count;
-    lightValue = lightBase + itemsInInventory;
+    lightBase = 4;
+    //itemsInInventory = pc.inventoryArray.count;
+    lightValue = lightBase;
     factor = 256 / lightValue;
     
     newAlpha =  distance == 0 ? 255 :

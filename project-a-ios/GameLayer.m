@@ -3916,7 +3916,12 @@ NSUInteger getMagicY( NSUInteger y ) {
             
                 //[ self addMessage: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
                 [ self addMessageWindowString: [NSString stringWithFormat:@"%@ drops a %@", entity.name, item.name]];
-                [ GameRenderer setEntity:item onTile:entityTile ];
+                
+                //[ GameRenderer setEntity:item onTile:entityTile ];
+                // hack to fix the post-item-drop rendering issue
+                item.positionOnMap = entityTile.position;
+                [ entityTile.contents insertObject:item atIndex: entityTile.contents.count-1 ];
+                
                 // remove the item from the entity's inventory
                 [[entity inventoryArray] removeObject: item];
                 
