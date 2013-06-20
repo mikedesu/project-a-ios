@@ -427,9 +427,21 @@ NSInteger getMod( NSInteger n ) {
     distance = [GameTools distanceFromCGPoint:pc.positionOnMap toCGPoint:tile.position];
     
     // crude light calculation
-    lightBase = 4;
-    //itemsInInventory = pc.inventoryArray.count;
-    lightValue = lightBase;
+    lightBase = 2;
+    int itemsInInventory = pc.inventoryArray.count;
+    //lightValue = lightBase;
+    lightValue = lightBase + itemsInInventory;
+    //lightValue = lightBase + gameLayer.karma;
+    
+    /*
+     other ways to think of light:
+     
+     1. torches, lanterns, candles, etc
+     2. karma-tiers
+     3. light-based magic items (rings, swords, armor, etc)
+     4. light-spell
+     */
+    
     factor = 256 / lightValue;
     
     newAlpha =  distance == 0 ? 255 :

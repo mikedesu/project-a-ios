@@ -1079,9 +1079,11 @@ static NSString  * const notifications[] = {
 #pragma mark - Message Window
 
 -(void) initMessageWindow {
+    int pad = 5;
     messageQueue = [[NSMutableArray alloc] init];
     messageWindow = [[MessageWindow alloc] init];
-    messageWindow.position = ccp( screenwidth/2 - messageWindow.contentSize.width/2, screenheight/2 - messageWindow.contentSize.height/2 );
+    //messageWindow.position = ccp( screenwidth/2 - messageWindow.contentSize.width/2, screenheight/2 - messageWindow.contentSize.height/2 );
+    messageWindow.position = ccp( screenwidth/2 - messageWindow.contentSize.width/2, screenheight - messageWindow.contentSize.height - pad );
 }
 
 -(void) addMessageWindowString: (NSString *)string {

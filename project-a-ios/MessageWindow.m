@@ -10,10 +10,13 @@
 
 @synthesize label;
 
+#define MW_HEIGHT 120
+
 -(id) init {
-    if ((self=[super initWithColor:black width:250 height:150])) {
-        label = [[CCLabelTTF alloc] initWithString:@"" dimensions:CGSizeMake(250, 150) hAlignment:kCCTextAlignmentCenter fontName:@"Courier" fontSize:14];;
-        label.position = ccp(250/2,150/2);
+    if ((self=[super initWithColor:black_alpha(200) width:250 height: MW_HEIGHT ])) {
+        label = [[CCLabelTTF alloc] initWithString:@"" dimensions:CGSizeMake(250, MW_HEIGHT ) hAlignment:kCCTextAlignmentCenter fontName:@"Courier" fontSize:14];;
+        //label = [[CCLabelTTF alloc] initWithString:@"" fontName:@"Courier" fontSize:14];
+        label.position = ccp(250/2, MW_HEIGHT/2);
         //label.color = white3;
         [self addChild:label];
     }
