@@ -139,13 +139,9 @@ unsigned get_memory_mb(void) {
     // set up our 'hero'
     [ self initializePCEntity ];
     
-    MLOG(@"");
-    
     killList = [NSMutableArray array];
     
     [self loadSprites];
-    
-    MLOG(@"");
     
     // set the camera anchor point
     cameraAnchorPoint = ccp( 7, 5 );
@@ -161,8 +157,6 @@ unsigned get_memory_mb(void) {
             break;
         }
     }
-    
-    MLOG(@"");
     
     
     [ GameRenderer setEntity:pcEntity onTile:startTile ];
@@ -195,7 +189,6 @@ unsigned get_memory_mb(void) {
     turnCounter = 1;
     
     
-    MLOG(@"");
     // initialize our notifications
     [ self initializeNotifications ];
     
@@ -213,7 +206,7 @@ unsigned get_memory_mb(void) {
     // only allow autostepping if both gameLogicIsOn and autosteppingGameLogic
     autostepGameLogic = autostepGameLogic && gameLogicIsOn;
     if ( gameLogicIsOn && autostepGameLogic ) {
-        MLOG(@"bootGame schedule step action...");
+ //       MLOG(@"bootGame schedule step action...");
         [ self scheduleStepAction ];
     }
     
@@ -2002,14 +1995,83 @@ static NSString  * const notifications[] = {
                             if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
                             [pcEntity getHungry];
                         }
-                        gameLogicIsOn ? [self stepGameLogic] : 0;
-                        [ self resetCameraPosition ];
-                    } else {
+                        //gameLogicIsOn ? [self stepGameLogic] : 0;
+                        //[ self resetCameraPosition ];
+                    }
+                    
+                    else {
                         // invalid quick-move
                         // possibly other quick-action
                         // deselect the tile
+                        MLOG(@"Invalid quick-move. Deselecting tile...");
                         [ self selectTileAtPosition: mapPoint ];
+                        
+                        // long-distance move
+                        // 1. get the nearest tile from the pc
+                        // this code was taken and altered from the friendly cat movement algorithm
+                        
+                        CGPoint basePos = pcEntity.positionOnMap;
+                        
+                        // check around the pc and compare each point
+                        
+                        CGPoint p[8];
+                        int p_dist[8];
+                        p[0] = ccp( basePos.x - 1, basePos.y - 1);
+                        p[1] = ccp( basePos.x, basePos.y - 1);
+                        p[2] = ccp( basePos.x + 1, basePos.y - 1);
+                        p[3] = ccp( basePos.x - 1, basePos.y );
+                        p[4] = ccp( basePos.x + 1, basePos.y );
+                        p[5] = ccp( basePos.x - 1, basePos.y + 1 );
+                        p[6] = ccp( basePos.x, basePos.y + 1 );
+                        p[7] = ccp( basePos.x + 1, basePos.y + 1 );
+                        
+                        for (int i=0; i<8; i++)
+                            p_dist[i] = [ GameTools distanceFromCGPoint:p[i] toCGPoint: mapPoint ];
+                     
+                        // compute min
+                        int min = 1000;
+                        int min_index = 1000;
+                        for (int i=0; i<8; i++) {
+                            // also check if it is a void tile
+                            if ( p_dist[i] <= min && [self getTileForCGPoint:p[i]].tileType != TILE_FLOOR_VOID ) {
+                                min = p_dist[i];
+                                min_index = i;
+                            }
+                        }
+                        
+                        // check for border-ties
+                        BOOL topRowTie    = (min_index == 0 || min_index == 1 || min_index == 2) && (p_dist[0] == p_dist[1] && p_dist[0] == p_dist[2]);
+                        BOOL leftColTie   = (min_index == 0 || min_index == 3 || min_index == 5) && p_dist[0] == p_dist[3] && p_dist[0] == p_dist[5];
+                        BOOL rightColTie  = (min_index == 2 || min_index == 4 || min_index == 7) && p_dist[2] == p_dist[4] && p_dist[2] == p_dist[7];
+                        BOOL bottomRowTie = (min_index == 5 || min_index == 6 || min_index == 7) && p_dist[5] == p_dist[6] && p_dist[5] == p_dist[7];
+                        
+                        // prefer central indices in case of triple-tie
+                        min_index = topRowTie    ? 1 :
+                                    leftColTie   ? 3 :
+                                    rightColTie  ? 4 :
+                                    bottomRowTie ? 6 : min_index;
+                        
+                        MLOG(@"LONG-MOVE CALC");
+                        MLOG(@"%d%d%d\n%d  %d\n%d%d%d",
+                             p_dist[0], p_dist[1], p_dist[2], p_dist[3], p_dist[4], p_dist[5], p_dist[6], p_dist[7] );
+                        
+                        MLOG(@"min: %d  --  min_index: %d", min, min_index);
+                        
+                        
+                        // move the entity
+                        [ self moveEntity:pcEntity toPosition:p[min_index]];
+                        
+                        
+                        
+                        
+                        //MLOG(@"pc.pos: (%.0f,%.0f)", pcEntity.positionOnMap.x, pcEntity.positionOnMap.y);
+                        //MLOG(@"next: (%.0f,%.0f)", p[min_index].x, p[min_index].y);
+                        
+                        
                     }
+                    gameLogicIsOn ? [self stepGameLogic] : 0;
+                    [ self resetCameraPosition ];
+                    
                 } else {
                     [ self selectTileAtPosition: mapPoint ];
                 }
