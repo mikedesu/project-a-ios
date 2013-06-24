@@ -240,4 +240,6 @@
 
 -(void) equipItem: (Entity *) item forEquipSlot: (EquipSlot_t) equipSlot;
 
+-(NSInteger) totalWeight;
+
 @end

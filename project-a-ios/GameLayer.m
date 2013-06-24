@@ -1588,7 +1588,7 @@ static NSString  * const notifications[] = {
     playerHUD.label.fontSize = 12;
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
                                     
-                                   [ NSString stringWithFormat: @"%@:%@:%@:T:%d", pcEntity.name,
+                                   [ NSString stringWithFormat: @"%@:%@:%@:W:%d:T:%d", pcEntity.name,
                                     
                                     pcEntity.status.base == STATUS_T_NORMAL ? @"Normal" :
                                         pcEntity.status.base == STATUS_T_POISON ? @"Poisoned" :
@@ -1599,8 +1599,8 @@ static NSString  * const notifications[] = {
                                         pcEntity.hunger < 150 ? @"Hungry" :
                                         pcEntity.hunger < 200 ? @"Very Hungry" :
                                         pcEntity.hunger < 250 ? @"Starving" :
-                                        @"Dead"
-                                    ,
+                                        @"Dead",
+                                    pcEntity.totalWeight,
                                     turnCounter],
                                    [ NSString stringWithFormat: @"St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d",
                                     pcEntity.strength,
@@ -1714,7 +1714,7 @@ static NSString  * const notifications[] = {
       
       [NSString stringWithFormat:@"Name: %@", pcEntity.name],
       [NSString stringWithFormat:@"Level: %d  -  XP: %d", pcEntity.level, pcEntity.totalxp],
-      [NSString stringWithFormat:@"HP: %d/%d  -  Base AC: %d\nTotal AC: %d\nHunger: %d\n", pcEntity.hp, pcEntity.maxhp, pcEntity.ac, pcEntity.totalac, pcEntity.hunger],
+      [NSString stringWithFormat:@"HP: %d/%d  -  Base AC: %d\nTotal AC: %d\nHunger: %d\nWeight: %d\n", pcEntity.hp, pcEntity.maxhp, pcEntity.ac, pcEntity.totalac, pcEntity.hunger, pcEntity.totalWeight],
       
       [NSString stringWithFormat:@"Strength: %d (%d)\nDexterity: %d (%d)\nConstitution: %d (%d)\nIntelligence: %d (%d)\nWisdom: %d (%d)\nCharisma:  %d (%d)\n",
        pcEntity.strength,       [GameRenderer modifierForNumber:pcEntity.strength],
@@ -2507,8 +2507,11 @@ NSUInteger getMagicY( NSUInteger y ) {
     MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
     BOOL retVal = FALSE;
     
+    BOOL pcIsUnencumbered = pcEntity.totalWeight <= [GameRenderer maxWeightForStrength: pcEntity.strength];
+    MLOG(@"PC encumberance: %d <= %d", pcEntity.totalWeight, [GameRenderer maxWeightForStrength: pcEntity.strength]);
+    
     Tile *tile = [ self getMapTileFromPoint: position forFloor: _floor ];
-    if ( tile.tileType != TILE_FLOOR_VOID ) {
+    if ( tile.tileType != TILE_FLOOR_VOID && pcIsUnencumbered ) {
         
         BOOL isMoveValid    = YES;
         BOOL npcExists      = NO;
@@ -2727,7 +2730,12 @@ NSUInteger getMagicY( NSUInteger y ) {
         } else {
             //MLOG( @"Attempting to move into NPC." );
         }
-    } else {
+    }
+    else if ( ! pcIsUnencumbered ) {
+        [self addMessageWindowString:@"You're carrying too much weight!"];
+        retVal = FALSE;
+    }
+    else {
         retVal = FALSE;
     }
     

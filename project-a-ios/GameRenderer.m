@@ -8,9 +8,14 @@
 
 @implementation GameRenderer
 
-static BOOL modTableInitialized = NO;
-static const NSInteger modTableSize = 50;
+static BOOL modTableInitialized             = NO;
+static BOOL strengthWeightTableInitialized  = NO;
+static const NSInteger modTableSize         = 50;
 static NSInteger modTable[ modTableSize ];
+static NSInteger strengthWeightTable[ modTableSize ];
+
+#define WEIGHT_FACTOR 3
+#define WEIGHT_FORMULA(n) (n * WEIGHT_FACTOR + n)
 
 void initModTable() {
     if ( ! modTableInitialized ) {
@@ -26,16 +31,30 @@ void initModTable() {
     }
 }
 
-NSInteger getMod( NSInteger n ) {
-    if ( ! modTableInitialized ) {
-        initModTable();
+void initStrengthWeightTable() {
+    if ( ! strengthWeightTableInitialized ) {
+        strengthWeightTable[ 0 ] = 0;
+        for (int i=1; i<modTableSize; i++) {
+            strengthWeightTable[ i ] = WEIGHT_FORMULA(i);
+        }
+        strengthWeightTableInitialized = YES;
     }
+}
+
+NSInteger getWeightForStrength( NSInteger str ) {
+    ! strengthWeightTableInitialized ? initStrengthWeightTable() : 0;
+    return strengthWeightTable[ str ];
+}
+
+NSInteger getMod( NSInteger n ) {
+    ! modTableInitialized ? initModTable() : 0;
     return modTable[ n ];
 }
 
-+( NSInteger ) modifierForNumber: (NSInteger) n {
-    return getMod( n );
-}
+
+// Tools...
++( NSInteger ) modifierForNumber: (NSInteger) n         { return getMod( n ); }
++( NSInteger ) maxWeightForStrength: (NSInteger) str    { return getWeightForStrength(str); }
 
 /*
  ====================

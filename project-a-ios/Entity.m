@@ -654,4 +654,25 @@
     [self.equipment setObject: item atIndexedSubscript: equipSlot];
 }
 
+
+/*
+ ====================
+ totalWeight
+ ====================
+ */
+-(NSInteger) totalWeight {
+    int total = 0;
+    if ( self.entityType==ENTITY_T_PC || self.entityType==ENTITY_T_NPC ) {
+        //for (Entity *e in self.equipment) {
+        for (Entity *e in self.inventoryArray) {
+            if ( [e isKindOfClass:NSClassFromString(@"Entity")])
+                total += e.weight;
+        }
+    
+    } else {
+        total = self.weight;
+    }
+    return total;
+}
+
 @end

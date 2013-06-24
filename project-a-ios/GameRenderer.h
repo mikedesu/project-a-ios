@@ -12,6 +12,7 @@
 @interface GameRenderer : NSObject {}
 
 +( NSInteger ) modifierForNumber: (NSInteger) n;
++( NSInteger ) maxWeightForStrength: (NSInteger) str;
 
 +( void ) colorScrambleTile: ( CCSprite * ) tileSprite;
 +( void ) colorScrambleAllTiles: ( NSArray * ) tileArray;
