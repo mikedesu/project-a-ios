@@ -218,26 +218,28 @@ unsigned get_memory_mb(void) {
     
     // populate treasure
     // generate and scatter some treasure
+    
+    
     for ( int i = 0; i < [dungeon count]; i++ ) {
-        NSInteger treasureCount = [Dice roll:6] + 1;
+        NSInteger tilecount     = [((DungeonFloor *)[dungeon objectAtIndex:i]).tileDataArray count];
+        NSInteger treasureCount = [Dice roll: 10 ] + 1;
+        //NSInteger treasureCount = [Dice roll: tilecount / 5 ] + 1;
         for ( int j = 0; j < treasureCount; j++ ) {
             NSInteger roll = [Dice roll:2];
             
             // weapons
             if ( roll == 1 ) {
                 NSInteger _roll = [Dice roll: 10];
-                //Entity *itemToSpawn = _roll <= 9 ? [Weapons shortSword:i] : [Weapons Asura];
-                Entity *itemToSpawn = [Armor blindfold];
-                
+                Entity *itemToSpawn = _roll <= 9 ? [Weapons shortSword:i] : [Weapons Asura];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
             
             // armor
             else if ( roll == 2 ) {
-                NSInteger _roll = [Dice roll: 2];
-                //Entity *itemToSpawn = _roll == 1 ? [Armor smallShield:i] : [Armor leatherArmor:i];
-                //Entity *itemToSpawn = [Armor smallShield:i];
-                Entity *itemToSpawn = [Armor blindfold];
+                NSInteger _roll = [Dice roll: 3];
+                Entity *itemToSpawn =   _roll == 1 ? [Armor smallShield:i]  :
+                                        _roll == 2 ? [Armor leatherArmor:i] :
+                                                     [Armor blindfold];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
             

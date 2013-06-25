@@ -516,14 +516,14 @@
     Color_t armorColor = hasChestArmor ? brown : skincolor0;
     Color_t pantsColor = gray;
     
-    CCMutableTexture2D *hero = [Drawer guy:armorColor body:skincolor0 pants: pantsColor blindfolded: NO];
+    CCMutableTexture2D *hero = [Drawer guy:skincolor0 body:armorColor pants: pantsColor blindfolded: NO];
     
     
     if ( hasHelmet ) {
         
         Entity *helmet = [pc.equipment objectAtIndex: EQUIPSLOT_T_HEAD];
         if ( [helmet.name isEqualToString:@"Blindfold"] ) {
-            hero = [Drawer guy:armorColor body:skincolor0 pants: pantsColor blindfolded: YES];
+            hero = [Drawer guy:skincolor0 body:armorColor pants: pantsColor blindfolded: YES];
         }
         
     }
