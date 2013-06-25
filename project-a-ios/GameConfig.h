@@ -56,6 +56,8 @@
 
 #import "DropMenu.h"
 
+#import "Zodiac.h"
+
 /*
 typedef struct {
     CGFloat x, y;

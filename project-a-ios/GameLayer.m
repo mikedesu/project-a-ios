@@ -192,6 +192,11 @@ unsigned get_memory_mb(void) {
     // first turn
     turnCounter = 1;
     
+    // choose a zodiac era to start with at random
+    zodiacEra = [Dice roll:ZODIAC_T_COUNT];
+    
+    
+    
     
     // initialize our notifications
     [ self initializeNotifications ];
@@ -1584,7 +1589,7 @@ static NSString  * const notifications[] = {
     playerHUD.label.fontSize = 12;
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
                                     
-                                   [ NSString stringWithFormat: @"%@:%@:%@:W:%d:T:%d", pcEntity.name,
+                                   [ NSString stringWithFormat: @"%@:%@:%@:W:%d:%@:%d", pcEntity.name,
                                     
                                     pcEntity.status.base == STATUS_T_NORMAL ? @"Normal" :
                                         pcEntity.status.base == STATUS_T_POISON ? @"Poisoned" :
@@ -1597,6 +1602,7 @@ static NSString  * const notifications[] = {
                                         pcEntity.hunger < 250 ? @"Starving" :
                                         @"Dead",
                                     pcEntity.totalWeight,
+                                    ZODIAC_STRING( zodiacEra ),
                                     turnCounter],
                                    [ NSString stringWithFormat: @"St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d",
                                     pcEntity.strength,
@@ -4074,6 +4080,16 @@ NSUInteger getMagicY( NSUInteger y ) {
     // post available karma
     gotKarmaThisTurn ? [[KarmaEngine sharedEngine] addKarma: totalKarmaThisTurn] : 0;
     turnCounter++;
+    
+    // wherever there's an increase to turnCounter,
+    // need to check if the era rolls over
+    if ( turnCounter / ZODIAC_CYCLE_TURN_COUNT > 0 ) {
+        zodiacEra++;
+        zodiacEra = ( zodiacEra == ZODIAC_T_COUNT ? ZODIAC_T_ARIES : zodiacEra );
+        
+    }
+    
+    
     
     // reset the karma for turn
     gotKarmaThisTurn = NO;

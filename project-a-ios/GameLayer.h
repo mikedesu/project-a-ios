@@ -6,6 +6,7 @@
 
 #import "GameConfig.h"
 #import "Spell.h"
+#import "Zodiac.h"
 
 typedef enum {
     GAMESTATE_T_MAINMENU=0,
@@ -41,6 +42,7 @@ typedef enum {
     GameState_t gameState;
     
     NSUInteger turnCounter;
+    Zodiac_t zodiacEra;
     
     CGPoint selectedTilePoint;
     
@@ -133,6 +135,7 @@ typedef enum {
 
 @property (nonatomic, assign) GameState_t gameState;
 @property (nonatomic, assign) NSUInteger turnCounter;
+@property (nonatomic, assign) Zodiac_t zodiacEra;
 @property (nonatomic, assign) Spell_t currentSpellBeingCast;
 //@property (nonatomic) DungeonFloor *safeRoom;
 
