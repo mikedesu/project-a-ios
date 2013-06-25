@@ -230,15 +230,16 @@ unsigned get_memory_mb(void) {
         NSInteger treasureCount = [Dice roll: 10 ] + 1;
         //NSInteger treasureCount = [Dice roll: tilecount / 5 ] + 1;
         for ( int j = 0; j < treasureCount; j++ ) {
-            NSInteger roll = [Dice roll:2];
             
             /*
-            Entity *itemToTest = [Items ringOfRegeneration];
+             //Entity *itemToTest = [Items ringOfRegeneration];
+            Entity *itemToTest = [Armor blindfold];
             [GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
-            */
+             */
              
+            NSInteger roll = [Dice roll:3];
+            
             // weapons
-            ///*
             if ( roll == 1 ) {
                 NSInteger _roll = [Dice roll: 10];
                 Entity *itemToSpawn = _roll <= 9 ? [Weapons shortSword:i] : [Weapons Asura];
@@ -259,7 +260,8 @@ unsigned get_memory_mb(void) {
                 [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
                 
             }
-            // */
+            /*
+             */
         
         }
     }
