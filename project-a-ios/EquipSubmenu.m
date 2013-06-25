@@ -14,20 +14,31 @@
 @synthesize menuControlBlock;
 @synthesize equipSlot;
 
+#define UNEQUIP_TAG 7770
+
 -(void) defineMenuControlBlock {
     __block typeof(self) weakSelf = self;
     weakSelf.menuControlBlock = ^(CCMenuItemLabel *sender) {
-        Entity *item = [pc.inventoryArray objectAtIndex: sender.tag];
-        MLOG(@"Item pressed: %@", item.name);
         
-        // do equipping
-        // ...
-        [self.pc equipItem:item forEquipSlot: equipSlot];
+        // do unequip
+        if ( sender.tag == UNEQUIP_TAG ) {
+            [self.pc unequipItemForEquipSlot: equipSlot ];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationUpdateReturn" object:self];
+        }
         
-        // return to equipMenu
-        //[self returnPressed];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationUpdateReturn" object:self];
+        else {
         
+            Entity *item = [pc.inventoryArray objectAtIndex: sender.tag];
+            MLOG(@"Item pressed: %@", item.name);
+        
+            // do equipping
+            // ...
+            [self.pc equipItem:item forEquipSlot: equipSlot];
+        
+            // return to equipMenu
+            //[self returnPressed];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationUpdateReturn" object:self];
+        }
     };
 }
 
@@ -56,16 +67,25 @@
                 CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:e.name fontName:@"Courier New" fontSize:16] block:menuControlBlock];
                 
                 x = 0 + item.contentSize.width/2;
-                y = y - item.contentSize.height/2;
+                y = y - item.contentSize.height;
                 
                 item.position = ccp(x,y);
                 [item setTag: i];
                 
                 [menuItems addObject: item];
             }
-            
-            
         }
+        
+        CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Unequip" fontName:@"Courier New" fontSize:16] block:menuControlBlock];
+        x = 0 + item.contentSize.width/2;
+        y = y - item.contentSize.height;
+        item.position = ccp(x,y);
+        [item setTag: UNEQUIP_TAG];
+        [menuItems addObject: item];
+        
+        
+        
+        
         
         //return button
         CCMenuItemLabel *returnButton = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Return" fontName:@"Courier New" fontSize:18] target:self selector:@selector(returnPressed)];
@@ -156,6 +176,16 @@
             }
         }
     }
+    CCMenuItemLabel *item = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Unequip" fontName:@"Courier New" fontSize:16] block:menuControlBlock];
+    x = 0 + item.contentSize.width/2;
+    y = y - item.contentSize.height;
+    item.position = ccp(x,y);
+    [item setTag: UNEQUIP_TAG];
+    [menuItems addObject: item];
+    
+    
+    
+    
     
     //return button
     CCMenuItemLabel *returnButton = [CCMenuItemLabel itemWithLabel:[CCLabelTTF labelWithString:@"Return" fontName:@"Courier New" fontSize:18] target:self selector:@selector(returnPressed)];

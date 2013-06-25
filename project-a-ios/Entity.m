@@ -78,6 +78,7 @@
 @synthesize potionType;
 @synthesize monsterType;
 @synthesize armorType;
+@synthesize ringType;
 
 @synthesize prefixes;
 @synthesize effects;
@@ -198,6 +199,7 @@
         spell = SPELL_T_NONE;
         charges = 0;
         maxCharges = 0;
+        ringType = 0;
         
     }
     return self;
@@ -650,9 +652,20 @@
  ====================
  */
 -(void) equipItem: (Entity *) item forEquipSlot: (EquipSlot_t) equipSlot {
-   // MLOG(@"equipItem: %@ forEquipSlot: %@", item.name, EquipSlotToStr(equipSlot));
+    // MLOG(@"equipItem: %@ forEquipSlot: %@", item.name, EquipSlotToStr(equipSlot));
     [self.equipment setObject: item atIndexedSubscript: equipSlot];
+    [self.inventoryArray removeObject: item];
 }
+
+-(void) unequipItemForEquipSlot: (EquipSlot_t) equipSlot {
+    // MLOG(@"equipItem: %@ forEquipSlot: %@", item.name, EquipSlotToStr(equipSlot));
+    NSObject *oldItem = [self.equipment objectAtIndex: equipSlot];
+    [self.equipment setObject: [NSNull null] atIndexedSubscript: equipSlot];
+    [oldItem isKindOfClass:NSClassFromString(@"Entity")] ? [self.inventoryArray addObject: oldItem] : 0;
+}
+
+
+
 
 
 /*

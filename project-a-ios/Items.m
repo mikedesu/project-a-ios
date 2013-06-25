@@ -265,15 +265,12 @@
     Entity *e = [[Entity alloc] init];
     e.entityType    = ENTITY_T_ITEM;
     e.itemType      = E_ITEM_T_RING;
+    e.ringType      = E_RING_T_REGENERATION;
     e.isPC                  = NO;
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
-    
     [e.name setString:  [NSString stringWithFormat:@"Ring of Regeneration"]];
-    
     return e;
 }
 

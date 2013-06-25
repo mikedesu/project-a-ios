@@ -193,7 +193,7 @@ unsigned get_memory_mb(void) {
     turnCounter = 1;
     
     // choose a zodiac era to start with at random
-    zodiacEra = [Dice roll:ZODIAC_T_COUNT];
+    zodiacEra = [Dice roll:ZODIAC_T_COUNT] - 1;
     
     
     
@@ -232,7 +232,13 @@ unsigned get_memory_mb(void) {
         for ( int j = 0; j < treasureCount; j++ ) {
             NSInteger roll = [Dice roll:2];
             
+            /*
+            Entity *itemToTest = [Items ringOfRegeneration];
+            [GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
+            */
+             
             // weapons
+            ///*
             if ( roll == 1 ) {
                 NSInteger _roll = [Dice roll: 10];
                 Entity *itemToSpawn = _roll <= 9 ? [Weapons shortSword:i] : [Weapons Asura];
@@ -253,6 +259,7 @@ unsigned get_memory_mb(void) {
                 [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
                 
             }
+            // */
         
         }
     }
@@ -3439,7 +3446,6 @@ NSUInteger getMagicY( NSUInteger y ) {
             }
         }
         
-        
         // deal pc poison damage
         if ( pcEntity.status.base == STATUS_T_POISON ) {
             
@@ -3450,6 +3456,19 @@ NSUInteger getMagicY( NSUInteger y ) {
             [self didPCDieJustNow];
         }
         
+        // heal pc if wearing regen ring
+        Entity *maybeLRing = [pcEntity.equipment objectAtIndex:EQUIPSLOT_T_LRING];
+        Entity *maybeRRing = [pcEntity.equipment objectAtIndex:EQUIPSLOT_T_RRING];
+        BOOL LRingIsRegen = NO;
+        BOOL RRingIsRegen = NO;
+        
+        LRingIsRegen = [maybeLRing isKindOfClass:NSClassFromString(@"Entity")] && maybeLRing.entityType == ENTITY_T_ITEM && maybeLRing.itemType == E_ITEM_T_RING && maybeLRing.ringType == E_RING_T_REGENERATION;
+        LRingIsRegen ? pcEntity.hp = (pcEntity.hp < pcEntity.maxhp ? pcEntity.hp + 1 : pcEntity.maxhp) : 0;
+        LRingIsRegen ? [pcEntity getHungry] : 0;
+        
+        RRingIsRegen = [maybeRRing isKindOfClass:NSClassFromString(@"Entity")] && maybeRRing.entityType == ENTITY_T_ITEM && maybeRRing.itemType == E_ITEM_T_RING && maybeRRing.ringType == E_RING_T_REGENERATION;
+        RRingIsRegen ? pcEntity.hp = (pcEntity.hp < pcEntity.maxhp ? pcEntity.hp + 1 : pcEntity.maxhp) : 0;
+        RRingIsRegen ? [pcEntity getHungry] : 0;
         
         
         [ self cleanupEntityArray ];
@@ -3777,7 +3796,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                 [ self addMessage: [ NSString stringWithFormat:@"%@ missed Lv%d %@", e.name, target.level, target.name ]];
                 [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ missed Lv%d %@", e.name, target.level, target.name ]];
             } else if ( !victory && !e.isPC ) {
-                [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ missed %@", e.name, target.name ]];
+                //[ self addMessageWindowString: [ NSString stringWithFormat:@"%@ missed %@", e.name, target.name ]];
             } else if ( victory && e.entityType == ENTITY_T_NPC && target.entityType == ENTITY_T_NPC ) {
                 // deal damage to NPC
                 NSInteger totaldamage = e.damageRoll;
@@ -3786,10 +3805,11 @@ NSUInteger getMagicY( NSUInteger y ) {
                 totaldamage = (totaldamage > 0) ? totaldamage : 0;
                 target.hp -= totaldamage;
                 
+                /*
                 [ self addMessageWindowString: [ NSString stringWithFormat:@"%@%@ dealt %d damage to Lv%d %@",
                                                 isCritical ? @"Critical! " : @"",
                                                 e.name, totaldamage, target.level, target.name ]];
-                
+                */
                 
                 
                 if (target.hp <= 0 ) {
@@ -3803,7 +3823,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     // test if the pc leveled up
                     if ( e.level > prevLevel ) {
                         
-                        [self addMessageWindowString:@"You leveled up!"];
+                  //      [self addMessageWindowString:@"You leveled up!"];
                         
                         // add the level-up window
                         
@@ -3819,7 +3839,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     
                     // remove target from t.contents
                     [t removeObjectFromContents: target];
-                    [ self addMessageWindowString: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
+                    //[ self addMessageWindowString: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
                     target.isAlive = NO;
                 }
             }

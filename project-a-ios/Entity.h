@@ -68,6 +68,8 @@
     
     Armor_t armorType;
     
+    Ring_t ringType;
+    
     
     NSInteger damageRollBase; // x, where 1dx = damage roll
     NSInteger damageBonus; // weapon roll bonus, if any
@@ -173,6 +175,7 @@
 @property (atomic, assign) PotionTypes_t potionType;
 @property (atomic, assign) Monster_t monsterType;
 @property (atomic, assign) Armor_t armorType;
+@property (atomic, assign) Ring_t ringType;
 
 @property (atomic, assign) NSInteger damageRollBase;
 @property (atomic, assign) NSInteger damageBonus;
@@ -239,7 +242,9 @@
 -( void ) setDamageRollBase: (NSInteger) _damageRollBase;
 
 -(void) equipItem: (Entity *) item forEquipSlot: (EquipSlot_t) equipSlot;
-
+//-(void) unequipItem: (Entity *) item forEquipSlot: (EquipSlot_t) equipSlot;
+-(void) unequipItemForEquipSlot: (EquipSlot_t) equipSlot;
+    
 -(NSInteger) totalWeight;
 
 @end

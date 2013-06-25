@@ -89,6 +89,11 @@ typedef enum {
 
 
 typedef enum {
+    E_RING_T_REGENERATION
+} Ring_t;
+
+
+typedef enum {
     ITEMPREFIX_T_NONE,
     
     ITEMPREFIX_T_NUMTYPES
