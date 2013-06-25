@@ -59,6 +59,8 @@ unsigned get_memory_mb(void) {
     
     [s setObject:[Drawer key: yellow]                               forKey: @"SimpleKey"];
     
+    [s setObject:[Drawer blindfold:gray]                               forKey: @"Blindfold"];
+    
     // Tiles
     
     [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
@@ -162,6 +164,8 @@ unsigned get_memory_mb(void) {
     [ GameRenderer setEntity:pcEntity onTile:startTile ];
     [ self resetCameraPosition ];
     
+    
+    
     // set the selectedTilePoint to (-1,-1) (none)
     selectedTilePoint = ccp( -1, -1 );
     
@@ -217,33 +221,23 @@ unsigned get_memory_mb(void) {
     for ( int i = 0; i < [dungeon count]; i++ ) {
         NSInteger treasureCount = [Dice roll:6] + 1;
         for ( int j = 0; j < treasureCount; j++ ) {
-            NSInteger roll = [Dice roll:3];
+            NSInteger roll = [Dice roll:2];
             
             // weapons
             if ( roll == 1 ) {
                 NSInteger _roll = [Dice roll: 10];
+                //Entity *itemToSpawn = _roll <= 9 ? [Weapons shortSword:i] : [Weapons Asura];
+                Entity *itemToSpawn = [Armor blindfold];
                 
-                /*
-                 short sword: 90%
-                 asura:       10%
-                 */
-                Entity *itemToSpawn =
-                _roll <= 9 ? [Weapons shortSword:i] : [Weapons Asura];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
             
             // armor
             else if ( roll == 2 ) {
-                
                 NSInteger _roll = [Dice roll: 2];
-                
-                /*
-                 shield:        100%
-                 leather armor: 0%
-                 */
-                
                 //Entity *itemToSpawn = _roll == 1 ? [Armor smallShield:i] : [Armor leatherArmor:i];
-                Entity *itemToSpawn = [Armor smallShield:i];
+                //Entity *itemToSpawn = [Armor smallShield:i];
+                Entity *itemToSpawn = [Armor blindfold];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
             
@@ -3304,9 +3298,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ hero.name setString: @"Mike" ];
     hero.entityType = ENTITY_T_PC;
     hero.isPC = YES;
-    //hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM;
     hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
-    //hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE;
     hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
     hero.level = 1;
@@ -3318,8 +3310,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     NSAssert(controller.strength > 0, @"Strength is negative");
     
     if ( controller.strength > 0) {
-        //MLOG(@"STRENGTH IS POSITIVE");
-        
         hero.strength       = controller.strength;
         hero.dexterity      = controller.dexterity;
         hero.constitution   = controller.constitution;
@@ -3328,15 +3318,12 @@ NSUInteger getMagicY( NSUInteger y ) {
         hero.charisma       = controller.charisma;
     }
     else {
-        //MLOG(@"STRENGTH IS NEGATIVE");
-    
         hero.strength       = [Dice roll:6 nTimes:3];
         hero.dexterity      = [Dice roll:6 nTimes:3];
         hero.constitution   = [Dice roll:6 nTimes:3];
         hero.intelligence   = [Dice roll:6 nTimes:3];
         hero.wisdom         = [Dice roll:6 nTimes:3];
         hero.charisma       = [Dice roll:6 nTimes:3];
-        
     }
     
     // stat tolerance
@@ -3364,6 +3351,11 @@ NSUInteger getMagicY( NSUInteger y ) {
     //using fists...
     hero.damageRollBase = 6;
     pcEntity = hero;
+    
+    /*
+    Entity *item = [Items blindfold];
+    [[ pcEntity inventoryArray ] addObject: item ];
+    */
     
     MLOG(@"");
 }

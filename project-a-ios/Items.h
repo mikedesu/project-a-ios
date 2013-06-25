@@ -30,4 +30,5 @@
 +(Entity *) ringOfRegeneration;
 +(Entity *) coin: (NSInteger) coinValue;
 
+
 @end

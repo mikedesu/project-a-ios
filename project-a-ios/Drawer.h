@@ -12,7 +12,7 @@
 
 +(CCMutableTexture2D *) chicken;
 +(CCMutableTexture2D *) smallBlob: (Color_t) blobColor ;
-+(CCMutableTexture2D *) guy: (Color_t) head body: (Color_t) body pants: (Color_t) pants ;
++(CCMutableTexture2D *) guy: (Color_t) head body: (Color_t) body pants: (Color_t) pants blindfolded: (BOOL) isBlindfolded;
 
 +(CCMutableTexture2D *) cat: (Color_t) body eyes: (Color_t) eyes;
 
@@ -58,6 +58,10 @@
 +(CCMutableTexture2D *) key: (Color_t) body;
 
 +(CCMutableTexture2D *) scroll: (Color_t) body;
++(CCMutableTexture2D *) scroll2: (Color_t) body;
++(CCMutableTexture2D *) blindfold: (Color_t) body;
+
+
 +(CCMutableTexture2D *) wand: (Color_t) body marking: (Color_t) marking;
 +(CCMutableTexture2D *) ring: (Color_t) body;
 

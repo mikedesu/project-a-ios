@@ -83,7 +83,7 @@
         
         
         CCMutableTexture2D *texture0 = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
-        CCMutableTexture2D *heroTexture = [Drawer guy:skincolor0 body:skincolor0 pants:gray];
+        CCMutableTexture2D *heroTexture = [Drawer guy:skincolor0 body:skincolor0 pants:gray blindfolded:NO];
         
         for (int i=0; i<16; i++) {
             for (int j=0; j<16; j++) {

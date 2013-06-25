@@ -30,7 +30,7 @@
 
 
 
-+(CCMutableTexture2D *) guy: (Color_t) head body: (Color_t) body pants: (Color_t) pants {
++(CCMutableTexture2D *) guy: (Color_t) head body: (Color_t) body pants: (Color_t) pants blindfolded: (BOOL) isBlindfolded {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     
     // pad everything over
@@ -49,6 +49,13 @@
     x1 = 5+pad, y1 = 2;
     [t setPixelAt:ccp(x0,y0) rgba:black];
     [t setPixelAt:ccp(x1,y1) rgba:black];
+    
+    // if is blindfolded...
+    if ( isBlindfolded ) {
+        x0 = 2+pad, y0 = 1;
+        x1 = 7+pad, y1 = 4;
+        for (int j=y0; j<y1; j++)  for (int i=x0; i<x1; i++)  [t setPixelAt:ccp(i,j) rgba:gray];
+    }
     
     
     // need body
@@ -501,14 +508,26 @@
     
     BOOL hasChestArmor   = [[pc.equipment objectAtIndex: EQUIPSLOT_T_CHEST] isKindOfClass:NSClassFromString(@"Entity")],
     hasLeftArmTool       = [[pc.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL] isKindOfClass:NSClassFromString(@"Entity")],
-    hasRightArmTool      = [[pc.equipment objectAtIndex: EQUIPSLOT_T_RARMTOOL] isKindOfClass:NSClassFromString(@"Entity")];
+    hasRightArmTool      = [[pc.equipment objectAtIndex: EQUIPSLOT_T_RARMTOOL] isKindOfClass:NSClassFromString(@"Entity")],
+    hasHelmet            = [[pc.equipment objectAtIndex: EQUIPSLOT_T_HEAD] isKindOfClass:NSClassFromString(@"Entity")];
     
     int pad = 2;
  
     Color_t armorColor = hasChestArmor ? brown : skincolor0;
     Color_t pantsColor = gray;
     
-    CCMutableTexture2D *hero = [Drawer guy:armorColor body:skincolor0 pants: pantsColor];
+    CCMutableTexture2D *hero = [Drawer guy:armorColor body:skincolor0 pants: pantsColor blindfolded: NO];
+    
+    
+    if ( hasHelmet ) {
+        
+        Entity *helmet = [pc.equipment objectAtIndex: EQUIPSLOT_T_HEAD];
+        if ( [helmet.name isEqualToString:@"Blindfold"] ) {
+            hero = [Drawer guy:armorColor body:skincolor0 pants: pantsColor blindfolded: YES];
+        }
+        
+    }
+     
     
     if ( hasLeftArmTool ) {
         
@@ -1162,6 +1181,47 @@
             [t setPixelAt:ccp(x,y) rgba:body];
     return t;
 }
+
+
++(CCMutableTexture2D *) blindfold: (Color_t) body {
+    return [Drawer scroll: body];
+}
+
+
+
+
+
++(CCMutableTexture2D *) scroll2: (Color_t) body {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill: black_alpha(0)];
+    /*
+     0123456789ABCDEF
+     ................ 0
+     ................ 1
+     ................ 2
+     ................ 3
+     ................ 4
+     ................ 5
+     ..            .. 6
+     ..            .. 7
+     ..            .. 8
+     ..            .. 9
+     ................ A
+     ................ B
+     ................ B
+     ................ B
+     ................ B
+     ................ B
+     */
+    int x=0, y=0, x0=2, y0=6, x1=0xE, y1=0xA;
+    for (y=y0; y<y1; y++)
+        for (x=x0; x<x1; x++)
+            [t setPixelAt:ccp(x,y) rgba:body];
+    return t;
+}
+
+
+
 
 
 

@@ -218,6 +218,13 @@ NSInteger getMod( NSInteger n ) {
                 else if ( entity.armorType == ARMOR_T_VEST ) {
                     t = [sprites objectForKey:@"LeatherArmor"];
                 }
+                else if ( entity.armorType == ARMOR_T_HELMET ) {
+                    
+                    if ( [entity.name isEqualToString:@"Blindfold" ] ) {
+                        t = [sprites objectForKey:@"Blindfold"];
+                    }
+                }
+                
             
             }
             
@@ -280,6 +287,13 @@ NSInteger getMod( NSInteger n ) {
             else if ( entity.itemType == E_ITEM_T_COIN ) {
                 t = [sprites objectForKey:@"Coin"];
             }
+            
+            /*
+            else if ( entity.itemType == E_ITEM_T_ ) {
+                t = [sprites objectForKey:@"Coin"];
+            }
+            */
+            
         }
         
         // at this point, t is set to something from data.contents
@@ -448,9 +462,15 @@ NSInteger getMod( NSInteger n ) {
     // crude light calculation
     lightBase = 2;
     int itemsInInventory = pc.inventoryArray.count;
-    //lightValue = lightBase;
     lightValue = lightBase + itemsInInventory;
+    //lightValue = lightBase;
     //lightValue = lightBase + gameLayer.karma;
+    
+    // check to see if pc is equipped with the blindfold
+    Entity *maybeBlindfold = [pc.equipment objectAtIndex: EQUIPSLOT_T_HEAD];
+    if ( [maybeBlindfold isKindOfClass:NSClassFromString(@"Entity")] && [maybeBlindfold.name isEqualToString:@"Blindfold"] ) {
+        lightValue = lightBase;
+    }
     
     /*
      other ways to think of light:

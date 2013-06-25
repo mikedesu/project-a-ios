@@ -103,6 +103,7 @@
             BOOL itemIsSet =
             ((self.equipSlot == EQUIPSLOT_T_LARMTOOL || self.equipSlot == EQUIPSLOT_T_RARMTOOL) && (e.itemType == E_ITEM_T_WEAPON || e.armorType == ARMOR_T_SHIELD)) ||
             //(self.equipSlot == EQUIPSLOT_T_CHEST                                               && e.itemType == E_ITEM_T_ARMOR)   ||
+            (self.equipSlot == EQUIPSLOT_T_HEAD                                                && e.armorType == ARMOR_T_HELMET) || 
             (self.equipSlot == EQUIPSLOT_T_CHEST                                               && e.armorType == ARMOR_T_VEST)   ||
             ((self.equipSlot == EQUIPSLOT_T_LRING || self.equipSlot == EQUIPSLOT_T_RRING) && e.itemType == E_ITEM_T_RING);
             
