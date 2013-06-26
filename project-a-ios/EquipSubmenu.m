@@ -23,7 +23,9 @@
         // do unequip
         if ( sender.tag == UNEQUIP_TAG ) {
             [self.pc unequipItemForEquipSlot: equipSlot ];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationUpdateReturn" object:self];
+            NSString *str = [NSString stringWithFormat:@"You unequip that item"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationUpdateReturn" object:str];
+            //[[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationUpdateReturn" object:self];
         }
         
         else {
@@ -36,8 +38,9 @@
             [self.pc equipItem:item forEquipSlot: equipSlot];
         
             // return to equipMenu
-            //[self returnPressed];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationUpdateReturn" object:self];
+            NSString *str = [NSString stringWithFormat:@"You equip a %@", item.name];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationUpdateReturn" object:str];
+            //[[NSNotificationCenter defaultCenter] postNotificationName:@"EquipSubmenuNotificationUpdateReturn" object:self];
         }
     };
 }

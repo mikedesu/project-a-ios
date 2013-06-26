@@ -11,34 +11,22 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    NSUInteger numItems = 12;
+    NSUInteger numItems = 13;
     NSUInteger roll = [Dice roll:numItems];
     
-    if (roll==1)
-        e = [Items potionOfLightHealing:1];
-    else if (roll==2)
-        e = [Items greenBlob];
-    else if (roll==3)
-        e = [Items woodenFishingRod];
-    else if (roll==4)
-        e = [Items catfish];
-    else if (roll==5)
-        e = [Items simpleDoor];
-    else if (roll==6)
-        e = [Items simpleKey];
-    else if (roll==7)
-        e = [Items poisonAntidote];
-    else if (roll==8)
-        e = [Items scrollOfCureLightWounds];
-    else if (roll==9)
-        e = [Items wandOfCureLightWounds];
-    else if (roll==10)
-        e = [Items ringOfRegeneration];
-    else if (roll==11)
-        e = [Items coin:[Dice roll:100]];
-
-    else
-        e = [Items basicBoulder];
+    if (roll==1)        e = [Items potionOfLightHealing:1];
+    else if (roll==2)   e = [Items greenBlob];
+    else if (roll==3)   e = [Items woodenFishingRod];
+    else if (roll==4)   e = [Items catfish];
+    else if (roll==5)   e = [Items simpleDoor];
+    else if (roll==6)   e = [Items simpleKey];
+    else if (roll==7)   e = [Items poisonAntidote];
+    else if (roll==8)   e = [Items scrollOfCureLightWounds];
+    else if (roll==9)   e = [Items wandOfCureLightWounds];
+    else if (roll==10)  e = [Items coin:[Dice roll:100]];
+    else if (roll==11)  e = [Items ringOfRegeneration];
+    else if (roll==12)  e = [Items ringOfAntihunger];
+    else                e = [Items basicBoulder];
     
     //e = [Items wandOfCureLightWounds];
     //e = [Items ringOfRegeneration];
@@ -273,6 +261,25 @@
     [e.name setString:  [NSString stringWithFormat:@"Ring of Regeneration"]];
     return e;
 }
+
+
++(Entity *) ringOfAntihunger {
+    Entity *e = [[Entity alloc] init];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_RING;
+    e.ringType      = E_RING_T_ANTIHUNGER;
+    e.isPC                  = NO;
+    e.weight            = 1;
+    e.durability        = 100;
+    e.totalDurability   = 100;
+    [e.name setString:  [NSString stringWithFormat:@"Ring of Antihunger"]];
+    return e;
+}
+
+
+
+
+
 
 
 

@@ -28,6 +28,8 @@
 +(Entity *) wandOfCureLightWounds;
 
 +(Entity *) ringOfRegeneration;
++(Entity *) ringOfAntihunger;
+
 +(Entity *) coin: (NSInteger) coinValue;
 
 

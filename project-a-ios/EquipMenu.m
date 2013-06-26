@@ -442,7 +442,8 @@
             [self removeChild:equipSubmenu cleanup:NO];
             equipSubmenuIsVisible = NO;
             [self update];
-            [self returnPressed];
+            //[self returnPressed];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipMenuReturnNotification" object: notification.object];
         }
     }
     

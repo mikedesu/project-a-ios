@@ -629,7 +629,16 @@
  ====================
  */
 -( void ) getHungry {
-    hunger++;
+    
+    // check if wearing the antihunger ring...
+    Entity *lring = [self.equipment objectAtIndex:EQUIPSLOT_T_LRING];
+    Entity *rring = [self.equipment objectAtIndex:EQUIPSLOT_T_RRING];
+    
+    BOOL hasAntihungerRing =
+    ([lring isKindOfClass:NSClassFromString(@"Entity")] && lring.ringType == E_RING_T_ANTIHUNGER) ||
+    ([rring isKindOfClass:NSClassFromString(@"Entity")] && rring.ringType == E_RING_T_ANTIHUNGER);
+    
+    if ( ! hasAntihungerRing ) hunger++;
     
     // various levels of hunger...
     // lets start with
@@ -653,6 +662,7 @@
  */
 -(void) equipItem: (Entity *) item forEquipSlot: (EquipSlot_t) equipSlot {
     // MLOG(@"equipItem: %@ forEquipSlot: %@", item.name, EquipSlotToStr(equipSlot));
+    [self unequipItemForEquipSlot:equipSlot];
     [self.equipment setObject: item atIndexedSubscript: equipSlot];
     [self.inventoryArray removeObject: item];
 }

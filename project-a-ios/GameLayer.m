@@ -232,12 +232,12 @@ unsigned get_memory_mb(void) {
         for ( int j = 0; j < treasureCount; j++ ) {
             
             /*
-             //Entity *itemToTest = [Items ringOfRegeneration];
-            Entity *itemToTest = [Armor blindfold];
+             Entity *itemToTest = [Items ringOfAntihunger];
+            //Entity *itemToTest = [Armor blindfold];
             [GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
              */
              
-            NSInteger roll = [Dice roll:3];
+             NSInteger roll = [Dice roll:3];
             
             // weapons
             if ( roll == 1 ) {
@@ -995,6 +995,8 @@ static NSString  * const notifications[] = {
         
         // update our hero sprite
         [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
+        
+        [self addMessageWindowString: notification.object ];
         
         
         // step game logic

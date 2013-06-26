@@ -89,7 +89,8 @@ typedef enum {
 
 
 typedef enum {
-    E_RING_T_REGENERATION
+    E_RING_T_REGENERATION,
+    E_RING_T_ANTIHUNGER
 } Ring_t;
 
 
