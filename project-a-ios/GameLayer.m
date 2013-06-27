@@ -70,6 +70,9 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer downstairsTile]                                    forKey: @"DownstairsTile"];
     [s setObject:[Drawer flatTile: blue]                                    forKey: @"WaterTile"];
     [s setObject:[Drawer flatTile: green]                                    forKey: @"GrassTile"];
+    [s setObject:[Drawer flatTile: red]                                    forKey: @"LavaTile"];        //unimplemented
+    [s setObject:[Drawer flatTile: darkgreen]                                    forKey: @"AcidTile"];
+    
     
     // Monsters
     
@@ -1372,6 +1375,8 @@ static NSString  * const notifications[] = {
                                                 t.tileType == TILE_FLOOR_STONE          ? @"Stone"      :
                                                 t.tileType == TILE_FLOOR_VOID           ? @"Void"       :
                                                 t.tileType == TILE_FLOOR_ICE            ? @"Ice"        :
+                                                t.tileType == TILE_FLOOR_ACID           ? @"Acid"       :
+                                                t.tileType == TILE_FLOOR_LAVA           ? @"Lava"       :
                                                 t.tileType == TILE_FLOOR_WATER          ? @"Water"      :
                                                                                         @"Unknown"
                                                 ]];
@@ -2660,6 +2665,26 @@ NSUInteger getMagicY( NSUInteger y ) {
                             [self addMessageWindowString:@"There is a disarmed trap here"];
                         }
                     }
+                    
+                    else if ( tile.tileType == TILE_FLOOR_ACID ) {
+                        
+                        int damage = pcEntity.hp;
+                        pcEntity.hp = 0;
+                        [self addMessageWindowString:[NSString stringWithFormat:@"%@ is dealt %d acid damage", pcEntity.name, damage]];
+                        [self didPCDieJustNow];
+                        
+                    }
+                    
+                    else if ( tile.tileType == TILE_FLOOR_LAVA ) {
+                        
+                        int damage = [Dice roll:12 nTimes:3];
+                        pcEntity.hp -= damage;
+                        [self addMessageWindowString:[NSString stringWithFormat:@"%@ is dealt %d lava damage", pcEntity.name, damage]];
+                        [self didPCDieJustNow];
+                        
+                    }
+                    
+                    
                     
                     else if ( itemExists ) {
                         // list all items on the tile

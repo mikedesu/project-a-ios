@@ -10,10 +10,16 @@ typedef enum {
     TILE_FLOOR_DOWNSTAIRS,
     TILE_FLOOR_STONE,
     TILE_FLOOR_WATER,
+    TILE_FLOOR_GRASS,
+    TILE_FLOOR_ACID,    // instant-death tile
+    TILE_FLOOR_LAVA,    // greater fire damage every step
     
     // un-implemented
-    TILE_FLOOR_GRASS,
-    TILE_FLOOR_ICE,
+    
+    TILE_FLOOR_ICE,  //undefined
+    //TILE_FLOOR_,
+    
+    
     
     // Trapped Tile-types
     TILE_FLOOR_STONE_TRAP_SPIKES_D6,

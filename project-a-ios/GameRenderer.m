@@ -108,6 +108,8 @@ NSInteger getMod( NSInteger n ) {
     CCMutableTexture2D *tileTexture =
     tileType == TILE_FLOOR_STONE          ? [sprites objectForKey:@"StoneTile"]      :
     tileType == TILE_FLOOR_GRASS          ? [sprites objectForKey:@"GrassTile"]      :
+    tileType == TILE_FLOOR_ACID           ? [sprites objectForKey:@"AcidTile"]      :
+    tileType == TILE_FLOOR_LAVA           ? [sprites objectForKey:@"LavaTile"]      :
     tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
     tileType == TILE_FLOOR_STONE_TRAP_POISON_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
     tileType == TILE_FLOOR_VOID           ? [sprites objectForKey:@"VoidTile"]       :
@@ -767,17 +769,26 @@ NSInteger getMod( NSInteger n ) {
             
             /*
              
-             stone:     60%  1-6
-             water:     10%  7
-             ...grass?: 30%  8-10
+             stone: 55%
+             water: 10%
+             grass: 20%
+             acid:  5%
+             lava:  10%
              
              */
             
-            NSInteger tileRoll = [Dice roll:10];
+            NSInteger tileRoll = [Dice roll:100];
+            //tileType = TILE_FLOOR_ACID;
             tileType =
-                ((tileRoll >= 1) && (tileRoll <= 6))    ? TILE_FLOOR_STONE :
-                tileRoll == 7                           ? TILE_FLOOR_WATER :
-                                                          TILE_FLOOR_GRASS;
+                tileRoll >= 1 && tileRoll <= 55    ? TILE_FLOOR_STONE :
+                tileRoll >= 56 && tileRoll <= 65   ? TILE_FLOOR_WATER :
+            tileRoll >= 66 && tileRoll <= 85   ? TILE_FLOOR_GRASS :
+            tileRoll >= 86 && tileRoll <= 90   ? TILE_FLOOR_ACID :
+            TILE_FLOOR_LAVA;
+            /*
+             */
+            
+            
             
             // setTileAtPosition will call handleTile and set if trapped
             [ self setTileAtPosition:point onFloor:floor toType:tileType ];
