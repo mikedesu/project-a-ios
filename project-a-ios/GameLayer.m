@@ -121,6 +121,7 @@ unsigned get_memory_mb(void) {
     
     [s setObject:[Drawer coin:yellow] forKey:@"Coin"];
     [s setObject:[Drawer vest:gray] forKey:@"Note"];
+    [s setObject:[Drawer vest:brown] forKey:@"BootsOfAntiacid"];
     
 }
 
@@ -232,16 +233,17 @@ unsigned get_memory_mb(void) {
     
     for ( int i = 0; i < [dungeon count]; i++ ) {
         NSInteger tilecount     = [((DungeonFloor *)[dungeon objectAtIndex:i]).tileDataArray count];
-        NSInteger treasureCount = [Dice roll: 10 ] + 1;
+        NSInteger minItemCount  = 2;
+        NSInteger maxItemCount  = 12;
+        NSInteger treasureCount = [Dice roll: maxItemCount ] + (minItemCount - 1);
         //NSInteger treasureCount = [Dice roll: tilecount / 5 ] + 1;
         for ( int j = 0; j < treasureCount; j++ ) {
             
-            /*
-             Entity *itemToTest = [Items note:@"You suck! I rule >:D"];
-             //Entity *itemToTest = [Items ringOfAntihunger];
+            //Entity *itemToTest = [Armor bootsOfAntiacid];
+            // Entity *itemToTest = [Items note:@"You suck! I rule >:D"];
+            //Entity *itemToTest = [Items ringOfAntihunger];
             //Entity *itemToTest = [Armor blindfold];
-            [GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
-             */
+            //[GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
              
              NSInteger roll = [Dice roll:3];
             
@@ -254,10 +256,11 @@ unsigned get_memory_mb(void) {
             
             // armor
             else if ( roll == 2 ) {
-                NSInteger _roll = [Dice roll: 3];
+                NSInteger _roll = [Dice roll: 4];
                 Entity *itemToSpawn =   _roll == 1 ? [Armor smallShield:i]  :
                                         _roll == 2 ? [Armor leatherArmor:i] :
-                                                     [Armor blindfold];
+                                        _roll == 3 ? [Armor bootsOfAntiacid] :
+                [Armor blindfold];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
             
@@ -268,7 +271,7 @@ unsigned get_memory_mb(void) {
             }
             /*
              */
-        
+            
         }
     }
     
@@ -904,6 +907,7 @@ static NSString  * const notifications[] = {
         Tile *t = [self getTileForCGPoint: pcEntity.positionOnMap];
         Entity *item = nil;
         for (Entity *e in t.contents) {
+            MLOG(@"in tile...%@", e.name);
             if (e.entityType == ENTITY_T_ITEM) {
                 item = e;
                 break;
@@ -998,15 +1002,15 @@ static NSString  * const notifications[] = {
 #pragma mark - Handle EquipMenu Notification - Return
     else if ( [notification.name isEqualToString: @"EquipMenuReturnNotification" ]) {
         [self removeEquipMenu];
+ 
+        // returning from equipSubmenu...
+        if ( [notification.object isKindOfClass:NSClassFromString(@"NSString")]) {
+            // update our hero sprite
+            [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
+            [self addMessageWindowString: notification.object ];
+            gameLogicIsOn ? [self stepGameLogic] : 0;
+        }
         
-        // update our hero sprite
-        [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
-        
-        [self addMessageWindowString: notification.object ];
-        
-        
-        // step game logic
-        gameLogicIsOn ? [self stepGameLogic] : 0;
         [ self resetCameraPosition ];
     }
     
@@ -2671,11 +2675,21 @@ NSUInteger getMagicY( NSUInteger y ) {
                     
                     else if ( tile.tileType == TILE_FLOOR_ACID ) {
                         
-                        int damage = pcEntity.hp;
-                        pcEntity.hp = 0;
-                        [self addMessageWindowString:[NSString stringWithFormat:@"%@ is dealt %d acid damage", pcEntity.name, damage]];
-                        [self didPCDieJustNow];
+                        // check if PC wearing anti-acid shoes
+                        Entity *maybeShoesL = [pcEntity.equipment objectAtIndex:EQUIPSLOT_T_LFOOT];
+                        Entity *maybeShoesR = [pcEntity.equipment objectAtIndex:EQUIPSLOT_T_RFOOT];
                         
+                        if ( ( [maybeShoesL isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesL.name isEqualToString:@"Boots of Anti-acid"] ) ||
+                             ( [maybeShoesR isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesR.name isEqualToString:@"Boots of Anti-acid"] ) ) {
+                        
+                            
+                        }
+                        else {
+                            int damage = pcEntity.hp;
+                            pcEntity.hp = 0;
+                            [self addMessageWindowString:[NSString stringWithFormat:@"%@ is dealt %d acid damage", pcEntity.name, damage]];
+                            [self didPCDieJustNow];
+                        }
                     }
                     
                     else if ( tile.tileType == TILE_FLOOR_LAVA ) {
@@ -2689,7 +2703,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     
                     
                     
-                    else if ( itemExists ) {
+                    if ( itemExists ) {
                         // list all items on the tile
                         if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_NONE ) {
                             for ( Entity *e in [tile contents] ) {

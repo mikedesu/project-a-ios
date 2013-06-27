@@ -226,6 +226,11 @@ NSInteger getMod( NSInteger n ) {
                         t = [sprites objectForKey:@"Blindfold"];
                     }
                 }
+                else if ( entity.armorType == ARMOR_T_SHOE ) {
+                    if ( [entity.name isEqualToString:@"Boots of Anti-acid"]) {
+                        t = [sprites objectForKey:@"BootsOfAntiacid"];
+                    }
+                }
                 
             
             }
@@ -293,6 +298,8 @@ NSInteger getMod( NSInteger n ) {
             else if ( entity.itemType == E_ITEM_T_NOTE ) {
                 t = [sprites objectForKey:@"Note"];
             }
+            
+            
             
             
             
@@ -784,7 +791,8 @@ NSInteger getMod( NSInteger n ) {
              */
             
             NSInteger tileRoll = [Dice roll:100];
-            //tileType = TILE_FLOOR_ACID;
+            
+            //tileType = tileRoll < 75 ? TILE_FLOOR_STONE : TILE_FLOOR_ACID;
             tileType =
                 tileRoll >= 1 && tileRoll <= 55    ? TILE_FLOOR_STONE :
                 tileRoll >= 56 && tileRoll <= 65   ? TILE_FLOOR_WATER :

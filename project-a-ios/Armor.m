@@ -65,6 +65,23 @@
 }
 
 
++(Entity *) bootsOfAntiacid {
+    Entity *e = [[Entity alloc] init];
+    e.entityType        = ENTITY_T_ITEM;
+    e.itemType          = E_ITEM_T_ARMOR;
+    e.armorType         = ARMOR_T_SHOE;
+    e.isPC              = NO;
+    e.weight            = 1;
+    e.durability        = 5;
+    e.totalDurability   = 5;
+    [e.name setString: [NSString stringWithFormat:@"Boots of Anti-acid"]];
+    return e;
+}
+
+
+
+
+
 
 /*
 +(Entity *) plateArmor: (NSInteger) bonus {

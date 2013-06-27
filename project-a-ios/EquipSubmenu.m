@@ -128,6 +128,8 @@
             //(self.equipSlot == EQUIPSLOT_T_CHEST                                               && e.itemType == E_ITEM_T_ARMOR)   ||
             (self.equipSlot == EQUIPSLOT_T_HEAD                                                && e.armorType == ARMOR_T_HELMET) || 
             (self.equipSlot == EQUIPSLOT_T_CHEST                                               && e.armorType == ARMOR_T_VEST)   ||
+            ((self.equipSlot == EQUIPSLOT_T_LFOOT || self.equipSlot == EQUIPSLOT_T_RFOOT )     && e.armorType == ARMOR_T_SHOE)   ||
+            
             ((self.equipSlot == EQUIPSLOT_T_LRING || self.equipSlot == EQUIPSLOT_T_RRING) && e.itemType == E_ITEM_T_RING);
             
             

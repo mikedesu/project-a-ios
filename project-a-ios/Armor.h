@@ -38,6 +38,7 @@ typedef enum {
 +(Entity *) leatherArmor: (NSInteger) bonus;
 
 +(Entity *) blindfold;
++(Entity *) bootsOfAntiacid;
 
 //+(Entity *) plateArmor: (NSInteger) bonus;
 
