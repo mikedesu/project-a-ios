@@ -120,6 +120,8 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer ring:yellow] forKey:@"MagicRing"];
     
     [s setObject:[Drawer coin:yellow] forKey:@"Coin"];
+    [s setObject:[Drawer vest:gray] forKey:@"Note"];
+    
 }
 
 
@@ -234,16 +236,18 @@ unsigned get_memory_mb(void) {
         //NSInteger treasureCount = [Dice roll: tilecount / 5 ] + 1;
         for ( int j = 0; j < treasureCount; j++ ) {
             
-            /*
-             Entity *itemToTest = [Items ringOfAntihunger];
+             Entity *itemToTest = [Items note:@"You suck! I rule >:D"];
+             //Entity *itemToTest = [Items ringOfAntihunger];
             //Entity *itemToTest = [Armor blindfold];
             [GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
+            /*
              */
              
              NSInteger roll = [Dice roll:3];
             
             // weapons
-            if ( roll == 1 ) {
+            /*
+             if ( roll == 1 ) {
                 NSInteger _roll = [Dice roll: 10];
                 Entity *itemToSpawn = _roll <= 9 ? [Weapons shortSword:i] : [Weapons Asura];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
@@ -263,7 +267,6 @@ unsigned get_memory_mb(void) {
                 [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
                 
             }
-            /*
              */
         
         }

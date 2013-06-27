@@ -290,6 +290,12 @@ NSInteger getMod( NSInteger n ) {
                 t = [sprites objectForKey:@"Coin"];
             }
             
+            else if ( entity.itemType == E_ITEM_T_NOTE ) {
+                t = [sprites objectForKey:@"Note"];
+            }
+            
+            
+            
             /*
             else if ( entity.itemType == E_ITEM_T_ ) {
                 t = [sprites objectForKey:@"Coin"];

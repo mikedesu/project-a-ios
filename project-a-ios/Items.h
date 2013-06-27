@@ -32,5 +32,7 @@
 
 +(Entity *) coin: (NSInteger) coinValue;
 
++(Entity *) note: (NSString *) text;
+
 
 @end

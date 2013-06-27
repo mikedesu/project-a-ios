@@ -122,6 +122,9 @@
     NSInteger charges;
     NSInteger maxCharges;
     
+    // for notes
+    NSString *notetext;
+    
     
 }
 
@@ -133,6 +136,7 @@
 @property (atomic) CCMutableTexture2D *texture;
 
 @property (atomic) NSMutableString *name;
+@property (atomic) NSString *notetext;
 
 @property (atomic, assign) EntityTypes_t entityType;
 @property (atomic, assign) Threat_t threatLevel;

@@ -11,7 +11,7 @@
 +( Entity * ) randomItem {
     Entity *e = nil;
     
-    NSUInteger numItems = 13;
+    NSUInteger numItems = 14;
     NSUInteger roll = [Dice roll:numItems];
     
     if (roll==1)        e = [Items potionOfLightHealing:1];
@@ -26,6 +26,7 @@
     else if (roll==10)  e = [Items coin:[Dice roll:100]];
     else if (roll==11)  e = [Items ringOfRegeneration];
     else if (roll==12)  e = [Items ringOfAntihunger];
+    else if (roll==13)  e = [Items note:@"You suck! I rule >:D"];
     else                e = [Items basicBoulder];
     
     //e = [Items wandOfCureLightWounds];
@@ -43,8 +44,6 @@
     e.isPC = NO;
     [e.name setString: @"Book of All-Knowing" ];
     e.itemType = E_ITEM_T_BOOK;
-    e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     return e;
 }
 
@@ -58,31 +57,23 @@
     e.isPC          = NO;
     [e.name setString:@"Potion of Light Healing"];
     
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
-    
     // now to define the effects of the potion when used
-    
     e.healingRollBase   = 6;
     e.healingBonus      = bonus;
     e.weight            = 0.1;
     e.durability        = 1;
     e.totalDurability   = 1;
-    
     return e;
 }
 
 
 +(Entity *) poisonAntidote {
     Entity *e = [[Entity alloc] init];
-    
     e.entityType    = ENTITY_T_ITEM;
     e.itemType      = E_ITEM_T_POTION;
     e.potionType    = POTION_T_POISON_ANTIDOTE;
     e.isPC          = NO;
     [e.name setString:@"Potion of Antidote"];
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
     // now to define the effects of the potion when used
     e.healingRollBase   = 0;
@@ -94,70 +85,48 @@
 }
 
 
-
-
 +(Entity *) greenBlob {
     Entity *e = [[Entity alloc] init];
-    
     e.entityType    = ENTITY_T_ITEM;
     e.itemType      = E_ITEM_T_FOOD;
     [e.name setString:@"Green Blob"];
-    
     e.isPC                  = NO;
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
     // now to define the effects of the food when used
     e.foodBase          = 10;
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
-    
     return e;
 }
 
 
-
-
 +(Entity *) catfish {
     Entity *e = [[Entity alloc] init];
-    
     e.entityType    = ENTITY_T_ITEM;
     e.itemType      = E_ITEM_T_FISH;
     [e.name setString:@"Catfish"];
-    
     e.isPC                  = NO;
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
     // now to define the effects of the food when used
     e.foodBase          = 25;
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
-    
     return e;
-
 }
 
 
 +(Entity *) woodenFishingRod {
     Entity *e = [[Entity alloc] init];
-    
     e.entityType    = ENTITY_T_ITEM;
     e.itemType      = E_ITEM_T_FISHING_ROD;
     [e.name setString:@"Wooden Fishing Rod"];
-    
     e.isPC                  = NO;
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
-    
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
-    
     return e;
-
 }
 
 
@@ -167,8 +136,6 @@
     e.itemType      = E_ITEM_T_BASICBOULDER;
     [e.name setString:@"Basic Boulder"];
     e.isPC                  = NO;
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
@@ -184,8 +151,6 @@
     e.doorOpen              = NO;
     e.doorLocked            = YES;
     e.isPC                  = NO;
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
@@ -199,8 +164,6 @@
     e.itemType      = E_ITEM_T_KEY_SIMPLE;
     [e.name setString:@"Key, Simple"];
     e.isPC                  = NO;
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
@@ -213,8 +176,6 @@
     e.entityType    = ENTITY_T_ITEM;
     e.itemType      = E_ITEM_T_SCROLL;
     e.isPC                  = NO;
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
@@ -231,8 +192,6 @@
     e.entityType    = ENTITY_T_ITEM;
     e.itemType      = E_ITEM_T_WAND;
     e.isPC                  = NO;
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
@@ -277,19 +236,11 @@
 }
 
 
-
-
-
-
-
-
 +(Entity *) coin: (NSInteger) coinValue {
     Entity *e = [[Entity alloc] init];
     e.entityType    = ENTITY_T_ITEM;
     e.itemType      = E_ITEM_T_COIN;
     e.isPC                  = NO;
-    e.pathFindingAlgorithm  = ENTITYPATHFINDINGALGORITHM_T_NONE;
-    e.itemPickupAlgorithm   = ENTITYITEMPICKUPALGORITHM_T_NONE;
     e.weight            = 1;
     e.durability        = 100;
     e.totalDurability   = 100;
@@ -303,24 +254,21 @@
         e.money = coinValue;
         [e.name setString:  [NSString stringWithFormat:@"%d coins", coinValue]];
     }
-    
-    
     return e;
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
++(Entity *) note:(NSString *)text {
+    Entity *e = [[Entity alloc] init];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_NOTE;
+    e.isPC                  = NO;
+    e.weight            = 1;
+    e.durability        = 100;
+    e.totalDurability   = 100;
+    [e.name setString:  [NSString stringWithFormat:@"A note"]];
+    e.notetext = text;
+    return e;
+}
 
 @end

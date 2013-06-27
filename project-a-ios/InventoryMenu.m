@@ -90,6 +90,13 @@
             }
         }
         
+        else if ( eItem.itemType == E_ITEM_T_NOTE ) {
+            [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@ read the note...", pc.name]];
+            [gameLayer addMessageWindowString:[NSString stringWithFormat:@"%@", eItem.notetext]];
+            [gameLayer addMessageWindowString:@"The note crumbles..."];
+            //handled = NO; //don't ditch it from our inventory
+        }
+        
         
         
         
