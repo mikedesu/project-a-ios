@@ -151,7 +151,7 @@ NSInteger getMod( NSInteger n ) {
         // Last, we will upgrade to multi-layer drawings
         
         Entity *entity = [data.contents objectAtIndex:i];
-        MLOG(@"%@:%d", entity.name, entity.name.length);
+        //MLOG(@"%@:%d", entity.name, entity.name.length);
         
         if ( entity.entityType == ENTITY_T_PC ) {
             t = [sprites objectForKey: @"Hero"];
@@ -194,7 +194,7 @@ NSInteger getMod( NSInteger n ) {
             
             if ( entity.itemType == E_ITEM_T_WEAPON ) {
                 
-                MLOG(@"");
+              //  MLOG(@"");
                 
                 
                 
@@ -210,7 +210,7 @@ NSInteger getMod( NSInteger n ) {
                 } else {
                     [GameRenderer renderTileColorFuzz: texture];
                 }
-                MLOG(@"");
+//                MLOG(@"");
                 
             } else if ( entity.itemType == E_ITEM_T_ARMOR ) {
                 

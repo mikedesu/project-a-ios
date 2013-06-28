@@ -1993,7 +1993,7 @@ static NSString  * const notifications[] = {
             // something was previously selected
             if ( validSelectedPoint ) {
             
-                MLOG( @"ccTouchEnded: valid point selected" );
+                //MLOG( @"ccTouchEnded: valid point selected" );
                 // check if we hit the same tile again
             
                 Tile *a = [ self getTileForCGPoint: mapPoint ];
@@ -2077,11 +2077,11 @@ static NSString  * const notifications[] = {
                                     rightColTie  ? 4 :
                                     bottomRowTie ? 6 : min_index;
                         
-                        MLOG(@"LONG-MOVE CALC");
-                        MLOG(@"%d%d%d\n%d  %d\n%d%d%d",
-                             p_dist[0], p_dist[1], p_dist[2], p_dist[3], p_dist[4], p_dist[5], p_dist[6], p_dist[7] );
+                        //MLOG(@"LONG-MOVE CALC");
+                        //MLOG(@"%d%d%d\n%d  %d\n%d%d%d",
+                        //     p_dist[0], p_dist[1], p_dist[2], p_dist[3], p_dist[4], p_dist[5], p_dist[6], p_dist[7] );
                         
-                        MLOG(@"min: %d  --  min_index: %d", min, min_index);
+                        //MLOG(@"min: %d  --  min_index: %d", min, min_index);
                         
                         
                         // move the entity
@@ -2530,11 +2530,11 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( BOOL ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) _floor {
-    MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
+    //MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
     BOOL retVal = FALSE;
     
     BOOL pcIsUnencumbered = pcEntity.totalWeight <= [GameRenderer maxWeightForStrength: pcEntity.strength];
-    MLOG(@"PC encumberance: %d <= %d", pcEntity.totalWeight, [GameRenderer maxWeightForStrength: pcEntity.strength]);
+    //MLOG(@"PC encumberance: %d <= %d", pcEntity.totalWeight, [GameRenderer maxWeightForStrength: pcEntity.strength]);
     
     Tile *tile = [ self getMapTileFromPoint: position forFloor: _floor ];
     if ( tile.tileType != TILE_FLOOR_VOID && pcIsUnencumbered ) {
@@ -2647,13 +2647,13 @@ NSUInteger getMagicY( NSUInteger y ) {
                     
                 if ( entity == pcEntity ) {
                     if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
-                        [ self addMessage: @"Going downstairs..." ];
+                        //[ self addMessage: @"Going downstairs..." ];
                         [ self addMessageWindowString: @"Going downstairs..." ];
                         //MLOG(@"Going downstairs...");
                         [ self goingDownstairs ];
                     } else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
                         if ( floorNumber != 0 ) {
-                            [ self addMessage: @"Going upstairs..." ];
+                            //[ self addMessage: @"Going upstairs..." ];
                             [ self addMessageWindowString: @"Going upstairs..." ];
                             //MLOG(@"Going upstairs...");
                         }
@@ -2681,8 +2681,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                         Entity *maybeShoesR = [pcEntity.equipment objectAtIndex:EQUIPSLOT_T_RFOOT];
                         
                         if ( ( [maybeShoesL isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesL.name isEqualToString:@"Boots of Anti-acid"] ) ||
-                             ( [maybeShoesR isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesR.name isEqualToString:@"Boots of Anti-acid"] ) ) {
-                        
+                            ( [maybeShoesR isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesR.name isEqualToString:@"Boots of Anti-acid"] ) ) {
+                            
                             
                         }
                         else {
@@ -2710,13 +2710,13 @@ NSUInteger getMagicY( NSUInteger y ) {
                             for ( Entity *e in [tile contents] ) {
                                 if ( e.entityType == ENTITY_T_ITEM ) {
                                     if ( e.itemType == E_ITEM_T_COIN ) {
-                                        MLOG( @"There is %@ here", e.name );
-                                        [ self addMessage: [NSString stringWithFormat:@"There is %@ here", e.name]];
+                                        //MLOG( @"There is %@ here", e.name );
+                                        //[ self addMessage: [NSString stringWithFormat:@"There is %@ here", e.name]];
                                         [ self addMessageWindowString: [NSString stringWithFormat:@"There is %@ here", e.name]];
                                     }
                                     else {
-                                        MLOG( @"There is a %@ here", e.name );
-                                        [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                        //MLOG( @"There is a %@ here", e.name );
+                                        //[ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                                         [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                                     }
                                 }
@@ -2725,8 +2725,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                             Entity *item = nil;
                             for ( Entity *e in [tile contents] ) {
                                 if ( e.entityType == ENTITY_T_ITEM ) {
-                                    MLOG( @"There is a %@ here", e.name );
-                                    [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
+                                    //MLOG( @"There is a %@ here", e.name );
+                                    //[ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                                     [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                                     item = e;
                                     break;
@@ -2744,6 +2744,42 @@ NSUInteger getMagicY( NSUInteger y ) {
                     }
                 } else if ( entity.entityType == ENTITY_T_NPC ) {
                     // not handling NPCs going up/downstairs yet...
+                    
+                    if ( tile.tileType == TILE_FLOOR_ACID ) {
+                        
+                        // check if PC wearing anti-acid shoes
+                        Entity *maybeShoesL = [entity.equipment objectAtIndex:EQUIPSLOT_T_LFOOT];
+                        Entity *maybeShoesR = [entity.equipment objectAtIndex:EQUIPSLOT_T_RFOOT];
+                        
+                        if ( ( [maybeShoesL isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesL.name isEqualToString:@"Boots of Anti-acid"] ) ||
+                            ( [maybeShoesR isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesR.name isEqualToString:@"Boots of Anti-acid"] ) ) {
+                            
+                            
+                        }
+                        else {
+                            int damage = entity.hp;
+                            entity.hp -= damage;
+                            entity.hp <= 0 ? entity.isAlive = NO : 0;
+                            ! entity.isAlive ? [tile removeObjectFromContents:entity] : 0;
+                            [ self cleanupEntityArray ];
+                            
+                            //[self addMessageWindowString:[NSString stringWithFormat:@"%@ is dealt %d acid damage", pcEntity.name, damage]];
+                            //[self didPCDieJustNow];
+                        }
+                    }
+                    
+                    else if ( tile.tileType == TILE_FLOOR_LAVA ) {
+                        
+                        int damage = [Dice roll:12 nTimes:3];
+                        entity.hp -= damage;
+                        entity.hp <= 0 ? entity.isAlive = NO : 0;
+                        ! entity.isAlive ? [tile removeObjectFromContents:entity] : 0;
+                        [ self cleanupEntityArray ];
+                        //[self addMessageWindowString:[NSString stringWithFormat:@"%@ is dealt %d lava damage", pcEntity.name, damage]];
+                        //[self didPCDieJustNow];
+                        
+                    }
+                    
                 }
             }
         }
@@ -3864,10 +3900,11 @@ NSUInteger getMagicY( NSUInteger y ) {
                     // figure out the xp to gain
                     // for right now, xp = target.level*4 + e.level
                     NSInteger xpToGain = target.level*4 + e.level;
-                    NSInteger prevLevel = e.level;
+                    //NSInteger prevLevel = e.level;
                     [ e gainXP: xpToGain ];
                     
                     // test if the pc leveled up
+                    /*
                     if ( e.level > prevLevel ) {
                         
                   //      [self addMessageWindowString:@"You leveled up!"];
@@ -3875,19 +3912,19 @@ NSUInteger getMagicY( NSUInteger y ) {
                         // add the level-up window
                         
                     }
+                     */
                     
                     
                     e.totalKills++;
-                    [ killList addObject: target.name];
-                    
-                    // we lose karma for killing
-                    gotKarmaThisTurn = YES;
-                    totalKarmaThisTurn -= 5;
-                    
-                    // remove target from t.contents
                     [t removeObjectFromContents: target];
-                    //[ self addMessageWindowString: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
                     target.isAlive = NO;
+                    
+                    //[ killList addObject: target.name]; // only for pc
+                    // we lose karma for
+                    //gotKarmaThisTurn = YES;
+                    //totalKarmaThisTurn -= 5;
+                    // remove target from t.contents
+                    //[ self addMessageWindowString: [ NSString stringWithFormat:@"%@ slayed Lv%d %@", e.name, target.level, target.name ] ];
                 }
             }
             
