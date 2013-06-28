@@ -91,6 +91,8 @@
 @synthesize charges;
 @synthesize maxCharges;
 
+@synthesize notetext;
+
 //@synthesize monsterPrefixGroup;
 //@synthesize itemPrefixGroup;
 

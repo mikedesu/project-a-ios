@@ -150,6 +150,7 @@
 		2773F29816C94DA3001C3E83 /* PlayerMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2773F29716C94DA3001C3E83 /* PlayerMenu.m */; };
 		27896AD117691BDB00802FBA /* GameTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 27896AD017691BDB00802FBA /* GameTools.m */; };
 		27A1A5A71709711E002C3A4A /* Attack_t.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A1A5A61709711E002C3A4A /* Attack_t.m */; };
+		27AD1EEC177D1DFB00523A85 /* HintGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AD1EEB177D1DFB00523A85 /* HintGenerator.m */; };
 		27B912A0174ACFFA008D221C /* Spell.m in Sources */ = {isa = PBXBuildFile; fileRef = 27B9129F174ACFFA008D221C /* Spell.m */; };
 		27BAC985174760B70046B1EC /* Status.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BAC984174760B70046B1EC /* Status.m */; };
 		27C0C2EA16FAA12D00AF1208 /* HelpMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C0C2E916FAA12D00AF1208 /* HelpMenu.m */; };
@@ -477,6 +478,8 @@
 		27A1A5A817097387002C3A4A /* AttackStatus_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttackStatus_t.h; sourceTree = "<group>"; };
 		27A1A5AB1709745D002C3A4A /* AttackElement_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttackElement_t.h; sourceTree = "<group>"; };
 		27A1A5AE170B9C94002C3A4A /* Prefix_t.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix_t.h; sourceTree = "<group>"; };
+		27AD1EEA177D1DFA00523A85 /* HintGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HintGenerator.h; sourceTree = "<group>"; };
+		27AD1EEB177D1DFB00523A85 /* HintGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HintGenerator.m; sourceTree = "<group>"; };
 		27B9129E174ACFFA008D221C /* Spell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Spell.h; sourceTree = "<group>"; };
 		27B9129F174ACFFA008D221C /* Spell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Spell.m; sourceTree = "<group>"; };
 		27BAC983174760B70046B1EC /* Status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Status.h; sourceTree = "<group>"; };
@@ -635,6 +638,8 @@
 				27896AD017691BDB00802FBA /* GameTools.m */,
 				27C0C2E816FAA12D00AF1208 /* HelpMenu.h */,
 				27C0C2E916FAA12D00AF1208 /* HelpMenu.m */,
+				27AD1EEA177D1DFA00523A85 /* HintGenerator.h */,
+				27AD1EEB177D1DFB00523A85 /* HintGenerator.m */,
 				2721D6FC16EEBA610051352D /* InventoryMenu.h */,
 				2721D6FD16EEBA610051352D /* InventoryMenu.m */,
 				2767E0C916E83FA500013CBE /* Items.h */,
@@ -1259,6 +1264,7 @@
 				27D0DC4117613DD600184312 /* LevelUpWindow.m in Sources */,
 				27896AD117691BDB00802FBA /* GameTools.m in Sources */,
 				274701601770CA5B00988419 /* DropMenu.m in Sources */,
+				27AD1EEC177D1DFB00523A85 /* HintGenerator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

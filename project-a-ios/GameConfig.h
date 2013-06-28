@@ -58,6 +58,8 @@
 
 #import "Zodiac.h"
 
+#import "HintGenerator.h"
+
 /*
 typedef struct {
     CGFloat x, y;

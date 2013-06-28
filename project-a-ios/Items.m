@@ -26,7 +26,8 @@
     else if (roll==10)  e = [Items coin:[Dice roll:100]];
     else if (roll==11)  e = [Items ringOfRegeneration];
     else if (roll==12)  e = [Items ringOfAntihunger];
-    else if (roll==13)  e = [Items note:@"You suck! I rule >:D"];
+    //else if (roll==13)  e = [Items note:@"You suck! I rule >:D"];
+    else if (roll==13)  e = [Items note:[[HintGenerator sharedHintGenerator] getNextHint] ];
     else                e = [Items basicBoulder];
     
     //e = [Items wandOfCureLightWounds];

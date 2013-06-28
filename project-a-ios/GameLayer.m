@@ -31,6 +31,7 @@ unsigned get_memory_mb(void) {
 @synthesize gameState;
 @synthesize turnCounter;
 @synthesize currentSpellBeingCast;
+@synthesize zodiacEra;
 
 /*
  ====================
@@ -240,14 +241,14 @@ unsigned get_memory_mb(void) {
         for ( int j = 0; j < treasureCount; j++ ) {
             
             //Entity *itemToTest = [Armor bootsOfAntiacid];
-            // Entity *itemToTest = [Items note:@"You suck! I rule >:D"];
+            // Entity *itemToTest = [Items note:[[HintGenerator sharedHintGenerator] getNextHint]];
             //Entity *itemToTest = [Items ringOfAntihunger];
             //Entity *itemToTest = [Armor blindfold];
             //[GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
              
-             NSInteger roll = [Dice roll:3];
             
-            // weapons
+             NSInteger roll = [Dice roll:3];
+             // weapons
              if ( roll == 1 ) {
                 NSInteger _roll = [Dice roll: 10];
                 Entity *itemToSpawn = _roll <= 9 ? [Weapons shortSword:i] : [Weapons Asura];
