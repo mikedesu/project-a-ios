@@ -49,6 +49,7 @@
 +( Entity * ) randomItem;
 +( Entity * ) randomMonsterForFloor: (DungeonFloor *) floor;
 
++( void ) spawnMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor;
 
 +( void ) spawnEntity: (Entity *) entity onFloor: (DungeonFloor *) floor atLocation: (CGPoint) location;
 +( void ) spawnEntityAtRandomLocation: (Entity *) entity onFloor: (DungeonFloor *) floor;

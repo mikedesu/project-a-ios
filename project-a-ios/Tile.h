@@ -8,16 +8,40 @@ typedef enum {
     TILE_FLOOR_VOID=0,
     TILE_FLOOR_UPSTAIRS,
     TILE_FLOOR_DOWNSTAIRS,
+    
+    
     TILE_FLOOR_STONE,
+    TILE_FLOOR_STONE_GRAY,
+    TILE_FLOOR_STONE_RED,
+    TILE_FLOOR_STONE_GOLD,
+    //TILE_FLOOR_STONE_ONYX,
+    //TILE_FLOOR_STONE_DIAMOND
+
+    
     TILE_FLOOR_WATER,
+    //TILE_FLOOR_WATER_DEEP
+    
     TILE_FLOOR_GRASS,
+    //TILE_FLOOR_GRASS_LIVELY,
+    //TILE_FLOOR_GRASS_DEAD,
+    
     TILE_FLOOR_ACID,    // instant-death tile
+    
     TILE_FLOOR_LAVA,    // greater fire damage every step
     
     // un-implemented
     
     TILE_FLOOR_ICE,  //undefined
-    //TILE_FLOOR_,
+    //TILE_FLOOR_ICE_WEAK,
+    //TILE_FLOOR_ICE_STRONG
+    
+    //TILE_FLOOR_SAND,
+    //TILE_FLOOR_GLASS,
+    
+    //TILE_FLOOR_EARTH_LUSH,
+    //TILE_FLOOR_EARTH_CRACKED,
+    
+    //TILE_FLOOR_
     
     
     
@@ -40,9 +64,20 @@ typedef enum {
     NSInteger tripDamageBase;
     NSInteger tripDamageMod;
     
+    //int temperature;
+    //int water;
+    //int elevation;
+    //int drainage;
+    //int vegetation;
+    int savagery;
+    //int goodevil;
+    //int salinity;
+    
     CGPoint position;
     NSMutableArray *contents;
 }
+
+@property (atomic, assign) int savagery;
 
 @property (atomic) Tile_t tileType;
 @property (atomic) BOOL isSelected;

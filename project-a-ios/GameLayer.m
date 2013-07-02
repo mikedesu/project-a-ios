@@ -65,14 +65,22 @@ unsigned get_memory_mb(void) {
     // Tiles
     
     [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
-    [s setObject:[Drawer stoneTile]                                         forKey: @"StoneTile"];
-    [s setObject:[Drawer stoneTileTrap]                                         forKey: @"StoneTileTrap"];
+    
+    [s setObject:[Drawer stoneTileColor0:darkgray Color1:gray Pattern:0]                                         forKey: @"StoneTileGray0"];
+    [s setObject:[Drawer stoneTileColor0:darkgray Color1:red Pattern:0]                                         forKey: @"StoneTileRed0"];
+    [s setObject:[Drawer stoneTileColor0:darkgray Color1:gold Pattern:0]                                         forKey: @"StoneTileGold0"];
+    //[s setObject:[Drawer flatTile:gold]                                         forKey: @"StoneTileGold0"];
+    //[s setObject:[Drawer stoneTileColor0:darkgray Color1:gray Pattern:1]                                         forKey: @"StoneTileGray1"];
+    
+    
+    [s setObject:[Drawer stoneTileTrap]                                     forKey: @"StoneTileTrap"];
+    
     [s setObject:[Drawer upstairsTile]                                      forKey: @"UpstairsTile"];
     [s setObject:[Drawer downstairsTile]                                    forKey: @"DownstairsTile"];
     [s setObject:[Drawer flatTile: blue]                                    forKey: @"WaterTile"];
-    [s setObject:[Drawer flatTile: green]                                    forKey: @"GrassTile"];
-    [s setObject:[Drawer flatTile: red]                                    forKey: @"LavaTile"];        //unimplemented
-    [s setObject:[Drawer flatTile: darkgreen]                                    forKey: @"AcidTile"];
+    [s setObject:[Drawer flatTile: green]                                   forKey: @"GrassTile"];
+    [s setObject:[Drawer flatTile: red]                                     forKey: @"LavaTile"];
+    [s setObject:[Drawer flatTile: darkgreen]                               forKey: @"AcidTile"];
     
     
     // Monsters
@@ -3562,7 +3570,9 @@ NSUInteger getMagicY( NSUInteger y ) {
  
         @try {
             // spawn a new monster on the current floor
-            [ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
+            //[ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
+            [GameRenderer spawnMonsterAtRandomLocationOnFloor: [dungeon objectAtIndex:floorNumber]];
+            
             
             Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
             

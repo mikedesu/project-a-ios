@@ -30,6 +30,8 @@
 #define CC4B_LIGHTBLUE_ALPHA(a) ccc4(0xad, 0xdf, 0xff, a)
 #define CC4B_LIGHTBLUE CC4B_LIGHTBLUE_ALPHA( 255 )
 
+#define CC4B_GOLD_ALPHA(a) ccc4(0xcd, 0x7f, 0x32, a)
+
 
 
 #define CC4B_ORANGE0    ccc4( 255, 165, 0, 255 )
@@ -64,6 +66,8 @@
 #define CC4B_YELLOW CC4B_YELLOW_ALPHA(0xff)
 #define CC4B_CYAN   CC4B_CYAN_ALPHA(0xff)
 #define CC4B_PURPLE CC4B_PURPLE_ALPHA(0xff)  
+
+#define CC4B_GOLD CC4B_GOLD_ALPHA(0xff)
 
 
 
@@ -143,8 +147,6 @@
 
 #define random_alpha(a) CC4B_RANDOM_ALPHA(a)
 
-
-
 #define orange0 CC4B_ORANGE0
 #define orange1 CC4B_ORANGE1
 #define orange2 CC4B_ORANGE2
@@ -152,7 +154,7 @@
 
 #define orange orange0
 
-
+#define gold CC4B_GOLD
 
 #define skincolor0  CC4B_SKIN0
 #define skincolor1  CC4B_SKIN1
@@ -166,14 +168,11 @@ n==2 ? skincolor2 : \
 n==3 ? skincolor3 : \
 skincolor4 )
 
-
 #define newColor(r,g,b,a) ccc4(r,g,b,a)
 #define newColor3(r,g,b) ccc3(r,g,b)
 
-
 typedef ccColor4B Color4_t;
 typedef ccColor3B Color3_t;
-
 typedef Color4_t Color_t;
 
 #endif

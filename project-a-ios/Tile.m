@@ -15,6 +15,7 @@
 @synthesize position;
 @synthesize tripDamageBase;
 @synthesize tripDamageMod;
+@synthesize savagery;
 
 /*
  ====================
@@ -29,6 +30,8 @@
         trapIsSet   = NO;
         position    = ccp( 0, 0 );
         contents    = nil;
+        
+        savagery    = 0;
     }
     return self;
 }

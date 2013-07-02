@@ -106,7 +106,13 @@ NSInteger getMod( NSInteger n ) {
     Tile_t tileType = data.tileType;
  
     CCMutableTexture2D *tileTexture =
-    tileType == TILE_FLOOR_STONE          ? [sprites objectForKey:@"StoneTile"]      :
+    
+    tileType == TILE_FLOOR_STONE               ? [sprites objectForKey:@"StoneTileGray0"]      :
+    tileType == TILE_FLOOR_STONE_GRAY          ? [sprites objectForKey:@"StoneTileGray0"]      :
+    tileType == TILE_FLOOR_STONE_RED           ? [sprites objectForKey:@"StoneTileRed0"]      :
+    tileType == TILE_FLOOR_STONE_GOLD          ? [sprites objectForKey:@"StoneTileGold0"]      :
+    
+    
     tileType == TILE_FLOOR_GRASS          ? [sprites objectForKey:@"GrassTile"]      :
     tileType == TILE_FLOOR_ACID           ? [sprites objectForKey:@"AcidTile"]      :
     tileType == TILE_FLOOR_LAVA           ? [sprites objectForKey:@"LavaTile"]      :
@@ -792,20 +798,25 @@ NSInteger getMod( NSInteger n ) {
             
             NSInteger tileRoll = [Dice roll:100];
             
+            //tileType = TILE_FLOOR_STONE_GOLD;
             //tileType = tileRoll < 75 ? TILE_FLOOR_STONE : TILE_FLOOR_ACID;
-            tileType =
-                tileRoll >= 1 && tileRoll <= 55    ? TILE_FLOOR_STONE :
+            
+             tileType =
+                tileRoll >= 1 && tileRoll <= 53    ? TILE_FLOOR_STONE_GRAY :
+                tileRoll == 54                     ? TILE_FLOOR_STONE_RED  :
+                tileRoll == 55                     ? TILE_FLOOR_STONE_GOLD :
                 tileRoll >= 56 && tileRoll <= 65   ? TILE_FLOOR_WATER :
             tileRoll >= 66 && tileRoll <= 85   ? TILE_FLOOR_GRASS :
             tileRoll >= 86 && tileRoll <= 90   ? TILE_FLOOR_ACID :
             TILE_FLOOR_LAVA;
-            /*
-             */
-            
             
             
             // setTileAtPosition will call handleTile and set if trapped
             [ self setTileAtPosition:point onFloor:floor toType:tileType ];
+            
+            Tile *_t = ((Tile *)[floor.tileDataArray objectAtIndex: point.x + ( point.y * floor.width) ]);
+            // roll savagery
+            _t.savagery = [Dice roll: 101] - 1;
             
             [ placedTilesArray addObject: v ];
             [ triedTilesArray removeAllObjects ];
@@ -1203,9 +1214,12 @@ NSInteger getMod( NSInteger n ) {
     Tile *spawnTile = nil;
     
     while ( ! locationIsAcceptable ) {
-        NSUInteger diceroll = [Dice roll: [[floor tileDataArray] count]] - 1;
+        NSArray *tileDataArray = [floor tileDataArray];
+        //NSUInteger diceroll = [Dice roll: [[floor tileDataArray] count]] - 1;
+        NSUInteger diceroll = [Dice roll: [tileDataArray count]] - 1;
         
-        Tile *tile = [[ floor tileDataArray ] objectAtIndex: diceroll ];
+        //Tile *tile = [[ floor tileDataArray ] objectAtIndex: diceroll ];
+        Tile *tile = [tileDataArray objectAtIndex: diceroll ];
         if ( tile.tileType != TILE_FLOOR_VOID &&
             tile.tileType != TILE_FLOOR_UPSTAIRS &&
             tile.tileType != TILE_FLOOR_DOWNSTAIRS
@@ -1235,8 +1249,6 @@ NSInteger getMod( NSInteger n ) {
         [[ floor entityArray ] addObject: entity];
     }
 }
-
-
 
 
 
@@ -1280,6 +1292,74 @@ NSInteger getMod( NSInteger n ) {
     [ self spawnRandomMonsterAtRandomLocationOnFloor:floor withPC:pc withChanceDie: 1 ];
 }
 
+
+
+
+
++( void ) spawnMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor {
+    BOOL locationIsAcceptable = NO;
+    Tile *spawnTile = nil;
+    
+
+    NSArray *tileDataArray = [floor tileDataArray];
+    
+        while ( ! locationIsAcceptable ) {
+            NSUInteger diceroll = [Dice roll: [tileDataArray count]] - 1;
+            BOOL tileIsFree = YES;
+            
+            Tile *tile = [tileDataArray objectAtIndex: diceroll ];
+    
+#define SAVAGERY_MIN 95
+            if ( tile.savagery > SAVAGERY_MIN ) {
+                MLOG(@"tile.savagery = %d", tile.savagery);
+                
+                
+                // check if a pc/npc occupies the tile contents
+                for ( Entity *e in tile.contents ) {
+                    if ( e.entityType == ENTITY_T_PC ||
+                        e.entityType == ENTITY_T_NPC ) {
+                        tileIsFree = NO;
+                        break;
+                    }
+                }
+                
+                // doesn't matter what tile is. check savagery
+                if ( tileIsFree ) {
+                    spawnTile = tile;
+                    locationIsAcceptable = YES;
+                    break;
+                }
+            }
+        }
+        
+        if ( spawnTile != nil ) {
+            Entity *e;
+            
+            // set number of monsterTypes
+            NSUInteger numMonsterTypes = 3;
+            NSUInteger m0 = [Dice roll: numMonsterTypes];
+            
+            // define monsters to spawn below
+            e =
+            ( m0 == 1 ) ? Cat :
+            ( m0 == 2 ) ? Ghoul :
+            ( m0 == 3 ) ? Totoro :
+            Cat;
+            
+            // level up monster appropriately
+            NSInteger levelRoll = [Dice roll: floor.floorNumber + 1];
+            for (int i=e.level; i<levelRoll; i++) [e handleLevelUp];
+            
+            [ GameRenderer setEntity: e onTile: spawnTile ];
+            [[ floor entityArray ] addObject: e ];
+        }
+    //}
+}
+
+
+
+
+
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc withChanceDie: (NSInteger) chanceDie {
     NSUInteger spawnChancePercent = 1;
     NSUInteger diceroll = chanceDie == 1 ? 1 : [Dice roll:chanceDie];
@@ -1298,6 +1378,7 @@ NSInteger getMod( NSInteger n ) {
         ( m0 == 3 ) ? Totoro :
         Cat;
         
+        
         // level up monster appropriately
         NSInteger levelRoll = [Dice roll: floor.floorNumber + 1];
         for (int i=e.level; i<levelRoll; i++)
@@ -1306,6 +1387,15 @@ NSInteger getMod( NSInteger n ) {
         
         // spawn monsters on grass tiles
         
+        /*
+         bug exists:
+         
+         ---will loop forever if tileType doesn't exist on floor
+         
+         solution:
+         
+         ---add 'savagery' field to tiles, spawn anywhere based on savagery
+         */
         [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor onTileType:TILE_FLOOR_GRASS ];
     }
 }

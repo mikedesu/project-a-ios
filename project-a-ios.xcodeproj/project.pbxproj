@@ -504,6 +504,8 @@
 		27DCE95F16E2EA5000109F88 /* Dice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dice.m; sourceTree = "<group>"; };
 		27DCE96116E2FB3900109F88 /* EntityInfoHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityInfoHUD.h; sourceTree = "<group>"; };
 		27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityInfoHUD.m; sourceTree = "<group>"; };
+		27DF78AE17827DF200061640 /* Metal_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Metal_t.h; sourceTree = "<group>"; };
+		27DF78B117827E0900061640 /* Element_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Element_t.h; sourceTree = "<group>"; };
 		27DFEA0D1701150A00933C8A /* EquipMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EquipMenu.h; sourceTree = "<group>"; };
 		27DFEA0E1701150A00933C8A /* EquipMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EquipMenu.m; sourceTree = "<group>"; };
 		27DFEA101701413F00933C8A /* EquipDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EquipDefines.h; sourceTree = "<group>"; };
@@ -617,6 +619,7 @@
 				2773F29116C85469001C3E83 /* EditorHUD.m */,
 				27E19241170D75A200AA3F25 /* Effect_t.h */,
 				27E19242170D75A200AA3F25 /* Effect_t.m */,
+				27DF78B117827E0900061640 /* Element_t.h */,
 				2773F28D16C8447D001C3E83 /* Entity.h */,
 				2773F28E16C8447D001C3E83 /* Entity.m */,
 				27E19248171EB87200AA3F25 /* EntityEvent.h */,
@@ -655,6 +658,7 @@
 				27E1924F1721C72900AA3F25 /* Maybe.m */,
 				27E1924B171EBA9000AA3F25 /* MessageWindow.h */,
 				27E1924C171EBA9000AA3F25 /* MessageWindow.m */,
+				27DF78AE17827DF200061640 /* Metal_t.h */,
 				27C88FDE16C573D4004AB4D8 /* MLog.h */,
 				2721D6F016EDE94F0051352D /* Monsters.h */,
 				27E192511729158A00AA3F25 /* NameEngine.h */,

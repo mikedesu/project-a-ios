@@ -233,20 +233,114 @@
 
 
 
-+(CCMutableTexture2D *) stoneTile {
++(CCMutableTexture2D *) stoneTileColor0: (Color_t) color0 Color1: (Color_t) color1 Pattern: (int) patternID {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
     
-    Color_t c0 = gray;
-    Color_t c1 = darkgray;
+    int offset = 2;
+    //Color_t c0 = color0;
+    //Color_t c1 = color1;
     
-    [t fill:c0];
-    for (int j=0; j<16; j+=2)
-        for (int i=0; i<16; i++)
-            [t setPixelAt:ccp(i,j) rgba:c1];
-    for (int i=0; i<16; i+=2)
-        for (int j=0; j<16; j++)
-            [t setPixelAt:ccp(i,j) rgba:c1];
+    [t fill:color0];
+    
+    if ( patternID == 0 ) {
+        for (int i=1; i<t.contentSizeInPixels.width; i+=offset) 
+            for (int j=1; j<t.contentSizeInPixels.height; j+=offset) 
+                [t setPixelAt:ccp(i,j) rgba:color1];
+    }
+    else if ( patternID == 1 ) {
+        /*
+          0123456789abcdef
+         0........x.......
+         1.......x.x......
+         2......x.x.x.....
+         3.....x.x.x.x....
+         4....x.x.x.x.x...
+         5...x.x.x.x.x.x..
+         6..x.x.x.x.x.x.x.
+         7.x.x.x.x.x.x.x.x
+         8x.x.x.x.x.x.x.x.
+         9.x.x.x.x.x.x.x..
+         a..x.x.x.x.x.x...
+         b...x.x.x.x.x....
+         c....x.x.x.x.....
+         d.....x.x.x......
+         e......x.x.......
+         f.......x........
+         */
+        
+        int i = 8,
+            j = 0,
+            start_i = 0,
+            start_j = 0,
+            end_i = 0,
+            end_j = 0;
+        [t setPixelAt:ccp(i,j) rgba:color1];
+        
+        j++;    start_i = 7;    end_i = 9;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        
+        j++;    start_i = 6;    end_i = 10;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 5;    end_i = 11;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 4;    end_i = 12;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 3;    end_i = 13;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 2;    end_i = 14;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 1;    end_i = 15;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        
+        j++;    start_i = 0;    end_i = 14;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 1;    end_i = 13;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 2;    end_i = 12;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 3;    end_i = 11;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 4;    end_i = 10;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 5;    end_i = 9;     for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        j++;    start_i = 6;    end_i = 8;     for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        
+        j++;    start_i = 7;    end_i = 7;     for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
+        
+        
+        
+        
+    }
+    
+    else if ( patternID == 2 ) {
+        int i = 0, j = 0;
+        for (i=6; i<=12; i+=offset)
+            for (j=0; j<=t.contentSizeInPixels.height; j+=offset)
+                [t setPixelAt:ccp(i,j) rgba:color1];
+        
+        for (i=0; i<=t.contentSizeInPixels.width; i+=offset)
+            for (j=6; j<=12; j+=offset)
+                [t setPixelAt:ccp(i,j) rgba:color1];
+    }
+    
+    else if ( patternID == 3 ) {
+        int i = 0, j = 0;
+        for (i=8; i<=10; i+=offset)
+            for (j=0; j<=t.contentSizeInPixels.height; j+=offset)
+                [t setPixelAt:ccp(i,j) rgba:color1];
+        
+        for (i=0; i<=t.contentSizeInPixels.width; i+=offset)
+            for (j=8; j<=10; j+=offset)
+                [t setPixelAt:ccp(i,j) rgba:color1];
+    }
+    
+    else if ( patternID == 4 ) {
+        int i = 0, j = 0;
+        for (i=2; i<=14; i+=offset)
+            for (j=0; j<=t.contentSizeInPixels.height; j+=offset)
+                [t setPixelAt:ccp(i,j) rgba:color1];
+        
+        for (i=0; i<=t.contentSizeInPixels.width; i+=offset)
+            for (j=2; j<=14; j+=offset)
+                [t setPixelAt:ccp(i,j) rgba:color1];
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     [ t apply ];
     
     return t;
