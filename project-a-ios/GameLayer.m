@@ -104,8 +104,10 @@ unsigned get_memory_mb(void) {
  
     
     // Items
+    [s setObject:[Drawer basicSwordWithColor:brown withHandleColor:brown ]    forKey: @"FirShortSword"];
+    [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:brown ]     forKey: @"IronShortSword"];
+    [s setObject:[Drawer basicSwordWithColor:darkgray withHandleColor:brown ] forKey: @"SteelShortSword"];
     
-    [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:brown ]     forKey: @"ShortSword"];
     [s setObject:[Drawer basicSwordWithColor:red withHandleColor:darkgray ]     forKey: @"AsuraSword"];
     
     [s setObject:[Drawer basicShieldWithColor:brown withEmblemColor:yellow] forKey: @"SmallShield"];
@@ -259,7 +261,14 @@ unsigned get_memory_mb(void) {
              // weapons
              if ( roll == 1 ) {
                 NSInteger _roll = [Dice roll: 10];
-                Entity *itemToSpawn = _roll <= 9 ? [Weapons shortSword:i] : [Weapons Asura];
+                Entity *itemToSpawn =
+                 _roll <= 3 ?
+                    [Weapons shortSword:WOOD_T_FIR metal:METAL_T_NONE withBonus:0] :
+                 _roll <= 7 ?
+                 [Weapons shortSword:WOOD_T_NONE metal:METAL_T_IRON withBonus:0] :
+                 _roll <= 9 ?
+                 [Weapons shortSword:WOOD_T_NONE metal:METAL_T_STEEL withBonus:0] :
+                [Weapons Asura];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
             

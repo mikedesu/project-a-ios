@@ -499,13 +499,13 @@
 		27C4145416C804E300BE09F9 /* Tile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tile.m; sourceTree = "<group>"; };
 		27C88FDE16C573D4004AB4D8 /* MLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLog.h; sourceTree = "<group>"; };
 		27C88FDF16C57607004AB4D8 /* ground_vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_vertical.png; sourceTree = "<group>"; };
+		27CABB351784B6E600D9E348 /* Wood_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wood_t.h; sourceTree = "<group>"; };
 		27D0DC3F17613DD600184312 /* LevelUpWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelUpWindow.h; sourceTree = "<group>"; };
 		27D0DC4017613DD600184312 /* LevelUpWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelUpWindow.m; sourceTree = "<group>"; };
 		27DCE95F16E2EA5000109F88 /* Dice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dice.m; sourceTree = "<group>"; };
 		27DCE96116E2FB3900109F88 /* EntityInfoHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityInfoHUD.h; sourceTree = "<group>"; };
 		27DCE96216E2FB3900109F88 /* EntityInfoHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityInfoHUD.m; sourceTree = "<group>"; };
 		27DF78AE17827DF200061640 /* Metal_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Metal_t.h; sourceTree = "<group>"; };
-		27DF78B117827E0900061640 /* Element_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Element_t.h; sourceTree = "<group>"; };
 		27DFEA0D1701150A00933C8A /* EquipMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EquipMenu.h; sourceTree = "<group>"; };
 		27DFEA0E1701150A00933C8A /* EquipMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EquipMenu.m; sourceTree = "<group>"; };
 		27DFEA101701413F00933C8A /* EquipDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EquipDefines.h; sourceTree = "<group>"; };
@@ -619,7 +619,6 @@
 				2773F29116C85469001C3E83 /* EditorHUD.m */,
 				27E19241170D75A200AA3F25 /* Effect_t.h */,
 				27E19242170D75A200AA3F25 /* Effect_t.m */,
-				27DF78B117827E0900061640 /* Element_t.h */,
 				2773F28D16C8447D001C3E83 /* Entity.h */,
 				2773F28E16C8447D001C3E83 /* Entity.m */,
 				27E19248171EB87200AA3F25 /* EntityEvent.h */,
@@ -684,6 +683,7 @@
 				27E19247171EB12000AA3F25 /* Version.h */,
 				2767E0CC16E8596900013CBE /* Weapons.h */,
 				2767E0CD16E8596900013CBE /* Weapons.m */,
+				27CABB351784B6E600D9E348 /* Wood_t.h */,
 				272E5E89177A30E200403EED /* Zodiac.h */,
 				272EF4DC16C5695D005DF231 /* Resources */,
 				272EF4F416C5695D005DF231 /* libs */,

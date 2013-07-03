@@ -16,8 +16,12 @@
 
 
 #define CC4B_RED_ALPHA(a)       ccc4( 0xFF, 0x00, 0x00, a )
+//#define CC4B_(a)   ccc4( , a )
+
 #define CC4B_GREEN_ALPHA(a)     ccc4( 0x00, 0xFF, 0x00, a )
 #define CC4B_BLUE_ALPHA(a)      ccc4( 0x00, 0x00, 0xFF, a )
+
+
 #define CC4B_DARKGREEN_ALPHA(a) ccc4( 0x01, 0x32, 0x20, a )
 
 #define CC4B_YELLOW_ALPHA(a)  ccc4( 0xff, 0xff, 0x00, a )
@@ -34,23 +38,13 @@
 
 
 
-#define CC4B_ORANGE0    ccc4( 255, 165, 0, 255 )
-#define CC4B_ORANGE1    ccc4( 238, 154, 0, 255 )
-#define CC4B_ORANGE2    ccc4( 205, 133, 0, 255 )
-#define CC4B_ORANGE3    ccc4( 139,  90, 0, 255 )
-
-
-
-#define CC4B_SKIN0  ccc4( 255, 220, 177, 255 )
-#define CC4B_SKIN1  ccc4( 229, 194, 152, 255 )
-#define CC4B_SKIN2  ccc4( 228, 185, 142, 255 )
-#define CC4B_SKIN3  ccc4( 226, 185, 143, 255 )
-#define CC4B_SKIN4  ccc4( 227, 161, 115, 255 )
-
-
-
-
 #define CC4B_RANDOM_ALPHA(a) ccc4( random() % 255, random() % 255, random() % 255, a )
+
+
+
+/* ==================== */
+/* ==================== */
+/* ==================== */
 
 
 #define CC4B_BLACK           CC4B_BLACK_ALPHA( 0xFF )
@@ -68,6 +62,21 @@
 #define CC4B_PURPLE CC4B_PURPLE_ALPHA(0xff)  
 
 #define CC4B_GOLD CC4B_GOLD_ALPHA(0xff)
+
+
+
+#define CC4B_ORANGE0    ccc4( 255, 165, 0, 255 )
+#define CC4B_ORANGE1    ccc4( 238, 154, 0, 255 )
+#define CC4B_ORANGE2    ccc4( 205, 133, 0, 255 )
+#define CC4B_ORANGE3    ccc4( 139,  90, 0, 255 )
+
+
+
+#define CC4B_SKIN0  ccc4( 255, 220, 177, 255 )
+#define CC4B_SKIN1  ccc4( 229, 194, 152, 255 )
+#define CC4B_SKIN2  ccc4( 228, 185, 142, 255 )
+#define CC4B_SKIN3  ccc4( 226, 185, 143, 255 )
+#define CC4B_SKIN4  ccc4( 227, 161, 115, 255 )
 
 
 

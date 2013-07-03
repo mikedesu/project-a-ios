@@ -56,6 +56,33 @@ NSInteger getMod( NSInteger n ) {
 +( NSInteger ) modifierForNumber: (NSInteger) n         { return getMod( n ); }
 +( NSInteger ) maxWeightForStrength: (NSInteger) str    { return getWeightForStrength(str); }
 
+
+
+
+static NSString *metalTable[3] = { @"", @"Iron", @"Steel" };
+static NSString *woodTable[2]  = { @"", @"Fir" };
+
+
+
++( NSString * ) getMetalName:(Metal_t)metal {
+    NSString *s = nil;
+    if ( metal >= METAL_T_NONE && metal < METAL_T_COUNT )
+        s = metalTable[ metal ];
+    MLOG(@"Generated metal: \"%@\"", s);
+    return s;
+    
+}
+
++( NSString * ) getWoodName:(Wood_t)wood {
+    NSString *s = nil;
+    if ( wood >= WOOD_T_NONE && wood < WOOD_T_COUNT )
+        s = woodTable[ wood ];
+    MLOG(@"Generated wood: \"%@\"", s);
+    return s;
+    
+}
+
+
 /*
  ====================
  colorScrambleTile
@@ -205,11 +232,22 @@ NSInteger getMod( NSInteger n ) {
                 
                 
                 
-                if ( entity.name.length >= @"Short Sword".length &&
-                    [[entity.name substringToIndex:@"Short Sword".length ] isEqualToString: @"Short Sword"] ) {
-                    t = [sprites objectForKey:@"ShortSword"];
-                    
-                } else if ( entity.name.length >= @"Asura".length &&
+                if ( entity.name.length >= @"Fir Short Sword".length &&
+                    [[entity.name substringToIndex:@"Fir Short Sword".length ] isEqualToString: @"Fir Short Sword"] )
+                    t = [sprites objectForKey:@"FirShortSword"];
+                
+                else if ( entity.name.length >= @"Iron Short Sword".length &&
+                    [[entity.name substringToIndex:@"Iron Short Sword".length ] isEqualToString: @"Iron Short Sword"] )
+                    t = [sprites objectForKey:@"IronShortSword"];
+                
+                
+                
+                else if ( entity.name.length >= @"Steel Short Sword".length &&
+                    [[entity.name substringToIndex:@"Steel Short Sword".length ] isEqualToString: @"Steel Short Sword"] )
+                    t = [sprites objectForKey:@"SteelShortSword"];
+                
+                
+                else if ( entity.name.length >= @"Asura".length &&
                     [[entity.name substringToIndex:@"Asura".length ] isEqualToString: @"Asura"] ) {
                     t = [sprites objectForKey:@"AsuraSword"];
                     
@@ -1300,59 +1338,64 @@ NSInteger getMod( NSInteger n ) {
     BOOL locationIsAcceptable = NO;
     Tile *spawnTile = nil;
     
+    // Spawn-call chance: 10%
+    int roll = [Dice roll:10];
+    
+    if ( roll == 1 ) {
 
-    NSArray *tileDataArray = [floor tileDataArray];
-    
-        while ( ! locationIsAcceptable ) {
-            NSUInteger diceroll = [Dice roll: [tileDataArray count]] - 1;
-            BOOL tileIsFree = YES;
-            
-            Tile *tile = [tileDataArray objectAtIndex: diceroll ];
-    
-#define SAVAGERY_MIN 95
-            if ( tile.savagery > SAVAGERY_MIN ) {
-                MLOG(@"tile.savagery = %d", tile.savagery);
+        NSArray *tileDataArray = [floor tileDataArray];
+        
+            while ( ! locationIsAcceptable ) {
+                NSUInteger diceroll = [Dice roll: [tileDataArray count]] - 1;
+                BOOL tileIsFree = YES;
                 
-                
-                // check if a pc/npc occupies the tile contents
-                for ( Entity *e in tile.contents ) {
-                    if ( e.entityType == ENTITY_T_PC ||
-                        e.entityType == ENTITY_T_NPC ) {
-                        tileIsFree = NO;
+                Tile *tile = [tileDataArray objectAtIndex: diceroll ];
+        
+    #define SAVAGERY_MIN 95
+                if ( tile.savagery > SAVAGERY_MIN ) {
+                    MLOG(@"tile.savagery = %d", tile.savagery);
+                    
+                    
+                    // check if a pc/npc occupies the tile contents
+                    for ( Entity *e in tile.contents ) {
+                        if ( e.entityType == ENTITY_T_PC ||
+                            e.entityType == ENTITY_T_NPC ) {
+                            tileIsFree = NO;
+                            break;
+                        }
+                    }
+                    
+                    // doesn't matter what tile is. check savagery
+                    if ( tileIsFree ) {
+                        spawnTile = tile;
+                        locationIsAcceptable = YES;
                         break;
                     }
                 }
-                
-                // doesn't matter what tile is. check savagery
-                if ( tileIsFree ) {
-                    spawnTile = tile;
-                    locationIsAcceptable = YES;
-                    break;
-                }
             }
-        }
-        
-        if ( spawnTile != nil ) {
-            Entity *e;
             
-            // set number of monsterTypes
-            NSUInteger numMonsterTypes = 3;
-            NSUInteger m0 = [Dice roll: numMonsterTypes];
-            
-            // define monsters to spawn below
-            e =
-            ( m0 == 1 ) ? Cat :
-            ( m0 == 2 ) ? Ghoul :
-            ( m0 == 3 ) ? Totoro :
-            Cat;
-            
-            // level up monster appropriately
-            NSInteger levelRoll = [Dice roll: floor.floorNumber + 1];
-            for (int i=e.level; i<levelRoll; i++) [e handleLevelUp];
-            
-            [ GameRenderer setEntity: e onTile: spawnTile ];
-            [[ floor entityArray ] addObject: e ];
-        }
+            if ( spawnTile != nil ) {
+                Entity *e;
+                
+                // set number of monsterTypes
+                NSUInteger numMonsterTypes = 3;
+                NSUInteger m0 = [Dice roll: numMonsterTypes];
+                
+                // define monsters to spawn below
+                e =
+                ( m0 == 1 ) ? Cat :
+                ( m0 == 2 ) ? Ghoul :
+                ( m0 == 3 ) ? Totoro :
+                Cat;
+                
+                // level up monster appropriately
+                NSInteger levelRoll = [Dice roll: floor.floorNumber + 1];
+                for (int i=e.level; i<levelRoll; i++) [e handleLevelUp];
+                
+                [ GameRenderer setEntity: e onTile: spawnTile ];
+                [[ floor entityArray ] addObject: e ];
+            }
+    }
     //}
 }
 

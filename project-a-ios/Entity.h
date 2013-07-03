@@ -11,6 +11,8 @@
 #import "Monsters.h"
 #import "Threat_t.h"
 #import "Spell.h"
+#import "Metal_t.h"
+#import "Wood_t.h"
 
 #import "GameConfig.h"
 
@@ -126,6 +128,10 @@
     NSString *notetext;
     
     
+    // for weapons/armor/etc
+    Metal_t metal;
+    Wood_t wood;
+    
 }
 
 @property (atomic, assign) BOOL wasBumped;
@@ -137,6 +143,9 @@
 
 @property (atomic) NSMutableString *name;
 @property (atomic) NSString *notetext;
+
+@property (atomic, assign) Metal_t metal;
+@property (atomic, assign) Wood_t wood;
 
 @property (atomic, assign) EntityTypes_t entityType;
 @property (atomic, assign) Threat_t threatLevel;

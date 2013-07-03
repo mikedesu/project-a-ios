@@ -92,6 +92,16 @@
 @synthesize maxCharges;
 
 @synthesize notetext;
+@synthesize wood;
+@synthesize metal;
+
+@synthesize damageRollBase;
+
+@synthesize earthRes;
+@synthesize fireRes;
+@synthesize waterRes;
+@synthesize iceRes;
+@synthesize lightningRes;
 
 //@synthesize monsterPrefixGroup;
 //@synthesize itemPrefixGroup;

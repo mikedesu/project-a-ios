@@ -4,6 +4,8 @@
 //  Created by Mike Bell on 2/10/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
+#import "Metal_t.h"
+#import "Wood_t.h"
 #import "GameConfig.h"
 #import "Tile.h"
 
@@ -13,6 +15,9 @@
 
 +( NSInteger ) modifierForNumber: (NSInteger) n;
 +( NSInteger ) maxWeightForStrength: (NSInteger) str;
+
++( NSString * ) getMetalName: (Metal_t) metal;
++( NSString * ) getWoodName: (Wood_t) wood;
 
 +( void ) colorScrambleTile: ( CCSprite * ) tileSprite;
 +( void ) colorScrambleAllTiles: ( NSArray * ) tileArray;

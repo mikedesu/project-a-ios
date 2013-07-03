@@ -631,7 +631,10 @@
         
         // draw a tiny sword since thats all we have right now
         Color_t swordColor = white;
-        swordColor = [leftArmTool.name isEqualToString:@"Asura"] ? red : white;
+        swordColor = [leftArmTool.name isEqualToString:@"Asura"] ? red :
+            leftArmTool.wood > 0 ? brown :
+            leftArmTool.metal > 0 ? gray :
+            white;
         Color_t armColor = armorColor;
         for (int i=9+pad; i<11+pad; i++) [hero setPixelAt:ccp(i,7) rgba:armColor];
         for (int j=0; j<10; j++) [hero setPixelAt:ccp(11+pad,j) rgba:swordColor];

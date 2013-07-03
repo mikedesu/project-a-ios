@@ -56,6 +56,8 @@
 
 #import "DropMenu.h"
 
+#import "Metal_t.h"
+#import "Wood_t.h"
 #import "Zodiac.h"
 
 #import "HintGenerator.h"

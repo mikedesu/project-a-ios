@@ -13,23 +13,44 @@
 
 #pragma mark - Blades
 
-+( Entity * ) shortSword: (NSInteger) bonus {
++( Entity * ) shortSword: (Wood_t) wood metal: (Metal_t) metal withBonus: (NSInteger) bonus {
     Entity *e = [[Entity alloc] init];
     
-    if ( bonus == 0 )
-        [e.name setString: @"Short Sword"];
-    else
-        [e.name setString: [NSString stringWithFormat:@"Short Sword +%d", bonus ]];
+    // Wood-type weapon
+    if ( wood > WOOD_T_NONE ) {
+        
+        bonus == 0 ?
+        [e.name setString: [NSString stringWithFormat:@"%@ Short Sword", [GameRenderer getWoodName:wood]]]
+        :
+        [e.name setString: [NSString stringWithFormat:@"%@ Short Sword +%d", [GameRenderer getWoodName:wood], bonus ]];
+        
+    }
+    
+    // Metal-type weapon
+    else if ( metal > METAL_T_NONE ) {
+    
+        bonus == 0 ?
+        [e.name setString: [NSString stringWithFormat:@"%@ Short Sword", [GameRenderer getMetalName:metal]]]
+        :
+        [e.name setString: [NSString stringWithFormat:@"%@ Short Sword +%d", [GameRenderer getMetalName:metal], bonus ]];
+        
+    }
     
     e.entityType = ENTITY_T_ITEM;
     e.itemType = E_ITEM_T_WEAPON;
     e.isPC = NO;
     
+    int metalBonus = metal == METAL_T_NONE ? 0 : metal;
+    int woodBonus  = wood  == WOOD_T_NONE  ? 0 : wood - 1;
+    
     e.damageRollBase  =  6;
-    e.damageBonus     =  bonus;
+    e.damageBonus     =  metalBonus + woodBonus + bonus;
     e.weight          =  2;
     e.durability      = -1;
     e.totalDurability = -1;
+    
+    e.wood            = wood;
+    e.metal           = metal;
     
     e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
     e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;

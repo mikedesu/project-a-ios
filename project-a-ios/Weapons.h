@@ -28,6 +28,7 @@ typedef enum {
 @interface Weapons : NSObject {}
 // bladed-weapons
 +(Entity *) shortSword: (NSInteger) bonus;
++( Entity * ) shortSword: (Wood_t) wood metal: (Metal_t) metal withBonus: (NSInteger) bonus;
 +(Entity *) longSword: (NSInteger) bonus;
 +(Entity *) bastardSword: (NSInteger) bonus;
 // legendary-weapons
