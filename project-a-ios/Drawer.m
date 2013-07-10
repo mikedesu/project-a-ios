@@ -607,28 +607,45 @@
     
     int pad = 2;
  
+    
+    
+    
     Color_t armorColor = hasChestArmor ? brown : skincolor0;
     Color_t pantsColor = gray;
+    
+    
+    
+    
+    
     
     CCMutableTexture2D *hero = [Drawer guy:skincolor0 body:armorColor pants: pantsColor blindfolded: NO];
     
     
-    if ( hasHelmet ) {
+    
+    if ( hasChestArmor ) {
+        Entity *armor = [pc.equipment objectAtIndex: EQUIPSLOT_T_CHEST];
+        if ( [armor.name isEqualToString:@"Cloth Robe"] ) {
+            armorColor = gray;
+            pantsColor = gray;
+        }
+        else {
+            armorColor = brown;
+            pantsColor = gray;
+        }
+        hero = [Drawer guy:skincolor0 body:armorColor pants:pantsColor blindfolded:NO];
         
+    }
+    
+    if ( hasHelmet ) {
         Entity *helmet = [pc.equipment objectAtIndex: EQUIPSLOT_T_HEAD];
         if ( [helmet.name isEqualToString:@"Blindfold"] ) {
             hero = [Drawer guy:skincolor0 body:armorColor pants: pantsColor blindfolded: YES];
         }
-        
     }
-     
     
     if ( hasLeftArmTool ) {
-        
         Entity *leftArmTool  = [pc.equipment objectAtIndex: EQUIPSLOT_T_LARMTOOL];
-        
         if ( leftArmTool.itemType == E_ITEM_T_WEAPON ) {
-        
         // draw a tiny sword since thats all we have right now
         Color_t swordColor = white;
             swordColor = [leftArmTool.name isEqualToString:@"Asura"] ? red :
@@ -645,9 +662,7 @@
         }
         
         else if ( leftArmTool.itemType == E_ITEM_T_ARMOR ) {
-            
             if ( leftArmTool.armorType == ARMOR_T_SHIELD ) {
-                
                 Color_t shieldColor = brown;
                 Color_t emblemColor = yellow;
                 
@@ -671,8 +686,6 @@
                 //[hero apply];
             }
         }
-        
-        
     }
     
     if ( hasRightArmTool ) {

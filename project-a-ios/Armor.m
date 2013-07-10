@@ -51,6 +51,31 @@
     return e;
 }
 
+
++(Entity *) robe: (Cloth_t) cloth bonus: (NSInteger) bonus {
+    Entity *e = [[Entity alloc] init];
+    if ( bonus == 0 )
+        [e.name setString: [NSString stringWithFormat:@"%@ Robe", [GameRenderer getClothName:cloth]] ];
+    else
+        [e.name setString: [NSString stringWithFormat:@"%@ Robe +%d", [GameRenderer getClothName:cloth], bonus ]];
+    
+    e.entityType = ENTITY_T_ITEM;
+    e.itemType   = E_ITEM_T_ARMOR;
+    e.armorType  = ARMOR_T_ROBE;
+    
+    e.isPC = NO;
+    
+    e.ac              =  cloth + bonus;
+    e.weight          =  1;
+    e.durability      = -1;
+    e.totalDurability = -1;
+    return e;    
+}
+
+
+
+
+
 +(Entity *) blindfold {
     Entity *e = [[Entity alloc] init];
     e.entityType        = ENTITY_T_ITEM;
@@ -77,6 +102,8 @@
     [e.name setString: [NSString stringWithFormat:@"Boots of Anti-acid"]];
     return e;
 }
+
+
 
 
 

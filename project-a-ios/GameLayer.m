@@ -135,6 +135,10 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer vest:gray] forKey:@"Note"];
     [s setObject:[Drawer vest:brown] forKey:@"BootsOfAntiacid"];
     
+    [s setObject:[Drawer vest:gray] forKey:@"ClothRobe"];
+    
+    
+    
 }
 
 
@@ -255,7 +259,8 @@ unsigned get_memory_mb(void) {
             // Entity *itemToTest = [Items note:[[HintGenerator sharedHintGenerator] getNextHint]];
             //Entity *itemToTest = [Items ringOfAntihunger];
             //Entity *itemToTest = [Armor blindfold];
-            Entity *itemToTest = [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE stone:STONE_T_ROCK withBonus:0];
+            //Entity *itemToTest = [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE stone:STONE_T_ROCK withBonus:0];
+            Entity *itemToTest = [Armor robe:CLOTH_T_CLOTH bonus:0];
             [GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
             
             

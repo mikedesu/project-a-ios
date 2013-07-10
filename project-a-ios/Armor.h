@@ -7,6 +7,7 @@
 //
 
 #import "GameConfig.h"
+#import "Cloth_t.h"
 
 /*
  // moved to EntitySubtypeDefines.h
@@ -36,6 +37,7 @@ typedef enum {
 +(Entity *) smallShield: (NSInteger) bonus;
 
 +(Entity *) leatherArmor: (NSInteger) bonus;
++(Entity *) robe: (Cloth_t) cloth bonus: (NSInteger) bonus;
 
 +(Entity *) blindfold;
 +(Entity *) bootsOfAntiacid;

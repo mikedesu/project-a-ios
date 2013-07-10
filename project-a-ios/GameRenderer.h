@@ -7,6 +7,7 @@
 #import "Metal_t.h"
 #import "Wood_t.h"
 #import "Stone_t.h"
+#import "Cloth_t.h"
 #import "GameConfig.h"
 #import "Tile.h"
 
@@ -20,6 +21,8 @@
 +( NSString * ) getMetalName: (Metal_t) metal;
 +( NSString * ) getWoodName: (Wood_t) wood;
 +( NSString * ) getStoneName: (Stone_t) stone;
++( NSString * ) getClothName: (Cloth_t) cloth;
+
 
 +( void ) colorScrambleTile: ( CCSprite * ) tileSprite;
 +( void ) colorScrambleAllTiles: ( NSArray * ) tileArray;

@@ -62,6 +62,8 @@ NSInteger getMod( NSInteger n ) {
 static NSString *metalTable [3] = { @"", @"Iron", @"Steel" };
 static NSString *woodTable  [2] = { @"", @"Fir" };
 static NSString *stoneTable [2] = { @"", @"Rock" };
+static NSString *clothTable [2] = { @"", @"Cloth" };
+
 
 
 +( NSString * ) getMetalName:(Metal_t)metal {
@@ -90,6 +92,17 @@ static NSString *stoneTable [2] = { @"", @"Rock" };
     return s;
     
 }
+
++( NSString * ) getClothName:(Cloth_t)cloth {
+    NSString *s = nil;
+    if ( cloth >= CLOTH_T_NONE && cloth < CLOTH_T_COUNT )
+        s = clothTable[ cloth ];
+    MLOG(@"Generated cloth: \"%@\"", s);
+    return s;
+    
+}
+
+
 
 
 
@@ -280,6 +293,12 @@ static NSString *stoneTable [2] = { @"", @"Rock" };
                 else if ( entity.armorType == ARMOR_T_VEST ) {
                     t = [sprites objectForKey:@"LeatherArmor"];
                 }
+                else if ( entity.armorType == ARMOR_T_ROBE ) {
+                    t = [sprites objectForKey:@"ClothRobe"];
+                }
+                
+                
+                
                 else if ( entity.armorType == ARMOR_T_HELMET ) {
                     
                     if ( [entity.name isEqualToString:@"Blindfold" ] ) {
