@@ -107,6 +107,7 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer basicSwordWithColor:brown withHandleColor:brown ]    forKey: @"FirShortSword"];
     [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:brown ]     forKey: @"IronShortSword"];
     [s setObject:[Drawer basicSwordWithColor:darkgray withHandleColor:brown ] forKey: @"SteelShortSword"];
+    [s setObject:[Drawer basicSwordWithColor:gray withHandleColor:brown ] forKey: @"RockShortSword"];
     
     [s setObject:[Drawer basicSwordWithColor:red withHandleColor:darkgray ]     forKey: @"AsuraSword"];
     
@@ -254,20 +255,25 @@ unsigned get_memory_mb(void) {
             // Entity *itemToTest = [Items note:[[HintGenerator sharedHintGenerator] getNextHint]];
             //Entity *itemToTest = [Items ringOfAntihunger];
             //Entity *itemToTest = [Armor blindfold];
-            //[GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
-             
+            Entity *itemToTest = [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE stone:STONE_T_ROCK withBonus:0];
+            [GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
             
+            
+            /*
+             
              NSInteger roll = [Dice roll:3];
              // weapons
              if ( roll == 1 ) {
-                NSInteger _roll = [Dice roll: 10];
+                NSInteger _roll = [Dice roll: 12];
                 Entity *itemToSpawn =
                  _roll <= 3 ?
-                    [Weapons shortSword:WOOD_T_FIR metal:METAL_T_NONE withBonus:0] :
+                    [Weapons shortSword:WOOD_T_FIR  metal:METAL_T_NONE  stone:STONE_T_NONE withBonus:0] :
                  _roll <= 7 ?
-                 [Weapons shortSword:WOOD_T_NONE metal:METAL_T_IRON withBonus:0] :
+                    [Weapons shortSword:WOOD_T_NONE metal:METAL_T_IRON  stone:STONE_T_NONE withBonus:0] :
                  _roll <= 9 ?
-                 [Weapons shortSword:WOOD_T_NONE metal:METAL_T_STEEL withBonus:0] :
+                    [Weapons shortSword:WOOD_T_NONE metal:METAL_T_STEEL stone:STONE_T_NONE withBonus:0] :
+                 _roll <= 12 ?
+                    [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE  stone:STONE_T_ROCK withBonus:0] :
                 [Weapons Asura];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
@@ -287,7 +293,6 @@ unsigned get_memory_mb(void) {
                 [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
                 
             }
-            /*
              */
             
         }

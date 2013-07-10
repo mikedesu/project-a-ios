@@ -13,7 +13,7 @@
 
 #pragma mark - Blades
 
-+( Entity * ) shortSword: (Wood_t) wood metal: (Metal_t) metal withBonus: (NSInteger) bonus {
++( Entity * ) shortSword: (Wood_t) wood metal: (Metal_t) metal stone: (Stone_t) stone withBonus: (NSInteger) bonus {
     Entity *e = [[Entity alloc] init];
     
     // Wood-type weapon
@@ -36,21 +36,32 @@
         
     }
     
+    // Stone-type weapon
+    else if ( stone > STONE_T_NONE ) {
+        bonus == 0 ?
+        [e.name setString: [NSString stringWithFormat:@"%@ Short Sword", [GameRenderer getStoneName:stone]]]
+        :
+        [e.name setString: [NSString stringWithFormat:@"%@ Short Sword +%d", [GameRenderer getStoneName:stone], bonus ]];
+    }
+    
+    
     e.entityType = ENTITY_T_ITEM;
     e.itemType = E_ITEM_T_WEAPON;
     e.isPC = NO;
     
     int metalBonus = metal == METAL_T_NONE ? 0 : metal;
     int woodBonus  = wood  == WOOD_T_NONE  ? 0 : wood - 1;
+    int stoneBonus = stone == STONE_T_NONE ? 0 : stone;
     
     e.damageRollBase  =  6;
-    e.damageBonus     =  metalBonus + woodBonus + bonus;
+    e.damageBonus     =  metalBonus + woodBonus + stoneBonus + bonus;
     e.weight          =  2;
     e.durability      = -1;
     e.totalDurability = -1;
     
     e.wood            = wood;
     e.metal           = metal;
+    e.stone           = stone;
     
     e.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_NONE;
     e.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;

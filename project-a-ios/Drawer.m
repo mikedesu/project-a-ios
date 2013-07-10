@@ -631,10 +631,12 @@
         
         // draw a tiny sword since thats all we have right now
         Color_t swordColor = white;
-        swordColor = [leftArmTool.name isEqualToString:@"Asura"] ? red :
+            swordColor = [leftArmTool.name isEqualToString:@"Asura"] ? red :
             leftArmTool.wood > 0 ? brown :
             leftArmTool.metal > 0 ? gray :
+            leftArmTool.stone > 0 ? gray :
             white;
+            
         Color_t armColor = armorColor;
         for (int i=9+pad; i<11+pad; i++) [hero setPixelAt:ccp(i,7) rgba:armColor];
         for (int j=0; j<10; j++) [hero setPixelAt:ccp(11+pad,j) rgba:swordColor];
@@ -681,7 +683,12 @@
         if ( rightArmTool.itemType == E_ITEM_T_WEAPON ) {
             
             Color_t swordColor = white;
-            swordColor = [rightArmTool.name isEqualToString:@"Asura"] ? red : white;
+            swordColor = [rightArmTool.name isEqualToString:@"Asura"] ? red :
+            rightArmTool.wood > 0 ? brown :
+            rightArmTool.metal > 0 ? gray :
+            rightArmTool.stone > 0 ? gray :
+            white;
+            
             Color_t armColor = armorColor;
             for (int i=0+pad; i<2+pad; i++) [hero setPixelAt:ccp(i,7) rgba:armColor];
             for (int j=0; j<10; j++) [hero setPixelAt:ccp(0+pad,j) rgba:swordColor];

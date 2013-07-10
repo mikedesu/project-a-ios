@@ -473,6 +473,8 @@
 		2773F29716C94DA3001C3E83 /* PlayerMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerMenu.m; sourceTree = "<group>"; };
 		27896ACF17691BDB00802FBA /* GameTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTools.h; sourceTree = "<group>"; };
 		27896AD017691BDB00802FBA /* GameTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameTools.m; sourceTree = "<group>"; };
+		279BE9B6178DD50B00BAE8C7 /* Cloth_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cloth_t.h; sourceTree = "<group>"; };
+		279BE9B9178DD5CD00BAE8C7 /* Stone_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stone_t.h; sourceTree = "<group>"; };
 		27A1A5A51709711E002C3A4A /* Attack_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attack_t.h; sourceTree = "<group>"; };
 		27A1A5A61709711E002C3A4A /* Attack_t.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attack_t.m; sourceTree = "<group>"; };
 		27A1A5A817097387002C3A4A /* AttackStatus_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttackStatus_t.h; sourceTree = "<group>"; };
@@ -600,6 +602,7 @@
 				27506B7716D7FF0200245F72 /* CCMutableTexture2D.m */,
 				271DE235175CF54C00857118 /* CharacterCreationScreen.h */,
 				271DE236175CF54C00857118 /* CharacterCreationScreen.m */,
+				279BE9B6178DD50B00BAE8C7 /* Cloth_t.h */,
 				27C4144E16C7D32400BE09F9 /* Colors.h */,
 				27C26D8816CEE904008B0E29 /* Dice.h */,
 				27DCE95F16E2EA5000109F88 /* Dice.m */,
@@ -674,6 +677,7 @@
 				27BAC984174760B70046B1EC /* Status.m */,
 				2721D6F316EEB9CC0051352D /* StatusMenu.h */,
 				2721D6F416EEB9CC0051352D /* StatusMenu.m */,
+				279BE9B9178DD5CD00BAE8C7 /* Stone_t.h */,
 				27E192461714C3F800AA3F25 /* Threat_t.h */,
 				27C4145316C804E300BE09F9 /* Tile.h */,
 				27C4145416C804E300BE09F9 /* Tile.m */,

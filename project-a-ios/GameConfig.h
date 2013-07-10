@@ -56,7 +56,9 @@
 
 #import "DropMenu.h"
 
+#import "Cloth_t.h"
 #import "Metal_t.h"
+#import "Stone_t.h"
 #import "Wood_t.h"
 #import "Zodiac.h"
 

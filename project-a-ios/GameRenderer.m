@@ -59,9 +59,9 @@ NSInteger getMod( NSInteger n ) {
 
 
 
-static NSString *metalTable[3] = { @"", @"Iron", @"Steel" };
-static NSString *woodTable[2]  = { @"", @"Fir" };
-
+static NSString *metalTable [3] = { @"", @"Iron", @"Steel" };
+static NSString *woodTable  [2] = { @"", @"Fir" };
+static NSString *stoneTable [2] = { @"", @"Rock" };
 
 
 +( NSString * ) getMetalName:(Metal_t)metal {
@@ -81,6 +81,17 @@ static NSString *woodTable[2]  = { @"", @"Fir" };
     return s;
     
 }
+
++( NSString * ) getStoneName:(Stone_t)stone {
+    NSString *s = nil;
+    if ( stone >= STONE_T_NONE && stone < STONE_T_COUNT )
+        s = stoneTable[ stone ];
+    MLOG(@"Generated stone: \"%@\"", s);
+    return s;
+    
+}
+
+
 
 
 /*
@@ -240,18 +251,23 @@ static NSString *woodTable[2]  = { @"", @"Fir" };
                     [[entity.name substringToIndex:@"Iron Short Sword".length ] isEqualToString: @"Iron Short Sword"] )
                     t = [sprites objectForKey:@"IronShortSword"];
                 
-                
-                
                 else if ( entity.name.length >= @"Steel Short Sword".length &&
                     [[entity.name substringToIndex:@"Steel Short Sword".length ] isEqualToString: @"Steel Short Sword"] )
                     t = [sprites objectForKey:@"SteelShortSword"];
                 
                 
                 else if ( entity.name.length >= @"Asura".length &&
-                    [[entity.name substringToIndex:@"Asura".length ] isEqualToString: @"Asura"] ) {
+                         [[entity.name substringToIndex:@"Asura".length ] isEqualToString: @"Asura"] ) {
                     t = [sprites objectForKey:@"AsuraSword"];
                     
-                } else {
+                }
+                
+                else if ( entity.name.length >= @"Rock Short Sword".length &&
+                         [[entity.name substringToIndex:@"Rock Short Sword".length ] isEqualToString: @"Rock Short Sword"] ) {
+                    t = [sprites objectForKey:@"RockShortSword"];
+                }
+                
+                else {
                     [GameRenderer renderTileColorFuzz: texture];
                 }
 //                MLOG(@"");

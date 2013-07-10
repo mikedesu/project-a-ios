@@ -12,6 +12,7 @@
 #import "Threat_t.h"
 #import "Spell.h"
 #import "Metal_t.h"
+#import "Stone_t.h"
 #import "Wood_t.h"
 
 #import "GameConfig.h"
@@ -146,6 +147,7 @@
 
 @property (atomic, assign) Metal_t metal;
 @property (atomic, assign) Wood_t wood;
+@property (atomic, assign) Stone_t stone;
 
 @property (atomic, assign) EntityTypes_t entityType;
 @property (atomic, assign) Threat_t threatLevel;
