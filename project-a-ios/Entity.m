@@ -703,7 +703,13 @@
             if ( [e isKindOfClass:NSClassFromString(@"Entity")])
                 total += e.weight;
         }
-    
+        
+        for (Entity *e in self.equipment) {
+            if ( [e isKindOfClass:NSClassFromString(@"Entity")] ) {
+                total += e.weight;
+            }
+        }
+
     } else {
         total = self.weight;
     }
