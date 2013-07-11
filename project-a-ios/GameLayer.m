@@ -284,10 +284,11 @@ unsigned get_memory_mb(void) {
             
             // armor
             else if ( roll == 2 ) {
-                NSInteger _roll = [Dice roll: 4];
+                NSInteger _roll = [Dice roll: 5];
                 Entity *itemToSpawn =   _roll == 1 ? [Armor smallShield:i]  :
                                         _roll == 2 ? [Armor leatherArmor:i] :
                                         _roll == 3 ? [Armor bootsOfAntiacid] :
+                                        _roll == 4 ? [Armor robe:CLOTH_T_CLOTH bonus:i] :
                 [Armor blindfold];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
