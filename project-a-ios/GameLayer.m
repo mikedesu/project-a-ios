@@ -260,12 +260,11 @@ unsigned get_memory_mb(void) {
             //Entity *itemToTest = [Items ringOfAntihunger];
             //Entity *itemToTest = [Armor blindfold];
             //Entity *itemToTest = [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE stone:STONE_T_ROCK withBonus:0];
-            Entity *itemToTest = [Armor robe:CLOTH_T_CLOTH bonus:0];
-            [GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
+            //Entity *itemToTest = [Armor robe:CLOTH_T_CLOTH bonus:0];
+            //[GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
             
             
-            /*
-             
+            
              NSInteger roll = [Dice roll:3];
              // weapons
              if ( roll == 1 ) {
@@ -298,6 +297,7 @@ unsigned get_memory_mb(void) {
                 [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
                 
             }
+            /*
              */
             
         }
