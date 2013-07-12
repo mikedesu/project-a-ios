@@ -378,6 +378,12 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                 t = [sprites objectForKey:@"Note"];
             }
             
+            else if ( entity.itemType == E_ITEM_T_TORCH ) {
+                t = [sprites objectForKey:@"Torch"];
+            }
+            
+            
+            
             
             
             
@@ -555,7 +561,15 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     
     // crude light calculation
     lightBase = 2;
-    int itemsInInventory = pc.inventoryArray.count;
+    //int itemsInInventory = pc.inventoryArray.count;
+    int itemsInInventory = 0;
+    
+    for ( Entity *item in pc.inventoryArray ) {
+        if ( [item.name isEqualToString:@"Torch"] )
+            itemsInInventory += item.lightLevel;
+    }
+    
+    
     lightValue = lightBase + itemsInInventory;
     //lightValue = lightBase;
     //lightValue = lightBase + gameLayer.karma;
@@ -1380,22 +1394,25 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
 
         NSArray *tileDataArray = [floor tileDataArray];
         
+        
+            int tolerance = 100;
+        
             while ( ! locationIsAcceptable ) {
                 NSUInteger diceroll = [Dice roll: [tileDataArray count]] - 1;
                 BOOL tileIsFree = YES;
                 
                 Tile *tile = [tileDataArray objectAtIndex: diceroll ];
-        
+                //MLOG(@"tile.savagery = %d", tile.savagery);
+                
     #define SAVAGERY_MIN 95
                 if ( tile.savagery > SAVAGERY_MIN ) {
-                    MLOG(@"tile.savagery = %d", tile.savagery);
-                    
                     
                     // check if a pc/npc occupies the tile contents
                     for ( Entity *e in tile.contents ) {
                         if ( e.entityType == ENTITY_T_PC ||
                             e.entityType == ENTITY_T_NPC ) {
                             tileIsFree = NO;
+                            tolerance--;
                             break;
                         }
                     }
@@ -1405,6 +1422,13 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                         spawnTile = tile;
                         locationIsAcceptable = YES;
                         break;
+                    }
+                    
+                    else {
+                        if ( tolerance == 0 ) {
+                            MLOG(@"Tolerance limit reached, returning...");
+                            return;
+                        }
                     }
                 }
             }
@@ -1429,6 +1453,8 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                 
                 [ GameRenderer setEntity: e onTile: spawnTile ];
                 [[ floor entityArray ] addObject: e ];
+                
+                MLOG(@"placed monster: %@", e.name);
             }
     }
     //}

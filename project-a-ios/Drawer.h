@@ -44,7 +44,8 @@
 
 +(CCMutableTexture2D *) smallFish: (Color_t) body eyeColor: (Color_t) eyeColor;
 +(CCMutableTexture2D *) fishingRod: (Color_t) rod;
-
++(CCMutableTexture2D *) torch;
+    
 +(CCMutableTexture2D *) boulder: (Color_t) body;
 
 +(CCMutableTexture2D *) totoro: (Color_t) body eyes: (Color_t) eyes;

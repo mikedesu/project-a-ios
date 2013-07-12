@@ -131,6 +131,22 @@
 }
 
 
++(Entity *) torch: (NSInteger) light {
+    Entity *e = [[Entity alloc] init];
+    e.entityType    = ENTITY_T_ITEM;
+    e.itemType      = E_ITEM_T_TORCH;
+    [e.name setString:@"Torch"];
+    e.isPC                  = NO;
+    e.weight            = 1;
+    e.durability        = 20;
+    e.totalDurability   = 20;
+    e.lightLevel        = light;
+    return e;    
+}
+
+
+
+
 +(Entity *) basicBoulder {
     Entity *e = [[Entity alloc] init];
     e.entityType    = ENTITY_T_ITEM;

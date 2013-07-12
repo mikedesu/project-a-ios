@@ -133,6 +133,9 @@
     Metal_t metal;
     Wood_t wood;
     
+    
+    NSInteger lightLevel;
+    
 }
 
 @property (atomic, assign) BOOL wasBumped;
@@ -185,6 +188,8 @@
 @property (atomic, assign) NSInteger hp;
 @property (atomic, assign) NSInteger maxhp;
 @property (atomic, assign) NSInteger ac;
+
+@property (atomic, assign) NSInteger lightLevel;
 
 @property (atomic, assign) EntityItemTypes_t itemType;
 @property (atomic, assign) PotionTypes_t potionType;

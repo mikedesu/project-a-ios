@@ -13,7 +13,7 @@ static BOOL isInitialized = NO;
 static int currentIndex = 0;
 static int maxIndex = 5;
 
-static NSString *hints[ 6 ];
+static NSString *hints[ 9 ];
 
 +( HintGenerator * ) sharedHintGenerator {
     if ( ! isInitialized ) {
@@ -25,6 +25,13 @@ static NSString *hints[ 6 ];
         hints[3] = @"Red tiles are lava and deal damage if you walk on them.";
         hints[4] = @"Dark green tiles are acid tiles and will deal lethal damage if you walk on them.";
         hints[5] = @"You're looking for the Book of All-Knowledge";
+        
+        hints[6] = @"There are different material types for Cloth, Metal, Stone, and Wood.";
+        
+        hints[7] = @"This is a hint designed to be a false hint. Beware of false hints!";
+        hints[8] = @"Be very careful in proceeding through the dungeon...";
+        
+        
         isInitialized = YES;
     }
     return hintGenerator;

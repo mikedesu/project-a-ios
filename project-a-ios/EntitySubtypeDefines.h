@@ -81,6 +81,9 @@ typedef enum {
     // Coins
     E_ITEM_T_COIN,
     
+    // Torches
+    E_ITEM_T_TORCH,
+    
     
     E_ITEM_T_NUMTYPES
 } EntityItemTypes_t;

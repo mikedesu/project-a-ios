@@ -124,6 +124,8 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer smallFish:brown eyeColor:black]                    forKey:@"Catfish"];
     
     [s setObject:[Drawer fishingRod:brown]                                  forKey:@"WoodenFishingRod"];
+    [s setObject:[Drawer torch]                                             forKey:@"Torch"];
+    
     
     [s setObject:[Drawer boulder:darkgray]                                  forKey:@"BasicBoulder"];
     
@@ -261,11 +263,12 @@ unsigned get_memory_mb(void) {
             //Entity *itemToTest = [Armor blindfold];
             //Entity *itemToTest = [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE stone:STONE_T_ROCK withBonus:0];
             //Entity *itemToTest = [Armor robe:CLOTH_T_CLOTH bonus:0];
+            //Entity *itemToTest = [Items torch: 2];
             //[GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
             
             
             
-             NSInteger roll = [Dice roll:3];
+             NSInteger roll = [Dice roll:4];
              // weapons
              if ( roll == 1 ) {
                 NSInteger _roll = [Dice roll: 12];
@@ -297,6 +300,12 @@ unsigned get_memory_mb(void) {
             else if ( roll == 3 ) {
                 [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
                 
+            }
+            
+            else if ( roll == 4 ) {
+                NSInteger torchLevel = [Dice roll: 3];
+                Entity *itemToSpawn = [Items torch: torchLevel];
+                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
             /*
              */
@@ -3580,6 +3589,31 @@ NSUInteger getMagicY( NSUInteger y ) {
         RRingIsRegen = [maybeRRing isKindOfClass:NSClassFromString(@"Entity")] && maybeRRing.entityType == ENTITY_T_ITEM && maybeRRing.itemType == E_ITEM_T_RING && maybeRRing.ringType == E_RING_T_REGENERATION;
         RRingIsRegen ? pcEntity.hp = (pcEntity.hp < pcEntity.maxhp ? pcEntity.hp + 1 : pcEntity.maxhp) : 0;
         RRingIsRegen ? [pcEntity getHungry] : 0;
+        
+        
+        
+        // decrease durability of torches in inventory
+        for ( Entity *item in pcEntity.inventoryArray )
+            if ( [item.name isEqualToString:@"Torch"] )
+                item.durability = item.durability == 0 ? 0 : item.durability - 1;
+        
+        // clean up torches
+        int i = 0;
+        for ( i=0; i<pcEntity.inventoryArray.count; i++ ) {
+            Entity *item = [pcEntity.inventoryArray objectAtIndex:i];
+            BOOL removeItem = NO;
+            if ( [item.name isEqualToString:@"Torch"] ) {
+                if ( item.durability == 0 ) {
+                    removeItem = YES;
+                }
+            }
+            if ( removeItem ) {
+                [pcEntity.inventoryArray removeObjectAtIndex: i];
+                i = 0;
+            }
+        }
+                
+        
         
         
         [ self cleanupEntityArray ];

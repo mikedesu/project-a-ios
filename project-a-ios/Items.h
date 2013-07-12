@@ -18,6 +18,8 @@
 +(Entity *) catfish;
 +(Entity *) woodenFishingRod;
 
++(Entity *) torch: (NSInteger) light;
+
 // Doors
 +(Entity *) simpleDoor;
 +(Entity *) simpleKey;
@@ -33,6 +35,7 @@
 +(Entity *) coin: (NSInteger) coinValue;
 
 +(Entity *) note: (NSString *) text;
+
 
 
 @end

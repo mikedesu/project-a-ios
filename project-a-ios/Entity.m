@@ -103,6 +103,8 @@
 @synthesize iceRes;
 @synthesize lightningRes;
 
+@synthesize lightLevel;
+
 //@synthesize monsterPrefixGroup;
 //@synthesize itemPrefixGroup;
 
