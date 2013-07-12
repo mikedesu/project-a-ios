@@ -2705,11 +2705,11 @@ NSUInteger getMagicY( NSUInteger y ) {
                     else if ( tile.tileType == TILE_FLOOR_ACID ) {
                         
                         // check if PC wearing anti-acid shoes
-                        Entity *maybeShoesL = [pcEntity.equipment objectAtIndex:EQUIPSLOT_T_LFOOT];
-                        Entity *maybeShoesR = [pcEntity.equipment objectAtIndex:EQUIPSLOT_T_RFOOT];
+                        Entity *maybeShoes = [pcEntity.equipment objectAtIndex:EQUIPSLOT_T_FEET];
+                        //Entity *maybeShoesR = [pcEntity.equipment objectAtIndex:EQUIPSLOT_T_RFOOT];
                         
-                        if ( ( [maybeShoesL isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesL.name isEqualToString:@"Boots of Anti-acid"] ) ||
-                            ( [maybeShoesR isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesR.name isEqualToString:@"Boots of Anti-acid"] ) ) {
+                        if ( ( [maybeShoes isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoes.name isEqualToString:@"Boots of Anti-acid"] )) {
+                            //( [maybeShoesR isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesR.name isEqualToString:@"Boots of Anti-acid"] ) ) {
                             
                             
                         }
@@ -2776,11 +2776,11 @@ NSUInteger getMagicY( NSUInteger y ) {
                     if ( tile.tileType == TILE_FLOOR_ACID ) {
                         
                         // check if PC wearing anti-acid shoes
-                        Entity *maybeShoesL = [entity.equipment objectAtIndex:EQUIPSLOT_T_LFOOT];
-                        Entity *maybeShoesR = [entity.equipment objectAtIndex:EQUIPSLOT_T_RFOOT];
+                        Entity *maybeShoes = [entity.equipment objectAtIndex:EQUIPSLOT_T_FEET];
+                        //Entity *maybeShoesR = [entity.equipment objectAtIndex:EQUIPSLOT_T_RFOOT];
                         
-                        if ( ( [maybeShoesL isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesL.name isEqualToString:@"Boots of Anti-acid"] ) ||
-                            ( [maybeShoesR isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesR.name isEqualToString:@"Boots of Anti-acid"] ) ) {
+                        if ( ( [maybeShoes isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoes.name isEqualToString:@"Boots of Anti-acid"] ) ) {
+                            //( [maybeShoesR isKindOfClass:NSClassFromString(@"Entity")] && [maybeShoesR.name isEqualToString:@"Boots of Anti-acid"] ) ) {
                             
                             
                         }

@@ -74,10 +74,8 @@
          l. ring
          r. ring
          waist
-         l. leg
-         r. leg
-         l. foot
-         r. foot
+         legs
+         feet
          
          l. arm tool  <-- could be weapon, shield, torch, wand, book, bow, fishing rod, etc
          r. arm tool
@@ -99,15 +97,21 @@
         MenuItem *lring = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
         MenuItem *rring = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
         MenuItem *waist = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
-        MenuItem *lleg = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
-        MenuItem *rleg = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
-        MenuItem *lfoot = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
-        MenuItem *rfoot = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
+        
+        MenuItem *legs = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
+        MenuItem *feet = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
+        
+        
+        //MenuItem *lleg = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
+        //MenuItem *rleg = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
+        //MenuItem *lfoot = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
+        //MenuItem *rfoot = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
+        
         MenuItem *larmtool = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
         MenuItem *rarmtool = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
         
-        NSString *equipmentNames[19];
-        for (int i=0; i<19; i++) {
+        NSString *equipmentNames[EQUIPSLOT_T_NUMSLOTS];
+        for (int i=0; i<EQUIPSLOT_T_NUMSLOTS; i++) {
             Entity *e = [pc.equipment objectAtIndex:i];
             equipmentNames[i] = (e == nil) ? nil : [e isKindOfClass:NSClassFromString(@"NSNull")] ? nil : [NSString stringWithFormat:@"%@", e.name];
         }
@@ -125,10 +129,10 @@
         lring.label.string      = [NSString stringWithFormat:@"L. Ring: %@",        equipmentNames[EQUIPSLOT_T_LRING]];
         rring.label.string      = [NSString stringWithFormat:@"R. Ring: %@",        equipmentNames[EQUIPSLOT_T_RRING]];
         waist.label.string      = [NSString stringWithFormat:@"Waist: %@",          equipmentNames[EQUIPSLOT_T_WAIST]];
-        lleg.label.string       = [NSString stringWithFormat:@"L. Leg: %@",         equipmentNames[EQUIPSLOT_T_LLEG]];
-        rleg.label.string       = [NSString stringWithFormat:@"R. Leg: %@",         equipmentNames[EQUIPSLOT_T_RLEG]];
-        lfoot.label.string      = [NSString stringWithFormat:@"L. Foot: %@",        equipmentNames[EQUIPSLOT_T_LFOOT]];
-        rfoot.label.string      = [NSString stringWithFormat:@"R. Foot: %@",        equipmentNames[EQUIPSLOT_T_RFOOT]];
+        legs.label.string       = [NSString stringWithFormat:@"Legs: %@",           equipmentNames[EQUIPSLOT_T_LEGS]];
+        //rleg.label.string       = [NSString stringWithFormat:@"R. Leg: %@",         equipmentNames[EQUIPSLOT_T_RLEG]];
+        //lfoot.label.string      = [NSString stringWithFormat:@"L. Foot: %@",        equipmentNames[EQUIPSLOT_T_LFOOT]];
+        feet.label.string       = [NSString stringWithFormat:@"Feet: %@",           equipmentNames[EQUIPSLOT_T_FEET]];
         larmtool.label.string   = [NSString stringWithFormat:@"L. Tool: %@",        equipmentNames[EQUIPSLOT_T_LARMTOOL]];
         rarmtool.label.string   = [NSString stringWithFormat:@"R. Tool: %@",        equipmentNames[EQUIPSLOT_T_RARMTOOL]];
         
@@ -145,10 +149,12 @@
         lring.tag       = EQUIPSLOT_T_LRING;
         rring.tag       = EQUIPSLOT_T_RRING;
         waist.tag       = EQUIPSLOT_T_WAIST;
-        lleg.tag        = EQUIPSLOT_T_LLEG;
-        rleg.tag        = EQUIPSLOT_T_RLEG;
-        lfoot.tag       = EQUIPSLOT_T_LFOOT;
-        rfoot.tag       = EQUIPSLOT_T_RFOOT;
+        legs.tag        = EQUIPSLOT_T_LEGS;
+        //lleg.tag        = EQUIPSLOT_T_LLEG;
+        //rleg.tag        = EQUIPSLOT_T_RLEG;
+        //lfoot.tag       = EQUIPSLOT_T_LFOOT;
+        //rfoot.tag       = EQUIPSLOT_T_RFOOT;
+        feet.tag        = EQUIPSLOT_T_FEET;
         larmtool.tag    = EQUIPSLOT_T_LARMTOOL;
         rarmtool.tag    = EQUIPSLOT_T_RARMTOOL;
         
@@ -181,14 +187,20 @@
         rring.position = ccp(x,y);
         y = y - waist.label.contentSize.height;
         waist.position = ccp(x,y);
-        y = y - lleg.label.contentSize.height;
-        lleg.position = ccp(x,y);
-        y = y - rleg.label.contentSize.height;
-        rleg.position = ccp(x,y);
-        y = y - lfoot.label.contentSize.height;
-        lfoot.position = ccp(x,y);
-        y = y - rfoot.label.contentSize.height;
-        rfoot.position = ccp(x,y);
+        
+        y = y - legs.label.contentSize.height;
+        legs.position = ccp(x,y);
+        
+        y = y - feet.label.contentSize.height;
+        feet.position = ccp(x,y);
+        
+        //y = y - rleg.label.contentSize.height;
+        //rleg.position = ccp(x,y);
+        
+        
+        //y = y - rfoot.label.contentSize.height;
+        //rfoot.position = ccp(x,y);
+        
         y = y - larmtool.label.contentSize.height;
         larmtool.position = ccp(x,y);
         y = y - rarmtool.label.contentSize.height;
@@ -214,10 +226,10 @@
         [menuItems addObject: lring];
         [menuItems addObject: rring];
         [menuItems addObject: waist];
-        [menuItems addObject: lleg];
-        [menuItems addObject: rleg];
-        [menuItems addObject: lfoot];
-        [menuItems addObject: rfoot];
+        [menuItems addObject: legs];
+        //[menuItems addObject: rleg];
+        //[menuItems addObject: lfoot];
+        [menuItems addObject: feet];
         [menuItems addObject: larmtool];
         [menuItems addObject: rarmtool];
         
@@ -251,6 +263,7 @@
 #ifndef MenuItem
 #define MenuItem CCMenuItemLabel
     
+    
     MenuItem *head = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
     MenuItem *neck = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
     MenuItem *chest = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
@@ -264,15 +277,17 @@
     MenuItem *lring = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
     MenuItem *rring = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
     MenuItem *waist = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
-    MenuItem *lleg = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
-    MenuItem *rleg = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
-    MenuItem *lfoot = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
-    MenuItem *rfoot = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
+    
+    MenuItem *legs = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
+    MenuItem *feet = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
+    
     MenuItem *larmtool = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
     MenuItem *rarmtool = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
     
-    NSString *equipmentNames[19];
-    for (int i=0; i<19; i++) {
+    
+    
+    NSString *equipmentNames[EQUIPSLOT_T_NUMSLOTS];
+    for (int i=0; i<EQUIPSLOT_T_NUMSLOTS; i++) {
         Entity *e = [pc.equipment objectAtIndex:i];
         equipmentNames[i] = (e == nil) ? nil : [e isKindOfClass:NSClassFromString(@"NSNull")] ? nil : [NSString stringWithFormat:@"%@", e.name];
     }
@@ -290,13 +305,12 @@
     lring.label.string      = [NSString stringWithFormat:@"L. Ring: %@",        equipmentNames[EQUIPSLOT_T_LRING]];
     rring.label.string      = [NSString stringWithFormat:@"R. Ring: %@",        equipmentNames[EQUIPSLOT_T_RRING]];
     waist.label.string      = [NSString stringWithFormat:@"Waist: %@",          equipmentNames[EQUIPSLOT_T_WAIST]];
-    lleg.label.string       = [NSString stringWithFormat:@"L. Leg: %@",         equipmentNames[EQUIPSLOT_T_LLEG]];
-    rleg.label.string       = [NSString stringWithFormat:@"R. Leg: %@",         equipmentNames[EQUIPSLOT_T_RLEG]];
-    lfoot.label.string      = [NSString stringWithFormat:@"L. Foot: %@",        equipmentNames[EQUIPSLOT_T_LFOOT]];
-    rfoot.label.string      = [NSString stringWithFormat:@"R. Foot: %@",        equipmentNames[EQUIPSLOT_T_RFOOT]];
+    legs.label.string       = [NSString stringWithFormat:@"Legs: %@",           equipmentNames[EQUIPSLOT_T_LEGS]];
+    //rleg.label.string       = [NSString stringWithFormat:@"R. Leg: %@",         equipmentNames[EQUIPSLOT_T_RLEG]];
+    //lfoot.label.string      = [NSString stringWithFormat:@"L. Foot: %@",        equipmentNames[EQUIPSLOT_T_LFOOT]];
+    feet.label.string       = [NSString stringWithFormat:@"Feet: %@",           equipmentNames[EQUIPSLOT_T_FEET]];
     larmtool.label.string   = [NSString stringWithFormat:@"L. Tool: %@",        equipmentNames[EQUIPSLOT_T_LARMTOOL]];
     rarmtool.label.string   = [NSString stringWithFormat:@"R. Tool: %@",        equipmentNames[EQUIPSLOT_T_RARMTOOL]];
-    
     
     head.tag        = EQUIPSLOT_T_HEAD;
     neck.tag        = EQUIPSLOT_T_NECK;
@@ -311,10 +325,12 @@
     lring.tag       = EQUIPSLOT_T_LRING;
     rring.tag       = EQUIPSLOT_T_RRING;
     waist.tag       = EQUIPSLOT_T_WAIST;
-    lleg.tag        = EQUIPSLOT_T_LLEG;
-    rleg.tag        = EQUIPSLOT_T_RLEG;
-    lfoot.tag       = EQUIPSLOT_T_LFOOT;
-    rfoot.tag       = EQUIPSLOT_T_RFOOT;
+    legs.tag        = EQUIPSLOT_T_LEGS;
+    //lleg.tag        = EQUIPSLOT_T_LLEG;
+    //rleg.tag        = EQUIPSLOT_T_RLEG;
+    //lfoot.tag       = EQUIPSLOT_T_LFOOT;
+    //rfoot.tag       = EQUIPSLOT_T_RFOOT;
+    feet.tag        = EQUIPSLOT_T_FEET;
     larmtool.tag    = EQUIPSLOT_T_LARMTOOL;
     rarmtool.tag    = EQUIPSLOT_T_RARMTOOL;
     
@@ -347,19 +363,24 @@
     rring.position = ccp(x,y);
     y = y - waist.label.contentSize.height;
     waist.position = ccp(x,y);
-    y = y - lleg.label.contentSize.height;
-    lleg.position = ccp(x,y);
-    y = y - rleg.label.contentSize.height;
-    rleg.position = ccp(x,y);
-    y = y - lfoot.label.contentSize.height;
-    lfoot.position = ccp(x,y);
-    y = y - rfoot.label.contentSize.height;
-    rfoot.position = ccp(x,y);
+    
+    y = y - legs.label.contentSize.height;
+    legs.position = ccp(x,y);
+    
+    y = y - feet.label.contentSize.height;
+    feet.position = ccp(x,y);
+    
+    //y = y - rleg.label.contentSize.height;
+    //rleg.position = ccp(x,y);
+    
+    
+    //y = y - rfoot.label.contentSize.height;
+    //rfoot.position = ccp(x,y);
+    
     y = y - larmtool.label.contentSize.height;
     larmtool.position = ccp(x,y);
     y = y - rarmtool.label.contentSize.height;
     rarmtool.position = ccp(x,y);
-    
     
 #undef MenuItem
 #endif
@@ -381,10 +402,10 @@
     [menuItems addObject: lring];
     [menuItems addObject: rring];
     [menuItems addObject: waist];
-    [menuItems addObject: lleg];
-    [menuItems addObject: rleg];
-    [menuItems addObject: lfoot];
-    [menuItems addObject: rfoot];
+    //[menuItems addObject: lleg];
+    [menuItems addObject: legs];
+    [menuItems addObject: feet];
+    //[menuItems addObject: rfoot];
     [menuItems addObject: larmtool];
     [menuItems addObject: rarmtool];
     
