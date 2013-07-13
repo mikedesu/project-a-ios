@@ -21,6 +21,8 @@ typedef enum {
     MONSTER_T_GOBLIN,
     MONSTER_T_TROLL,
     
+    MONSTER_T_TREE,
+    
     MONSTER_T_SLIME,
     MONSTER_T_FUNGUS,
     MONSTER_T_GELANTONOUS_CUBE,
@@ -86,7 +88,6 @@ withAttacks: a])
 // entity type,
 // threat,
 // monster type,
-// item type,
 // level,
 // hit die,
 // str
@@ -140,6 +141,33 @@ ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, \
 ENTITYITEMPICKUPALGORITHM_T_NONE, \
 8, \
 nil))
+
+
+
+#define Tree \
+(Monster(\
+@"Tree", \
+[NSArray arrayWithObject: [Prefix_t noPrefix]], \
+THREAT_T_HOSTILE, \
+MONSTER_T_TREE, \
+1, \
+12, \
+12, \
+12, \
+12, \
+12, \
+12, \
+12, \
+ENTITYPATHFINDINGALGORITHM_T_NONE, \
+ENTITYITEMPICKUPALGORITHM_T_NONE, \
+8, \
+nil))
+
+
+
+
+
+
 
 
 #define Cat \

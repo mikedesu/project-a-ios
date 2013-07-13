@@ -140,6 +140,12 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer vest:gray] forKey:@"ClothRobe"];
     
     
+    [s setObject:[Drawer tree] forKey:@"Tree"];
+    
+    
+    
+    
+    
     
 }
 
@@ -250,7 +256,7 @@ unsigned get_memory_mb(void) {
     
     
     for ( int i = 0; i < [dungeon count]; i++ ) {
-        NSInteger tilecount     = [((DungeonFloor *)[dungeon objectAtIndex:i]).tileDataArray count];
+        //NSInteger tilecount     = [((DungeonFloor *)[dungeon objectAtIndex:i]).tileDataArray count];
         NSInteger minItemCount  = 2;
         NSInteger maxItemCount  = 12;
         NSInteger treasureCount = [Dice roll: maxItemCount ] + (minItemCount - 1);
@@ -264,11 +270,12 @@ unsigned get_memory_mb(void) {
             //Entity *itemToTest = [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE stone:STONE_T_ROCK withBonus:0];
             //Entity *itemToTest = [Armor robe:CLOTH_T_CLOTH bonus:0];
             //Entity *itemToTest = [Items torch: 2];
+            //Entity *itemToTest = Tree;
             //[GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
             
             
             
-             NSInteger roll = [Dice roll:4];
+             NSInteger roll = [Dice roll:5];
              // weapons
              if ( roll == 1 ) {
                 NSInteger _roll = [Dice roll: 12];
@@ -307,6 +314,12 @@ unsigned get_memory_mb(void) {
                 Entity *itemToSpawn = [Items torch: torchLevel];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
+            
+            else if ( roll == 5 ) {
+                Entity *itemToSpawn = Tree;
+                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
+            }
+            
             /*
              */
             

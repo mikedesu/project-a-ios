@@ -933,6 +933,63 @@
 
 
 
++(CCMutableTexture2D *) tree {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:black_alpha(0)];
+    
+    /*
+     ................0
+     ................1
+     ...          ...2 start
+     ...          ...3
+     ...          ...4
+     ...          ...5 end
+     ..            ..6 start
+     ..            ..7
+     ..            ..8
+     ..            ..9 end
+     ...          ...A start/end
+     .......  .......B
+     .......  .......C
+     ......    ......D
+     ....        ....E
+     ................F
+     */
+    Color_t leaves = darkgreen;
+    Color_t bark   = brown;
+    
+    // leaves
+    for (int y=2; y<6; y++)
+        for (int x=3; x<12; x++)
+            [t setPixelAt:ccp(x,y) rgba:leaves];
+    for (int y=6; y<10; y++)
+        for (int x=2; x<13; x++)
+            [t setPixelAt:ccp(x,y) rgba:leaves];
+    for (int y=10; y<11; y++)
+        for (int x=3; x<12; x++)
+            [t setPixelAt:ccp(x,y) rgba:leaves];
+    
+    // bark
+    for (int y=11; y<13; y++)
+        for (int x=7; x<9; x++)
+            [t setPixelAt:ccp(x,y) rgba:bark];
+    for (int y=13; y<14; y++)
+        for (int x=6; x<10; x++)
+            [t setPixelAt:ccp(x,y) rgba:bark];
+    for (int y=14; y<15; y++)
+        for (int x=4; x<12; x++)
+            [t setPixelAt:ccp(x,y) rgba:bark];
+    return t;
+}
+
+
+
+
+
+
+
+
+
 
 
 

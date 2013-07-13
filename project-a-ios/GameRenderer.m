@@ -239,6 +239,8 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                 t = [sprites objectForKey:@"Cat"];
             } else if ( entity.monsterType == MONSTER_T_TOTORO ) {
                 t = [sprites objectForKey:@"Totoro"];
+            } else if ( entity.monsterType == MONSTER_T_TREE ) {
+                t = [sprites objectForKey:@"Tree"];
             }
             
             for ( int i = 0; i < 16; i++ )
@@ -1437,7 +1439,7 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                 Entity *e;
                 
                 // set number of monsterTypes
-                NSUInteger numMonsterTypes = 3;
+                NSUInteger numMonsterTypes = 3; //4;
                 NSUInteger m0 = [Dice roll: numMonsterTypes];
                 
                 // define monsters to spawn below
@@ -1445,8 +1447,9 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                 ( m0 == 1 ) ? Cat :
                 ( m0 == 2 ) ? Ghoul :
                 ( m0 == 3 ) ? Totoro :
+ //               ( m0 == 4 ) ? Tree :
                 Cat;
-                
+
                 // level up monster appropriately
                 NSInteger levelRoll = [Dice roll: floor.floorNumber + 1];
                 for (int i=e.level; i<levelRoll; i++) [e handleLevelUp];
