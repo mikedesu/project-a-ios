@@ -1924,13 +1924,15 @@ static NSString  * const notifications[] = {
  */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	//UITouch *touch=[touches anyObject];
-    touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
-    isTouched = YES;
+    //touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
+    //isTouched = YES;
     
     //CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
     //CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
     
     // valid selected point
+    
+    /*
     BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
     
     if ( validSelectedPoint ) {
@@ -1941,7 +1943,9 @@ static NSString  * const notifications[] = {
        // MLOG( @"ccTouchBegan: Nothing previously selected" );
        // [ self selectTileAtPosition: mapPoint ];
     }
+     
     needsRedraw = YES;
+     */
 }
 
 /*
@@ -1950,6 +1954,8 @@ static NSString  * const notifications[] = {
  ====================
  */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    /*
     UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = YES;
@@ -1971,6 +1977,7 @@ static NSString  * const notifications[] = {
         // shouldnt be possible
     }
     needsRedraw = YES;
+     */
 }
 
 /*
@@ -1979,6 +1986,8 @@ static NSString  * const notifications[] = {
  ====================
  */
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    /*
     UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = NO;
@@ -2159,6 +2168,7 @@ static NSString  * const notifications[] = {
         }
         needsRedraw = YES;
     }
+     */
 }
 
 /*
