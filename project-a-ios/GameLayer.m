@@ -1932,7 +1932,6 @@ static NSString  * const notifications[] = {
     
     // valid selected point
     
-    /*
     BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
     
     if ( validSelectedPoint ) {
@@ -1945,7 +1944,6 @@ static NSString  * const notifications[] = {
     }
      
     needsRedraw = YES;
-     */
 }
 
 /*
@@ -1955,7 +1953,6 @@ static NSString  * const notifications[] = {
  */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    /*
     UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = YES;
@@ -1977,7 +1974,6 @@ static NSString  * const notifications[] = {
         // shouldnt be possible
     }
     needsRedraw = YES;
-     */
 }
 
 /*
@@ -1987,7 +1983,6 @@ static NSString  * const notifications[] = {
  */
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    /*
     UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = NO;
@@ -2050,15 +2045,18 @@ static NSString  * const notifications[] = {
         // not fishing, going for quick-move
         else {
             // something was previously selected
-            if ( validSelectedPoint ) {
-            
+            //if ( validSelectedPoint ) {
+            if ( validMapPoint ) {
+                
                 //MLOG( @"ccTouchEnded: valid point selected" );
                 // check if we hit the same tile again
             
                 Tile *a = [ self getTileForCGPoint: mapPoint ];
-                Tile *b = [ self getTileForCGPoint: selectedTilePoint ];
+                /*
+                 Tile *b = [ self getTileForCGPoint: selectedTilePoint ];
             
                 if ( a==b ) {
+                 */
                     // check distance from pcEntity
                     Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
                     //NSInteger distance = [ self distanceFromTile:a toTile: pcTile ];
@@ -2156,19 +2154,22 @@ static NSString  * const notifications[] = {
                     }
                     gameLogicIsOn ? [self stepGameLogic] : 0;
                     [ self resetCameraPosition ];
-                    
+                
+                /*
                 } else {
                     [ self selectTileAtPosition: mapPoint ];
                 }
+                 */
             }
             // something was not prev. selected
+            /*
             else {
                 [ self selectTileAtPosition: mapPoint ];
             }
+             */
         }
         needsRedraw = YES;
     }
-     */
 }
 
 /*
