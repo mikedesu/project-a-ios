@@ -2047,126 +2047,91 @@ static NSString  * const notifications[] = {
             // something was previously selected
             //if ( validSelectedPoint ) {
             if ( validMapPoint ) {
-                
-                //MLOG( @"ccTouchEnded: valid point selected" );
                 // check if we hit the same tile again
-            
                 Tile *a = [ self getTileForCGPoint: mapPoint ];
-                /*
-                 Tile *b = [ self getTileForCGPoint: selectedTilePoint ];
-            
-                if ( a==b ) {
-                 */
-                    // check distance from pcEntity
-                    Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
-                    //NSInteger distance = [ self distanceFromTile:a toTile: pcTile ];
-                    NSInteger distance = [ GameTools distanceFromTile:a toTile: pcTile ];
-                    
-                    if ( distance <= pcEntity.movement ) {
-                        // valid quick-move
-                        // deselect the tile
-                        [ self selectTileAtPosition: mapPoint ];
-                    
-                        // move the pcEntity to the tile
-                        if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y ) {
-                            [ self moveEntity:pcEntity toPosition:mapPoint ];
-                        } else {
-                            // rest
-                            [self addMessage:@"You rest..."];
-                            [self addMessageWindowString:@"You rest..."];
-                            pcEntity.hp++;
-                            if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
-                            [pcEntity getHungry];
-                        }
-                        //gameLogicIsOn ? [self stepGameLogic] : 0;
-                        //[ self resetCameraPosition ];
-                    }
-                    
-                    else {
-                        // invalid quick-move
-                        // possibly other quick-action
-                        // deselect the tile
-                        MLOG(@"Invalid quick-move. Deselecting tile...");
-                        [ self selectTileAtPosition: mapPoint ];
-                        
-                        // long-distance move
-                        // 1. get the nearest tile from the pc
-                        // this code was taken and altered from the friendly cat movement algorithm
-                        
-                        CGPoint basePos = pcEntity.positionOnMap;
-                        
-                        // check around the pc and compare each point
-                        
-                        CGPoint p[8];
-                        int p_dist[8];
-                        p[0] = ccp( basePos.x - 1, basePos.y - 1);
-                        p[1] = ccp( basePos.x, basePos.y - 1);
-                        p[2] = ccp( basePos.x + 1, basePos.y - 1);
-                        p[3] = ccp( basePos.x - 1, basePos.y );
-                        p[4] = ccp( basePos.x + 1, basePos.y );
-                        p[5] = ccp( basePos.x - 1, basePos.y + 1 );
-                        p[6] = ccp( basePos.x, basePos.y + 1 );
-                        p[7] = ccp( basePos.x + 1, basePos.y + 1 );
-                        
-                        for (int i=0; i<8; i++)
-                            p_dist[i] = [ GameTools distanceFromCGPoint:p[i] toCGPoint: mapPoint ];
-                     
-                        // compute min
-                        int min = 1000;
-                        int min_index = 1000;
-                        for (int i=0; i<8; i++) {
-                            // also check if it is a void tile
-                            if ( p_dist[i] <= min && [self getTileForCGPoint:p[i]].tileType != TILE_FLOOR_VOID ) {
-                                min = p_dist[i];
-                                min_index = i;
-                            }
-                        }
-                        
-                        // check for border-ties
-                        BOOL topRowTie    = (min_index == 0 || min_index == 1 || min_index == 2) && (p_dist[0] == p_dist[1] && p_dist[0] == p_dist[2]);
-                        BOOL leftColTie   = (min_index == 0 || min_index == 3 || min_index == 5) && p_dist[0] == p_dist[3] && p_dist[0] == p_dist[5];
-                        BOOL rightColTie  = (min_index == 2 || min_index == 4 || min_index == 7) && p_dist[2] == p_dist[4] && p_dist[2] == p_dist[7];
-                        BOOL bottomRowTie = (min_index == 5 || min_index == 6 || min_index == 7) && p_dist[5] == p_dist[6] && p_dist[5] == p_dist[7];
-                        
-                        // prefer central indices in case of triple-tie
-                        min_index = topRowTie    ? 1 :
-                                    leftColTie   ? 3 :
-                                    rightColTie  ? 4 :
-                                    bottomRowTie ? 6 : min_index;
-                        
-                        //MLOG(@"LONG-MOVE CALC");
-                        //MLOG(@"%d%d%d\n%d  %d\n%d%d%d",
-                        //     p_dist[0], p_dist[1], p_dist[2], p_dist[3], p_dist[4], p_dist[5], p_dist[6], p_dist[7] );
-                        
-                        //MLOG(@"min: %d  --  min_index: %d", min, min_index);
-                        
-                        
-                        // move the entity
-                        [ self moveEntity:pcEntity toPosition:p[min_index]];
-                        
-                        
-                        
-                        
-                        //MLOG(@"pc.pos: (%.0f,%.0f)", pcEntity.positionOnMap.x, pcEntity.positionOnMap.y);
-                        //MLOG(@"next: (%.0f,%.0f)", p[min_index].x, p[min_index].y);
-                        
-                        
-                    }
-                    gameLogicIsOn ? [self stepGameLogic] : 0;
-                    [ self resetCameraPosition ];
                 
-                /*
-                } else {
+                // check distance from pcEntity
+                Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
+                NSInteger distance = [ GameTools distanceFromTile:a toTile: pcTile ];
+                
+                if ( distance <= pcEntity.movement ) {
+                    // valid quick-move
+                    // deselect the tile
                     [ self selectTileAtPosition: mapPoint ];
+                    
+                    // move the pcEntity to the tile
+                    if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y ) {
+                        [ self moveEntity:pcEntity toPosition:mapPoint ];
+                    } else {
+                        // rest
+                        [self addMessage:@"You rest..."];
+                        [self addMessageWindowString:@"You rest..."];
+                        pcEntity.hp++;
+                        if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
+                        [pcEntity getHungry];
+                    }
                 }
-                 */
+                    
+                else {
+                    // invalid quick-move
+                    // possibly other quick-action
+                    // deselect the tile
+                    MLOG(@"Invalid quick-move. Deselecting tile...");
+                    [ self selectTileAtPosition: mapPoint ];
+                        
+                    // long-distance move
+                    // 1. get the nearest tile from the pc
+                    // this code was taken and altered from the friendly cat movement algorithm
+                        
+                    CGPoint basePos = pcEntity.positionOnMap;
+                        
+                    // check around the pc and compare each point
+                        
+                    CGPoint p[8];
+                    int p_dist[8];
+                    p[0] = ccp( basePos.x - 1, basePos.y - 1);
+                    p[1] = ccp( basePos.x, basePos.y - 1);
+                    p[2] = ccp( basePos.x + 1, basePos.y - 1);
+                    p[3] = ccp( basePos.x - 1, basePos.y );
+                    p[4] = ccp( basePos.x + 1, basePos.y );
+                    p[5] = ccp( basePos.x - 1, basePos.y + 1 );
+                    p[6] = ccp( basePos.x, basePos.y + 1 );
+                    p[7] = ccp( basePos.x + 1, basePos.y + 1 );
+                        
+                    for (int i=0; i<8; i++)
+                        p_dist[i] = [ GameTools distanceFromCGPoint:p[i] toCGPoint: mapPoint ];
+                     
+                    // compute min
+                    int min = 1000;
+                    int min_index = 1000;
+                    for (int i=0; i<8; i++) {
+                        // also check if it is a void tile
+                        if ( p_dist[i] <= min && [self getTileForCGPoint:p[i]].tileType != TILE_FLOOR_VOID ) {
+                            min = p_dist[i];
+                            min_index = i;
+                        }
+                    }
+                        
+                    // check for border-ties
+                    BOOL topRowTie    = (min_index == 0 || min_index == 1 || min_index == 2) && (p_dist[0] == p_dist[1] && p_dist[0] == p_dist[2]);
+                    BOOL leftColTie   = (min_index == 0 || min_index == 3 || min_index == 5) && p_dist[0] == p_dist[3] && p_dist[0] == p_dist[5];
+                    BOOL rightColTie  = (min_index == 2 || min_index == 4 || min_index == 7) && p_dist[2] == p_dist[4] && p_dist[2] == p_dist[7];
+                    BOOL bottomRowTie = (min_index == 5 || min_index == 6 || min_index == 7) && p_dist[5] == p_dist[6] && p_dist[5] == p_dist[7];
+                        
+                    // prefer central indices in case of triple-tie
+                    min_index = topRowTie    ? 1 :
+                                leftColTie   ? 3 :
+                                rightColTie  ? 4 :
+                                bottomRowTie ? 6 : min_index;
+                        
+                    // move the entity
+                    [ self moveEntity:pcEntity toPosition:p[min_index]];
+                    
+                }
+                gameLogicIsOn ? [self stepGameLogic] : 0;
+                [ self resetCameraPosition ];
             }
             // something was not prev. selected
-            /*
-            else {
-                [ self selectTileAtPosition: mapPoint ];
-            }
-             */
         }
         needsRedraw = YES;
     }
@@ -2708,13 +2673,10 @@ NSUInteger getMagicY( NSUInteger y ) {
                     
                 if ( entity == pcEntity ) {
                     if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
-                        //[ self addMessage: @"Going downstairs..." ];
                         [ self addMessageWindowString: @"Going downstairs..." ];
-                        //MLOG(@"Going downstairs...");
                         [ self goingDownstairs ];
                     } else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
                         if ( floorNumber != 0 ) {
-                            //[ self addMessage: @"Going upstairs..." ];
                             [ self addMessageWindowString: @"Going upstairs..." ];
                             //MLOG(@"Going upstairs...");
                         }
@@ -2783,22 +2745,24 @@ NSUInteger getMagicY( NSUInteger y ) {
                                 }
                             }
                         } else if ( entity.itemPickupAlgorithm == ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE ) {
+                            
+                            
+                            // add all items on the tile to your inventory
+                            
                             Entity *item = nil;
-                            for ( Entity *e in [tile contents] ) {
+                            
+                            for ( int i = 0; i < [tile contents].count; i++) {
+                                Entity *e = [[tile contents] objectAtIndex:i];
                                 if ( e.entityType == ENTITY_T_ITEM ) {
-                                    //MLOG( @"There is a %@ here", e.name );
-                                    //[ self addMessage: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                                     [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", e.name]];
                                     item = e;
-                                    break;
+                                    if ( item.itemType != E_ITEM_T_DOOR_SIMPLE ) {
+                                        [ self handleItemPickup: item forEntity: entity ];
+                                        i = 0;
+                                    }
                                 }
                             }
-                            if ( item != nil ) {
-                                // add the item to your inventory
-                                if ( item.itemType != E_ITEM_T_DOOR_SIMPLE ) {
-                                    [ self handleItemPickup: item forEntity: entity ];
-                                }
-                            }
+                            
                         }
                     } else if ( doorExists ) {
                         //[self addMessageWindowString: @"There is an open door here"];
@@ -3458,7 +3422,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     hero.entityType = ENTITY_T_PC;
     hero.isPC = YES;
     hero.pathFindingAlgorithm = ENTITYPATHFINDINGALGORITHM_T_SIMPLE;
-    hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
+    
+    
+    hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_AUTO_SIMPLE;
+    //hero.itemPickupAlgorithm = ENTITYITEMPICKUPALGORITHM_T_NONE;
     
     hero.level = 1;
     
@@ -4116,17 +4083,27 @@ NSUInteger getMagicY( NSUInteger y ) {
             Tile *itemTile = [ self getTileForCGPoint:item.positionOnMap ];
             if ( itemTile != nil ) {
                 if ( item.itemType == E_ITEM_T_WEAPON ) {
+                    
                     // equip the weapon
-                    if ( entity.equippedArmsLeft == nil ) {
-                        entity.equippedArmsLeft = item;
+                    //if ( entity.equippedArmsLeft == nil ) {
+                    if ( [[entity.equipment objectAtIndex:EQUIPSLOT_T_LARMTOOL] isEqual:[NSNull null]] ) {
+//                        entity.equippedArmsLeft = item;
+                        //[entity.equipment setObject:item atIndexedSubscript:EQUIPSLOT_T_LARMTOOL];
+                        
+                        [entity equipItem:item forEquipSlot:EQUIPSLOT_T_LARMTOOL];
                         [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
                         [ self addMessageWindowString: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
                         wasPickedUp = YES;
-                    } else {
+                    }
+                    
+                    else {
                         if ( entity.equippedArmsLeft.damageRollBase < item.damageRollBase ||
-                             entity.equippedArmsLeft.damageBonus < item.damageBonus ) {
+                             entity.equippedArmsLeft.damageBonus < item.damageBonus )
+                        {
                             // entity puts his weapon into his inventory
-                            entity.equippedArmsLeft = item;
+                            //entity.equippedArmsLeft = item;
+                            //[entity.equipment setObject:item atIndexedSubscript:EQUIPSLOT_T_LARMTOOL];
+                            [entity equipItem:item forEquipSlot:EQUIPSLOT_T_LARMTOOL];
                             [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
                             [ self addMessageWindowString: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
                             wasPickedUp = YES;
@@ -4138,25 +4115,59 @@ NSUInteger getMagicY( NSUInteger y ) {
                         }
                     }
                 } else if ( item.itemType == E_ITEM_T_ARMOR ) {
-                    // equip the weapon
-                    if ( entity.equippedArmorChest == nil ) {
-                        entity.equippedArmorChest = item;
+                    
+                    wasPickedUp = YES;
+                    
+                    // equip the armor
+                    if ( item.armorType == ARMOR_T_VEST ||
+                         item.armorType == ARMOR_T_MAIL ||
+                         item.armorType == ARMOR_T_ROBE
+                        ) {
+                        
+                        if ( [[entity.equipment objectAtIndex:EQUIPSLOT_T_CHEST] isEqual:[NSNull null]] ) {
+                            //[entity.equipment setObject:item atIndexedSubscript:EQUIPSLOT_T_CHEST];
+                            [entity equipItem:item forEquipSlot:EQUIPSLOT_T_CHEST];
+                        } else {
+                            if ( [[entity.equipment objectAtIndex:EQUIPSLOT_T_CHEST] ac] < item.ac )
+                                
+                                [entity equipItem:item forEquipSlot:EQUIPSLOT_T_CHEST];
+                            //[entity.equipment setObject:item atIndexedSubscript:EQUIPSLOT_T_CHEST];
+                        }
+                        
+                    }
+                    
+                    else if ( item.armorType == ARMOR_T_SHOE ) {
+                        if ( [[entity.equipment objectAtIndex:EQUIPSLOT_T_FEET] isEqual:[NSNull null]] ) {
+                            //[entity.equipment setObject:item atIndexedSubscript:EQUIPSLOT_T_FEET];
+                            [entity equipItem:item forEquipSlot:EQUIPSLOT_T_FEET];
+                            
+                        } else {
+                            if ( [[entity.equipment objectAtIndex:EQUIPSLOT_T_FEET] ac] < item.ac ) 
+                                //[entity.equipment setObject:item atIndexedSubscript:EQUIPSLOT_T_FEET];
+                                [entity equipItem:item forEquipSlot:EQUIPSLOT_T_FEET];
+                        }
+                        
+                    }
+                    
+                    
+                    else if ( item.armorType == ARMOR_T_SHIELD ) {
+                        if ( [[entity.equipment objectAtIndex:EQUIPSLOT_T_RARMTOOL] isEqual:[NSNull null]] ) {
+                            //[entity.equipment setObject:item atIndexedSubscript:EQUIPSLOT_T_RARMTOOL];
+                            [entity equipItem:item forEquipSlot:EQUIPSLOT_T_RARMTOOL];
+                        } else {
+                            if ( [[entity.equipment objectAtIndex:EQUIPSLOT_T_RARMTOOL] ac] < item.ac ) 
+                                //[entity.equipment setObject:item atIndexedSubscript:EQUIPSLOT_T_RARMTOOL];
+                                [entity equipItem:item forEquipSlot:EQUIPSLOT_T_RARMTOOL];
+                        }
+                        
+                    }
+                    
+                    if (wasPickedUp) {
                         [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
                         [ self addMessageWindowString: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
-                        wasPickedUp = YES;
-                    } else {
-                        if ( entity.equippedArmorChest.ac < item.ac ) {
-                            entity.equippedArmorChest = item;
-                            [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
-                            [ self addMessageWindowString: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
-                            wasPickedUp = YES;
-                        }
-                        // else - we don't equip the new item, just store it
-                        else {
-                            [ self addMessage: [NSString stringWithFormat:@"There is a %@ here", item.name]];
-                            [ self addMessageWindowString: [NSString stringWithFormat:@"There is a %@ here", item.name]];
-                        }
                     }
+                    
+                    
                 } else {
                     wasPickedUp = YES;
                     [[ entity inventoryArray ] addObject: item ];
