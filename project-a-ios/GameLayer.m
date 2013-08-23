@@ -4168,12 +4168,42 @@ NSUInteger getMagicY( NSUInteger y ) {
                     }
                     
                     
-                } else {
+                }
+                
+                
+                else if ( item.itemType == E_ITEM_T_RING ) {
+                    
+                    wasPickedUp = YES;
+                    
+                    // to handle all scenarios just rotate back and forth between slots
+                    static int slotSwapper = 0;
+                    if ( slotSwapper == 0 ) {
+                        [entity equipItem:item forEquipSlot:EQUIPSLOT_T_LRING];
+                        slotSwapper=1;
+                    }
+                    
+                    else if ( slotSwapper == 1 ) {
+                        [entity equipItem:item forEquipSlot:EQUIPSLOT_T_RRING];
+                        slotSwapper=0;
+                    }
+                
+                    if (wasPickedUp) {
+                        [ self addMessage: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                        [ self addMessageWindowString: [NSString stringWithFormat:@"%@ equips a %@", entity.name, item.name]];
+                    }
+                    
+                }
+                
+                
+                
+                else {
                     wasPickedUp = YES;
                     [[ entity inventoryArray ] addObject: item ];
                     [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
                     [ self addMessageWindowString: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
                 }
+                
+                
                 // remove the item from our entityArray and from it's tile's contents
                 if ( wasPickedUp ) {
                     [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
