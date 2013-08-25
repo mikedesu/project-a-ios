@@ -1213,8 +1213,9 @@ static NSString  * const notifications[] = {
 }
 
 -(void) updateEquipMenu {
-    
+    [equipMenu update];
 }
+
 
 
 #pragma mark - Help Menu

@@ -110,11 +110,28 @@
         MenuItem *larmtool = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
         MenuItem *rarmtool = [[MenuItem alloc] initWithLabel:[CCLabelTTF labelWithString:@"_" dimensions:CGSizeMake(screenwidth, 20) hAlignment:kCCTextAlignmentLeft fontName:@"Courier New" fontSize:18] block: menuControlBlock];
         
-        NSString *equipmentNames[EQUIPSLOT_T_NUMSLOTS];
+        NSMutableString *equipmentNames[EQUIPSLOT_T_NUMSLOTS];
+        for (int i=0; i<EQUIPSLOT_T_NUMSLOTS; i++)
+            equipmentNames[i] = [NSMutableString stringWithString:@""];
+        
         for (int i=0; i<EQUIPSLOT_T_NUMSLOTS; i++) {
             Entity *e = [pc.equipment objectAtIndex:i];
-            equipmentNames[i] = (e == nil) ? nil : [e isKindOfClass:NSClassFromString(@"NSNull")] ? nil : [NSString stringWithFormat:@"%@", e.name];
+            //equipmentNames[i] = (e == nil) ? nil : [e isKindOfClass:NSClassFromString(@"NSNull")] ? nil : [NSString stringWithFormat:@"%@", e.name];
+            
+            if ( e != nil ) {
+                
+                if ( [e isKindOfClass:NSClassFromString(@"NSNull")] ) {
+                    [equipmentNames[i] setString: @"empty!"];
+                }
+                else {
+                    [equipmentNames[i] setString: e.name];
+                }
+            }
+            else {
+                [equipmentNames[i] setString: @"empty!"];
+            }
         }
+        
         
         head.label.string       = [NSString stringWithFormat:@"Head: %@",           equipmentNames[EQUIPSLOT_T_HEAD]];
         neck.label.string       = [NSString stringWithFormat:@"Neck: %@",           equipmentNames[EQUIPSLOT_T_BACK]];
@@ -242,6 +259,8 @@
         equipSubmenu = [[EquipSubmenu alloc] initWithPC: pc];
         equipSubmenuIsVisible = NO;
         [self registerNotifications];
+        
+        [self update];
     }
     return self;
 }
@@ -286,11 +305,28 @@
     
     
     
-    NSString *equipmentNames[EQUIPSLOT_T_NUMSLOTS];
+    NSMutableString *equipmentNames[EQUIPSLOT_T_NUMSLOTS];
+    for (int i=0; i<EQUIPSLOT_T_NUMSLOTS; i++)
+        equipmentNames[i] = [NSMutableString stringWithString:@""];
+    
     for (int i=0; i<EQUIPSLOT_T_NUMSLOTS; i++) {
         Entity *e = [pc.equipment objectAtIndex:i];
-        equipmentNames[i] = (e == nil) ? nil : [e isKindOfClass:NSClassFromString(@"NSNull")] ? nil : [NSString stringWithFormat:@"%@", e.name];
+        //equipmentNames[i] = (e == nil) ? nil : [e isKindOfClass:NSClassFromString(@"NSNull")] ? nil : [NSString stringWithFormat:@"%@", e.name];
+        
+        if ( e != nil ) {
+            
+            if ( [e isKindOfClass:NSClassFromString(@"NSNull")] ) {
+                [equipmentNames[i] setString: @"empty!"];
+            }
+            else {
+                [equipmentNames[i] setString: e.name];
+            }
+        }
+        else {
+            [equipmentNames[i] setString: @"empty!"];
+        }
     }
+    
     
     head.label.string       = [NSString stringWithFormat:@"Head: %@",           equipmentNames[EQUIPSLOT_T_HEAD]];
     neck.label.string       = [NSString stringWithFormat:@"Neck: %@",           equipmentNames[EQUIPSLOT_T_BACK]];
