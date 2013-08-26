@@ -33,6 +33,10 @@ unsigned get_memory_mb(void) {
 @synthesize currentSpellBeingCast;
 @synthesize zodiacEra;
 
+@synthesize equipMenu;
+
+//@synthesize equipMenu;
+
 /*
  ====================
  scene
@@ -416,7 +420,7 @@ unsigned get_memory_mb(void) {
     sprites = nil;
     
     [self unschedule:@selector(tick:)];
-    [self removeNotifications];
+    //[self removeNotifications];
     [self removeAllChildrenWithCleanup:YES];
 }
 
@@ -501,6 +505,7 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) initializeNotifications {
+    M3LOG(@"initializeNotifications");
     for (int i=0; i<notificationsCount; i++)
         [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:notifications[i] object:nil];
 }
@@ -513,6 +518,7 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) removeNotifications {
+    M3LOG(@"removeNotifications");
      for (int i=0; i<notificationsCount; i++)
         [[ NSNotificationCenter defaultCenter ] removeObserver:self name:notifications[i] object:nil];
 }

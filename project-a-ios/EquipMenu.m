@@ -465,12 +465,25 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"EquipMenuReturnNotification" object:self];
 }
 
+//static bool registered = NO;
 
 -( void ) registerNotifications {
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuNotificationReturn" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuNotificationUpdateReturn" object:nil];
-    [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuNotificationShow" object:nil];
+    M3LOG(@"registerNotifications");
+    //if ( ! registered ) {
+        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuNotificationReturn" object:nil];
+        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuNotificationUpdateReturn" object:nil];
+        [[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuNotificationShow" object:nil];
+        //registered = YES;
+    //}
     //[[ NSNotificationCenter defaultCenter ] addObserver: self selector:@selector(receiveNotification:) name:@"EquipSubmenuReturnNotification" object:nil];
+    
+}
+
+-( void ) unregisterNotifications {
+    M3LOG(@"unregisterNotifications");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"EquipSubmenuNotificationReturn" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"EquipSubmenuNotificationUpdateReturn" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"EquipSubmenuNotificationShow" object:nil];
 }
 
 

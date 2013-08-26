@@ -139,13 +139,20 @@ typedef enum {
 @property (nonatomic, assign) Spell_t currentSpellBeingCast;
 //@property (nonatomic) DungeonFloor *safeRoom;
 
+// allow access to MasterLayer
+@property (atomic) EquipMenu *equipMenu;
+
 
 +(CCScene *) scene;
 
 -( id ) init;
 -( void ) dealloc;
 
+-( void ) cleanupGame;
+
 -( void ) receiveNotification: ( NSNotification * ) notification;
+
+-( void ) removeNotifications;
 
 -(void) initMessageWindow;
 -(void) addMessageWindowString: (NSString *) string;

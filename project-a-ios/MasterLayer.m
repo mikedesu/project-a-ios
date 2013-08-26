@@ -95,6 +95,13 @@
         
     } else if ([notification.name isEqualToString:@"UnloadGame"]) {
         
+        // unregister lower-level notifications
+        [gameLayer.equipMenu unregisterNotifications];
+        [gameLayer removeNotifications];
+        
+        [gameLayer cleanupGame];
+        
+        
         [self removeChild:gameLayer cleanup:YES];
         gameLayer = nil;
         

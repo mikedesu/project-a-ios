@@ -37,5 +37,6 @@ typedef void (^EquipMenuControlBlock)(CCMenuItemLabel *);
 -(id)   initWithPC: (Entity *) _pc withFloor: (DungeonFloor *) _floor withGameLayer: (GameLayer *) _gameLayer;
 -(void) update;
 -(void) registerNotifications;
+-(void) unregisterNotifications;
 -(void) receiveNotification: (NSNotification *) notification;
 @end
