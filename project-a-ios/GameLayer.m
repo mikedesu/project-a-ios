@@ -3660,6 +3660,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         BOOL rollIsUnacceptable = YES;
         CGPoint newPosition;
         while ( rollIsUnacceptable ) {
+            MLOG(@"Rolling for tile to move to...");
             NSUInteger roll = [Dice roll:8];
             CGFloat x = -1;
             CGFloat y = -1;
@@ -3696,6 +3697,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             
             Tile *tile = [ self getTileForCGPoint: newPosition ];
             rollIsUnacceptable = tile.tileType == TILE_FLOOR_VOID;
+            
         }
         
         // try to move the entity to the new position
