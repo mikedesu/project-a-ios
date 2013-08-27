@@ -138,8 +138,8 @@
     [e.name setString:@"Torch"];
     e.isPC                  = NO;
     e.weight            = 1;
-    e.durability        = 20;
-    e.totalDurability   = 20;
+    e.durability        = 512;
+    e.totalDurability   = 512;
     e.lightLevel        = light;
     return e;    
 }

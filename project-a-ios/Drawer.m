@@ -607,20 +607,10 @@
     
     int pad = 2;
  
-    
-    
-    
     Color_t armorColor = hasChestArmor ? brown : skincolor0;
     Color_t pantsColor = gray;
     
-    
-    
-    
-    
-    
     CCMutableTexture2D *hero = [Drawer guy:skincolor0 body:armorColor pants: pantsColor blindfolded: NO];
-    
-    
     
     if ( hasChestArmor ) {
         Entity *armor = [pc.equipment objectAtIndex: EQUIPSLOT_T_CHEST];
@@ -650,9 +640,15 @@
         Color_t swordColor = white;
             swordColor = [leftArmTool.name isEqualToString:@"Asura"] ? red :
             leftArmTool.wood > 0 ? brown :
-            leftArmTool.metal > 0 ? gray :
+            
+            leftArmTool.metal > 0 ?
+                (leftArmTool.metal == METAL_T_IRON ? gray :
+                 leftArmTool.metal == METAL_T_STEEL ? darkgray :
+                 gray) :
+        
             leftArmTool.stone > 0 ? gray :
             white;
+            
             
         Color_t armColor = armorColor;
         for (int i=9+pad; i<11+pad; i++) [hero setPixelAt:ccp(i,7) rgba:armColor];
@@ -696,11 +692,17 @@
         if ( rightArmTool.itemType == E_ITEM_T_WEAPON ) {
             
             Color_t swordColor = white;
-            swordColor = [rightArmTool.name isEqualToString:@"Asura"] ? red :
-            rightArmTool.wood > 0 ? brown :
-            rightArmTool.metal > 0 ? gray :
-            rightArmTool.stone > 0 ? gray :
-            white;
+                swordColor = [rightArmTool.name isEqualToString:@"Asura"] ? red :
+                rightArmTool.wood > 0 ? brown :
+            
+                rightArmTool.metal > 0 ?
+                (rightArmTool.metal == METAL_T_IRON ? gray :
+                 rightArmTool.metal == METAL_T_STEEL ? darkgray :
+                 gray) :
+            
+                rightArmTool.stone > 0 ? gray :
+                white;
+            
             
             Color_t armColor = armorColor;
             for (int i=0+pad; i<2+pad; i++) [hero setPixelAt:ccp(i,7) rgba:armColor];

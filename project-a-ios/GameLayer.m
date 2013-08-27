@@ -4207,9 +4207,50 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 else {
                     wasPickedUp = YES;
-                    [[ entity inventoryArray ] addObject: item ];
                     [ self addMessage: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
                     [ self addMessageWindowString: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
+                    
+                    if ( item.itemType == E_ITEM_T_POTION ) {
+                        if ( item.potionType == POTION_T_HEALING ) {
+                            
+                            if ( pcEntity.maxhp - pcEntity.hp >= item.healingRollBase + item.healingBonus ) {
+                                NSInteger total = [Dice roll: item.healingRollBase] + item.healingBonus;
+                                pcEntity.hp += total;
+                                if ( pcEntity.hp > pcEntity.maxhp ) pcEntity.hp = pcEntity.maxhp;
+                                    [self addMessageWindowString:[NSString stringWithFormat:@"%@ recovered %d hp", pcEntity.name, total]];
+                                }
+                            else {
+                                [[ entity inventoryArray ] addObject: item ];
+                                
+                            }
+                            
+                        }
+                        
+                        else if ( item.potionType == POTION_T_POISON_ANTIDOTE ) {
+                            
+                            // for now - instant-cure
+                            if ( pcEntity.status.base == STATUS_T_POISON ) {
+                                pcEntity.status = [Status normal];
+                                [self addMessageWindowString:[NSString stringWithFormat:@"%@ is cured of poison!", pcEntity.name]];
+                            }
+                            else {
+                                [[ entity inventoryArray ] addObject: item ];
+                                
+                            }
+                            
+                        }
+                    }
+                    
+                    else if ( item.itemType == E_ITEM_T_FOOD ||
+                             item.itemType == E_ITEM_T_FISH) {
+                        pcEntity.hunger -= item.foodBase;
+                        [self addMessageWindowString:[NSString stringWithFormat:@"%@ ate a %@", pcEntity.name, item.name]];
+                    }
+                    
+                    else {
+                        [[ entity inventoryArray ] addObject: item ];
+                    }
+                    
                 }
                 
                 
