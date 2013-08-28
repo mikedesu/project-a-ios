@@ -11,6 +11,8 @@
 #import "AppDelegate.h"
 #import "GameLayer.h"
 
+#import "TestFlight.h"
+
 @implementation AppController
 
 @synthesize window=window_, navController=navController_, director=director_;
@@ -24,6 +26,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    // start of your application:didFinishLaunchingWithOptions // ...
+    [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]]; // DEPRECATED: REMOVE WHEN READY TO LAUNCH
+    [TestFlight takeOff:@"e3441539-7291-47cb-a69c-1d0a0eb91a22"];
+    // The rest of your application:didFinishLaunchingWithOptions method// ...
+    
+    
+    
 	// Create the main window
 	window_ = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
