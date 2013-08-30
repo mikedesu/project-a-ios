@@ -119,6 +119,7 @@ typedef enum {
     CGPoint cameraAnchorPoint;
     
     double touchBeganTime;
+    double touchEndedTime;
     
     BOOL gameLogicIsOn;
     BOOL autostepGameLogic;

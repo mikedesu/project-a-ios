@@ -1930,9 +1930,9 @@ static NSString  * const notifications[] = {
  ====================
  */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	//UITouch *touch=[touches anyObject];
-    //touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
-    //isTouched = YES;
+	UITouch *touch=[touches anyObject];
+    touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
+    isTouched = YES;
     
     //CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
     //CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
@@ -1961,8 +1961,8 @@ static NSString  * const notifications[] = {
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     
     UITouch *touch=[touches anyObject];
-    touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
-    isTouched = YES;
+    //touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
+    //isTouched = YES;
     
     CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
     CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
@@ -1991,7 +1991,7 @@ static NSString  * const notifications[] = {
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
     UITouch *touch=[touches anyObject];
-    touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
+    touchEndedTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = NO;
     
     CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
@@ -2001,6 +2001,18 @@ static NSString  * const notifications[] = {
     BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
     BOOL validMapPoint      = mapPoint.x >= 0          && mapPoint.y >= 0;
     
+    
+    // duration delta
+    
+    double duration_d = 1.0;
+    if ( touchEndedTime - touchBeganTime < duration_d ) {
+        [self shortPress:touch];
+    }
+    else {
+        [self longPress];
+    }
+    
+    /*
     if ( messageWindowIsVisible ) {
         // make window go away, we acknowledge message
         [ self removeMessageWindow ];
@@ -2142,6 +2154,7 @@ static NSString  * const notifications[] = {
         }
         needsRedraw = YES;
     }
+     */
 }
 
 /*
@@ -2160,6 +2173,160 @@ static NSString  * const notifications[] = {
  */
 -( void ) shortPress: (UITouch *) touch {
     //MLOG( @"short press" );
+    
+    //UITouch *touch=[touches anyObject];
+    //touchEndedTime = [NSDate timeIntervalSinceReferenceDate];
+    //isTouched = NO;
+    
+    CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
+    CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
+    
+    // valid selected point
+    BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
+    BOOL validMapPoint      = mapPoint.x >= 0          && mapPoint.y >= 0;
+    
+    
+    if ( messageWindowIsVisible ) {
+        // make window go away, we acknowledge message
+        [ self removeMessageWindow ];
+    } else {
+        if ( gameState == GAMESTATE_T_GAME_PC_FISHING_PRECAST ) {
+            // check tile cast on
+            if ( validMapPoint ) {
+                Tile *a = [ self getTileForCGPoint: mapPoint ];
+                
+                // check tiletype...
+                if ( a.tileType != TILE_FLOOR_WATER ) {
+                    [ self addMessageWindowString: @"That is not a water tile..." ];
+                } else {
+                    [ self addMessageWindowString: @"You catch a fish!" ];
+                    [self handleItemPickup:[Items catfish] forEntity:pcEntity];
+                }
+            }
+            gameState = GAMESTATE_T_MAINMENU;
+            gameLogicIsOn ? [self stepGameLogic] : 0;
+        }
+        
+        else if ( gameState == GAMESTATE_T_GAME_PC_KEY_PREUSE ) {
+            // check tile for locked door
+            
+            if ( validMapPoint ) {
+                Tile *a = [self getTileForCGPoint: mapPoint];
+                
+                Entity *door = nil;
+                for (Entity *e in a.contents) {
+                    if (e.itemType == E_ITEM_T_DOOR_SIMPLE) {
+                        door = e;
+                        break;
+                    }
+                }
+                
+                if ( door != nil ) {
+                    door.doorLocked = NO;
+                    [self addMessageWindowString: @"Door unlocked"];
+                }
+                else {
+                    [self addMessageWindowString: @"No door here"];
+                }
+            }
+            
+            gameState = GAMESTATE_T_MAINMENU;
+            gameLogicIsOn ? [self stepGameLogic] : 0;
+        }
+        
+        // not fishing, going for quick-move
+        else {
+            // something was previously selected
+            //if ( validSelectedPoint ) {
+            if ( validMapPoint ) {
+                // check if we hit the same tile again
+                Tile *a = [ self getTileForCGPoint: mapPoint ];
+                
+                // check distance from pcEntity
+                Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
+                NSInteger distance = [ GameTools distanceFromTile:a toTile: pcTile ];
+                
+                if ( distance <= pcEntity.movement ) {
+                    // valid quick-move
+                    // deselect the tile
+                    [ self selectTileAtPosition: mapPoint ];
+                    
+                    // move the pcEntity to the tile
+                    if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y ) {
+                        [ self moveEntity:pcEntity toPosition:mapPoint ];
+                    } else {
+                        // rest
+                        [self addMessage:@"You rest..."];
+                        [self addMessageWindowString:@"You rest..."];
+                        pcEntity.hp++;
+                        if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
+                        [pcEntity getHungry];
+                    }
+                }
+                
+                else {
+                    // invalid quick-move
+                    // possibly other quick-action
+                    // deselect the tile
+                    MLOG(@"Invalid quick-move. Deselecting tile...");
+                    [ self selectTileAtPosition: mapPoint ];
+                    
+                    // long-distance move
+                    // 1. get the nearest tile from the pc
+                    // this code was taken and altered from the friendly cat movement algorithm
+                    
+                    CGPoint basePos = pcEntity.positionOnMap;
+                    
+                    // check around the pc and compare each point
+                    
+                    CGPoint p[8];
+                    int p_dist[8];
+                    p[0] = ccp( basePos.x - 1, basePos.y - 1);
+                    p[1] = ccp( basePos.x, basePos.y - 1);
+                    p[2] = ccp( basePos.x + 1, basePos.y - 1);
+                    p[3] = ccp( basePos.x - 1, basePos.y );
+                    p[4] = ccp( basePos.x + 1, basePos.y );
+                    p[5] = ccp( basePos.x - 1, basePos.y + 1 );
+                    p[6] = ccp( basePos.x, basePos.y + 1 );
+                    p[7] = ccp( basePos.x + 1, basePos.y + 1 );
+                    
+                    for (int i=0; i<8; i++)
+                        p_dist[i] = [ GameTools distanceFromCGPoint:p[i] toCGPoint: mapPoint ];
+                    
+                    // compute min
+                    int min = 1000;
+                    int min_index = 1000;
+                    for (int i=0; i<8; i++) {
+                        // also check if it is a void tile
+                        if ( p_dist[i] <= min && [self getTileForCGPoint:p[i]].tileType != TILE_FLOOR_VOID ) {
+                            min = p_dist[i];
+                            min_index = i;
+                        }
+                    }
+                    
+                    // check for border-ties
+                    BOOL topRowTie    = (min_index == 0 || min_index == 1 || min_index == 2) && (p_dist[0] == p_dist[1] && p_dist[0] == p_dist[2]);
+                    BOOL leftColTie   = (min_index == 0 || min_index == 3 || min_index == 5) && p_dist[0] == p_dist[3] && p_dist[0] == p_dist[5];
+                    BOOL rightColTie  = (min_index == 2 || min_index == 4 || min_index == 7) && p_dist[2] == p_dist[4] && p_dist[2] == p_dist[7];
+                    BOOL bottomRowTie = (min_index == 5 || min_index == 6 || min_index == 7) && p_dist[5] == p_dist[6] && p_dist[5] == p_dist[7];
+                    
+                    // prefer central indices in case of triple-tie
+                    min_index = topRowTie    ? 1 :
+                    leftColTie   ? 3 :
+                    rightColTie  ? 4 :
+                    bottomRowTie ? 6 : min_index;
+                    
+                    // move the entity
+                    [ self moveEntity:pcEntity toPosition:p[min_index]];
+                    
+                }
+                gameLogicIsOn ? [self stepGameLogic] : 0;
+                [ self resetCameraPosition ];
+            }
+            // something was not prev. selected
+        }
+        needsRedraw = YES;
+    }
 }
 
 /*
@@ -2169,6 +2336,9 @@ static NSString  * const notifications[] = {
  */
 -( void ) longPress {
     //MLOG( @"long press" );
+    
+    UIAlertView *alert = [[ UIAlertView alloc] initWithTitle:@"Test" message:@"Long Press" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    [alert show];
 }
 
 #pragma mark - Tile code
