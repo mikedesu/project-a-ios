@@ -14,6 +14,13 @@
     TitleScreen *titleScreen;
     CharacterCreationScreen *characterCreationScreen;
     GameLayer *gameLayer;
+    
+    NSInteger strength;
+    NSInteger dexterity;
+    NSInteger constitution;
+    NSInteger intelligence;
+    NSInteger wisdom;
+    NSInteger charisma;
 }
 
 @property (nonatomic) TitleScreen *titleScreen;
@@ -23,6 +30,7 @@
 +(AppController *) sharedController;
 
 +(CCScene *) scene;
+-(void) rollStats;
 -(void) handleNotification: (NSNotification *) notification;
 
 @end

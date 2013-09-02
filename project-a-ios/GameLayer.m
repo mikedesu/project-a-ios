@@ -3608,10 +3608,10 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     // pull stats down via controller
     // if stats == -1, roll
+    
+    /*
     AppController *controller = [MasterLayer sharedController];
-    
     NSAssert(controller.strength > 0, @"Strength is negative");
-    
     if ( controller.strength > 0) {
         hero.strength       = controller.strength;
         hero.dexterity      = controller.dexterity;
@@ -3621,16 +3621,17 @@ NSUInteger getMagicY( NSUInteger y ) {
         hero.charisma       = controller.charisma;
     }
     else {
-        hero.strength       = [Dice roll:6 nTimes:3];
-        hero.dexterity      = [Dice roll:6 nTimes:3];
-        hero.constitution   = [Dice roll:6 nTimes:3];
-        hero.intelligence   = [Dice roll:6 nTimes:3];
-        hero.wisdom         = [Dice roll:6 nTimes:3];
-        hero.charisma       = [Dice roll:6 nTimes:3];
-    }
+     */
+    hero.strength       = 3;
+    hero.dexterity      = 3;
+    hero.constitution   = 3;
+    hero.intelligence   = 3;
+    hero.wisdom         = 3;
+    hero.charisma       = 3;
+    //}
     
     // stat tolerance
-    /*
+    
     NSUInteger _tolerance = 12;
     while (hero.strength < _tolerance)      hero.strength       = [Dice roll:6 nTimes:3];
     while (hero.dexterity < _tolerance)     hero.dexterity      = [Dice roll:6 nTimes:3];
@@ -3638,14 +3639,13 @@ NSUInteger getMagicY( NSUInteger y ) {
     while (hero.intelligence < _tolerance)  hero.intelligence   = [Dice roll:6 nTimes:3];
     while (hero.wisdom < _tolerance)        hero.wisdom         = [Dice roll:6 nTimes:3];
     while (hero.charisma < _tolerance)      hero.charisma       = [Dice roll:6 nTimes:3];
-    */
+    
     
     NSInteger conMod = [GameRenderer modifierForNumber:hero.constitution];
     NSUInteger pcHD = 12;
     hero.maxhp = [Dice roll:pcHD] + conMod;
     
-    while (hero.maxhp <= 0)
-        hero.maxhp = [Dice roll:pcHD] + conMod;
+    while (hero.maxhp <= 0) hero.maxhp = [Dice roll:pcHD] + conMod;
     
     
     hero.hp = hero.maxhp;
@@ -3660,7 +3660,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     [[ pcEntity inventoryArray ] addObject: item ];
     */
     
-    MLOG(@"");
+    //MLOG(@"");
 }
 
 /*
