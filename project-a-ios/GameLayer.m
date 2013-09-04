@@ -334,6 +334,9 @@ unsigned get_memory_mb(void) {
     [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
     MLOG(@"");
     
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayerMenuCloseNotification" object:nil];
+    
     /*
     MLOG(@"INSTRUCTIONS");
     for ( NSString *s in [Drawer codeForTexture:[sprites objectForKey:@"BookOfAllKnowing"]]) MLOG(@"%@", s);
@@ -844,10 +847,10 @@ static NSString  * const notifications[] = {
         if ( ! isMinimized ) {
             isMinimized = YES;
             [ self removePlayerMenu: playerMenu ];
-            [ self addPlayerMenuMin: playerMenuMin ];
+            //[ self addPlayerMenuMin: playerMenuMin ];
         } else {
             isMinimized = NO;
-            [ self removePlayerMenuMin: playerMenuMin ];
+            //[ self removePlayerMenuMin: playerMenuMin ];
             [ self addPlayerMenu: playerMenu ];
         }
     } else if ( [notification.name isEqualToString: @"PlayerMenuTogglePositionNotification" ]) {
@@ -2337,8 +2340,10 @@ static NSString  * const notifications[] = {
 -( void ) longPress {
     //MLOG( @"long press" );
     
-    UIAlertView *alert = [[ UIAlertView alloc] initWithTitle:@"Test" message:@"Long Press" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [alert show];
+    //UIAlertView *alert = [[ UIAlertView alloc] initWithTitle:@"Test" message:@"Long Press" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    //[alert show];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayerMenuCloseNotification" object:nil];
 }
 
 #pragma mark - Tile code
