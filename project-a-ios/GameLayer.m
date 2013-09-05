@@ -2865,6 +2865,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                         [ self goingUpstairs ];
                     }
                     
+                    /*
                     else if ( tile.tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 ||
                               tile.tileType == TILE_FLOOR_STONE_TRAP_POISON_D6
                              ) {
@@ -2878,6 +2879,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                             [self addMessageWindowString:@"There is a disarmed trap here"];
                         }
                     }
+                     */
                     
                     else if ( tile.tileType == TILE_FLOOR_ACID ) {
                         
@@ -3057,6 +3059,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     Tile *t = [self getMapTileFromPoint:pcPos];
     
+    /*
     if ( t.tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 ) {
         
         // chance to set trap off
@@ -3080,8 +3083,10 @@ NSUInteger getMagicY( NSUInteger y ) {
             [ self addMessageWindowString: [ NSString stringWithFormat:@"Success!" ]];
         }
     }
+     */
     
     // poison trap tile
+    /*
     else if ( t.tileType == TILE_FLOOR_STONE_TRAP_POISON_D6 ) {
         
         // chance to set trap off
@@ -3102,6 +3107,7 @@ NSUInteger getMagicY( NSUInteger y ) {
             [ self addMessageWindowString: [ NSString stringWithFormat:@"Success!" ]];
         }
     }
+     */
 }
 
 

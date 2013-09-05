@@ -66,6 +66,7 @@
  */
 -( void ) handleTileType: (Tile_t) _tileType {
     // handle trapIsSet based on tile type
+    /*
     if ( _tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 ) {
         trapIsSet = YES;
         tripDamageBase = 6;
@@ -77,10 +78,11 @@
         tripDamageMod = 0;
     }
     else {
+     */
         trapIsSet = NO;
         tripDamageBase = 0;
         tripDamageMod = 0;
-    }
+    //}
 }
 
 

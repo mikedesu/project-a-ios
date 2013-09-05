@@ -159,16 +159,16 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     CCMutableTexture2D *tileTexture =
     
     tileType == TILE_FLOOR_STONE               ? [sprites objectForKey:@"StoneTileGray0"]      :
-    tileType == TILE_FLOOR_STONE_GRAY          ? [sprites objectForKey:@"StoneTileGray0"]      :
-    tileType == TILE_FLOOR_STONE_RED           ? [sprites objectForKey:@"StoneTileRed0"]      :
-    tileType == TILE_FLOOR_STONE_GOLD          ? [sprites objectForKey:@"StoneTileGold0"]      :
+    //tileType == TILE_FLOOR_STONE_GRAY          ? [sprites objectForKey:@"StoneTileGray0"]      :
+    //tileType == TILE_FLOOR_STONE_RED           ? [sprites objectForKey:@"StoneTileRed0"]      :
+    //tileType == TILE_FLOOR_STONE_GOLD          ? [sprites objectForKey:@"StoneTileGold0"]      :
     
     
     tileType == TILE_FLOOR_GRASS          ? [sprites objectForKey:@"GrassTile"]      :
     tileType == TILE_FLOOR_ACID           ? [sprites objectForKey:@"AcidTile"]      :
     tileType == TILE_FLOOR_LAVA           ? [sprites objectForKey:@"LavaTile"]      :
-    tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
-    tileType == TILE_FLOOR_STONE_TRAP_POISON_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
+    //tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
+    //tileType == TILE_FLOOR_STONE_TRAP_POISON_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
     tileType == TILE_FLOOR_VOID           ? [sprites objectForKey:@"VoidTile"]       :
     tileType == TILE_FLOOR_UPSTAIRS       ? [sprites objectForKey:@"UpstairsTile"]   :
     tileType == TILE_FLOOR_DOWNSTAIRS     ? [sprites objectForKey:@"DownstairsTile"] :
@@ -176,17 +176,17 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                                              nil;
     
     // hidden traps
-    if ( tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 && data.trapIsSet ) {
-        tileTexture = [sprites objectForKey:@"StoneTile"];
-    } else if ( tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 && ! data.trapIsSet ) {
-        tileTexture = [sprites objectForKey:@"StoneTileTrap"];
-    }
+    //if ( tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 && data.trapIsSet ) {
+    //    tileTexture = [sprites objectForKey:@"StoneTile"];
+    //} else if ( tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 && ! data.trapIsSet ) {
+    //    tileTexture = [sprites objectForKey:@"StoneTileTrap"];
+   // }
     
-    if ( tileType == TILE_FLOOR_STONE_TRAP_POISON_D6 && data.trapIsSet ) {
-        tileTexture = [sprites objectForKey:@"StoneTile"];
-    } else if ( tileType == TILE_FLOOR_STONE_TRAP_POISON_D6 && ! data.trapIsSet ) {
-        tileTexture = [sprites objectForKey:@"StoneTileTrap"];
-    }
+    //if ( tileType == TILE_FLOOR_STONE_TRAP_POISON_D6 && data.trapIsSet ) {
+    //    tileTexture = [sprites objectForKey:@"StoneTile"];
+    //} else if ( tileType == TILE_FLOOR_STONE_TRAP_POISON_D6 && ! data.trapIsSet ) {
+    //    tileTexture = [sprites objectForKey:@"StoneTileTrap"];
+    //}
     
     
     // in most cases, we will fill our texture
@@ -780,10 +780,15 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     
     BOOL doPrintMaxTiles = NO;
     
+    
+    
     // determine a tile-type as the base tile type to use
     Tile_t baseTileType;
     
     baseTileType = TILE_FLOOR_STONE;
+    
+    
+    
     
     CGPoint point = ccp( x, y );
     [ self setTileAtPosition:point onFloor:floor toType:baseTileType ];
@@ -870,38 +875,16 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
         
         if ( ! willReroll ) {
             
+            
+            
             // Programmatically set the tile type
-            
             Tile_t tileType = baseTileType;
-            
-            
-            /*
-             
-             stone: 55%
-             water: 10%
-             grass: 20%
-             acid:  5%
-             lava:  10%
-             
-             */
-            
-            NSInteger tileRoll = [Dice roll:100];
-            
-            //tileType = TILE_FLOOR_STONE_GOLD;
-            //tileType = tileRoll < 75 ? TILE_FLOOR_STONE : TILE_FLOOR_ACID;
-            
-             tileType =
-                tileRoll >= 1 && tileRoll <= 53    ? TILE_FLOOR_STONE_GRAY :
-                tileRoll == 54                     ? TILE_FLOOR_STONE_RED  :
-                tileRoll == 55                     ? TILE_FLOOR_STONE_GOLD :
-                tileRoll >= 56 && tileRoll <= 65   ? TILE_FLOOR_WATER :
-            tileRoll >= 66 && tileRoll <= 85   ? TILE_FLOOR_GRASS :
-            tileRoll >= 86 && tileRoll <= 90   ? TILE_FLOOR_ACID :
-            TILE_FLOOR_LAVA;
-            
             
             // setTileAtPosition will call handleTile and set if trapped
             [ self setTileAtPosition:point onFloor:floor toType:tileType ];
+            
+            
+            
             
             Tile *_t = ((Tile *)[floor.tileDataArray objectAtIndex: point.x + ( point.y * floor.width) ]);
             // roll savagery

@@ -4,50 +4,54 @@
 //  Created by Mike Bell on 2/10/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
+
+/*
+ 
+ ideas for tilePalette generation via tileTypes...
+ 
+ base tileTypes:
+ 
+ void 0
+ upstairs 1
+ downstairs 2
+ 
+ stone 3
+ water 4
+ grass 5
+ acid 6  <-- may become 'swamp'
+ lava 7
+ ice 8
+ sand 9
+ 
+ 
+ From each type, every tile will also have:
+ 
+ temperature
+ wetness
+ salinity
+ drainage
+ vegetation
+ savagery
+ goodevil
+ 
+ */
+
+
 typedef enum {
     TILE_FLOOR_VOID=0,
     TILE_FLOOR_UPSTAIRS,
     TILE_FLOOR_DOWNSTAIRS,
     
-    
     TILE_FLOOR_STONE,
-    TILE_FLOOR_STONE_GRAY,
-    TILE_FLOOR_STONE_RED,
-    TILE_FLOOR_STONE_GOLD,
-    //TILE_FLOOR_STONE_ONYX,
-    //TILE_FLOOR_STONE_DIAMOND
-
-    
     TILE_FLOOR_WATER,
-    //TILE_FLOOR_WATER_DEEP
-    
     TILE_FLOOR_GRASS,
-    //TILE_FLOOR_GRASS_LIVELY,
-    //TILE_FLOOR_GRASS_DEAD,
-    
     TILE_FLOOR_ACID,    // instant-death tile
-    
     TILE_FLOOR_LAVA,    // greater fire damage every step
-    
-    // un-implemented
-    
     TILE_FLOOR_ICE,  //undefined
-    //TILE_FLOOR_ICE_WEAK,
-    //TILE_FLOOR_ICE_STRONG
-    
-    //TILE_FLOOR_SAND,
-    //TILE_FLOOR_GLASS,
-    
-    //TILE_FLOOR_EARTH_LUSH,
-    //TILE_FLOOR_EARTH_CRACKED,
-    
-    //TILE_FLOOR_
-    
-    
     
     // Trapped Tile-types
-    TILE_FLOOR_STONE_TRAP_SPIKES_D6,
-    TILE_FLOOR_STONE_TRAP_POISON_D6,
+    //TILE_FLOOR_STONE_TRAP_SPIKES_D6,
+    //TILE_FLOOR_STONE_TRAP_POISON_D6,
     
 } Tile_t;
 
