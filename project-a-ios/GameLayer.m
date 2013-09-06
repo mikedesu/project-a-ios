@@ -1264,10 +1264,13 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) initPlayerMenu {
-    NSInteger width  = screenwidth;
-    NSInteger height = 50;
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black width:width height:height ];
-    playerMenu.position = ccp( 0 , playerHUD.contentSize.height);
+    NSInteger width  = screenwidth/4;
+    NSInteger height = screenheight/2;
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(128) width:width height:height ];
+    
+    int offset = screenheight;
+    //playerMenu.position = ccp( 0 , playerHUD.contentSize.height + offset);
+    playerMenu.position = ccp( screenwidth - playerMenu.contentSize.width , screenheight - playerMenu.contentSize.height);
 }
 
 

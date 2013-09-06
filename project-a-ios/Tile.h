@@ -45,7 +45,7 @@ typedef enum {
     TILE_FLOOR_STONE,
     TILE_FLOOR_WATER,
     TILE_FLOOR_GRASS,
-    TILE_FLOOR_ACID,    // instant-death tile
+    TILE_FLOOR_ACID,    // instant-death tile - might be renamed to swamp tiles
     TILE_FLOOR_LAVA,    // greater fire damage every step
     TILE_FLOOR_ICE,  //undefined
     
