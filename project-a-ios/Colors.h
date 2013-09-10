@@ -36,6 +36,8 @@
 
 #define CC4B_GOLD_ALPHA(a) ccc4(0xcd, 0x7f, 0x32, a)
 
+#define CC4B_SAND_ALPHA(a) ccc4(0xd6, 0xb5, 0x5f, a)
+
 
 
 #define CC4B_RANDOM_ALPHA(a) ccc4( random() % 255, random() % 255, random() % 255, a )
@@ -62,6 +64,8 @@
 #define CC4B_PURPLE CC4B_PURPLE_ALPHA(0xff)  
 
 #define CC4B_GOLD CC4B_GOLD_ALPHA(0xff)
+
+#define CC4B_SAND CC4B_SAND_ALPHA(0xff)
 
 
 
@@ -100,6 +104,8 @@
 
 #define CC3B_DARKGREEN      ccc3( 0x01, 0x32, 0x20 )
 
+#define CC3B_SAND           ccc3( 0xd6, 0xb5, 0x5f )
+
 #define CC3B_RANDOM         ccc3( random() % 255, random() % 255, random() % 255 )
 
 #define white3              CC3B_WHITE
@@ -111,6 +117,8 @@
 #define cyan3               CC3B_CYAN
 #define purple3             CC3B_PURPLE
 #define darkgreen3          CC3B_DARKGREEN
+
+#define sand3               CC3B_SAND
 
 #define random_color3        CC3B_RANDOM
 
@@ -165,13 +173,16 @@
 
 #define gold CC4B_GOLD
 
+#define sand CC4B_SAND
+
 #define skincolor0  CC4B_SKIN0
 #define skincolor1  CC4B_SKIN1
 #define skincolor2  CC4B_SKIN2
 #define skincolor3  CC4B_SKIN3
 #define skincolor4  CC4B_SKIN4
 
-#define skincolor(n) (n==0 ? skincolor0 : \
+#define skincolor(n) (\
+n==0 ? skincolor0 : \
 n==1 ? skincolor1 : \
 n==2 ? skincolor2 : \
 n==3 ? skincolor3 : \

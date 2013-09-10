@@ -52,37 +52,50 @@ unsigned get_memory_mb(void) {
 }
 
 
+
+
+
+
 -(void) loadSprites {
     
     sprites = [NSMutableDictionary dictionary];
     NSMutableDictionary *s = sprites;
+    [s setObject:[Drawer heroForPC:pcEntity]                 forKey: @"Hero"];
     
-    [s setObject:[Drawer heroForPC:pcEntity]                                forKey: @"Hero"];
+    [s setObject:[Drawer door:brown knob:yellow]             forKey: @"SimpleDoorClosed"];
+    [s setObject:[Drawer opendoor:brown knob:yellow]         forKey: @"SimpleDoorOpen"];
     
-    [s setObject:[Drawer door:brown knob:yellow]                               forKey: @"SimpleDoorClosed"];
-    [s setObject:[Drawer opendoor:brown knob:yellow]                               forKey: @"SimpleDoorOpen"];
-    
-    [s setObject:[Drawer key: yellow]                               forKey: @"SimpleKey"];
-    
-    [s setObject:[Drawer blindfold:gray]                               forKey: @"Blindfold"];
+    [s setObject:[Drawer key: yellow]                        forKey: @"SimpleKey"];
+    [s setObject:[Drawer blindfold:gray]                     forKey: @"Blindfold"];
     
     // Tiles
     
-    [s setObject:[Drawer voidTile]                                          forKey: @"VoidTile"];
+    [s setObject:[Drawer voidTile]                                          forKey: KEY_FOR_TILETYPE(TILE_FLOOR_VOID)];
     
-    [s setObject:[Drawer stoneTileColor0:darkgray Color1:gray Pattern:0]                                         forKey: @"StoneTileGray0"];
-    [s setObject:[Drawer stoneTileColor0:darkgray Color1:red Pattern:0]                                         forKey: @"StoneTileRed0"];
-    [s setObject:[Drawer stoneTileColor0:darkgray Color1:gold Pattern:0]                                         forKey: @"StoneTileGold0"];
-    //[s setObject:[Drawer flatTile:gold]                                         forKey: @"StoneTileGold0"];
-    //[s setObject:[Drawer stoneTileColor0:darkgray Color1:gray Pattern:1]                                         forKey: @"StoneTileGray1"];
+    [s setObject:[Drawer upstairsTile]                                      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_UPSTAIRS)];
+    [s setObject:[Drawer downstairsTile]                                    forKey: KEY_FOR_TILETYPE(TILE_FLOOR_DOWNSTAIRS)];
+    
+    [s setObject:[Drawer stoneTileColor0:darkgray Color1:gray Pattern:0]    forKey: KEY_FOR_TILETYPE(TILE_FLOOR_STONE_0)];
+    [s setObject:[Drawer stoneTileColor0:darkgray Color1:red Pattern:0]     forKey: KEY_FOR_TILETYPE(TILE_FLOOR_STONE_1)];
+    [s setObject:[Drawer stoneTileColor0:darkgray Color1:gold Pattern:0]    forKey: KEY_FOR_TILETYPE(TILE_FLOOR_STONE_2)];
+    [s setObject:[Drawer stoneTileColor0:darkgray Color1:blue Pattern:0]    forKey: KEY_FOR_TILETYPE(TILE_FLOOR_STONE_3)];
+    [s setObject:[Drawer stoneTileColor0:darkgray Color1:green Pattern:0]    forKey: KEY_FOR_TILETYPE(TILE_FLOOR_STONE_4)];
+    
+    [s setObject:[Drawer grassTile: 0 c0: green c1: darkgreen]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_0)];
+    [s setObject:[Drawer grassTile: 1 c0: green c1: darkgreen]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_1)];
+    
+    [s setObject:[Drawer grassTile: 4 c0: sand c1: darkgray] forKey: KEY_FOR_TILETYPE(TILE_FLOOR_SAND_0)];
+    [s setObject:[Drawer grassTile: 4 c0: sand c1: darkgray] forKey: KEY_FOR_TILETYPE(TILE_FLOOR_SAND_1)];
+    [s setObject:[Drawer grassTile: 4 c0: sand c1: darkgray] forKey: KEY_FOR_TILETYPE(TILE_FLOOR_SAND_2)];
+    [s setObject:[Drawer grassTile: 4 c0: sand c1: darkgray] forKey: KEY_FOR_TILETYPE(TILE_FLOOR_SAND_3)];
+    [s setObject:[Drawer grassTile: 4 c0: sand c1: darkgray] forKey: KEY_FOR_TILETYPE(TILE_FLOOR_SAND_4)];
+    [s setObject:[Drawer grassTile: 4 c0: sand c1: darkgray] forKey: KEY_FOR_TILETYPE(TILE_FLOOR_SAND_5)];
+    [s setObject:[Drawer grassTile: 4 c0: sand c1: darkgray] forKey: KEY_FOR_TILETYPE(TILE_FLOOR_SAND_6)];
+    [s setObject:[Drawer grassTile: 4 c0: sand c1: darkgray] forKey: KEY_FOR_TILETYPE(TILE_FLOOR_SAND_7)];
+    
+    [s setObject:[Drawer grassTile: 0 c0:blue c1:lightblue]  forKey: KEY_FOR_TILETYPE(TILE_FLOOR_WATER_0)];
     
     
-    [s setObject:[Drawer stoneTileTrap]                                     forKey: @"StoneTileTrap"];
-    
-    [s setObject:[Drawer upstairsTile]                                      forKey: @"UpstairsTile"];
-    [s setObject:[Drawer downstairsTile]                                    forKey: @"DownstairsTile"];
-    [s setObject:[Drawer flatTile: blue]                                    forKey: @"WaterTile"];
-    [s setObject:[Drawer flatTile: green]                                   forKey: @"GrassTile"];
     [s setObject:[Drawer flatTile: red]                                     forKey: @"LavaTile"];
     [s setObject:[Drawer flatTile: darkgreen]                               forKey: @"AcidTile"];
     
@@ -145,11 +158,6 @@ unsigned get_memory_mb(void) {
     
     
     [s setObject:[Drawer tree] forKey:@"Tree"];
-    
-    
-    
-    
-    
     
 }
 
@@ -314,7 +322,8 @@ unsigned get_memory_mb(void) {
             }
             
             else if ( roll == 4 ) {
-                NSInteger torchLevel = [Dice roll: 3];
+                //NSInteger torchLevel = [Dice roll: 3];
+                NSInteger torchLevel = 1;
                 Entity *itemToSpawn = [Items torch: torchLevel];
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
             }
@@ -1442,13 +1451,13 @@ static NSString  * const notifications[] = {
                 [entityInfoHUD.label setString:[ NSString stringWithFormat: @"Tile Type: %@\n@\n@\n@\n",
                                                 t.tileType == TILE_FLOOR_DOWNSTAIRS     ? @"Downstairs" :
                                                 t.tileType == TILE_FLOOR_UPSTAIRS       ? @"Upstairs"   :
-                                                t.tileType == TILE_FLOOR_GRASS          ? @"Grass"      :
-                                                t.tileType == TILE_FLOOR_STONE          ? @"Stone"      :
+                                                t.tileType == TILE_FLOOR_GRASS_0          ? @"Grass"      :
+                                                t.tileType == TILE_FLOOR_STONE_0          ? @"Stone"      :
                                                 t.tileType == TILE_FLOOR_VOID           ? @"Void"       :
                                                 t.tileType == TILE_FLOOR_ICE            ? @"Ice"        :
                                                 t.tileType == TILE_FLOOR_ACID           ? @"Acid"       :
                                                 t.tileType == TILE_FLOOR_LAVA           ? @"Lava"       :
-                                                t.tileType == TILE_FLOOR_WATER          ? @"Water"      :
+                                                t.tileType == TILE_FLOOR_WATER_0          ? @"Water"      :
                                                                                         @"Unknown"
                                                 ]];
             }
@@ -2202,7 +2211,7 @@ static NSString  * const notifications[] = {
                 Tile *a = [ self getTileForCGPoint: mapPoint ];
                 
                 // check tiletype...
-                if ( a.tileType != TILE_FLOOR_WATER ) {
+                if ( a.tileType != TILE_FLOOR_WATER_0 ) {
                     [ self addMessageWindowString: @"That is not a water tile..." ];
                 } else {
                     [ self addMessageWindowString: @"You catch a fish!" ];
@@ -3942,10 +3951,10 @@ NSUInteger getMagicY( NSUInteger y ) {
                     Tile *oldTile = [ self getTileForCGPoint:basePos        forFloor:[dungeon objectAtIndex:floorNumber ] ];
                     Tile *newTile = [ self getTileForCGPoint:newPosition    forFloor:[dungeon objectAtIndex:floorNumber ] ];
                     
-                    if ( newTile.tileType != TILE_FLOOR_WATER ) {
+                    if ( newTile.tileType != TILE_FLOOR_WATER_0 ) {
                         // if currently on a water tile
                         // panic and do nothing until bumped
-                        if ( oldTile.tileType != TILE_FLOOR_WATER ) {
+                        if ( oldTile.tileType != TILE_FLOOR_WATER_0 ) {
                             [ self moveEntity:e toPosition:newPosition ];
                         } else {
                             // is water tile

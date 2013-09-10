@@ -158,22 +158,35 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
  
     CCMutableTexture2D *tileTexture =
     
-    tileType == TILE_FLOOR_STONE               ? [sprites objectForKey:@"StoneTileGray0"]      :
-    //tileType == TILE_FLOOR_STONE_GRAY          ? [sprites objectForKey:@"StoneTileGray0"]      :
-    //tileType == TILE_FLOOR_STONE_RED           ? [sprites objectForKey:@"StoneTileRed0"]      :
-    //tileType == TILE_FLOOR_STONE_GOLD          ? [sprites objectForKey:@"StoneTileGold0"]      :
+    tileType == TILE_FLOOR_STONE_0               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_0)]      :
+    tileType == TILE_FLOOR_STONE_1               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_1)]      :
+    tileType == TILE_FLOOR_STONE_2               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_2)]      :
+    tileType == TILE_FLOOR_STONE_3               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_3)]      :
+    tileType == TILE_FLOOR_STONE_4               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_4)]      :
+    
+    tileType == TILE_FLOOR_GRASS_0          ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_0)]      :
+    tileType == TILE_FLOOR_GRASS_1          ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_1)]      :
+    
+    tileType == TILE_FLOOR_SAND_0 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_0)] : 
+    tileType == TILE_FLOOR_SAND_1 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_1)] :
+    tileType == TILE_FLOOR_SAND_2 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_2)] :
+    tileType == TILE_FLOOR_SAND_3 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_3)] :
+    tileType == TILE_FLOOR_SAND_4 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_4)] :
+    tileType == TILE_FLOOR_SAND_5 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_5)] :
+    tileType == TILE_FLOOR_SAND_6 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_6)] :
+    tileType == TILE_FLOOR_SAND_7 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_7)] :
     
     
-    tileType == TILE_FLOOR_GRASS          ? [sprites objectForKey:@"GrassTile"]      :
     tileType == TILE_FLOOR_ACID           ? [sprites objectForKey:@"AcidTile"]      :
     tileType == TILE_FLOOR_LAVA           ? [sprites objectForKey:@"LavaTile"]      :
-    //tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
-    //tileType == TILE_FLOOR_STONE_TRAP_POISON_D6          ? [sprites objectForKey:@"StoneTileTrap"]      :
+ 
     tileType == TILE_FLOOR_VOID           ? [sprites objectForKey:@"VoidTile"]       :
     tileType == TILE_FLOOR_UPSTAIRS       ? [sprites objectForKey:@"UpstairsTile"]   :
     tileType == TILE_FLOOR_DOWNSTAIRS     ? [sprites objectForKey:@"DownstairsTile"] :
-    tileType == TILE_FLOOR_WATER          ? [sprites objectForKey:@"WaterTile"]      :
+    
+    tileType == TILE_FLOOR_WATER_0          ? [sprites objectForKey:@"WaterTile0"]      :
                                              nil;
+ 
     
     // hidden traps
     //if ( tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 && data.trapIsSet ) {
@@ -746,7 +759,7 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
 }
 
 +(void) largeRoomAlgorithm: (DungeonFloor *) floor {
-    [ self setAllTilesInFloor:floor toTileType:TILE_FLOOR_STONE ];
+    [ self setAllTilesInFloor:floor toTileType:TILE_FLOOR_STONE_0 ];
 }
 
 +(void) algorithm0: (DungeonFloorAlgorithm_t) algorithm withFloor: (DungeonFloor *) floor {
@@ -785,9 +798,26 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     // determine a tile-type as the base tile type to use
     Tile_t baseTileType;
     
-    baseTileType = TILE_FLOOR_STONE;
+    roll = [Dice roll:10];
     
+    //baseTileType = TILE_FLOOR_WATER_0;
     
+    baseTileType =
+    roll == 1 ? TILE_FLOOR_STONE_0 :
+    roll == 2 ? TILE_FLOOR_STONE_0 :
+    roll == 3 ? TILE_FLOOR_STONE_0 :
+    roll == 4 ? TILE_FLOOR_STONE_0 :
+    roll == 5 ? TILE_FLOOR_STONE_0 :
+    
+    roll == 6 ? TILE_FLOOR_GRASS_0 :
+    roll == 7 ? TILE_FLOOR_GRASS_0 :
+    roll == 8 ? TILE_FLOOR_GRASS_0 :
+    
+    roll == 9 ? TILE_FLOOR_SAND_0 :
+    
+    roll == 10 ? TILE_FLOOR_WATER_0 :
+ 
+    TILE_FLOOR_STONE_0;
     
     
     CGPoint point = ccp( x, y );
@@ -879,6 +909,41 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
             
             // Programmatically set the tile type
             Tile_t tileType = baseTileType;
+            int tileTypeOffset, tileTypeOffsetBase;
+            tileTypeOffsetBase = 1;
+            
+            if ( baseTileType == TILE_FLOOR_STONE_0 ) {                
+                tileTypeOffsetBase =
+                floor.floorNumber <= 5 ?  0 :
+                floor.floorNumber <= 10 ? 1 :
+                floor.floorNumber <= 15 ? 2 :
+                floor.floorNumber <= 20 ? 3 :
+                floor.floorNumber <= 25 ? 4 :
+                floor.floorNumber <= 30 ? 5 :
+                5;
+            }
+            
+            else if ( baseTileType == TILE_FLOOR_GRASS_0 ) {
+                tileTypeOffsetBase = 2;
+            }
+            
+            if ( baseTileType == TILE_FLOOR_WATER_0 ) {
+                tileTypeOffsetBase = 1;
+            }
+            
+            if ( baseTileType == TILE_FLOOR_SAND_0 ) {
+                tileTypeOffsetBase = 8;
+            }
+            
+            tileTypeOffset = [Dice roll: tileTypeOffsetBase] - 1;
+            tileType += tileTypeOffset;
+            
+            
+            
+            
+            
+            
+            
             
             // setTileAtPosition will call handleTile and set if trapped
             [ self setTileAtPosition:point onFloor:floor toType:tileType ];
@@ -1486,7 +1551,7 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
          
          ---add 'savagery' field to tiles, spawn anywhere based on savagery
          */
-        [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor onTileType:TILE_FLOOR_GRASS ];
+        [ GameRenderer spawnEntityAtRandomLocation:e onFloor:floor onTileType:TILE_FLOOR_GRASS_0 ];
     }
 }
 

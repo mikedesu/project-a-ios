@@ -18,7 +18,10 @@
     else if (roll==2)   e = [Items greenBlob];
     else if (roll==3)   e = [Items woodenFishingRod];
     else if (roll==4)   e = [Items catfish];
-    else if (roll==5)   e = [Items simpleDoor];
+    
+    else if (roll==5)   e = [Items catfish];
+    //else if (roll==5)   e = [Items simpleDoor];
+    
     else if (roll==6)   e = [Items simpleKey];
     else if (roll==7)   e = [Items poisonAntidote];
     else if (roll==8)   e = [Items scrollOfCureLightWounds];
@@ -26,9 +29,8 @@
     else if (roll==10)  e = [Items coin:[Dice roll:100]];
     else if (roll==11)  e = [Items ringOfRegeneration];
     else if (roll==12)  e = [Items ringOfAntihunger];
-    //else if (roll==13)  e = [Items note:@"You suck! I rule >:D"];
     else if (roll==13)  e = [Items note:[[HintGenerator sharedHintGenerator] getNextHint] ];
-    else                e = [Items basicBoulder];
+    else if (roll==14)  e = [Items basicBoulder];
     
     //e = [Items wandOfCureLightWounds];
     //e = [Items ringOfRegeneration];

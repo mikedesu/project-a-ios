@@ -88,3 +88,30 @@ typedef struct {
 #define screenheight    ([[CCDirector sharedDirector] winSize].height)
 
 
+#define KEY_FOR_TILETYPE(n) ( \
+n==TILE_FLOOR_VOID ? @"VoidTile" : \
+\
+n==TILE_FLOOR_UPSTAIRS ? @"UpstairsTile" : \
+n==TILE_FLOOR_DOWNSTAIRS ? @"DownstairsTile" : \
+\
+n==TILE_FLOOR_STONE_0 ? @"StoneTile0" : \
+n==TILE_FLOOR_STONE_1 ? @"StoneTile1" : \
+n==TILE_FLOOR_STONE_2 ? @"StoneTile2" : \
+n==TILE_FLOOR_STONE_3 ? @"StoneTile3" : \
+n==TILE_FLOOR_STONE_4 ? @"StoneTile4" : \
+\
+n==TILE_FLOOR_GRASS_0 ? @"GrassTile0" : \
+n==TILE_FLOOR_GRASS_1 ? @"GrassTile1" : \
+\
+n==TILE_FLOOR_SAND_0 ? @"SandTile0" : \
+n==TILE_FLOOR_SAND_1 ? @"SandTile1" : \
+n==TILE_FLOOR_SAND_2 ? @"SandTile2" : \
+n==TILE_FLOOR_SAND_3 ? @"SandTile3" : \
+n==TILE_FLOOR_SAND_4 ? @"SandTile4" : \
+n==TILE_FLOOR_SAND_5 ? @"SandTile5" : \
+n==TILE_FLOOR_SAND_6 ? @"SandTile6" : \
+n==TILE_FLOOR_SAND_7 ? @"SandTile7" : \
+\
+n==TILE_FLOOR_WATER_0 ? @"WaterTile0" : \
+@"")
+

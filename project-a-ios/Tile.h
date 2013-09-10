@@ -42,9 +42,28 @@ typedef enum {
     TILE_FLOOR_UPSTAIRS,
     TILE_FLOOR_DOWNSTAIRS,
     
-    TILE_FLOOR_STONE,
-    TILE_FLOOR_WATER,
-    TILE_FLOOR_GRASS,
+    TILE_FLOOR_STONE_0, //gray
+    TILE_FLOOR_STONE_1, //red
+    TILE_FLOOR_STONE_2, //gold
+    TILE_FLOOR_STONE_3, //blue
+    TILE_FLOOR_STONE_4, //green
+    
+    TILE_FLOOR_GRASS_0,
+    TILE_FLOOR_GRASS_1,
+ 
+    TILE_FLOOR_SAND_0, //
+    TILE_FLOOR_SAND_1, //
+    TILE_FLOOR_SAND_2, //
+    TILE_FLOOR_SAND_3, //
+    TILE_FLOOR_SAND_4, //
+    TILE_FLOOR_SAND_5, //
+    TILE_FLOOR_SAND_6, //
+    TILE_FLOOR_SAND_7, //
+    
+    
+    TILE_FLOOR_WATER_0,
+    
+    
     TILE_FLOOR_ACID,    // instant-death tile - might be renamed to swamp tiles
     TILE_FLOOR_LAVA,    // greater fire damage every step
     TILE_FLOOR_ICE,  //undefined
@@ -55,7 +74,7 @@ typedef enum {
     
 } Tile_t;
 
-#define TILE_FLOOR_DEFAULT    TILE_FLOOR_GRASS
+#define TILE_FLOOR_DEFAULT    TILE_FLOOR_STONE_0
 
 
 @interface Tile : NSObject {
@@ -103,5 +122,7 @@ typedef enum {
 -( void ) setContents: ( NSMutableArray * ) c;
 -( void ) addObjectToContents: ( NSObject * ) obj;
 -( void ) removeObjectFromContents: (NSObject *) obj;
-    
+
++( NSString * ) stringForTileType: (Tile_t) _tileType;
+
 @end

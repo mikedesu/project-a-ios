@@ -17,11 +17,6 @@
 @synthesize tripDamageMod;
 @synthesize savagery;
 
-/*
- ====================
- init
- ====================
- */
 -( id ) init {
     if ( ( self = [ super init ] ) ) {
         tileType    = TILE_FLOOR_DEFAULT;
@@ -37,11 +32,6 @@
 }
 
 
-/*
- ====================
- initWithTileType: tileType
- ====================
- */
 -( id ) initWithTileType: ( Tile_t ) _tileType {
     if ( ( self = [ super init ] ) ) {
         tileType    = _tileType;
@@ -56,14 +46,7 @@
     return self;
 }
 
-/*
- ====================
- handleTiletype: _tileType
- 
- for use at initialization of tile 
- sets the trap vars
- ====================
- */
+
 -( void ) handleTileType: (Tile_t) _tileType {
     // handle trapIsSet based on tile type
     /*
@@ -89,11 +72,6 @@
 
 
 
-/*
- ====================
- newTileWithType: tileType withPosition: position
- ====================
- */
 +( Tile * ) newTileWithType: ( Tile_t ) tileType withPosition: ( CGPoint ) position {
     Tile *tile = [[ Tile alloc ] initWithTileType: tileType ];
     tile->position.x = position.x;
@@ -102,13 +80,6 @@
 }
 
 
-/*
- ====================
- contents
- 
- returns content array, initializes if nil
- ====================
- */
 -( NSMutableArray * ) contents {
     if ( contents == nil ) {
         contents = [[ NSMutableArray alloc ] init ];
@@ -117,39 +88,28 @@
 }
 
 
-/*
- ====================
- setContents
- 
- sets the contents pointer to c
- ====================
- */
 -( void ) setContents: ( NSMutableArray * ) c {
     contents = c;
 }
 
 
-/*
- ====================
- addObjectToContents: obj
- 
- adds the object obj to contents
- ====================
- */
 -( void ) addObjectToContents: ( NSObject * ) obj {
     [[ self contents] addObject: obj ];
 }
 
 
-/*
- ====================
- removeObjectFromContents: obj
- 
- removes the object obj from contents
- ====================
- */
 -( void ) removeObjectFromContents: (NSObject *) obj {
     [[self contents] removeObject:obj];
+}
+
+
+
+
+
+
++( NSString * ) stringForTileType: (Tile_t) _tileType {
+    
+    
 }
 
 @end

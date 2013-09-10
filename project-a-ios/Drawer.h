@@ -27,7 +27,10 @@
 +(CCMutableTexture2D *) stoneTileColor0: (Color_t) color0 Color1: (Color_t) color1 Pattern: (int) patternID;
     +(CCMutableTexture2D *) stoneTileTrap;
 +(CCMutableTexture2D *) flatTile: (Color_t) tileColor;
-+(CCMutableTexture2D *) voidTile;
+
++(CCMutableTexture2D *) grassTile: (int) style c0:(Color_t) c0 c1:(Color_t) c1;
+
+    +(CCMutableTexture2D *) voidTile;
 +(CCMutableTexture2D *) upstairsTile;
 +(CCMutableTexture2D *) downstairsTile;
 
