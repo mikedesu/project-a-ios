@@ -158,11 +158,35 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
  
     CCMutableTexture2D *tileTexture =
     
+    [sprites objectForKey:KEY_FOR_TILETYPE(tileType)]; // NEW :X MIGHT WORK!
+    
+    /*
     tileType == TILE_FLOOR_STONE_0               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_0)]      :
     tileType == TILE_FLOOR_STONE_1               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_1)]      :
     tileType == TILE_FLOOR_STONE_2               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_2)]      :
     tileType == TILE_FLOOR_STONE_3               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_3)]      :
     tileType == TILE_FLOOR_STONE_4               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_4)]      :
+    tileType == TILE_FLOOR_STONE_5               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_5)]      :
+    tileType == TILE_FLOOR_STONE_6               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_6)]      :
+    tileType == TILE_FLOOR_STONE_7               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_7)]      :
+    tileType == TILE_FLOOR_STONE_8               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_8)]      :
+    tileType == TILE_FLOOR_STONE_9               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_9)]      :
+    tileType == TILE_FLOOR_STONE_10               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_10)]      :
+    tileType == TILE_FLOOR_STONE_11               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_11)]      :
+    tileType == TILE_FLOOR_STONE_12               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_12)]      :
+    tileType == TILE_FLOOR_STONE_13               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_13)]      :
+    tileType == TILE_FLOOR_STONE_14               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_14)]      :
+    tileType == TILE_FLOOR_STONE_15               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_15)]      :
+    tileType == TILE_FLOOR_STONE_16               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_16)]      :
+    tileType == TILE_FLOOR_STONE_17               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_17)]      :
+    tileType == TILE_FLOOR_STONE_18               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_18)]      :
+    tileType == TILE_FLOOR_STONE_19               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_19)]      :
+    tileType == TILE_FLOOR_STONE_20               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_20)]      :
+    tileType == TILE_FLOOR_STONE_21               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_21)]      :
+    tileType == TILE_FLOOR_STONE_22               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_22)]      :
+    tileType == TILE_FLOOR_STONE_23               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_23)]      :
+    tileType == TILE_FLOOR_STONE_24               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_24)]      :
+    
     
     tileType == TILE_FLOOR_GRASS_0          ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_0)]      :
     tileType == TILE_FLOOR_GRASS_1          ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_1)]      :
@@ -186,7 +210,7 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     
     tileType == TILE_FLOOR_WATER_0          ? [sprites objectForKey:@"WaterTile0"]      :
                                              nil;
- 
+ */
     
     // hidden traps
     //if ( tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 && data.trapIsSet ) {
@@ -912,19 +936,15 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
             int tileTypeOffset, tileTypeOffsetBase;
             tileTypeOffsetBase = 1;
             
+            //baseTileType = TILE_FLOOR_STONE_0;
+            baseTileType = TILE_FLOOR_GRASS_0;
+            
             if ( baseTileType == TILE_FLOOR_STONE_0 ) {                
-                tileTypeOffsetBase =
-                floor.floorNumber <= 5 ?  0 :
-                floor.floorNumber <= 10 ? 1 :
-                floor.floorNumber <= 15 ? 2 :
-                floor.floorNumber <= 20 ? 3 :
-                floor.floorNumber <= 25 ? 4 :
-                floor.floorNumber <= 30 ? 5 :
-                5;
+                tileTypeOffsetBase = 23;
             }
             
             else if ( baseTileType == TILE_FLOOR_GRASS_0 ) {
-                tileTypeOffsetBase = 2;
+                tileTypeOffsetBase = 15;
             }
             
             if ( baseTileType == TILE_FLOOR_WATER_0 ) {

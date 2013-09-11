@@ -24,6 +24,8 @@
  sand 9
  
  
+ 
+ 
  From each type, every tile will also have:
  
  temperature
@@ -47,9 +49,60 @@ typedef enum {
     TILE_FLOOR_STONE_2, //gold
     TILE_FLOOR_STONE_3, //blue
     TILE_FLOOR_STONE_4, //green
+    TILE_FLOOR_STONE_5,
+    TILE_FLOOR_STONE_6,
+    TILE_FLOOR_STONE_7,
+    TILE_FLOOR_STONE_8,
+    TILE_FLOOR_STONE_9,
+    TILE_FLOOR_STONE_10,
+    TILE_FLOOR_STONE_11,
+    TILE_FLOOR_STONE_12,
+    TILE_FLOOR_STONE_13,
+    TILE_FLOOR_STONE_14,
+    TILE_FLOOR_STONE_15,
+    TILE_FLOOR_STONE_16,
+    TILE_FLOOR_STONE_17,
+    TILE_FLOOR_STONE_18,
+    TILE_FLOOR_STONE_19,
+    TILE_FLOOR_STONE_20,
+    TILE_FLOOR_STONE_21,
+    TILE_FLOOR_STONE_22,
+    TILE_FLOOR_STONE_23,
+    TILE_FLOOR_STONE_24,
+    
+    
+    //TILE_FLOOR_STONE_5, //sand
+    
+    //DIRT
+    //MUD
+    //QUICKSAND
+    //SPACE (warp tiles, meteors, black holes, etc)
+    //SNOW
+    //ICE (can fall through)
+    //CLOUD
+    //METAL
+    //WOOD
+    //LAVA
+    
     
     TILE_FLOOR_GRASS_0,
     TILE_FLOOR_GRASS_1,
+    TILE_FLOOR_GRASS_2,
+    TILE_FLOOR_GRASS_3,
+    TILE_FLOOR_GRASS_4,
+    TILE_FLOOR_GRASS_5,
+    TILE_FLOOR_GRASS_6,
+    TILE_FLOOR_GRASS_7,
+    TILE_FLOOR_GRASS_8,
+    TILE_FLOOR_GRASS_9,
+    TILE_FLOOR_GRASS_10,
+    TILE_FLOOR_GRASS_11,
+    TILE_FLOOR_GRASS_12,
+    TILE_FLOOR_GRASS_13,
+    TILE_FLOOR_GRASS_14,
+    TILE_FLOOR_GRASS_15,
+    
+    
  
     TILE_FLOOR_SAND_0, //
     TILE_FLOOR_SAND_1, //

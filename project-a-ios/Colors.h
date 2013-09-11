@@ -11,11 +11,13 @@
 
 #define CC4B_BLACK_ALPHA(a)  ccc4( 0x00, 0x00, 0x00, a )
 #define CC4B_WHITE_ALPHA(a)  ccc4( 0xFF, 0xFF, 0xFF, a )
-#define CC4B_GRAY_ALPHA(a)  ccc4( 0xCC, 0xCC, 0xCC, a )
+#define CC4B_GRAY_ALPHA(a)  ccc4( 0x99, 0x99, 0x99, a )
 #define CC4B_DARKGRAY_ALPHA(a) ccc4( 0x55, 0x55, 0x55, a )
+#define CC4B_LIGHTGRAY_ALPHA(a) ccc4( 0xCC, 0xCC, 0xCC, a )
 
 
 #define CC4B_RED_ALPHA(a)       ccc4( 0xFF, 0x00, 0x00, a )
+#define CC4B_DARKRED_ALPHA(a)   ccc4( 0x8B, 0x00, 0x00, a )
 //#define CC4B_(a)   ccc4( , a )
 
 #define CC4B_GREEN_ALPHA(a)     ccc4( 0x00, 0xFF, 0x00, a )
@@ -27,6 +29,8 @@
 #define CC4B_YELLOW_ALPHA(a)  ccc4( 0xff, 0xff, 0x00, a )
 #define CC4B_CYAN_ALPHA(a)    ccc4( 0x00, 0xff, 0xff, a )
 #define CC4B_PURPLE_ALPHA(a)  ccc4( 0xff, 0x00, 0xff, a )
+
+#define CC4B_AZURE_ALPHA(a) ccc4( 0xf0, 0xff, 0xff, a )
 
 #define CC4B_BROWN_ALPHA(a) ccc4(0xa5, 0x2a, 0x2a, a)
 #define CC4B_BROWN      CC4B_BROWN_ALPHA(255)
@@ -53,8 +57,10 @@
 #define CC4B_WHITE           CC4B_WHITE_ALPHA( 0xFF )
 #define CC4B_GRAY            CC4B_GRAY_ALPHA( 0xFF )
 #define CC4B_DARKGRAY        CC4B_DARKGRAY_ALPHA( 0xFF )
+#define CC4B_LIGHTGRAY       CC4B_LIGHTGRAY_ALPHA( 0xFF )
 
 #define CC4B_RED             CC4B_RED_ALPHA( 0xFF )
+#define CC4B_DARKRED         CC4B_DARKRED_ALPHA( 0xFF )
 #define CC4B_GREEN           CC4B_GREEN_ALPHA( 0xFF )
 #define CC4B_DARKGREEN           CC4B_DARKGREEN_ALPHA( 0xFF )
 #define CC4B_BLUE            CC4B_BLUE_ALPHA( 0xFF )
@@ -62,6 +68,8 @@
 #define CC4B_YELLOW CC4B_YELLOW_ALPHA(0xff)
 #define CC4B_CYAN   CC4B_CYAN_ALPHA(0xff)
 #define CC4B_PURPLE CC4B_PURPLE_ALPHA(0xff)  
+
+#define CC4B_AZURE CC4B_AZURE_ALPHA(0xff)
 
 #define CC4B_GOLD CC4B_GOLD_ALPHA(0xff)
 
@@ -106,6 +114,8 @@
 
 #define CC3B_SAND           ccc3( 0xd6, 0xb5, 0x5f )
 
+#define CC3B_AZURE          ccc3( 0xf0, 0xff, 0xff )
+
 #define CC3B_RANDOM         ccc3( random() % 255, random() % 255, random() % 255 )
 
 #define white3              CC3B_WHITE
@@ -117,6 +127,7 @@
 #define cyan3               CC3B_CYAN
 #define purple3             CC3B_PURPLE
 #define darkgreen3          CC3B_DARKGREEN
+#define azure3              CC3B_AZURE
 
 #define sand3               CC3B_SAND
 
@@ -134,8 +145,10 @@
 #define white       CC4B_WHITE
 #define gray        CC4B_GRAY
 #define darkgray    CC4B_DARKGRAY
+#define lightgray   CC4B_LIGHTGRAY
 
 #define red    CC4B_RED
+#define darkred CC4B_DARKRED
 #define green  CC4B_GREEN
 #define blue   CC4B_BLUE
 #define darkgreen CC4B_DARKGREEN
@@ -143,6 +156,7 @@
 #define yellow CC4B_YELLOW
 #define cyan   CC4B_CYAN
 #define purple CC4B_PURPLE
+#define azure CC4B_AZURE
 
 #define brown CC4B_BROWN
 
@@ -155,6 +169,7 @@
 
 #define gray_alpha(a) CC4B_GRAY_ALPHA(a)
 #define darkgray_alpha(a) CC4B_DARKGRAY_ALPHA(a)
+#define lightgray_alpha(a) CC4B_LIGHTGRAY_ALPHA(a)
 
 #define red_alpha(a)   CC4B_RED_ALPHA(a)
 #define green_alpha(a) CC4B_GREEN_ALPHA(a)

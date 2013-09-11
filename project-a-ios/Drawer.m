@@ -234,14 +234,17 @@
 
 
 
-+(CCMutableTexture2D *) grassTile: (int) style c0:(Color_t) c0 c1:(Color_t) c1 {
++(CCMutableTexture2D *) grassTile: (int) style c0:(Color_t) c0 c1:(Color_t) c1 c2:(Color_t) c2 {
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill: c0];
     
     if ( style == 0 ) {
         // filled, flat-tile
     }
+    
+    // checkerboard c1
     else if ( style == 1 ) {
+        // checkerboard pattern
         for (int i=0; i<16; i+=2)
             for (int j=0; j<16; j+=2)
                 [t setPixelAt:ccp(i,j) rgba:c1];
@@ -249,37 +252,64 @@
             for (int j=1; j<16; j+=2)
                 [t setPixelAt:ccp(i,j) rgba:c1];
     }
+    
+    // checkerboard c1
     else if ( style == 2 ) {
-        for ( int i = 0; i < 16; i++) {
-            for ( int j = 0; j < 16; j++) {
-                if ( (i+j)%3 == 0 ) {
-                    [t setPixelAt:ccp(i,j) rgba:c1];
-                }
-            }
-        }
-    }
-    else if ( style == 3 ) {
-        for ( int i = 0; i<16; i+=4)
-            for ( int j = 0; j<16; j+=4)
+        // checkerboard pattern
+        for (int i=0; i<8; i+=2)
+            for (int j=0; j<8; j+=2)
+                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=1; i<8; i+=2)
+            for (int j=1; j<8; j+=2)
                 [t setPixelAt:ccp(i,j) rgba:c1];
     }
+    
+    // checkerboard c1
+    else if ( style == 3 ) {
+        // checkerboard pattern
+        for (int i=8; i<16; i+=2)
+            for (int j=0; j<8; j+=2)
+                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=9; i<16; i+=2)
+            for (int j=1; j<8; j+=2)
+                [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
     else if ( style == 4 ) {
-        int count = [Dice roll:64];
-        while ( count > 0 ) {
+        // checkerboard pattern
+        for (int i=0; i<8; i+=2)
+            for (int j=8; j<16; j+=2)
+                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=1; i<8; i+=2)
+            for (int j=9; j<16; j+=2)
+                [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 5 ) {
+        // checkerboard pattern
+        for (int i=8; i<16; i+=2)
+            for (int j=8; j<16; j+=2)
+                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=9; i<16; i+=2)
+            for (int j=9; j<16; j+=2)
+                [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    
+    // random scatter c1
+    else if ( style == 9999 ) {
+        int pixels = style == 2 ? 16 : style == 3 ? 32 : style == 4 ? 64 : 16;
+        while ( pixels > 0 ) {
             int rx = [Dice roll:16];
             int ry = [Dice roll:16];
-            Color4_t pixelColor = [t pixelAt:ccp(rx,ry)];
-            if ( pixelColor.r == c1.r &&
-                 pixelColor.g == c1.g &&
-                 pixelColor.b == c1.b &&
-                 pixelColor.a == c1.a ) {
-                
-            } else {
-                [t setPixelAt:ccp(rx,ry) rgba:c1];
-                count--;
-            }
+            [t setPixelAt:ccp(rx,ry) rgba:c1];
+            pixels--;
         }
     }
+    
+    
     
     [t apply];
     return t;
