@@ -244,58 +244,176 @@
     
     // checkerboard c1
     else if ( style == 1 ) {
-        // checkerboard pattern
         for (int i=0; i<16; i+=2)
-            for (int j=0; j<16; j+=2)
-                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int j=0; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
         for (int i=1; i<16; i+=2)
-            for (int j=1; j<16; j+=2)
-                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int j=1; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
     }
     
     // checkerboard c1
     else if ( style == 2 ) {
-        // checkerboard pattern
         for (int i=0; i<8; i+=2)
-            for (int j=0; j<8; j+=2)
-                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int j=0; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
         for (int i=1; i<8; i+=2)
-            for (int j=1; j<8; j+=2)
-                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int j=1; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
     }
     
     // checkerboard c1
     else if ( style == 3 ) {
-        // checkerboard pattern
-        for (int i=8; i<16; i+=2)
-            for (int j=0; j<8; j+=2)
-                [t setPixelAt:ccp(i,j) rgba:c1];
-        for (int i=9; i<16; i+=2)
-            for (int j=1; j<8; j+=2)
-                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=0; i<4; i+=2)
+            for (int j=0; j<4; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=1; i<4; i+=2)
+            for (int j=1; j<4; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
     }
     
     // checkerboard c1
     else if ( style == 4 ) {
-        // checkerboard pattern
-        for (int i=0; i<8; i+=2)
-            for (int j=8; j<16; j+=2)
-                [t setPixelAt:ccp(i,j) rgba:c1];
-        for (int i=1; i<8; i+=2)
-            for (int j=9; j<16; j+=2)
-                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=4; i<8; i+=2)
+            for (int j=0; j<4; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=5; i<8; i+=2)
+            for (int j=1; j<4; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
     }
     
     // checkerboard c1
     else if ( style == 5 ) {
-        // checkerboard pattern
-        for (int i=8; i<16; i+=2)
-            for (int j=8; j<16; j+=2)
-                [t setPixelAt:ccp(i,j) rgba:c1];
-        for (int i=9; i<16; i+=2)
-            for (int j=9; j<16; j+=2)
-                [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=8; i<12; i+=2)
+            for (int j=0; j<4; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=9; i<12; i+=2)
+            for (int j=1; j<4; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
     }
+    
+    // checkerboard c1
+    else if ( style == 6 ) {
+        for (int i=12; i<16; i+=2)
+            for (int j=0; j<4; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=13; i<16; i+=2)
+            for (int j=1; j<4; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    
+    // checkerboard c1
+    else if ( style == 7 ) {
+        for (int i=0; i<4; i+=2)
+            for (int j=4; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=1; i<4; i+=2)
+            for (int j=5; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 8 ) {
+        for (int i=4; i<8; i+=2)
+            for (int j=4; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=5; i<8; i+=2)
+            for (int j=5; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 9 ) {
+        for (int i=8; i<12; i+=2)
+            for (int j=4; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=9; i<12; i+=2)
+            for (int j=5; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 10 ) {
+        for (int i=12; i<16; i+=2)
+        for (int j=4; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=13; i<16; i+=2)
+        for (int j=5; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    
+    // checkerboard c1
+    else if ( style == 11 ) {
+        for (int i=0; i<4; i+=2)
+        for (int j=8; j<12; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=1; i<4; i+=2)
+        for (int j=9; j<12; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 12 ) {
+        for (int i=4; i<8; i+=2)
+        for (int j=8; j<12; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=5; i<8; i+=2)
+        for (int j=9; j<12; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 13 ) {
+        for (int i=8; i<12; i+=2)
+        for (int j=8; j<12; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=9; i<12; i+=2)
+        for (int j=9; j<12; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 14 ) {
+        for (int i=12; i<16; i+=2)
+        for (int j=8; j<12; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=13; i<16; i+=2)
+        for (int j=9; j<12; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 15 ) {
+        for (int i=0; i<4; i+=2)
+        for (int j=12; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=1; i<4; i+=2)
+        for (int j=13; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 16 ) {
+        for (int i=4; i<8; i+=2)
+        for (int j=12; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=5; i<8; i+=2)
+        for (int j=13; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 17 ) {
+        for (int i=8; i<12; i+=2)
+        for (int j=12; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=9; i<12; i+=2)
+        for (int j=13; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 18 ) {
+        for (int i=12; i<16; i+=2)
+        for (int j=12; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=13; i<16; i+=2)
+        for (int j=13; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+
+    
+    
+    // checkerboard c1
+    else if ( style == 19 ) {
+        for (int i=8; i<16; i+=2)
+        for (int j=0; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=9; i<16; i+=2)
+        for (int j=1; j<8; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 20 ) {
+        for (int i=0; i<8; i+=2)
+        for (int j=8; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=1; i<8; i+=2)
+        for (int j=9; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
+    // checkerboard c1
+    else if ( style == 21 ) {
+        for (int i=8; i<16; i+=2)
+        for (int j=8; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+        for (int i=9; i<16; i+=2)
+        for (int j=9; j<16; j+=2) [t setPixelAt:ccp(i,j) rgba:c1];
+    }
+    
     
     
     // random scatter c1

@@ -944,7 +944,8 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
             }
             
             else if ( baseTileType == TILE_FLOOR_GRASS_0 ) {
-                tileTypeOffsetBase = 15;
+                tileTypeOffsetBase = 32;
+                //tileTypeOffsetBase = 64;
             }
             
             if ( baseTileType == TILE_FLOOR_WATER_0 ) {
