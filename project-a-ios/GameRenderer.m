@@ -822,25 +822,18 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     // determine a tile-type as the base tile type to use
     Tile_t baseTileType;
     
-    roll = [Dice roll:10];
+    roll = [Dice roll:7];
     
     //baseTileType = TILE_FLOOR_WATER_0;
     
     baseTileType =
     roll == 1 ? TILE_FLOOR_STONE_0 :
-    roll == 2 ? TILE_FLOOR_STONE_0 :
-    roll == 3 ? TILE_FLOOR_STONE_0 :
-    roll == 4 ? TILE_FLOOR_STONE_0 :
-    roll == 5 ? TILE_FLOOR_STONE_0 :
-    
-    roll == 6 ? TILE_FLOOR_GRASS_0 :
-    roll == 7 ? TILE_FLOOR_GRASS_0 :
-    roll == 8 ? TILE_FLOOR_GRASS_0 :
-    
-    roll == 9 ? TILE_FLOOR_SAND_0 :
-    
-    roll == 10 ? TILE_FLOOR_WATER_0 :
- 
+    roll == 2 ? TILE_FLOOR_GRASS_0 :
+    roll == 3 ? TILE_FLOOR_DIRT_0  :
+    roll == 4 ? TILE_FLOOR_METAL_0  :
+    roll == 5 ? TILE_FLOOR_SPACE_0  :
+    roll == 6 ? TILE_FLOOR_SAND_0 :
+    roll == 7 ? TILE_FLOOR_WATER_0 :
     TILE_FLOOR_STONE_0;
     
     
@@ -937,38 +930,46 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
             tileTypeOffsetBase = 1;
             
             //baseTileType = TILE_FLOOR_STONE_0;
-            baseTileType = TILE_FLOOR_GRASS_0;
+            //baseTileType = TILE_FLOOR_GRASS_0;
+            //baseTileType = TILE_FLOOR_METAL_0;
+            //baseTileType = TILE_FLOOR_DIRT_0;
+            //baseTileType = TILE_FLOOR_SPACE_0;
+            
             
             if ( baseTileType == TILE_FLOOR_STONE_0 ) {                
                 tileTypeOffsetBase = 23;
             }
-            
             else if ( baseTileType == TILE_FLOOR_GRASS_0 ) {
-                tileTypeOffsetBase = 32;
-                //tileTypeOffsetBase = 64;
+                //tileTypeOffsetBase = 1;
+                //tileTypeOffsetBase = 32;
+                tileTypeOffsetBase = 64;
             }
-            
-            if ( baseTileType == TILE_FLOOR_WATER_0 ) {
+            else if ( baseTileType == TILE_FLOOR_DIRT_0 ) {
                 tileTypeOffsetBase = 1;
             }
             
-            if ( baseTileType == TILE_FLOOR_SAND_0 ) {
+            else if ( baseTileType == TILE_FLOOR_WATER_0 ) {
+                tileTypeOffsetBase = 1;
+            }
+            else if ( baseTileType == TILE_FLOOR_SAND_0 ) {
                 tileTypeOffsetBase = 8;
             }
+            else if ( baseTileType == TILE_FLOOR_METAL_0 ) {
+                tileTypeOffsetBase = 4;
+            }
+            else if ( baseTileType == TILE_FLOOR_SPACE_0 ) {
+                tileTypeOffsetBase = 4;
+            }
+        
+            
             
             tileTypeOffset = [Dice roll: tileTypeOffsetBase] - 1;
             tileType += tileTypeOffset;
             
             
             
-            
-            
-            
-            
-            
             // setTileAtPosition will call handleTile and set if trapped
             [ self setTileAtPosition:point onFloor:floor toType:tileType ];
-            
             
             
             

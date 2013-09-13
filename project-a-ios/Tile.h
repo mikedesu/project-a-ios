@@ -151,7 +151,16 @@ typedef enum {
     TILE_FLOOR_GRASS_62,
     TILE_FLOOR_GRASS_63,
     
+    TILE_FLOOR_DIRT_0,
     
+    TILE_FLOOR_MUD_0,
+    TILE_FLOOR_QUICKSAND_0,
+    TILE_FLOOR_SNOW_0,
+    TILE_FLOOR_ICE_0,
+    TILE_FLOOR_CLOUD_0,
+    TILE_FLOOR_WOOD_0,
+    TILE_FLOOR_LAVA_0,
+    TILE_FLOOR_SWAMP_0,
     
  
     TILE_FLOOR_SAND_0, //
@@ -162,6 +171,20 @@ typedef enum {
     TILE_FLOOR_SAND_5, //
     TILE_FLOOR_SAND_6, //
     TILE_FLOOR_SAND_7, //
+    
+    
+    TILE_FLOOR_METAL_0,
+    TILE_FLOOR_METAL_1,
+    TILE_FLOOR_METAL_2,
+    TILE_FLOOR_METAL_3,
+    
+    
+    TILE_FLOOR_SPACE_0,
+    TILE_FLOOR_SPACE_1,
+    TILE_FLOOR_SPACE_2,
+    TILE_FLOOR_SPACE_3,
+    
+    
     
     
     TILE_FLOOR_WATER_0,

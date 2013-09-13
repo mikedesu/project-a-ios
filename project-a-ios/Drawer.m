@@ -415,10 +415,65 @@
     }
     
     
+    // metal plate drawing pattern
+    else if ( style == 22 ) {
+        for (int i=0; i<16; i++) {
+            [t setPixelAt:ccp(i,0) rgba:c1];
+            [t setPixelAt:ccp(i,15) rgba:c1];
+            [t setPixelAt:ccp(0,i) rgba:c1];
+            [t setPixelAt:ccp(15,i) rgba:c1];
+        }
+    }
+    
+    else if ( style == 23 ) {
+        for (int i=0; i<16; i++) {
+            [t setPixelAt:ccp(i,0) rgba:c1];
+            [t setPixelAt:ccp(i,15) rgba:c1];
+            [t setPixelAt:ccp(0,i) rgba:c1];
+            [t setPixelAt:ccp(15,i) rgba:c1];
+        }
+        [t setPixelAt:ccp(2,2) rgba:c1];
+        [t setPixelAt:ccp(2,13) rgba:c1];
+        [t setPixelAt:ccp(13,2) rgba:c1];
+        [t setPixelAt:ccp(13,13) rgba:c1];
+    }
+    
+    else if ( style == 24 ) {
+        for (int i=0; i<16; i++) {
+            [t setPixelAt:ccp(i,0) rgba:c1];
+            [t setPixelAt:ccp(i,15) rgba:c1];
+            [t setPixelAt:ccp(0,i) rgba:c1];
+            [t setPixelAt:ccp(15,i) rgba:c1];
+        }
+        [t setPixelAt:ccp(2,3) rgba:c1];
+        [t setPixelAt:ccp(3,3) rgba:c1];
+        [t setPixelAt:ccp(4,3) rgba:c1];
+        [t setPixelAt:ccp(3,2) rgba:c1];
+        [t setPixelAt:ccp(3,4) rgba:c1];
+        
+        [t setPixelAt:ccp(2,12) rgba:c1];
+        [t setPixelAt:ccp(3,12) rgba:c1];
+        [t setPixelAt:ccp(4,12) rgba:c1];
+        [t setPixelAt:ccp(3,11) rgba:c1];
+        [t setPixelAt:ccp(3,13) rgba:c1];
+        
+        [t setPixelAt:ccp(11,3) rgba:c1];
+        [t setPixelAt:ccp(12,3) rgba:c1];
+        [t setPixelAt:ccp(13,3) rgba:c1];
+        [t setPixelAt:ccp(12,2) rgba:c1];
+        [t setPixelAt:ccp(12,4) rgba:c1];
+        
+        [t setPixelAt:ccp(11,12) rgba:c1];
+        [t setPixelAt:ccp(12,12) rgba:c1];
+        [t setPixelAt:ccp(13,12) rgba:c1];
+        [t setPixelAt:ccp(12,11) rgba:c1];
+        [t setPixelAt:ccp(12,13) rgba:c1];
+    }
+    
     
     // random scatter c1
     else if ( style == 9999 ) {
-        int pixels = style == 2 ? 16 : style == 3 ? 32 : style == 4 ? 64 : 16;
+        int pixels = [Dice roll:16];
         while ( pixels > 0 ) {
             int rx = [Dice roll:16];
             int ry = [Dice roll:16];

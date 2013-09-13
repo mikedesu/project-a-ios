@@ -185,6 +185,8 @@ n==TILE_FLOOR_GRASS_61 ? @"GrassTile61" : \
 n==TILE_FLOOR_GRASS_62 ? @"GrassTile62" : \
 n==TILE_FLOOR_GRASS_63 ? @"GrassTile63" : \
 \
+n==TILE_FLOOR_DIRT_0 ? @"DirtTile0" : \
+\
 n==TILE_FLOOR_SAND_0 ? @"SandTile0" : \
 n==TILE_FLOOR_SAND_1 ? @"SandTile1" : \
 n==TILE_FLOOR_SAND_2 ? @"SandTile2" : \
@@ -193,6 +195,25 @@ n==TILE_FLOOR_SAND_4 ? @"SandTile4" : \
 n==TILE_FLOOR_SAND_5 ? @"SandTile5" : \
 n==TILE_FLOOR_SAND_6 ? @"SandTile6" : \
 n==TILE_FLOOR_SAND_7 ? @"SandTile7" : \
+\
+n==TILE_FLOOR_METAL_0 ? @"MetalTile0" : \
+n==TILE_FLOOR_METAL_1 ? @"MetalTile1" : \
+n==TILE_FLOOR_METAL_2 ? @"MetalTile2" : \
+n==TILE_FLOOR_METAL_3 ? @"MetalTile3" : \
+\
+n==TILE_FLOOR_MUD_0 ? @"MudTile0" : \
+n==TILE_FLOOR_QUICKSAND_0 ? @"QuicksandTile0" : \
+n==TILE_FLOOR_SNOW_0 ? @"SnowTile0" : \
+n==TILE_FLOOR_ICE_0 ? @"IceTile0" : \
+n==TILE_FLOOR_CLOUD_0 ? @"CloudTile0" : \
+n==TILE_FLOOR_WOOD_0 ? @"WoodTile0" : \
+n==TILE_FLOOR_LAVA_0 ? @"LavaTile0" : \
+n==TILE_FLOOR_SWAMP_0 ? @"SwampTile0" : \
+\
+n==TILE_FLOOR_SPACE_0 ? @"SpaceTile0" : \
+n==TILE_FLOOR_SPACE_1 ? @"SpaceTile1" : \
+n==TILE_FLOOR_SPACE_2 ? @"SpaceTile2" : \
+n==TILE_FLOOR_SPACE_3 ? @"SpaceTile3" : \
 \
 n==TILE_FLOOR_WATER_0 ? @"WaterTile0" : \
 @"")
