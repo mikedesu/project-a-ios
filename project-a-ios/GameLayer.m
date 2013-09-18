@@ -101,40 +101,40 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer stoneTileColor0:lightgray Color1:orange Pattern:0]    forKey: KEY_FOR_TILETYPE(TILE_FLOOR_STONE_23)];
     [s setObject:[Drawer stoneTileColor0:lightgray Color1:brown Pattern:0]    forKey: KEY_FOR_TILETYPE(TILE_FLOOR_STONE_24)];
     
-    
-    
     [s setObject:[Drawer grassTile: 0 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_0)];
-    [s setObject:[Drawer grassTile: 0 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_1)];
-    [s setObject:[Drawer grassTile: 0 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_2)];
-    [s setObject:[Drawer grassTile: 0 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_3)];
-    [s setObject:[Drawer grassTile: 0 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_4)];
-    [s setObject:[Drawer grassTile: 0 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_5)];
-    [s setObject:[Drawer grassTile: 1 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_6)];
-    [s setObject:[Drawer grassTile: 1 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_7)];
-    [s setObject:[Drawer grassTile: 1 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_8)];
-    [s setObject:[Drawer grassTile: 1 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_9)];
-    [s setObject:[Drawer grassTile: 1 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_10)];
-    [s setObject:[Drawer grassTile: 1 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_11)];
-    [s setObject:[Drawer grassTile: 2 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_12)];
-    [s setObject:[Drawer grassTile: 3 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_13)];
-    [s setObject:[Drawer grassTile: 4 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_14)];
-    [s setObject:[Drawer grassTile: 5 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_15)];
-    [s setObject:[Drawer grassTile: 6 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_16)];
-    [s setObject:[Drawer grassTile: 7 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_17)];
-    [s setObject:[Drawer grassTile: 8 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_18)];
-    [s setObject:[Drawer grassTile: 9 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_19)];
-    [s setObject:[Drawer grassTile: 10 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_20)];
-    [s setObject:[Drawer grassTile: 11 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_21)];
+    [s setObject:[Drawer grassTile: 1 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_1)];
+    [s setObject:[Drawer grassTile: 2 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_2)];
+    [s setObject:[Drawer grassTile: 3 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_3)];
+    [s setObject:[Drawer grassTile: 4 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_4)];
+    [s setObject:[Drawer grassTile: 5 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_5)];
+    [s setObject:[Drawer grassTile: 6 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_6)];
+    [s setObject:[Drawer grassTile: 7 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_7)];
+    [s setObject:[Drawer grassTile: 8 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_8)];
+    [s setObject:[Drawer grassTile: 9 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_9)];
+    [s setObject:[Drawer grassTile: 10 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_10)];
+    [s setObject:[Drawer grassTile: 11 c0: green c1: darkgreen c2: green]        forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_11)];
+    [s setObject:[Drawer grassTile: 12 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_12)];
+    [s setObject:[Drawer grassTile: 13 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_13)];
+    [s setObject:[Drawer grassTile: 14 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_14)];
+    [s setObject:[Drawer grassTile: 15 c0: green c1: darkgreen c2: green ]       forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_15)];
+    [s setObject:[Drawer grassTile: 16 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_16)];
+    [s setObject:[Drawer grassTile: 17 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_17)];
+    [s setObject:[Drawer grassTile: 18 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_18)];
+    [s setObject:[Drawer grassTile: 19 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_19)];
+    [s setObject:[Drawer grassTile: 20 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_20)];
+    [s setObject:[Drawer grassTile: 21 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_21)];
     
-    [s setObject:[Drawer grassTile: 12 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_22)];
-    [s setObject:[Drawer grassTile: 13 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_23)];
-    [s setObject:[Drawer grassTile: 14 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_24)];
-    [s setObject:[Drawer grassTile: 15 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_25)];
-    [s setObject:[Drawer grassTile: 16 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_26)];
-    [s setObject:[Drawer grassTile: 17 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_27)];
-    [s setObject:[Drawer grassTile: 18 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_28)];
-    [s setObject:[Drawer grassTile: 19 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_29)];
-    [s setObject:[Drawer grassTile: 20 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_30)];
+    [s setObject:[Drawer grassTile: 22 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_22)];
+    [s setObject:[Drawer grassTile: 23 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_23)];
+    [s setObject:[Drawer grassTile: 24 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_24)];
+    [s setObject:[Drawer grassTile: 25 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_25)];
+    [s setObject:[Drawer grassTile: 26 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_26)];
+    
+    /*
+    [s setObject:[Drawer grassTile: 7 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_27)];
+    [s setObject:[Drawer grassTile: 8 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_28)];
+    [s setObject:[Drawer grassTile: 9 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_29)];
+    [s setObject:[Drawer grassTile: 0 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_30)];
     [s setObject:[Drawer grassTile: 21 c0: green c1: darkgreen c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_31)];
     
     
@@ -172,8 +172,36 @@ unsigned get_memory_mb(void) {
     [s setObject:[Drawer grassTile: 18 c0: green c1: white c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_62)];
     [s setObject:[Drawer grassTile: 19 c0: green c1: white c2: green ]      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_63)];
     
+    */
+    [ s setObject:[Drawer grassTile:0 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_0) ];
+    [ s setObject:[Drawer grassTile:1 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_1) ];
+    [ s setObject:[Drawer grassTile:2 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_2) ];
+    [ s setObject:[Drawer grassTile:3 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_3) ];
+    [ s setObject:[Drawer grassTile:4 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_4) ];
+    [ s setObject:[Drawer grassTile:5 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_5) ];
+    [ s setObject:[Drawer grassTile:6 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_6) ];
+    [ s setObject:[Drawer grassTile:7 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_7) ];
+    [ s setObject:[Drawer grassTile:8 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_8) ];
+    [ s setObject:[Drawer grassTile:9 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_9) ];
+    [ s setObject:[Drawer grassTile:10 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_10) ];
+    [ s setObject:[Drawer grassTile:11 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_11) ];
+    [ s setObject:[Drawer grassTile:12 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_12) ];
+    [ s setObject:[Drawer grassTile:13 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_13) ];
+    [ s setObject:[Drawer grassTile:14 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_14) ];
+    [ s setObject:[Drawer grassTile:15 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_15) ];
+    [ s setObject:[Drawer grassTile:16 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_16) ];
+    [ s setObject:[Drawer grassTile:17 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_17) ];
+    [ s setObject:[Drawer grassTile:18 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_18) ];
+    [ s setObject:[Drawer grassTile:19 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_19) ];
+    [ s setObject:[Drawer grassTile:20 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_20) ];
+    [ s setObject:[Drawer grassTile:21 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_21) ];
+    [ s setObject:[Drawer grassTile:22 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_22) ];
+    [ s setObject:[Drawer grassTile:23 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_23) ];
+    [ s setObject:[Drawer grassTile:24 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_24) ];
+    [ s setObject:[Drawer grassTile:25 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_25) ];
+    [ s setObject:[Drawer grassTile:26 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_26) ];
+    [ s setObject:[Drawer grassTile:9999 c0:brown c1:black c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_27) ];
     
-    [ s setObject:[Drawer grassTile:0 c0:brown c1:brown c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_DIRT_0) ];
     /*
      [ s setObject:[Drawer grassTile:0 c0:brown c1:brown c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_MUD_0) ];
     [ s setObject:[Drawer grassTile:0 c0:brown c1:brown c2:brown] forKey:KEY_FOR_TILETYPE(TILE_FLOOR_QUICKSAND_0) ];
@@ -1412,7 +1440,7 @@ static NSString  * const notifications[] = {
     NSInteger height = screenheight/2;
     playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(128) width:width height:height ];
     
-    int offset = screenheight;
+    //int offset = screenheight;
     //playerMenu.position = ccp( 0 , playerHUD.contentSize.height + offset);
     playerMenu.position = ccp( screenwidth - playerMenu.contentSize.width , screenheight - playerMenu.contentSize.height);
 }
@@ -2080,7 +2108,7 @@ static NSString  * const notifications[] = {
  ====================
  */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	UITouch *touch=[touches anyObject];
+	//UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = YES;
     
@@ -2144,12 +2172,12 @@ static NSString  * const notifications[] = {
     touchEndedTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = NO;
     
-    CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
-    CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
+    //CGPoint touchedTilePoint = [ self getTileCGPointForTouch: touch ];
+    //CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
     
     // valid selected point
-    BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
-    BOOL validMapPoint      = mapPoint.x >= 0          && mapPoint.y >= 0;
+    //BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
+   // BOOL validMapPoint      = mapPoint.x >= 0          && mapPoint.y >= 0;
     
     
     // duration delta
@@ -2332,7 +2360,7 @@ static NSString  * const notifications[] = {
     CGPoint mapPoint = [ self translateTouchPointToMapPoint: touchedTilePoint ];
     
     // valid selected point
-    BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
+   // BOOL validSelectedPoint = selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0;
     BOOL validMapPoint      = mapPoint.x >= 0          && mapPoint.y >= 0;
     
     
@@ -3202,9 +3230,9 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) handleTrapSetOffPC {
-    CGPoint pcPos = pcEntity.positionOnMap;
+    //CGPoint pcPos = pcEntity.positionOnMap;
     
-    Tile *t = [self getMapTileFromPoint:pcPos];
+    //Tile *t = [self getMapTileFromPoint:pcPos];
     
     /*
     if ( t.tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 ) {
@@ -4672,11 +4700,11 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) doTimer: (SEL) selector {
     if ( selector != nil ) {
-        CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+        //CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
         [ self performSelector:selector ];
-        CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
-        CFAbsoluteTime total = ( end - start );
-        MLOG( @"method ran in %f s", total );
+        //CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
+        //CFAbsoluteTime total = ( end - start );
+        //MLOG( @"method ran in %f s", total );
     }
 }
 

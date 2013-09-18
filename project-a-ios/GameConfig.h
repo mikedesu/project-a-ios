@@ -186,6 +186,33 @@ n==TILE_FLOOR_GRASS_62 ? @"GrassTile62" : \
 n==TILE_FLOOR_GRASS_63 ? @"GrassTile63" : \
 \
 n==TILE_FLOOR_DIRT_0 ? @"DirtTile0" : \
+n==TILE_FLOOR_DIRT_1 ? @"DirtTile1" : \
+n==TILE_FLOOR_DIRT_2 ? @"DirtTile2" : \
+n==TILE_FLOOR_DIRT_3 ? @"DirtTile3" : \
+n==TILE_FLOOR_DIRT_4 ? @"DirtTile4" : \
+n==TILE_FLOOR_DIRT_5 ? @"DirtTile5" : \
+n==TILE_FLOOR_DIRT_6 ? @"DirtTile6" : \
+n==TILE_FLOOR_DIRT_7 ? @"DirtTile7" : \
+n==TILE_FLOOR_DIRT_8 ? @"DirtTile8" : \
+n==TILE_FLOOR_DIRT_9 ? @"DirtTile9" : \
+n==TILE_FLOOR_DIRT_10 ? @"DirtTile10" : \
+n==TILE_FLOOR_DIRT_11 ? @"DirtTile11" : \
+n==TILE_FLOOR_DIRT_12 ? @"DirtTile12" : \
+n==TILE_FLOOR_DIRT_13 ? @"DirtTile13" : \
+n==TILE_FLOOR_DIRT_14 ? @"DirtTile14" : \
+n==TILE_FLOOR_DIRT_15 ? @"DirtTile15" : \
+n==TILE_FLOOR_DIRT_16 ? @"DirtTile16" : \
+n==TILE_FLOOR_DIRT_17 ? @"DirtTile17" : \
+n==TILE_FLOOR_DIRT_18 ? @"DirtTile18" : \
+n==TILE_FLOOR_DIRT_19 ? @"DirtTile19" : \
+n==TILE_FLOOR_DIRT_20 ? @"DirtTile20" : \
+n==TILE_FLOOR_DIRT_21 ? @"DirtTile21" : \
+n==TILE_FLOOR_DIRT_22 ? @"DirtTile22" : \
+n==TILE_FLOOR_DIRT_23 ? @"DirtTile23" : \
+n==TILE_FLOOR_DIRT_24 ? @"DirtTile24" : \
+n==TILE_FLOOR_DIRT_25 ? @"DirtTile25" : \
+n==TILE_FLOOR_DIRT_26 ? @"DirtTile26" : \
+n==TILE_FLOOR_DIRT_27 ? @"DirtTile27" : \
 \
 n==TILE_FLOOR_SAND_0 ? @"SandTile0" : \
 n==TILE_FLOOR_SAND_1 ? @"SandTile1" : \

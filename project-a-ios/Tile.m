@@ -105,11 +105,8 @@
 
 
 
-
-
 +( NSString * ) stringForTileType: (Tile_t) _tileType {
-    
-    
+    return nil;
 }
 
 @end

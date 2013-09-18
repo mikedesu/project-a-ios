@@ -471,6 +471,25 @@
     }
     
     
+    else if ( style == 25 ) {
+        for (int x=0; x<16; x++)
+            for (int y=2; y<16; y+=2)
+                [t setPixelAt:ccp(x,y) rgba:c1];
+    }
+    
+    else if ( style == 26 ) {
+        for (int x=2; x<16; x+=2)
+            for (int y=0; y<16; y++)
+                [t setPixelAt:ccp(x,y) rgba:c1];
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     // random scatter c1
     else if ( style == 9999 ) {
         int pixels = [Dice roll:16];
@@ -530,9 +549,9 @@
         int i = 8,
             j = 0,
             start_i = 0,
-            start_j = 0,
-            end_i = 0,
-            end_j = 0;
+            //start_j = 0,
+        end_i = 0;
+            //end_j = 0;
         [t setPixelAt:ccp(i,j) rgba:color1];
         
         j++;    start_i = 7;    end_i = 9;    for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
@@ -553,9 +572,6 @@
         j++;    start_i = 6;    end_i = 8;     for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
         
         j++;    start_i = 7;    end_i = 7;     for (i = start_i; i <= end_i; i+=offset) [t setPixelAt:ccp(i,j) rgba:color1];
-        
-        
-        
         
     }
     
@@ -591,13 +607,6 @@
             for (j=2; j<=14; j+=offset)
                 [t setPixelAt:ccp(i,j) rgba:color1];
     }
-    
-    
-    
-    
-    
-    
-    
     
     [ t apply ];
     

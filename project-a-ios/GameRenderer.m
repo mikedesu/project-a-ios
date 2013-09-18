@@ -928,44 +928,41 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
             Tile_t tileType = baseTileType;
             int tileTypeOffset, tileTypeOffsetBase;
             tileTypeOffsetBase = 1;
+           
             
+/*
+ Here, we have the list of tileOffsets when generating floors
+ Basically, we can hard-code in the offset 
+ This is useful for debugging and expanding the tiles used
+ */
+            
+#define TILEOFFSET_STONE 23
+#define TILEOFFSET_GRASS 27
+#define TILEOFFSET_DIRT  27
+#define TILEOFFSET_WATER  1
+#define TILEOFFSET_SAND   8
+#define TILEOFFSET_METAL  4
+#define TILEOFFSET_SPACE  4
+
             //baseTileType = TILE_FLOOR_STONE_0;
             //baseTileType = TILE_FLOOR_GRASS_0;
             //baseTileType = TILE_FLOOR_METAL_0;
-            //baseTileType = TILE_FLOOR_DIRT_0;
+            baseTileType = TILE_FLOOR_DIRT_0;
             //baseTileType = TILE_FLOOR_SPACE_0;
-            
-            
-            if ( baseTileType == TILE_FLOOR_STONE_0 ) {                
-                tileTypeOffsetBase = 23;
-            }
-            else if ( baseTileType == TILE_FLOOR_GRASS_0 ) {
-                //tileTypeOffsetBase = 1;
-                //tileTypeOffsetBase = 32;
-                tileTypeOffsetBase = 64;
-            }
-            else if ( baseTileType == TILE_FLOOR_DIRT_0 ) {
-                tileTypeOffsetBase = 1;
-            }
-            
-            else if ( baseTileType == TILE_FLOOR_WATER_0 ) {
-                tileTypeOffsetBase = 1;
-            }
-            else if ( baseTileType == TILE_FLOOR_SAND_0 ) {
-                tileTypeOffsetBase = 8;
-            }
-            else if ( baseTileType == TILE_FLOOR_METAL_0 ) {
-                tileTypeOffsetBase = 4;
-            }
-            else if ( baseTileType == TILE_FLOOR_SPACE_0 ) {
-                tileTypeOffsetBase = 4;
-            }
-        
+ 
+            tileTypeOffsetBase =
+            baseTileType == TILE_FLOOR_STONE_0 ? TILEOFFSET_STONE  :
+            baseTileType == TILE_FLOOR_GRASS_0 ? TILEOFFSET_GRASS  :
+            baseTileType == TILE_FLOOR_DIRT_0  ?  TILEOFFSET_DIRT  :
+            baseTileType == TILE_FLOOR_WATER_0 ?  TILEOFFSET_WATER :
+            baseTileType == TILE_FLOOR_SAND_0  ?  TILEOFFSET_SAND  :
+            baseTileType == TILE_FLOOR_METAL_0 ?  TILEOFFSET_METAL :
+            baseTileType == TILE_FLOOR_SPACE_0 ?  TILEOFFSET_SPACE :
+            0;
             
             
             tileTypeOffset = [Dice roll: tileTypeOffsetBase] - 1;
             tileType += tileTypeOffset;
-            
             
             
             // setTileAtPosition will call handleTile and set if trapped
