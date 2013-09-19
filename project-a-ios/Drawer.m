@@ -470,7 +470,7 @@
         [t setPixelAt:ccp(12,13) rgba:c1];
     }
     
-    
+    //striped patterns
     else if ( style == 25 ) {
         for (int x=0; x<16; x++)
             for (int y=2; y<16; y+=2)

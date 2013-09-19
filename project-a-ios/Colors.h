@@ -33,8 +33,6 @@
 
 #define CC4B_AZURE_ALPHA(a) ccc4( 0xf0, 0xff, 0xff, a )
 
-
-
 #define CC4B_BROWN_ALPHA(a) ccc4(0xa5, 0x2a, 0x2a, a)
 #define CC4B_BROWN      CC4B_BROWN_ALPHA(255)
 
@@ -45,7 +43,7 @@
 
 #define CC4B_SAND_ALPHA(a) ccc4(0xd6, 0xb5, 0x5f, a)
 
-
+#define CC4B_PINK_ALPHA(a) ccc4(a)
 
 #define CC4B_RANDOM_ALPHA(a) ccc4( random() % 255, random() % 255, random() % 255, a )
 

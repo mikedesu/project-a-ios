@@ -227,15 +227,102 @@ n==TILE_FLOOR_METAL_0 ? @"MetalTile0" : \
 n==TILE_FLOOR_METAL_1 ? @"MetalTile1" : \
 n==TILE_FLOOR_METAL_2 ? @"MetalTile2" : \
 n==TILE_FLOOR_METAL_3 ? @"MetalTile3" : \
+n==TILE_FLOOR_METAL_4 ? @"MetalTile4" : \
+n==TILE_FLOOR_METAL_5 ? @"MetalTile5" : \
+n==TILE_FLOOR_METAL_6 ? @"MetalTile6" : \
+n==TILE_FLOOR_METAL_7 ? @"MetalTile7" : \
+n==TILE_FLOOR_METAL_8 ? @"MetalTile8" : \
+n==TILE_FLOOR_METAL_9 ? @"MetalTile9" : \
+n==TILE_FLOOR_METAL_10 ? @"MetalTile10" : \
+n==TILE_FLOOR_METAL_11 ? @"MetalTile11" : \
+n==TILE_FLOOR_METAL_12 ? @"MetalTile12" : \
+n==TILE_FLOOR_METAL_13 ? @"MetalTile13" : \
+n==TILE_FLOOR_METAL_14 ? @"MetalTile14" : \
+n==TILE_FLOOR_METAL_15 ? @"MetalTile15" : \
+n==TILE_FLOOR_METAL_16 ? @"MetalTile16" : \
+n==TILE_FLOOR_METAL_17 ? @"MetalTile17" : \
+n==TILE_FLOOR_METAL_18 ? @"MetalTile18" : \
+n==TILE_FLOOR_METAL_19 ? @"MetalTile19" : \
+n==TILE_FLOOR_METAL_20 ? @"MetalTile20" : \
+n==TILE_FLOOR_METAL_21 ? @"MetalTile21" : \
+n==TILE_FLOOR_METAL_22 ? @"MetalTile22" : \
+n==TILE_FLOOR_METAL_23 ? @"MetalTile23" : \
 \
 n==TILE_FLOOR_MUD_0 ? @"MudTile0" : \
 n==TILE_FLOOR_QUICKSAND_0 ? @"QuicksandTile0" : \
+\
 n==TILE_FLOOR_SNOW_0 ? @"SnowTile0" : \
+n==TILE_FLOOR_SNOW_1 ? @"SnowTile1" : \
+n==TILE_FLOOR_SNOW_2 ? @"SnowTile2" : \
+n==TILE_FLOOR_SNOW_3 ? @"SnowTile3" : \
+n==TILE_FLOOR_SNOW_4 ? @"SnowTile4" : \
+n==TILE_FLOOR_SNOW_5 ? @"SnowTile5" : \
+n==TILE_FLOOR_SNOW_6 ? @"SnowTile6" : \
+n==TILE_FLOOR_SNOW_7 ? @"SnowTile7" : \
+n==TILE_FLOOR_SNOW_8 ? @"SnowTile8" : \
+n==TILE_FLOOR_SNOW_9 ? @"SnowTile9" : \
+n==TILE_FLOOR_SNOW_10 ? @"SnowTile10" : \
+n==TILE_FLOOR_SNOW_11 ? @"SnowTile11" : \
+n==TILE_FLOOR_SNOW_12 ? @"SnowTile12" : \
+n==TILE_FLOOR_SNOW_13 ? @"SnowTile13" : \
+n==TILE_FLOOR_SNOW_14 ? @"SnowTile14" : \
+n==TILE_FLOOR_SNOW_15 ? @"SnowTile15" : \
+n==TILE_FLOOR_SNOW_16 ? @"SnowTile16" : \
+n==TILE_FLOOR_SNOW_17 ? @"SnowTile17" : \
+n==TILE_FLOOR_SNOW_18 ? @"SnowTile18" : \
+n==TILE_FLOOR_SNOW_19 ? @"SnowTile19" : \
+n==TILE_FLOOR_SNOW_20 ? @"SnowTile20" : \
+n==TILE_FLOOR_SNOW_21 ? @"SnowTile21" : \
+n==TILE_FLOOR_SNOW_22 ? @"SnowTile22" : \
+n==TILE_FLOOR_SNOW_23 ? @"SnowTile23" : \
+n==TILE_FLOOR_SNOW_24 ? @"SnowTile24" : \
+n==TILE_FLOOR_SNOW_25 ? @"SnowTile25" : \
+n==TILE_FLOOR_SNOW_26 ? @"SnowTile26" : \
+n==TILE_FLOOR_SNOW_27 ? @"SnowTile27" : \
+n==TILE_FLOOR_SNOW_28 ? @"SnowTile28" : \
+n==TILE_FLOOR_SNOW_29 ? @"SnowTile29" : \
+n==TILE_FLOOR_SNOW_30 ? @"SnowTile30" : \
+n==TILE_FLOOR_SNOW_31 ? @"SnowTile31" : \
+n==TILE_FLOOR_SNOW_32 ? @"SnowTile32" : \
+\
 n==TILE_FLOOR_ICE_0 ? @"IceTile0" : \
 n==TILE_FLOOR_CLOUD_0 ? @"CloudTile0" : \
 n==TILE_FLOOR_WOOD_0 ? @"WoodTile0" : \
 n==TILE_FLOOR_LAVA_0 ? @"LavaTile0" : \
+\
 n==TILE_FLOOR_SWAMP_0 ? @"SwampTile0" : \
+n==TILE_FLOOR_SWAMP_1 ? @"SwampTile1" : \
+n==TILE_FLOOR_SWAMP_2 ? @"SwampTile2" : \
+n==TILE_FLOOR_SWAMP_3 ? @"SwampTile3" : \
+n==TILE_FLOOR_SWAMP_4 ? @"SwampTile4" : \
+n==TILE_FLOOR_SWAMP_5 ? @"SwampTile5" : \
+n==TILE_FLOOR_SWAMP_6 ? @"SwampTile6" : \
+n==TILE_FLOOR_SWAMP_7 ? @"SwampTile7" : \
+n==TILE_FLOOR_SWAMP_8 ? @"SwampTile8" : \
+n==TILE_FLOOR_SWAMP_9 ? @"SwampTile9" : \
+n==TILE_FLOOR_SWAMP_10 ? @"SwampTile10" : \
+n==TILE_FLOOR_SWAMP_11 ? @"SwampTile11" : \
+n==TILE_FLOOR_SWAMP_12 ? @"SwampTile12" : \
+n==TILE_FLOOR_SWAMP_13 ? @"SwampTile13" : \
+n==TILE_FLOOR_SWAMP_14 ? @"SwampTile14" : \
+n==TILE_FLOOR_SWAMP_15 ? @"SwampTile15" : \
+n==TILE_FLOOR_SWAMP_16 ? @"SwampTile16" : \
+n==TILE_FLOOR_SWAMP_17 ? @"SwampTile17" : \
+n==TILE_FLOOR_SWAMP_18 ? @"SwampTile18" : \
+n==TILE_FLOOR_SWAMP_19 ? @"SwampTile19" : \
+n==TILE_FLOOR_SWAMP_20 ? @"SwampTile20" : \
+n==TILE_FLOOR_SWAMP_21 ? @"SwampTile21" : \
+n==TILE_FLOOR_SWAMP_22 ? @"SwampTile22" : \
+n==TILE_FLOOR_SWAMP_23 ? @"SwampTile23" : \
+n==TILE_FLOOR_SWAMP_24 ? @"SwampTile24" : \
+n==TILE_FLOOR_SWAMP_25 ? @"SwampTile25" : \
+n==TILE_FLOOR_SWAMP_26 ? @"SwampTile26" : \
+n==TILE_FLOOR_SWAMP_27 ? @"SwampTile27" : \
+n==TILE_FLOOR_SWAMP_28 ? @"SwampTile28" : \
+n==TILE_FLOOR_SWAMP_29 ? @"SwampTile29" : \
+n==TILE_FLOOR_SWAMP_30 ? @"SwampTile30" : \
+n==TILE_FLOOR_SWAMP_31 ? @"SwampTile31" : \
+n==TILE_FLOOR_SWAMP_32 ? @"SwampTile32" : \
 \
 n==TILE_FLOOR_SPACE_0 ? @"SpaceTile0" : \
 n==TILE_FLOOR_SPACE_1 ? @"SpaceTile1" : \
@@ -243,5 +330,6 @@ n==TILE_FLOOR_SPACE_2 ? @"SpaceTile2" : \
 n==TILE_FLOOR_SPACE_3 ? @"SpaceTile3" : \
 \
 n==TILE_FLOOR_WATER_0 ? @"WaterTile0" : \
+\
+n==TILE_FLOOR_QUANTUMFOAM_0 ? @"QuantumFoam0" : \
 @"")
-

@@ -820,20 +820,18 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     
     
     // determine a tile-type as the base tile type to use
-    Tile_t baseTileType;
-    
-    roll = [Dice roll:7];
-    
-    //baseTileType = TILE_FLOOR_WATER_0;
-    
-    baseTileType =
+    roll = [Dice roll:10];
+    Tile_t baseTileType =
     roll == 1 ? TILE_FLOOR_STONE_0 :
     roll == 2 ? TILE_FLOOR_GRASS_0 :
     roll == 3 ? TILE_FLOOR_DIRT_0  :
     roll == 4 ? TILE_FLOOR_METAL_0  :
-    roll == 5 ? TILE_FLOOR_SPACE_0  :
-    roll == 6 ? TILE_FLOOR_SAND_0 :
-    roll == 7 ? TILE_FLOOR_WATER_0 :
+    roll == 5 ? TILE_FLOOR_SAND_0 :
+    roll == 6 ? TILE_FLOOR_SNOW_0 :
+    roll == 7 ? TILE_FLOOR_SWAMP_0 :
+    roll == 8 ? TILE_FLOOR_WATER_0 :
+    roll == 9 ? TILE_FLOOR_QUANTUMFOAM_0 :
+    roll == 10 ? TILE_FLOOR_SPACE_0  :
     TILE_FLOOR_STONE_0;
     
     
@@ -936,38 +934,61 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
  This is useful for debugging and expanding the tiles used
  */
             
-#define TILEOFFSET_STONE 23
-#define TILEOFFSET_GRASS 27
-#define TILEOFFSET_DIRT  27
-#define TILEOFFSET_WATER  1
-#define TILEOFFSET_SAND   8
-#define TILEOFFSET_METAL  4
-#define TILEOFFSET_SPACE  4
+#define TILEOFFSET_STONE       [Dice roll:23]
+#define TILEOFFSET_GRASS       23
+#define TILEOFFSET_DIRT        23
+#define TILEOFFSET_WATER        1
+#define TILEOFFSET_SAND        15
+#define TILEOFFSET_METAL       29
+#define TILEOFFSET_SNOW        23
+#define TILEOFFSET_SWAMP       23
+#define TILEOFFSET_QUANTUMFOAM  0
+#define TILEOFFSET_SPACE        4
 
             //baseTileType = TILE_FLOOR_STONE_0;
             //baseTileType = TILE_FLOOR_GRASS_0;
             //baseTileType = TILE_FLOOR_METAL_0;
-            baseTileType = TILE_FLOOR_DIRT_0;
+            //baseTileType = TILE_FLOOR_SWAMP_0;
+            //baseTileType = TILE_FLOOR_DIRT_0;
+            //baseTileType = TILE_FLOOR_SNOW_0;
+            //baseTileType = TILE_FLOOR_QUANTUMFOAM_0;
             //baseTileType = TILE_FLOOR_SPACE_0;
- 
-            tileTypeOffsetBase =
-            baseTileType == TILE_FLOOR_STONE_0 ? TILEOFFSET_STONE  :
-            baseTileType == TILE_FLOOR_GRASS_0 ? TILEOFFSET_GRASS  :
-            baseTileType == TILE_FLOOR_DIRT_0  ?  TILEOFFSET_DIRT  :
-            baseTileType == TILE_FLOOR_WATER_0 ?  TILEOFFSET_WATER :
-            baseTileType == TILE_FLOOR_SAND_0  ?  TILEOFFSET_SAND  :
-            baseTileType == TILE_FLOOR_METAL_0 ?  TILEOFFSET_METAL :
-            baseTileType == TILE_FLOOR_SPACE_0 ?  TILEOFFSET_SPACE :
-            0;
+            
+            switch (baseTileType) {
+                case TILE_FLOOR_METAL_0:
+                    baseTileType = baseTileType + ([Dice roll: 29]-1) ;
+                    tileTypeOffsetBase = floor.floorNumber;
+                    break;
+                    
+                case TILE_FLOOR_STONE_0:
+                    baseTileType = baseTileType + ([Dice roll: 23]-1) ;
+                    tileTypeOffsetBase = floor.floorNumber;
+                    break;
+                    
+                    
+                    
+                default:
+                    tileTypeOffsetBase =
+                    //baseTileType == TILE_FLOOR_STONE_0 ? TILEOFFSET_STONE  :
+                    baseTileType == TILE_FLOOR_GRASS_0 ? TILEOFFSET_GRASS  :
+                    baseTileType == TILE_FLOOR_DIRT_0  ?  TILEOFFSET_DIRT  :
+                    baseTileType == TILE_FLOOR_WATER_0 ?  TILEOFFSET_WATER :
+                    baseTileType == TILE_FLOOR_SAND_0  ?  TILEOFFSET_SAND  :
+                    //baseTileType == TILE_FLOOR_METAL_0 ?  TILEOFFSET_METAL :
+                    baseTileType == TILE_FLOOR_SNOW_0  ?  TILEOFFSET_SNOW  :
+                    baseTileType == TILE_FLOOR_SWAMP_0 ?  TILEOFFSET_SWAMP :
+                    baseTileType == TILE_FLOOR_QUANTUMFOAM_0 ? TILEOFFSET_QUANTUMFOAM :
+                    baseTileType == TILE_FLOOR_SPACE_0 ?  TILEOFFSET_SPACE :
+                    0;
+                    break;
+            }
             
             
-            tileTypeOffset = [Dice roll: tileTypeOffsetBase] - 1;
-            tileType += tileTypeOffset;
-            
+            tileTypeOffset = [Dice roll: tileTypeOffsetBase]-1;
+            tileType = baseTileType + tileTypeOffset;
             
             // setTileAtPosition will call handleTile and set if trapped
             [ self setTileAtPosition:point onFloor:floor toType:tileType ];
-            
             
             
             Tile *_t = ((Tile *)[floor.tileDataArray objectAtIndex: point.x + ( point.y * floor.width) ]);
