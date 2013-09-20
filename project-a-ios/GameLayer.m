@@ -2212,7 +2212,8 @@ static NSString  * const notifications[] = {
     
     // duration delta
     
-    double duration_d = 1.0;
+    //double duration_d = 1.0;
+    double duration_d = 0.7;
     if ( touchEndedTime - touchBeganTime < duration_d ) {
         [self shortPress:touch];
     }
@@ -4799,12 +4800,11 @@ NSUInteger getMagicY( NSUInteger y ) {
     Entity *itemDrop = nil;
     
     // item-generation logic
-    NSInteger roll = [Dice roll:3];
+    NSInteger roll = [Dice roll:4];
     itemDrop =
-    roll == 1 ? [Items greenBlob] :
-    roll == 2 ? [Items coin:1] :
-    roll == 3 ? [Items coin:5] :
-    [Items coin:1];
+    roll == 1 || roll == 2 ? [Items catfish] :
+    [Items simpleKey];
+    
     
     return itemDrop;
 }
