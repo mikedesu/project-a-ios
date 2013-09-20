@@ -471,8 +471,6 @@ unsigned get_memory_mb(void) {
             //Entity *itemToTest = Tree;
             //[GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
             
-            
-            
              NSInteger roll = [Dice roll:5];
              // weapons
              if ( roll == 1 ) {
@@ -527,6 +525,14 @@ unsigned get_memory_mb(void) {
     }
     
     //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
+    
+    
+    // place doors
+    for (int i=0; i<[dungeon count]; i++) {
+        [ GameRenderer spawnDoors: 2 forFloor: [dungeon objectAtIndex:i] ];
+    }
+    
+    
     [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
     MLOG(@"");
     
@@ -2861,6 +2867,7 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
     return tile;
 }
+
 
 #pragma mark - EntityHUD Message code
 

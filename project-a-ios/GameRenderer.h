@@ -60,7 +60,8 @@
 +( Entity * ) randomMonsterForFloor: (DungeonFloor *) floor;
 
 +( void ) spawnMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor;
-
++( void ) spawnDoors: (int) doorCount forFloor: (DungeonFloor *) floor;
+    
 +( void ) spawnEntity: (Entity *) entity onFloor: (DungeonFloor *) floor atLocation: (CGPoint) location;
 +( void ) spawnEntityAtRandomLocation: (Entity *) entity onFloor: (DungeonFloor *) floor;
 +( void ) spawnEntityAtRandomLocation: (Entity *) entity onFloor: (DungeonFloor *) floor onTileType: (Tile_t) tileType;
@@ -73,6 +74,7 @@
 +( void ) spawnBookOfAllKnowingAtRandomLocationOnFloor: (DungeonFloor *) floor;
 
 +(void) copyTexture: (CCMutableTexture2D *) texture0 ontoTexture: (CCMutableTexture2D *) texture1 ;
-    
+
++( Tile * ) getMapTileFromPoint: (CGPoint) p forFloor: (DungeonFloor *) _floor;
 
 @end
