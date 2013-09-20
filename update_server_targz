@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cd ..
+#cd ..
 #rsync -av --progress --bwlimit=20 project-a-ios-*.tar.gz darkmagex6@evildojo.com:.
 #rsync -av --progress project-a-ios-*.tar.gz darkmagex6@evildojo.com:.
-rsync -av --progress project-a-ios.*tar.gz mike@gikh.in:src/.
+rsync -av --progress ../project-a-ios.*tar.gz mike@gikh.in:src/projecta_tar/.
 cd project-a-ios/
