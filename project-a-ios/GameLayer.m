@@ -528,9 +528,11 @@ unsigned get_memory_mb(void) {
     
     
     // place doors
+    /*
     for (int i=0; i<[dungeon count]; i++) {
-        [ GameRenderer spawnDoors: 2 forFloor: [dungeon objectAtIndex:i] ];
+        [ GameRenderer spawnDoors: 1 forFloor: [dungeon objectAtIndex:i] ];
     }
+    */
     
     
     [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
@@ -1356,7 +1358,7 @@ static NSString  * const notifications[] = {
 #pragma mark - Message Window
 
 -(void) initMessageWindow {
-    int pad = 5;
+    int pad = 20;
     messageQueue = [[NSMutableArray alloc] init];
     messageWindow = [[MessageWindow alloc] init];
     //messageWindow.position = ccp( screenwidth/2 - messageWindow.contentSize.width/2, screenheight/2 - messageWindow.contentSize.height/2 );
@@ -3580,7 +3582,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) initializeDungeon {
     [ self initializeTiles ];
-    NSUInteger numberOfFloors = 20;
+    NSUInteger numberOfFloors = 5;
     dungeon = [[ NSMutableArray alloc ] init ];
     for ( int i = 0; i < numberOfFloors; i++ ) {
         DungeonFloor *newFloor = [ DungeonFloor newFloorWidth:40 andHeight:40 andFloorNumber: i ];

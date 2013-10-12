@@ -76,5 +76,6 @@
 +(void) copyTexture: (CCMutableTexture2D *) texture0 ontoTexture: (CCMutableTexture2D *) texture1 ;
 
 +( Tile * ) getMapTileFromPoint: (CGPoint) p forFloor: (DungeonFloor *) _floor;
++( Tile * ) getMapTileFromPointX: (CGFloat) _x Y: (CGFloat) _y forFloor: (DungeonFloor *) _floor;
 
 @end

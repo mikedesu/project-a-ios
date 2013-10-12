@@ -1387,6 +1387,7 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     int floorTileDataArrayCount = [[floor tileDataArray] count];
     int floorRolls[ floorTileDataArrayCount ];
     
+    // zero out the floorRolls array
     for (int i=0; i<floorTileDataArrayCount; i++) floorRolls[i] = 0;
     
     for (int i=0; i<floorTileDataArrayCount; i++) {
@@ -1395,8 +1396,9 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
         BOOL floorRollsHasRollAlready = NO;
         for (int j=0; j<floorTileDataArrayCount; j++) {
             if ( floorRolls[j] == roll ) {
-                floorRollsHasRollAlready = YES;
-                break;
+                //floorRollsHasRollAlready = YES;
+                roll = [Dice roll: floorTileDataArrayCount] - 1;
+                j=0;
             }
         }
         
@@ -1408,43 +1410,75 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     
     
     for (int i=0; i<floorTileDataArrayCount; i++) {
-    //while ( doors > 0 ) {
-        //int roll = [Dice roll: [[floor tileDataArray] count]] - 1;
+        
         Tile *t = [[floor tileDataArray] objectAtIndex: floorRolls[i]];
-        //Tile *t = [[floor tileDataArray] objectAtIndex: i];
-        //Tile *t = [[floor tileDataArray] objectAtIndex: roll];
         
         if ( t.tileType != TILE_FLOOR_UPSTAIRS && t.tileType != TILE_FLOOR_DOWNSTAIRS ) {
         
             CGPoint tp = t.position;
-            
-            Tile *t0 = [GameRenderer getMapTileFromPoint: ccp(tp.x-1, tp.y-1) forFloor: floor];
-            Tile *t1 = [GameRenderer getMapTileFromPoint: ccp(tp.x,   tp.y-1) forFloor: floor];
-            Tile *t2 = [GameRenderer getMapTileFromPoint: ccp(tp.x+1, tp.y-1) forFloor: floor];
-            Tile *t3 = [GameRenderer getMapTileFromPoint: ccp(tp.x-1, tp.y)   forFloor: floor];
-            Tile *t4 = [GameRenderer getMapTileFromPoint: ccp(tp.x+1, tp.y)   forFloor: floor];
-            Tile *t5 = [GameRenderer getMapTileFromPoint: ccp(tp.x-1, tp.y+1) forFloor: floor];
-            Tile *t6 = [GameRenderer getMapTileFromPoint: ccp(tp.x,   tp.y+1) forFloor: floor];
-            Tile *t7 = [GameRenderer getMapTileFromPoint: ccp(tp.x+1, tp.y+1) forFloor: floor];
+            CGFloat tpx = tp.x;
+            CGFloat tpy = tp.y;
+ 
+
+            Tile *t_[8];
+
+            t_[0] = [GameRenderer getMapTileFromPointX: tpx-1 Y: tpy-1 forFloor: floor];
+            t_[1] = [GameRenderer getMapTileFromPointX: tpx   Y: tpy-1 forFloor: floor];
+            t_[2] = [GameRenderer getMapTileFromPointX: tpx+1 Y: tpy-1 forFloor: floor];
+            t_[3] = [GameRenderer getMapTileFromPointX: tpx-1 Y: tpy   forFloor: floor];
+            t_[4] = [GameRenderer getMapTileFromPointX: tpx+1 Y: tpy   forFloor: floor];
+            t_[5] = [GameRenderer getMapTileFromPointX: tpx-1 Y: tpy+1 forFloor: floor];
+            t_[6] = [GameRenderer getMapTileFromPointX: tpx   Y: tpy+1 forFloor: floor];
+            t_[7] = [GameRenderer getMapTileFromPointX: tpx+1 Y: tpy+1 forFloor: floor];
             
             // perform analysis to determine if t is good to put a door on
-            
+
+            Tile_t tttt = t.tileType;
+            Tile_t t0tt = t_[0].tileType;
+            Tile_t t1tt = t_[1].tileType;
+            Tile_t t2tt = t_[2].tileType;
+            Tile_t t3tt = t_[3].tileType;
+            Tile_t t4tt = t_[4].tileType;
+            Tile_t t5tt = t_[5].tileType;
+            Tile_t t6tt = t_[6].tileType;
+            Tile_t t7tt = t_[7].tileType;
+
+            BOOL ttttnev = tttt != TILE_FLOOR_VOID;
+
+            BOOL t0tteev = t0tt == TILE_FLOOR_VOID; 
+            BOOL t0ttnev = t0tt != TILE_FLOOR_VOID; 
+            BOOL t1tteev = t1tt == TILE_FLOOR_VOID; 
+            BOOL t1ttnev = t1tt != TILE_FLOOR_VOID; 
+            BOOL t2tteev = t2tt == TILE_FLOOR_VOID; 
+            BOOL t2ttnev = t2tt != TILE_FLOOR_VOID; 
+            BOOL t3tteev = t3tt == TILE_FLOOR_VOID; 
+            BOOL t3ttnev = t3tt != TILE_FLOOR_VOID; 
+            BOOL t4tteev = t4tt == TILE_FLOOR_VOID; 
+            BOOL t4ttnev = t4tt != TILE_FLOOR_VOID; 
+            BOOL t5tteev = t5tt == TILE_FLOOR_VOID; 
+            BOOL t5ttnev = t5tt != TILE_FLOOR_VOID; 
+            BOOL t6tteev = t6tt == TILE_FLOOR_VOID; 
+            BOOL t6ttnev = t6tt != TILE_FLOOR_VOID; 
+            BOOL t7tteev = t7tt == TILE_FLOOR_VOID; 
+            BOOL t7ttnev = t7tt != TILE_FLOOR_VOID; 
+
+
             /*   ###
              *   xxx
              *   ###
              */
-            BOOL p0_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p0_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p0_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
+            BOOL p0_t0 = t0tteev && t1tteev && t2tteev;
+            BOOL p0_t1 = t3ttnev && ttttnev && t4ttnev;
+            BOOL p0_t2 = t5tteev && t6tteev && t7tteev;
             BOOL p0 = p0_t0 && p0_t1 && p0_t2;
             
             /*   ##x
              *   #x#
              *   x##
              */
-            BOOL p1_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p1_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p1_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
+            BOOL p1_t0 = t0tteev && t1tteev && t2ttnev;
+            BOOL p1_t1 = t3tteev && ttttnev && t4tteev;
+            BOOL p1_t2 = t5ttnev && t6tteev && t7tteev;
             BOOL p1 = p1_t0 && p1_t1 && p1_t2;
             
             
@@ -1452,20 +1486,18 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
              *   #x#
              *   #x#
              */
-            BOOL p2_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p2_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p2_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p2 = p2_t0 && p2_t1 && p2_t2;
+            BOOL p2_t0 = t0tteev && t1ttnev && t2tteev;
+            BOOL p2_t2 = t5tteev && t6ttnev && t7tteev;
+            BOOL p2 = p2_t0 && p1_t1 && p2_t2;
             
             
             /*   x##
              *   #x#
              *   ##x
              */
-            BOOL p3_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p3_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p3_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p3 = p3_t0 && p3_t1 && p3_t2;
+            BOOL p3_t0 = t0ttnev && t1tteev && t2tteev;
+            BOOL p3_t2 = t5tteev && t6tteev && t7ttnev;
+            BOOL p3 = p3_t0 && p1_t1 && p3_t2;
             
             
             // ==========
@@ -1474,37 +1506,28 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
              *   xxx
              *   ##x
              */
-            BOOL p4_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p4_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p4_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p4 = p4_t0 && p4_t1 && p4_t2;
+
+            BOOL p4 = p1_t0 && p0_t1 && p3_t2;
             
             /*   xxx
              *   #x#
              *   #x#
              */
-            BOOL p5_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p5_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p5_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p5 = p5_t0 && p5_t1 && p5_t2;
+            BOOL p5_t0 = t0ttnev && t1ttnev && t2ttnev;
+            BOOL p5 = p5_t0 && p1_t1 && p2_t2;
             
             /*   x##
              *   xxx
              *   x##
              */
-            BOOL p6_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p6_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p6_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p6 = p6_t0 && p6_t1 && p6_t2;
+            BOOL p6 = p3_t0 && p0_t1 && p1_t2;
             
             /*   #x#
              *   #x#
              *   xxx
              */
-            BOOL p7_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p7_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p7_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p7 = p7_t0 && p7_t1 && p7_t2;
+            BOOL p7_t2 = t5ttnev && t6ttnev && t7ttnev;
+            BOOL p7 = p2_t0 && p1_t1 && p7_t2;
             
             // ==========
             
@@ -1512,73 +1535,55 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
              *   xxx
              *   ###
              */
-            BOOL p8_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p8_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p8_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p8 = p8_t0 && p8_t1 && p8_t2;
+            BOOL p8 = p1_t0 && p0_t1 && p0_t2;
             
             /*   ###
              *   xxx
              *   ##x
              */
-            BOOL p9_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p9_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p9_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p9 = p9_t0 && p9_t1 && p9_t2;
+            
+            BOOL p9 = p0_t0 && p0_t1 && p3_t2;
             
             /*   #x#
              *   #x#
              *   xx#
              */
-            BOOL p10_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p10_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p10_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p10 = p10_t0 && p10_t1 && p10_t2;
+            BOOL p10_t2 = t5ttnev && t6ttnev && t7tteev;
+            BOOL p10 = p2_t0 && p1_t1 && p10_t2;
             
             /*   #x#
              *   #x#
              *   #xx
              */
-            BOOL p11_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p11_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p11_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p11 = p11_t0 && p11_t1 && p11_t2;
+            BOOL p11_t2 = t5tteev && t6ttnev && t7ttnev;
+            BOOL p11 = p2_t0 && p1_t1 && p11_t2;
             
             /*   ###
              *   xxx
              *   x##
              */
-            BOOL p12_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p12_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p12_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p12 = p12_t0 && p12_t1 && p12_t2;
+            
+            BOOL p12 = p0_t0 && p0_t1 && p1_t2;
             
             /*   x##
              *   xxx
              *   ###
              */
-            BOOL p13_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p13_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p13_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p13 = p13_t0 && p13_t1 && p13_t2;
+            BOOL p13 = p3_t0 && p0_t1 && p0_t2;
             
             /*   xx#
              *   #x#
              *   #x#
              */
-            BOOL p14_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p14_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p14_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p14 = p14_t0 && p14_t1 && p14_t2;
+            BOOL p14_t0 = t0ttnev && t1ttnev && t2tteev;
+            BOOL p14 = p14_t0 && p1_t1 && p2_t2;
             
             /*   #xx
              *   #x#
              *   #x#
              */
-            BOOL p15_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p15_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p15_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p15 = p15_t0 && p15_t1 && p15_t2;
+            BOOL p15_t0 = t0tteev && t1ttnev && t2ttnev;
+            BOOL p15 = p15_t0 && p1_t1 && p2_t2;
             
             // ==========
             
@@ -1586,37 +1591,28 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
              *   xx#
              *   ##x
              */
-            BOOL p16_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p16_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p16_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p16 = p16_t0 && p16_t1 && p16_t2;
+            BOOL p16_t1 = t3ttnev && ttttnev && t4tteev;
+            BOOL p16 = p14_t0 && p16_t1 && p3_t2;
             
             /*   ##x
              *   xx#
              *   xx#
              */
-            BOOL p17_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p17_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p17_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p17 = p17_t0 && p17_t1 && p17_t2;
+            
+            BOOL p17 = p1_t0 && p16_t1 && p10_t2;
             
             /*   x##
              *   #xx
              *   #xx
              */
-            BOOL p18_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p18_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p18_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p18 = p18_t0 && p18_t1 && p18_t2;
+            BOOL p18_t1 = t3tteev && ttttnev && t4ttnev;
+            BOOL p18 = p3_t0 && p18_t1 && p11_t2;
             
             /*   #xx
              *   #xx
              *   x##
              */
-            BOOL p19_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p19_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p19_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p19 = p19_t0 && p19_t1 && p19_t2;
+            BOOL p19 = p15_t0 && p18_t1 && p1_t2;
             
             // ==========
             
@@ -1624,147 +1620,103 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
              *   #xx
              *   #x#
              */
-            BOOL p20_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p20_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p20_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p20 = p20_t0 && p20_t1 && p20_t2;
+            BOOL p20 = p3_t0 && p18_t1 && p2_t2;
             
             /*   ##x
              *   xx#
              *   #x#
              */
-            BOOL p21_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p21_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p21_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p21 = p21_t0 && p21_t1 && p21_t2;
+            BOOL p21 = p1_t0 && p16_t1 && p2_t2;
             
             /*   x##
              *   #xx
              *   #x#
              */
-            BOOL p22_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p22_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p22_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p22 = p22_t0 && p22_t1 && p22_t2;
+            BOOL p22 = p3_t0 && p18_t1 && p2_t2;
             
             /*   #x#
              *   #xx
              *   x##
              */
-            BOOL p23_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p23_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p23_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p23 = p23_t0 && p23_t1 && p23_t2;
+            BOOL p23 = p2_t0 && p18_t1 && p1_t2;
             
             /*   x##
              *   #x#
              *   x##
              */
-            BOOL p24_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p24_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p24_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p24 = p24_t0 && p24_t1 && p24_t2;
+            BOOL p24 = p3_t0 && p1_t1 && p1_t2;
             
             /*   ###
              *   #x#
              *   x#x
              */
-            BOOL p25_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p25_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p25_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p25 = p25_t0 && p25_t1 && p25_t2;
+            
+            BOOL p25_t2 = t5ttnev && t6tteev && t7ttnev;
+            BOOL p25 = p0_t0 && p1_t1 && p25_t2;
             
             /*   ##x
              *   #x#
              *   ##x
              */
-            BOOL p26_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p26_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p26_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p26 = p26_t0 && p26_t1 && p26_t2;
+            
+            BOOL p26 = p1_t0 && p1_t1 && p3_t2;
             
             /*   x#x
              *   #x#
              *   ###
              */
-            BOOL p27_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p27_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p27_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p27 = p27_t0 && p27_t1 && p27_t2;
+            BOOL p27_t0 = t0ttnev && t1tteev && t2ttnev;
+            BOOL p27 = p27_t0 && p1_t1 && p0_t2;
             
             //==========
             /*   x#x
              *   #x#
              *   x##
              */
-            BOOL p28_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p28_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p28_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p28 = p28_t0 && p28_t1 && p28_t2;
+            BOOL p28 = p27_t0 && p1_t1 && p1_t2;
             
             /*   x##
              *   #x#
              *   x#x
              */
-            BOOL p29_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p29_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p29_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p29 = p29_t0 && p29_t1 && p29_t2;
+            BOOL p29 = p3_t0 && p1_t1 && p25_t2;
             
             /*   x#x
              *   #x#
              *   ##x
              */
-            BOOL p30_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p30_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p30_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p30 = p30_t0 && p30_t1 && p30_t2;
+            BOOL p30 = p27_t0 && p1_t1 && p3_t2;
             
             /*   ##x
              *   #x#
              *   x#x
              */
-            BOOL p31_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p31_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p31_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p31 = p31_t0 && p31_t1 && p31_t2;
+            BOOL p31 = p1_t0 && p1_t1 && p25_t2;
             
             //=====
             /*   xx#
              *   #x#
              *   #xx
              */
-            BOOL p32_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p32_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p32_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p32 = p32_t0 && p32_t1 && p32_t2;
+            BOOL p32 = p14_t0 && p1_t1 && p11_t2;
             
             /*   ##x
              *   xxx
              *   x##
              */
-            BOOL p33_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p33_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p33_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p33 = p33_t0 && p33_t1 && p33_t2;
+            BOOL p33 = p1_t0 && p0_t1 && p1_t2;
             
             /*   #xx
              *   #x#
              *   xx#
              */
-            BOOL p34_t0 = t0.tileType == TILE_FLOOR_VOID && t1.tileType != TILE_FLOOR_VOID && t2.tileType != TILE_FLOOR_VOID;
-            BOOL p34_t1 = t3.tileType == TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType == TILE_FLOOR_VOID;
-            BOOL p34_t2 = t5.tileType != TILE_FLOOR_VOID && t6.tileType != TILE_FLOOR_VOID && t7.tileType == TILE_FLOOR_VOID;
-            BOOL p34 = p34_t0 && p34_t1 && p34_t2;
+            BOOL p34 = p15_t0 && p1_t1 && p10_t2;
             
             /*   x##
              *   xxx
              *   ##x
              */
-            BOOL p35_t0 = t0.tileType != TILE_FLOOR_VOID && t1.tileType == TILE_FLOOR_VOID && t2.tileType == TILE_FLOOR_VOID;
-            BOOL p35_t1 = t3.tileType != TILE_FLOOR_VOID && t.tileType  != TILE_FLOOR_VOID && t4.tileType != TILE_FLOOR_VOID;
-            BOOL p35_t2 = t5.tileType == TILE_FLOOR_VOID && t6.tileType == TILE_FLOOR_VOID && t7.tileType != TILE_FLOOR_VOID;
-            BOOL p35 = p35_t0 && p35_t1 && p35_t2;
+            BOOL p35 = p3_t0 && p0_t1 && p3_t2;
             
             //=====
             
@@ -1781,7 +1733,7 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
             
             if ( analysisStatement ) {
                 // place door
-                MLOG(@"Floor %d Door placed", floor.floorNumber);
+                MLOG(@"Floor %d Door %d placed", floor.floorNumber, doors);
                 Entity *tmpDoor = [Items simpleDoor];
                 [GameRenderer setEntity: tmpDoor onTile: t];
                 [[floor entityArray] addObject: tmpDoor];
@@ -2075,9 +2027,26 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
 }
 
 
++( Tile * ) getMapTileFromPointX: (CGFloat) _x Y: (CGFloat) _y forFloor: (DungeonFloor *) _floor {
+    Tile *tile = nil;
+    for ( int i = 0; i < [[_floor tileDataArray] count]; i++ ) {
+        Tile *t = [[_floor tileDataArray] objectAtIndex: i];
+        CGPoint tp = t.position;
+        CGFloat tpx = tp.x;
+        CGFloat tpy = tp.y;
+        if ( tpx == _x && tpy == _y ) {
+            tile = t;
+            break;
+        }
+    }
+    return tile;
+}
+
+
 +( Tile * ) getMapTileFromPoint: (CGPoint) p forFloor: (DungeonFloor *) _floor {
     Tile *tile = nil;
-    for ( Tile *t in [_floor tileDataArray ] ) {
+    for ( int i = 0; i < [[_floor tileDataArray] count]; i++ ) {
+        Tile *t = [[_floor tileDataArray] objectAtIndex: i];
         if ( t.position.x == p.x && t.position.y == p.y ) {
             tile = t;
             break;
