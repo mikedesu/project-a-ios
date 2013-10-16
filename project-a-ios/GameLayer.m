@@ -352,6 +352,8 @@ unsigned get_memory_mb(void) {
 -(void) bootGame {
     [self cleanupGame];
     
+    MLOG(@"Booting game"); 
+    
     // setting up some basic variables
     self.isTouchEnabled = YES;
     selectedTile = -1;
@@ -362,34 +364,50 @@ unsigned get_memory_mb(void) {
     gotKarmaThisTurn = NO;
     
     // Dungeon initialization
+    MLOG(@"Initializing Dungeon...");
     [ self initializeDungeon ];
+    MLOG(@"...finished ");
     
-    CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: [dungeon objectAtIndex:floorNumber]];
+    CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: currentFloor];
+    //CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: [dungeon objectAtIndex:floorNumber]];
     
     // set up our 'hero'
+    MLOG(@"Initialize PC Entity");
     [ self initializePCEntity ];
+        MLOG(@"...finished ");
     
     killList = [NSMutableArray array];
     
+    MLOG(@"Loading sprites");
     [self loadSprites];
+        MLOG(@"...finished ");
     
+    MLOG(@"Setting camera anchor point");
     // set the camera anchor point
     cameraAnchorPoint = ccp( 7, 5 );
     
+    MLOG(@"Adding PC Entity to currentFloor entityArray");
     // our list of entities
-    [[[ dungeon objectAtIndex:floorNumber ] entityArray] addObject: pcEntity];
+    [[currentFloor entityArray] addObject: pcEntity];
+    //[[[ dungeon objectAtIndex:floorNumber ] entityArray] addObject: pcEntity];
     
+    MLOG(@"Setting start tile");
     // set the starting tile
     Tile *startTile = nil;
-    for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
+    //for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
+    for ( Tile *t in [ currentFloor tileDataArray ] ) {
         if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
             startTile = t;
             break;
         }
     }
+        MLOG(@"...finished ");
     
     
+    MLOG(@"Setting PC Entity on start tile");
     [ GameRenderer setEntity:pcEntity onTile:startTile ];
+    
+    MLOG(@"Resetting camera position");
     [ self resetCameraPosition ];
     
     
@@ -412,7 +430,9 @@ unsigned get_memory_mb(void) {
     
     
     // initialize our various HUDs
+    MLOG(@"Initialize HUDs");
     [ self initializeHUDs ];
+        MLOG(@"...finished ");
     
     // haven't touched the hero yet
     heroTouches = 0;
@@ -425,9 +445,10 @@ unsigned get_memory_mb(void) {
     
     
     
-    
+    MLOG(@"Initialize notifications");
     // initialize our notifications
     [ self initializeNotifications ];
+        MLOG(@"...finished ");
     
     // schedule our update method, tick
     [ self schedule:@selector(tick:)];
@@ -452,8 +473,9 @@ unsigned get_memory_mb(void) {
     // populate treasure
     // generate and scatter some treasure
     
+    MLOG(@"Generating treasure");
     
-    for ( int i = 0; i < [dungeon count]; i++ ) {
+    for ( int i = 0; i < 1; i++ ) {
         //NSInteger tilecount     = [((DungeonFloor *)[dungeon objectAtIndex:i]).tileDataArray count];
         NSInteger minItemCount  = 2;
         NSInteger maxItemCount  = 12;
@@ -485,7 +507,7 @@ unsigned get_memory_mb(void) {
                  _roll <= 12 ?
                     [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE  stone:STONE_T_ROCK withBonus:0] :
                 [Weapons Asura];
-                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
+                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:currentFloor];
             }
             
             // armor
@@ -496,12 +518,12 @@ unsigned get_memory_mb(void) {
                                         _roll == 3 ? [Armor bootsOfAntiacid] :
                                         _roll == 4 ? [Armor robe:CLOTH_T_CLOTH bonus:i] :
                 [Armor blindfold];
-                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
+                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:currentFloor];
             }
             
             // random items
             else if ( roll == 3 ) {
-                [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:[dungeon objectAtIndex:i]];
+                [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:currentFloor];
                 
             }
             
@@ -510,12 +532,12 @@ unsigned get_memory_mb(void) {
                 NSInteger torchLevel = 1;
                 Entity *itemToSpawn = [Items torch: torchLevel];
                 itemToSpawn.durability = 128;
-                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
+                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:currentFloor];
             }
             
             else if ( roll == 5 ) {
                 Entity *itemToSpawn = Tree;
-                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:[dungeon objectAtIndex:i]];
+                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:currentFloor];
             }
             
             /*
@@ -523,6 +545,7 @@ unsigned get_memory_mb(void) {
             
         }
     }
+        MLOG(@"...finished ");
     
     //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
     
@@ -535,7 +558,7 @@ unsigned get_memory_mb(void) {
     */
     
     
-    [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
+   // [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
     MLOG(@"");
     
     
@@ -564,10 +587,10 @@ unsigned get_memory_mb(void) {
     killList = nil;
     
     floorNumber = 0;
-    floor = nil;
+    //floor = nil;
     
-    dungeon!=nil ? [dungeon removeAllObjects] : 0;
-    dungeon = nil;
+    //dungeon!=nil ? [dungeon removeAllObjects] : 0;
+    //dungeon = nil;
     
     tileArray != nil ? [tileArray removeAllObjects] : 0;
     tileArray = nil;
@@ -907,7 +930,8 @@ static NSString  * const notifications[] = {
             dr = ccp( a.x+1, a.y+1 );
             CGPoint surroundingPoints[ 8 ] = { ul, u, ur, l, r, dl, d, dr };
             for ( int i = 0; i < 8; i++ ) {
-                Tile *t = [self getTileForCGPoint:surroundingPoints[i] forFloor:[dungeon objectAtIndex:floorNumber]];
+                Tile *t = [self getTileForCGPoint:surroundingPoints[i] forFloor:currentFloor];
+                //Tile *t = [self getTileForCGPoint:surroundingPoints[i] forFloor:[dungeon objectAtIndex:floorNumber]];
                 if ( [[t contents] count] > 0 ) {
                     Entity *e = [t.contents objectAtIndex:0];
                     if ( e.entityType == ENTITY_T_NPC ||
@@ -957,7 +981,8 @@ static NSString  * const notifications[] = {
         
         else if (pcEntity.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SIMPLE ) {
             BOOL hasItem = NO;
-            BOOL isBottomFloor = floorNumber == dungeon.count - 1;
+            BOOL isBottomFloor = NO;
+            //BOOL isBottomFloor = floorNumber == dungeon.count - 1;
             
             for ( Entity *e in pcEntity.inventoryArray ) {
                 if ( e.itemType == E_ITEM_T_BOOK ) {
@@ -969,10 +994,12 @@ static NSString  * const notifications[] = {
             CGPoint nearest;
             
             if ( ! isBottomFloor && ! hasItem ) {
-                nearest = [ self nearestNonVoidCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber]] ];
+                //nearest = [ self nearestNonVoidCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber]] ];
+                nearest = [ self nearestNonVoidCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getDownstairsTileForFloor:currentFloor] ];
             } else if ( isBottomFloor && ! hasItem ) {
                 CGPoint itemPoint;
-                for ( Tile *t in [[dungeon objectAtIndex:floorNumber] tileDataArray] ) {
+                //for ( Tile *t in [[dungeon objectAtIndex:floorNumber] tileDataArray] ) {
+                for ( Tile *t in [currentFloor tileDataArray] ) {
                     if ( t.contents.count > 0 ) {
                         for ( Entity *e in t.contents ) {
                             // just for the book of all knowing
@@ -985,7 +1012,8 @@ static NSString  * const notifications[] = {
                 }
                 nearest = itemPoint;
             } else if ( hasItem ) {
-                nearest = [ self nearestNonVoidCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getUpstairsTileForFloor:[dungeon objectAtIndex:floorNumber]] ];
+                //nearest = [ self nearestNonVoidCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getUpstairsTileForFloor:[dungeon objectAtIndex:floorNumber]] ];
+                nearest = [ self nearestNonVoidCGPointFromCGPoint:pcEntity.positionOnMap toCGPoint: [GameRenderer getUpstairsTileForFloor:currentFloor] ];
             }
             
             // check if monsters are around you
@@ -1003,7 +1031,8 @@ static NSString  * const notifications[] = {
             dr = ccp( a.x+1, a.y+1 );
             CGPoint surroundingPoints[ 8 ] = { ul, u, ur, l, r, dl, d, dr };
             for ( int i = 0; i < 8; i++ ) {
-                Tile *t = [self getTileForCGPoint:surroundingPoints[i] forFloor:[dungeon objectAtIndex:floorNumber]];
+                //Tile *t = [self getTileForCGPoint:surroundingPoints[i] forFloor:[dungeon objectAtIndex:floorNumber]];
+                Tile *t = [self getTileForCGPoint:surroundingPoints[i] forFloor:currentFloor];
                 if ( [[t contents] count] > 0 ) {
                     nearest = surroundingPoints[i];
                     monsterNear = YES;
@@ -1407,7 +1436,8 @@ static NSString  * const notifications[] = {
  */
 
 -(void) initEquipMenu {
-    equipMenu = [[EquipMenu alloc] initWithPC:pcEntity withFloor:[dungeon objectAtIndex:floorNumber] withGameLayer:self];
+    equipMenu = [[EquipMenu alloc] initWithPC:pcEntity withFloor:currentFloor withGameLayer:self];
+    //equipMenu = [[EquipMenu alloc] initWithPC:pcEntity withFloor:[dungeon objectAtIndex:floorNumber] withGameLayer:self];
     equipMenu.position = ccp(0,0);
 }
 
@@ -1743,7 +1773,8 @@ static NSString  * const notifications[] = {
       pcEntity.positionOnMap.y,
       cameraAnchorPoint.x,
       cameraAnchorPoint.y,
-      [[[dungeon objectAtIndex:floorNumber] entityArray] count],
+      [[currentFloor entityArray] count],
+      //[[[dungeon objectAtIndex:floorNumber] entityArray] count],
       [[pcEntity inventoryArray] count],
       get_memory_kb()
       ]
@@ -2028,7 +2059,8 @@ static NSString  * const notifications[] = {
 #pragma mark - Inventory Menu
 
 -(void) initInventoryMenu {
-    inventoryMenu = [[InventoryMenu alloc] initWithPC: pcEntity withFloor: [dungeon objectAtIndex:floorNumber] withGameLayer:self];
+    //inventoryMenu = [[InventoryMenu alloc] initWithPC: pcEntity withFloor: [dungeon objectAtIndex:floorNumber] withGameLayer:self];
+    inventoryMenu = [[InventoryMenu alloc] initWithPC: pcEntity withFloor: currentFloor withGameLayer:self];
     inventoryMenu.position = ccp(0,0);
 }
 
@@ -2057,7 +2089,8 @@ static NSString  * const notifications[] = {
 # pragma mark - Drop Menu
 
 -(void) initDropMenu {
-    dropMenu = [[DropMenu alloc] initWithPC:pcEntity withFloor:[dungeon objectAtIndex:floorNumber] withGameLayer:self];
+    //dropMenu = [[DropMenu alloc] initWithPC:pcEntity withFloor:[dungeon objectAtIndex:floorNumber] withGameLayer:self];
+    dropMenu = [[DropMenu alloc] initWithPC:pcEntity withFloor:currentFloor withGameLayer:self];
     dropMenu.position = ccp(0,0);
 }
 
@@ -2113,7 +2146,8 @@ static NSString  * const notifications[] = {
 
     // only if we need redraw, really...
     if ( needsRedraw ) {
-        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint withSprites: sprites ];
+        [ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: currentFloor withCamera:cameraAnchorPoint withSprites: sprites ];
+        //[ GameRenderer setAllVisibleTiles: tileArray withDungeonFloor: [dungeon objectAtIndex:floorNumber] withCamera:cameraAnchorPoint withSprites: sprites ];
         
         editorHUDIsVisible ? [ self updateEditorHUDLabel ] : 0;
         monitorIsVisible ? [self updateMonitorLabel] : 0;
@@ -2676,7 +2710,8 @@ static NSString  * const notifications[] = {
  */
 -( Tile * ) getTileForCGPoint: ( CGPoint ) p  {
     Tile *tile = nil;
-    tile = [[[dungeon objectAtIndex:floorNumber] tileDataArray] objectAtIndex: p.x + ( p.y * [ (DungeonFloor *)[dungeon objectAtIndex:floorNumber] width ] ) ];
+    //tile = [[[dungeon objectAtIndex:floorNumber] tileDataArray] objectAtIndex: p.x + ( p.y * [ (DungeonFloor *)[dungeon objectAtIndex:floorNumber] width ] ) ];
+    tile = [[currentFloor tileDataArray] objectAtIndex: p.x + ( p.y * [ (DungeonFloor *)currentFloor width ] ) ];
     return tile;
 }
 
@@ -2851,7 +2886,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( Tile * ) getMapTileFromPoint: (CGPoint) p {
     Tile *tile = nil;
-    for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
+    //for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
+    for ( Tile *t in [ currentFloor tileDataArray ] ) {
         if ( t.position.x == p.x && t.position.y == p.y ) {
             tile = t;
             break;
@@ -2900,7 +2936,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( Entity * ) getEntityForName: ( NSString * ) name {
     Entity *entity = nil;
-    for ( Entity *e in [[dungeon objectAtIndex:floorNumber] entityArray] ) {
+    //for ( Entity *e in [[dungeon objectAtIndex:floorNumber] entityArray] ) {
+    for ( Entity *e in [currentFloor entityArray] ) {
         if ( [e.name isEqualToString: name ] ) {
             entity = e;
             break;
@@ -2918,7 +2955,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( Entity * ) getEntityForPosition: (CGPoint) p {
     Entity *entity = nil;
-    for ( Entity *e in [[dungeon objectAtIndex:floorNumber] entityArray] ) {
+    //for ( Entity *e in [[dungeon objectAtIndex:floorNumber] entityArray] ) {
+    for ( Entity *e in [currentFloor entityArray] ) {
         if ( e.positionOnMap.x == p.x && e.positionOnMap.y == p.y ) {
             entity = e;
             break;
@@ -2936,7 +2974,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 
 -( BOOL ) moveEntity:(Entity *)entity toPosition:(CGPoint)position {
-    return [ self moveEntity: entity toPosition:position onFloor:[dungeon objectAtIndex:floorNumber ] ];
+    //return [ self moveEntity: entity toPosition:position onFloor:[dungeon objectAtIndex:floorNumber ] ];
+    return [ self moveEntity: entity toPosition:position onFloor:currentFloor ];
 }
 
 /*
@@ -3534,7 +3573,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         CGPoint points[ 8 ] = { ul, u, ur, l, r, dl, d, dr };
         NSInteger distances[ 8 ] = { uld, ud, urd, ld, rd, dld, dd, drd };
         for ( int i = 0; i < 8; i++ ) {
-            if ( distances[i] <= min && ((Tile *)[self getTileForCGPoint:points[i] forFloor:[dungeon objectAtIndex:floorNumber]]).tileType != TILE_FLOOR_VOID ) {
+            //if ( distances[i] <= min && ((Tile *)[self getTileForCGPoint:points[i] forFloor:[dungeon objectAtIndex:floorNumber]]).tileType != TILE_FLOOR_VOID ) {
+            if ( distances[i] <= min && ((Tile *)[self getTileForCGPoint:points[i] forFloor:currentFloor]).tileType != TILE_FLOOR_VOID ) {
                 min = distances[i];
                 nearest = points[i];
             }
@@ -3566,7 +3606,8 @@ NSUInteger getMagicY( NSUInteger y ) {
     
     for ( int i = 0; i < array.count; i++ ) {
         CGPoint p = ((NSValue *)[ array objectAtIndex: i ]).CGPointValue;
-        if ( ((Tile *)[self getTileForCGPoint:p forFloor:[dungeon objectAtIndex:floorNumber]]).tileType == TILE_FLOOR_VOID ) {
+        //if ( ((Tile *)[self getTileForCGPoint:p forFloor:[dungeon objectAtIndex:floorNumber]]).tileType == TILE_FLOOR_VOID ) {
+        if ( ((Tile *)[self getTileForCGPoint:p forFloor:currentFloor]).tileType == TILE_FLOOR_VOID ) {
             [ array removeObjectAtIndex: i ];
             i = 0;
         }
@@ -3582,6 +3623,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) initializeDungeon {
     [ self initializeTiles ];
+    /*
     NSUInteger numberOfFloors = 5;
     dungeon = [[ NSMutableArray alloc ] init ];
     for ( int i = 0; i < numberOfFloors; i++ ) {
@@ -3593,8 +3635,24 @@ NSUInteger getMagicY( NSUInteger y ) {
         }
         [ dungeon addObject: newFloor ];
     }
+    */
     floorNumber = 0;
+    currentFloor = [DungeonFloor newFloorWidth:40 andHeight:40 andFloorNumber:floorNumber];
+    [ GameRenderer generateDungeonFloor:currentFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
 }
+
+
+-(void) initializeNextFloor {
+    nextFloor = [DungeonFloor newFloorWidth:40 andHeight:40 andFloorNumber:floorNumber+1];
+    [ GameRenderer generateDungeonFloor:nextFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
+}
+
+-(void) setNextFloor {
+    currentFloor = nextFloor;
+    floorNumber++;
+}
+
+
 
 /*
  ====================
@@ -3602,6 +3660,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) goingUpstairs {
+    /* temporarily disabled 10/16/13
+     *
     if ( floorNumber == 0 ) {
         // top floor
     }
@@ -3614,6 +3674,7 @@ NSUInteger getMagicY( NSUInteger y ) {
         [[[ dungeon objectAtIndex:floorNumber ] entityArray ] addObject: pcEntity ];
         needsRedraw = YES;
     }
+    */
 }
 
 /*
@@ -3622,6 +3683,8 @@ NSUInteger getMagicY( NSUInteger y ) {
  ====================
  */
 -( void ) goingDownstairs {
+    /* temporarily disabled 10/16/13
+     *
     if ( floorNumber < [ dungeon count ] - 1 ) {
         floorNumber++;
         
@@ -3633,6 +3696,15 @@ NSUInteger getMagicY( NSUInteger y ) {
     } else {
         // bottom floor        
     }
+    */
+    [[currentFloor entityArray] removeObject: pcEntity ];
+    
+    [self initializeNextFloor];
+    [self setNextFloor];
+    
+    [self setEntityOnUpstairs: pcEntity ];
+    [[currentFloor entityArray] addObject: pcEntity ];
+    needsRedraw = YES;
 }
 
 /*
@@ -3642,11 +3714,13 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) setEntityOnUpstairs:(Entity *)entity {
     // find the upstairs tile
-    CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: [dungeon objectAtIndex:floorNumber] ];
+    //CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: [dungeon objectAtIndex:floorNumber] ];
+    CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: currentFloor ];
     
     // set the starting tile
     Tile *tile = nil;
-    for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
+    for ( Tile *t in [ currentFloor tileDataArray ] ) {
+    //for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
         if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
             tile = t;
             break;
@@ -3699,7 +3773,7 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) setEntityOnDownstairs:(Entity *)entity forFloor: (DungeonFloor *) _floor {
     // find the upstairs tile
-    CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: floor ];
+    CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: _floor ];
     
     // set the starting tile
     Tile *tile = nil;
@@ -3719,11 +3793,13 @@ NSUInteger getMagicY( NSUInteger y ) {
  */
 -( void ) setEntityOnDownstairs:(Entity *)entity {
     // find the downstairs tile
-    CGPoint startPoint = [ GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber] ];
+    CGPoint startPoint = [ GameRenderer getDownstairsTileForFloor:currentFloor ];
+    //CGPoint startPoint = [ GameRenderer getDownstairsTileForFloor:[dungeon objectAtIndex:floorNumber] ];
     
     // set the starting tile
     Tile *tile = nil;
-    for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
+    //for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
+    for ( Tile *t in [ currentFloor tileDataArray ] ) {
         if ( t.position.x == startPoint.x && t.position.y == startPoint.y ) {
             tile = t;
             break;
@@ -3907,7 +3983,8 @@ NSUInteger getMagicY( NSUInteger y ) {
 #pragma mark - Game Logic code
 
 -( void ) haveAllEntitiesActOnThisFloor {
-    [self haveAllEntitiesActOnFloor:[dungeon objectAtIndex:floorNumber]];
+    [self haveAllEntitiesActOnFloor:currentFloor];
+    //[self haveAllEntitiesActOnFloor:[dungeon objectAtIndex:floorNumber]];
 }
 
 -( void ) haveAllEntitiesActOnFloor:(DungeonFloor *) _floor {
@@ -4013,7 +4090,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         @try {
             // spawn a new monster on the current floor
             //[ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
-            [GameRenderer spawnMonsterAtRandomLocationOnFloor: [dungeon objectAtIndex:floorNumber]];
+            //[GameRenderer spawnMonsterAtRandomLocationOnFloor: [dungeon objectAtIndex:floorNumber]];
+            [GameRenderer spawnMonsterAtRandomLocationOnFloor: currentFloor];
             
             
             Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
@@ -4145,8 +4223,10 @@ NSUInteger getMagicY( NSUInteger y ) {
                     nearest = [ self nearestNonVoidCGPointFromCGPoint:basePos toCGPoint:pcPos ];
                     newPosition = nearest;
                     
-                    Tile *oldTile = [ self getTileForCGPoint:basePos        forFloor:[dungeon objectAtIndex:floorNumber ] ];
-                    Tile *newTile = [ self getTileForCGPoint:newPosition    forFloor:[dungeon objectAtIndex:floorNumber ] ];
+                    //Tile *oldTile = [ self getTileForCGPoint:basePos        forFloor:[dungeon objectAtIndex:floorNumber ] ];
+                    Tile *oldTile = [ self getTileForCGPoint:basePos        forFloor:currentFloor];
+                    Tile *newTile = [ self getTileForCGPoint:newPosition    forFloor:currentFloor];
+                    //Tile *newTile = [ self getTileForCGPoint:newPosition    forFloor:[dungeon objectAtIndex:floorNumber ] ];
                     
                     if ( newTile.tileType != TILE_FLOOR_WATER_0 ) {
                         // if currently on a water tile
@@ -4473,7 +4553,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                     [ self addMessageWindowString: [NSString stringWithFormat:@"%@ picks up a %@", entity.name, item.name]];
                 }
                 
-                [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
+                [[currentFloor entityArray ] removeObject: item];
+                //[[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
                 [[ itemTile contents ] removeObject: item];
                 [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
             }
@@ -4646,7 +4727,8 @@ NSUInteger getMagicY( NSUInteger y ) {
                 
                 // remove the item from our entityArray and from it's tile's contents
                 if ( wasPickedUp ) {
-                    [[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
+                    //[[[ dungeon objectAtIndex:floorNumber ] entityArray ] removeObject: item];
+                    [[currentFloor entityArray ] removeObject: item];
                     [[ itemTile contents ] removeObject: item];
                     // update our hero sprite
                     [sprites setObject:[Drawer heroForPC:pcEntity] forKey:@"Hero"];
@@ -4778,8 +4860,9 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 -(void) cleanupEntityArray {
     // cleanup entityArray
-    for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] entityArray] count]; i++ ) {
-        Entity *e = [[[dungeon objectAtIndex:floorNumber] entityArray] objectAtIndex: i];
+    //for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] entityArray] count]; i++ ) {
+    for ( int i = 0; i < [[currentFloor entityArray] count]; i++ ) {
+        Entity *e = [[currentFloor entityArray] objectAtIndex: i];
         if ( e.isAlive == NO ) {
             //CGPoint entityPos = e.positionOnMap;
             
@@ -4790,7 +4873,8 @@ NSUInteger getMagicY( NSUInteger y ) {
             [self handleItemDropForEntity: e];
  
             // remove the dead entity from the array
-            [[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: e ];
+            [[currentFloor entityArray] removeObject: e ];
+            //[[[dungeon objectAtIndex:floorNumber] entityArray] removeObject: e ];
             i = 0;
         }
     }
@@ -4813,7 +4897,7 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 -(void) handleItemDropForEntity: (Entity *) entity {
     Entity *itemDrop = [self itemDropForEntity: entity];
-    [GameRenderer spawnEntity:itemDrop onFloor:[dungeon objectAtIndex:floorNumber] atLocation:entity.positionOnMap];
+    [GameRenderer spawnEntity:itemDrop onFloor:currentFloor atLocation:entity.positionOnMap];
 }
 
 

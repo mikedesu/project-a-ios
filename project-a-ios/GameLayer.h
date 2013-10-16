@@ -50,10 +50,11 @@ typedef enum {
     NSMutableArray *killList;
     
     NSUInteger floorNumber;
-    DungeonFloor *floor;
+    DungeonFloor *currentFloor;
+    DungeonFloor *nextFloor;
     
    // DungeonFloor *safeRoom;
-    NSMutableArray *dungeon;
+    //NSMutableArray *dungeon;
     NSMutableArray *tileArray;
     NSMutableArray *tileDataArray;
     NSMutableArray *entityArray;
