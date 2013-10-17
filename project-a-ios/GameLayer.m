@@ -472,7 +472,8 @@ unsigned get_memory_mb(void) {
     
     // populate treasure
     // generate and scatter some treasure
-    
+ 
+    /*
     MLOG(@"Generating treasure");
     
     for ( int i = 0; i < 1; i++ ) {
@@ -540,15 +541,15 @@ unsigned get_memory_mb(void) {
                 [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:currentFloor];
             }
             
-            /*
-             */
             
         }
     }
         MLOG(@"...finished ");
+             */
     
     //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
     
+     [ GameRenderer spawnTreasureForFloor: currentFloor];
     
     // place doors
     /*
@@ -556,6 +557,10 @@ unsigned get_memory_mb(void) {
         [ GameRenderer spawnDoors: 1 forFloor: [dungeon objectAtIndex:i] ];
     }
     */
+    
+    int maxDoors = 10;
+    int numDoors = [Dice roll: maxDoors];
+    [ GameRenderer spawnDoors: numDoors forFloor: currentFloor ];
     
     
    // [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
@@ -3645,6 +3650,15 @@ NSUInteger getMagicY( NSUInteger y ) {
 -(void) initializeNextFloor {
     nextFloor = [DungeonFloor newFloorWidth:40 andHeight:40 andFloorNumber:floorNumber+1];
     [ GameRenderer generateDungeonFloor:nextFloor withAlgorithm: DF_ALGORITHM_T_ALGORITHM0 ];
+     
+    // spawn treasure
+    [ GameRenderer spawnTreasureForFloor: nextFloor ];
+
+    // spawn doors
+    int maxDoors = 10;
+    int numDoors = [Dice roll: maxDoors];
+    [ GameRenderer spawnDoors: numDoors forFloor: nextFloor ];
+    
 }
 
 -(void) setNextFloor {

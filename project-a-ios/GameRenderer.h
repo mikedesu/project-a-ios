@@ -78,4 +78,6 @@
 +( Tile * ) getMapTileFromPoint: (CGPoint) p forFloor: (DungeonFloor *) _floor;
 +( Tile * ) getMapTileFromPointX: (CGFloat) _x Y: (CGFloat) _y forFloor: (DungeonFloor *) _floor;
 
++( void ) spawnTreasureForFloor: (DungeonFloor *) floor ;
+
 @end

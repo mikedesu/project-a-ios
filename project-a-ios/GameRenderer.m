@@ -2056,4 +2056,75 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
 }
 
 
++( void ) spawnTreasureForFloor: (DungeonFloor *) floor {
+    MLOG(@"Generating treasure");
+    
+    int floorBonus = floor.floorNumber;
+
+    NSInteger minItemCount  = 2;
+    NSInteger maxItemCount  = 12;
+    NSInteger treasureCount = [Dice roll: maxItemCount ] + (minItemCount - 1);
+    
+    for ( int j = 0; j < treasureCount; j++ ) {
+        
+        //Entity *itemToTest = [Armor bootsOfAntiacid];
+        //Entity *itemToTest = [Armor robe:CLOTH_T_CLOTH bonus:0];
+        //Entity *itemToTest = [Items torch: 2];
+        //Entity *itemToTest = Tree;
+        //[GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
+        
+         NSInteger roll = [Dice roll:5];
+         // weapons
+         if ( roll == 1 ) {
+            NSInteger _roll = [Dice roll: 12];
+            Entity *itemToSpawn =
+             _roll <= 3 ?
+                [Weapons shortSword:WOOD_T_FIR  metal:METAL_T_NONE  stone:STONE_T_NONE withBonus:0] :
+             _roll <= 7 ?
+                [Weapons shortSword:WOOD_T_NONE metal:METAL_T_IRON  stone:STONE_T_NONE withBonus:0] :
+             _roll <= 9 ?
+                [Weapons shortSword:WOOD_T_NONE metal:METAL_T_STEEL stone:STONE_T_NONE withBonus:0] :
+             _roll <= 12 ?
+                [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE  stone:STONE_T_ROCK withBonus:0] :
+            [Weapons Asura];
+            [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:floor];
+        }
+        
+        // armor
+        else if ( roll == 2 ) {
+            NSInteger _roll = [Dice roll: 5];
+            Entity *itemToSpawn =   _roll == 1 ? [Armor smallShield: floorBonus ]  :
+                                    _roll == 2 ? [Armor leatherArmor: floorBonus ] :
+                                    _roll == 3 ? [Armor bootsOfAntiacid] :
+                                    _roll == 4 ? [Armor robe:CLOTH_T_CLOTH bonus: floorBonus ] :
+            [Armor blindfold];
+            [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:floor];
+        }
+        
+        // random items
+        else if ( roll == 3 ) {
+            [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:floor];
+            
+        }
+        
+        else if ( roll == 4 ) {
+            //NSInteger torchLevel = [Dice roll: 3];
+            NSInteger torchLevel = 1;
+            Entity *itemToSpawn = [Items torch: torchLevel];
+            itemToSpawn.durability = 128;
+            [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:floor];
+        }
+        
+        else if ( roll == 5 ) {
+            Entity *itemToSpawn = Tree;
+            [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:floor];
+        }
+        
+    }
+    MLOG(@"...finished ");
+
+}
+
+
+
 @end
