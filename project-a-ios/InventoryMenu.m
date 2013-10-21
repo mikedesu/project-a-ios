@@ -154,8 +154,9 @@
         
         NSMutableArray *menuItems = [NSMutableArray array];
         
+        CGFloat pad = 10;
         CGFloat x = 0;
-        CGFloat y = s.height;
+        CGFloat y = s.height - pad;
         
         [self defineMenuControlBlock];
         

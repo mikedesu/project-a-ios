@@ -308,7 +308,6 @@
       withDamageRollBase: (NSInteger) _damageRollBase
              withAttacks: (NSArray *) _attacks {
     
-    
     Entity *e               = [[Entity alloc] initWithHitDie:_hd];
     e.entityType            = _entityType;
     e.pathFindingAlgorithm  = _pfa;
@@ -352,6 +351,138 @@
     
     return e;
 }
+
+
+
+
+-(Entity *) initWithName: (NSString *) _name
+            withPrefixes: (NSArray *) _prefixes
+          withEntityType: (EntityTypes_t) _entityType
+              withThreat: (Threat_t) _threat
+         withMonsterType: (Monster_t) _monsterType
+            withItemType: (EntityItemTypes_t) _itemType
+               withLevel: (NSInteger) _level
+              withHitDie: (NSInteger) _hd
+            withStrength: (NSInteger) _str
+           withDexterity: (NSInteger) _dex
+        withConstitution: (NSInteger) _con
+        withIntelligence: (NSInteger) _int
+              withWisdom: (NSInteger) _wis
+            withCharisma: (NSInteger) _cha
+                 withPFA: (EntityPathFindingAlgorithm_t) _pfa
+                 withIPA: (EntityItemPickupAlgorithm_t) _ipa
+      withDamageRollBase: (NSInteger) _damageRollBase
+             withAttacks: (NSArray *) _attacks 
+            //withItemType: (EntityItemTypes_t) _itemType
+          withPotionType: (PotionTypes_t) _potionType
+     withHealingRollBase: (NSInteger) _hrb
+        withHealingBonus: (NSInteger) _hb
+              withWeight: (NSInteger) _weight
+          withDurability: (NSInteger) _durability 
+     withTotalDurability: (NSInteger) _totalDurability 
+            withFoodBase: (NSInteger) _foodBase
+          withLightLevel: (NSInteger) _lightLevel
+            withDoorOpen: (BOOL) _doorOpen
+        withDoorIsLocked: (BOOL) _doorIsLocked
+               withSpell: (Spell_t) _spell 
+             withCharges: (NSInteger) _charges
+          withMaxCharges: (NSInteger) _maxcharges
+            withRingType: (Ring_t) _ringType
+               withMoney: (NSInteger) _money 
+            withNotetext: (NSString *) _notetext
+{
+    
+    Entity *e               = [[Entity alloc] initWithHitDie:_hd];
+    e.entityType            = _entityType;
+    e.pathFindingAlgorithm  = _pfa;
+    e.itemPickupAlgorithm   = _ipa;
+    e.damageRollBase        = _damageRollBase;
+    
+    e.strength              = _str;
+    e.dexterity             = _dex;
+    e.constitution          = _con;
+    e.intelligence          = _int;
+    e.wisdom                = _wis;
+    e.charisma              = _cha;
+    
+    e.threatLevel           = _threat;
+    e.monsterType           = _monsterType;
+    e.itemType              = _itemType;
+    
+    [e.prefixes             setArray: _prefixes];
+    
+    NSMutableString *prefixNames = [NSMutableString string];
+    for (Prefix_t *prefix in e.prefixes) {
+        [prefixNames appendFormat: @"%@ ", prefix.name ];
+    }
+    [prefixNames appendString: _name];
+    
+    [e.name setString:      prefixNames];
+    // parse a big prefix
+    // this is to get around an annoying bug involving commas and the C preprocessor
+    // see Monsters.h and later Items/EntitySubtypeDefines
+    
+    //NSString *prefix = [_prefixes objectAtIndex:0];
+   // MLOG(@"Prefix: '%@'", e.prefixes);
+ 
+    /*
+            withItemType: (EntityItemTypes_t) _itemType
+          withPotionType: (Potion_t) _potionType
+     withHealingRollBase: (NSInteger) _hrb
+        withHealingBonus: (NSInteger) _hb
+              withWeight: (NSInteger) _weight
+          withDurability: (NSInteger) _durability 
+     withTotalDurability: (NSInteger) _totalDurability 
+            withFoodBase: (NSInteger) _foodBase
+          withLightLevel: (NSInteger) _lightLevel
+            withDoorOpen: (BOOL) _doorOpen
+        withDoorIsLocked: (BOOL) _doorIsLocked
+               withSpell: (Spell_t) _spell 
+             withCharges: (NSInteger) _charges
+          withMaxCharges: (NSInteger) _maxcharges
+            withRingType: (Ring_t) _ringType
+               withMoney: (NSInteger) _money 
+            withNotetext: (NSString *) _notetext
+*/
+
+    e.itemType = _itemType;
+    e.potionType = _potionType;
+    e.healingRollBase = _hrb;
+    e.healingBonus = _hb;
+    e.weight = _weight;
+    e.durability = _durability;
+    e.totalDurability = _totalDurability;
+    e.foodBase = _foodBase;
+    e.lightLevel = _lightLevel;
+    e.doorOpen = _doorOpen;
+    e.doorLocked = _doorIsLocked;
+    e.spell = _spell;
+    e.charges = _charges;
+    e.maxCharges = _maxcharges;
+    e.ringType = _ringType;
+    e.money = _money;
+    e.notetext = _notetext;
+
+    // currently not setting attack_t objects yet
+    for (int i=e.level; i<_level; i++) {
+        [e handleLevelUp];
+    }
+    
+    // handle the prefix processing...
+ //   MLOG(@"%@", e.name);
+    
+    return e;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -103,88 +103,25 @@ withAttacks: a])
 #define Monster(n,r,t,m,l,h,str,dex,con,int,wis,cha,p,i,d,a) MONSTER(n,r,t,m,l,h,str,dex,con,int,wis,cha,p,i,d,a)
 
 
-#define Ghoul \
-(Monster(\
-@"Ghoul", \
-[NSArray arrayWithObject: [Prefix_t randomPrefix]], \
-THREAT_T_HOSTILE, \
-MONSTER_T_GHOUL, \
-1, \
-6, \
-10, \
-10, \
-10, \
-10, \
-10, \
-10, \
-ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, \
-ENTITYITEMPICKUPALGORITHM_T_NONE, \
-6, \
-nil))
+#define Ghoul (Monster(@"Ghoul", [NSArray arrayWithObject: [Prefix_t randomPrefix]], THREAT_T_HOSTILE, MONSTER_T_GHOUL, \
+1, 6, \
+10, 10, 10, 10, 10, 10, \
+ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, ENTITYITEMPICKUPALGORITHM_T_NONE, 6, nil))
 
 
-#define Totoro \
-(Monster(\
-@"Totoro", \
-[NSArray arrayWithObject: [Prefix_t noPrefix]], \
-THREAT_T_HOSTILE, \
-MONSTER_T_TOTORO, \
-1, \
-6, \
-12, \
-8, \
-14, \
-10, \
-10, \
-10, \
-ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, \
-ENTITYITEMPICKUPALGORITHM_T_NONE, \
-8, \
-nil))
+#define Totoro (Monster(@"Totoro", [NSArray arrayWithObject: [Prefix_t noPrefix]], THREAT_T_HOSTILE, MONSTER_T_TOTORO, \
+1, 6, \
+12, 8, 14, 10, 10, 10, \
+ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, ENTITYITEMPICKUPALGORITHM_T_NONE, 8, nil))
 
 
-
-#define Tree \
-(Monster(\
-@"Tree", \
-[NSArray arrayWithObject: [Prefix_t noPrefix]], \
-THREAT_T_HOSTILE, \
-MONSTER_T_TREE, \
-1, \
-12, \
-12, \
-12, \
-12, \
-12, \
-12, \
-12, \
-ENTITYPATHFINDINGALGORITHM_T_NONE, \
-ENTITYITEMPICKUPALGORITHM_T_NONE, \
-8, \
-nil))
+#define Tree (Monster(@"Tree", [NSArray arrayWithObject: [Prefix_t noPrefix]], THREAT_T_HOSTILE, MONSTER_T_TREE, \
+1, 12, \
+12, 12, 12, 12, 12, 12, \
+ENTITYPATHFINDINGALGORITHM_T_NONE, ENTITYITEMPICKUPALGORITHM_T_NONE, 8, nil))
 
 
-
-
-
-
-
-
-#define Cat \
-(Monster(\
-[[NameEngine sharedEngine] getNextCatName], \
-[NSArray arrayWithObject: [Prefix_t noPrefix]], \
-THREAT_T_FRIENDLY, \
-MONSTER_T_CAT, \
-1, \
-4, \
-12, \
-12, \
-12, \
-12, \
-12, \
-12, \
-ENTITYPATHFINDINGALGORITHM_T_FRIENDLY_FOLLOW_PC_STRICT, \
-ENTITYITEMPICKUPALGORITHM_T_NONE, \
-4, \
-nil))
+#define Cat (Monster([[NameEngine sharedEngine] getNextCatName], [NSArray arrayWithObject: [Prefix_t noPrefix]], THREAT_T_FRIENDLY, MONSTER_T_CAT, \
+1, 4, \
+12, 12, 12, 12, 12, 12, \
+ENTITYPATHFINDINGALGORITHM_T_FRIENDLY_FOLLOW_PC_STRICT, ENTITYITEMPICKUPALGORITHM_T_NONE, 4, nil))

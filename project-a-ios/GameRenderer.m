@@ -528,13 +528,14 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
  ====================
  setAllTiles: withData
  ====================
- */
+ 
 +( void ) setAllTiles: ( NSArray * ) tileArray withData: ( NSArray * ) data {
     for ( int i = 0; i < [tileArray count]; i++ ) {
         CCSprite *sprite = [ tileArray objectAtIndex: i ];
         [ GameRenderer setTile: sprite withData: [ data objectAtIndex: i ] ];
     }
 }
+ */
 
 
 +( void ) setTile: (CCSprite *) sprite toAlpha: (GLubyte) alpha {
@@ -569,6 +570,11 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     int distance = [GameTools distanceFromCGPoint:pc.positionOnMap toCGPoint:tile.position];
     int factor = 64;
     
+    // check if void-tile exists between this tile and PC
+    
+    
+    
+    
     // crude light calculation - 4 distances away from PC, nothing else (yet)
     GLubyte newAlpha =
         distance == 0 ? 255 :
@@ -580,10 +586,95 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
 }
 
 
+
+
+
++(BOOL) voidTileExistsBetweenEntity: (Entity *) e andTile: (Tile *) tile onFloor: (DungeonFloor *) floor {
+    BOOL retVal = NO;
+    
+    // calculate the vector from e to tile
+    int xu = 0;
+    int yu = 0;
+    
+    // easy cases...same X
+    if ( e.positionOnMap.x == tile.position.x ) {
+        xu = 0;
+        
+        if ( e.positionOnMap.y < tile.position.y ) {
+            yu = 1;
+        }
+        else if ( e.positionOnMap.y > tile.position.y ) {
+            yu = -1;
+        }
+        
+    }
+    else if ( e.positionOnMap.y == tile.position.y ) {
+        yu = 0;
+        
+        if ( e.positionOnMap.x < tile.position.x ) {
+            xu = 1;
+        }
+        else if ( e.positionOnMap.x > tile.position.x ) {
+            xu = -1;
+        }
+    }
+    else {
+        if ( e.positionOnMap.y < tile.position.y ) {
+            yu = 1;
+        }
+        else if ( e.positionOnMap.y > tile.position.y ) {
+            yu = -1;
+        }
+    
+        if ( e.positionOnMap.x < tile.position.x ) {
+            xu = 1;
+        }
+        else if ( e.positionOnMap.x > tile.position.x ) {
+            xu = -1;
+        }
+    }
+    
+    // now we have our vector <xu,yu>
+    int tmpx = e.positionOnMap.x;
+    int tmpy = e.positionOnMap.y;
+    
+    while (tmpx != tile.position.x &&
+           tmpy != tile.position.y ) {
+        
+        CGPoint tmpPoint = ccp(tmpx, tmpy);
+        
+        Tile *tmpTile = [GameRenderer getTileForFloor:floor forCGPoint:tmpPoint];
+        
+        if ( tmpTile.tileType == TILE_FLOOR_VOID ) {
+            retVal = YES;
+            MLOG(@"====VOID TILE====");
+            break;
+        }
+        
+        tmpx += xu;
+        tmpy += yu;
+        
+        if ( tmpx == tile.position.x ) {
+            xu = 0;
+        }
+        
+        if ( tmpy == tile.position.y ) {
+            yu = 0;
+        }
+        
+    }
+    
+    
+    return retVal;
+}
+
+
+
 +( void) setLightTileForTexture: (CCMutableTexture2D *) texture withData:(Tile *) tile withFloor: (DungeonFloor *) floor {
     // calculate alpha value (light)
     
     // grab the pc
+    
     Entity *pc;
     for (Entity *e in floor.entityArray) {
         if ( e.isPC ) {
@@ -633,6 +724,9 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     newAlpha =  distance == 0 ? 255 :
     distance < lightValue ? 255 - factor * distance : 0;
     
+    newAlpha =
+    [GameRenderer voidTileExistsBetweenEntity:pc andTile:tile onFloor:floor] ? 0 : newAlpha;
+    
     [ GameRenderer setTileForTexture:texture toAlpha:newAlpha ];
 }
 
@@ -677,13 +771,14 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
  ====================
  setAllTiles: withEntityData
  ====================
- */
+ 
 +( void ) setAllTiles: ( NSArray * ) tileArray withEntityData: ( NSArray * ) data {
     for ( int i = 0; i < [tileArray count]; i++ ) {
         CCSprite *sprite = [ tileArray objectAtIndex: i ];
         [ GameRenderer setTile: sprite withData: [ data objectAtIndex: i ] ];
     }
 }
+ */
 
 /*
  ====================
@@ -1444,304 +1539,309 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
             Tile_t t7tt = t_[7].tileType;
 
             BOOL ttttnev = tttt != TILE_FLOOR_VOID;
+            BOOL ttttisempty = [t isEmpty];
 
-            BOOL t0tteev = t0tt == TILE_FLOOR_VOID; 
-            BOOL t0ttnev = t0tt != TILE_FLOOR_VOID; 
-            BOOL t1tteev = t1tt == TILE_FLOOR_VOID; 
-            BOOL t1ttnev = t1tt != TILE_FLOOR_VOID; 
-            BOOL t2tteev = t2tt == TILE_FLOOR_VOID; 
-            BOOL t2ttnev = t2tt != TILE_FLOOR_VOID; 
-            BOOL t3tteev = t3tt == TILE_FLOOR_VOID; 
-            BOOL t3ttnev = t3tt != TILE_FLOOR_VOID; 
-            BOOL t4tteev = t4tt == TILE_FLOOR_VOID; 
-            BOOL t4ttnev = t4tt != TILE_FLOOR_VOID; 
-            BOOL t5tteev = t5tt == TILE_FLOOR_VOID; 
-            BOOL t5ttnev = t5tt != TILE_FLOOR_VOID; 
-            BOOL t6tteev = t6tt == TILE_FLOOR_VOID; 
-            BOOL t6ttnev = t6tt != TILE_FLOOR_VOID; 
-            BOOL t7tteev = t7tt == TILE_FLOOR_VOID; 
-            BOOL t7ttnev = t7tt != TILE_FLOOR_VOID; 
+            if ( ttttnev && ttttisempty ) {
+
+                BOOL t0tteev = t0tt == TILE_FLOOR_VOID; 
+                BOOL t0ttnev = t0tt != TILE_FLOOR_VOID; 
+                BOOL t1tteev = t1tt == TILE_FLOOR_VOID; 
+                BOOL t1ttnev = t1tt != TILE_FLOOR_VOID; 
+                BOOL t2tteev = t2tt == TILE_FLOOR_VOID; 
+                BOOL t2ttnev = t2tt != TILE_FLOOR_VOID; 
+                BOOL t3tteev = t3tt == TILE_FLOOR_VOID; 
+                BOOL t3ttnev = t3tt != TILE_FLOOR_VOID; 
+                BOOL t4tteev = t4tt == TILE_FLOOR_VOID; 
+                BOOL t4ttnev = t4tt != TILE_FLOOR_VOID; 
+                BOOL t5tteev = t5tt == TILE_FLOOR_VOID; 
+                BOOL t5ttnev = t5tt != TILE_FLOOR_VOID; 
+                BOOL t6tteev = t6tt == TILE_FLOOR_VOID; 
+                BOOL t6ttnev = t6tt != TILE_FLOOR_VOID; 
+                BOOL t7tteev = t7tt == TILE_FLOOR_VOID; 
+                BOOL t7ttnev = t7tt != TILE_FLOOR_VOID; 
 
 
-            /*   ###
-             *   xxx
-             *   ###
-             */
-            BOOL p0_t0 = t0tteev && t1tteev && t2tteev;
-            BOOL p0_t1 = t3ttnev && ttttnev && t4ttnev;
-            BOOL p0_t2 = t5tteev && t6tteev && t7tteev;
-            BOOL p0 = p0_t0 && p0_t1 && p0_t2;
-            
-            /*   ##x
-             *   #x#
-             *   x##
-             */
-            BOOL p1_t0 = t0tteev && t1tteev && t2ttnev;
-            BOOL p1_t1 = t3tteev && ttttnev && t4tteev;
-            BOOL p1_t2 = t5ttnev && t6tteev && t7tteev;
-            BOOL p1 = p1_t0 && p1_t1 && p1_t2;
-            
-            
-            /*   #x#
-             *   #x#
-             *   #x#
-             */
-            BOOL p2_t0 = t0tteev && t1ttnev && t2tteev;
-            BOOL p2_t2 = t5tteev && t6ttnev && t7tteev;
-            BOOL p2 = p2_t0 && p1_t1 && p2_t2;
-            
-            
-            /*   x##
-             *   #x#
-             *   ##x
-             */
-            BOOL p3_t0 = t0ttnev && t1tteev && t2tteev;
-            BOOL p3_t2 = t5tteev && t6tteev && t7ttnev;
-            BOOL p3 = p3_t0 && p1_t1 && p3_t2;
-            
-            
-            // ==========
-            
-            /*   ##x
-             *   xxx
-             *   ##x
-             */
+                /*   ###
+                 *   xxx
+                 *   ###
+                 */
+                BOOL p0_t0 = t0tteev && t1tteev && t2tteev;
+                BOOL p0_t1 = t3ttnev && t4ttnev;
+                BOOL p0_t2 = t5tteev && t6tteev && t7tteev;
+                BOOL p0 = p0_t0 && p0_t1 && p0_t2;
+                
+                /*   ##x
+                 *   #x#
+                 *   x##
+                 */
+                BOOL p1_t0 = t0tteev && t1tteev && t2ttnev;
+                BOOL p1_t1 = t3tteev && t4tteev;
+                BOOL p1_t2 = t5ttnev && t6tteev && t7tteev;
+                BOOL p1 = p1_t0 && p1_t1 && p1_t2;
+                
+                
+                /*   #x#
+                 *   #x#
+                 *   #x#
+                 */
+                BOOL p2_t0 = t0tteev && t1ttnev && t2tteev;
+                BOOL p2_t2 = t5tteev && t6ttnev && t7tteev;
+                BOOL p2 = p2_t0 && p1_t1 && p2_t2;
+                
+                
+                /*   x##
+                 *   #x#
+                 *   ##x
+                 */
+                BOOL p3_t0 = t0ttnev && t1tteev && t2tteev;
+                BOOL p3_t2 = t5tteev && t6tteev && t7ttnev;
+                BOOL p3 = p3_t0 && p1_t1 && p3_t2;
+                
+                
+                // ==========
+                
+                /*   ##x
+                 *   xxx
+                 *   ##x
+                 */
 
-            BOOL p4 = p1_t0 && p0_t1 && p3_t2;
-            
-            /*   xxx
-             *   #x#
-             *   #x#
-             */
-            BOOL p5_t0 = t0ttnev && t1ttnev && t2ttnev;
-            BOOL p5 = p5_t0 && p1_t1 && p2_t2;
-            
-            /*   x##
-             *   xxx
-             *   x##
-             */
-            BOOL p6 = p3_t0 && p0_t1 && p1_t2;
-            
-            /*   #x#
-             *   #x#
-             *   xxx
-             */
-            BOOL p7_t2 = t5ttnev && t6ttnev && t7ttnev;
-            BOOL p7 = p2_t0 && p1_t1 && p7_t2;
-            
-            // ==========
-            
-            /*   ##x
-             *   xxx
-             *   ###
-             */
-            BOOL p8 = p1_t0 && p0_t1 && p0_t2;
-            
-            /*   ###
-             *   xxx
-             *   ##x
-             */
-            
-            BOOL p9 = p0_t0 && p0_t1 && p3_t2;
-            
-            /*   #x#
-             *   #x#
-             *   xx#
-             */
-            BOOL p10_t2 = t5ttnev && t6ttnev && t7tteev;
-            BOOL p10 = p2_t0 && p1_t1 && p10_t2;
-            
-            /*   #x#
-             *   #x#
-             *   #xx
-             */
-            BOOL p11_t2 = t5tteev && t6ttnev && t7ttnev;
-            BOOL p11 = p2_t0 && p1_t1 && p11_t2;
-            
-            /*   ###
-             *   xxx
-             *   x##
-             */
-            
-            BOOL p12 = p0_t0 && p0_t1 && p1_t2;
-            
-            /*   x##
-             *   xxx
-             *   ###
-             */
-            BOOL p13 = p3_t0 && p0_t1 && p0_t2;
-            
-            /*   xx#
-             *   #x#
-             *   #x#
-             */
-            BOOL p14_t0 = t0ttnev && t1ttnev && t2tteev;
-            BOOL p14 = p14_t0 && p1_t1 && p2_t2;
-            
-            /*   #xx
-             *   #x#
-             *   #x#
-             */
-            BOOL p15_t0 = t0tteev && t1ttnev && t2ttnev;
-            BOOL p15 = p15_t0 && p1_t1 && p2_t2;
-            
-            // ==========
-            
-            /*   xx#
-             *   xx#
-             *   ##x
-             */
-            BOOL p16_t1 = t3ttnev && ttttnev && t4tteev;
-            BOOL p16 = p14_t0 && p16_t1 && p3_t2;
-            
-            /*   ##x
-             *   xx#
-             *   xx#
-             */
-            
-            BOOL p17 = p1_t0 && p16_t1 && p10_t2;
-            
-            /*   x##
-             *   #xx
-             *   #xx
-             */
-            BOOL p18_t1 = t3tteev && ttttnev && t4ttnev;
-            BOOL p18 = p3_t0 && p18_t1 && p11_t2;
-            
-            /*   #xx
-             *   #xx
-             *   x##
-             */
-            BOOL p19 = p15_t0 && p18_t1 && p1_t2;
-            
-            // ==========
-            
-            /*   x##
-             *   #xx
-             *   #x#
-             */
-            BOOL p20 = p3_t0 && p18_t1 && p2_t2;
-            
-            /*   ##x
-             *   xx#
-             *   #x#
-             */
-            BOOL p21 = p1_t0 && p16_t1 && p2_t2;
-            
-            /*   x##
-             *   #xx
-             *   #x#
-             */
-            BOOL p22 = p3_t0 && p18_t1 && p2_t2;
-            
-            /*   #x#
-             *   #xx
-             *   x##
-             */
-            BOOL p23 = p2_t0 && p18_t1 && p1_t2;
-            
-            /*   x##
-             *   #x#
-             *   x##
-             */
-            BOOL p24 = p3_t0 && p1_t1 && p1_t2;
-            
-            /*   ###
-             *   #x#
-             *   x#x
-             */
-            
-            BOOL p25_t2 = t5ttnev && t6tteev && t7ttnev;
-            BOOL p25 = p0_t0 && p1_t1 && p25_t2;
-            
-            /*   ##x
-             *   #x#
-             *   ##x
-             */
-            
-            BOOL p26 = p1_t0 && p1_t1 && p3_t2;
-            
-            /*   x#x
-             *   #x#
-             *   ###
-             */
-            BOOL p27_t0 = t0ttnev && t1tteev && t2ttnev;
-            BOOL p27 = p27_t0 && p1_t1 && p0_t2;
-            
-            //==========
-            /*   x#x
-             *   #x#
-             *   x##
-             */
-            BOOL p28 = p27_t0 && p1_t1 && p1_t2;
-            
-            /*   x##
-             *   #x#
-             *   x#x
-             */
-            BOOL p29 = p3_t0 && p1_t1 && p25_t2;
-            
-            /*   x#x
-             *   #x#
-             *   ##x
-             */
-            BOOL p30 = p27_t0 && p1_t1 && p3_t2;
-            
-            /*   ##x
-             *   #x#
-             *   x#x
-             */
-            BOOL p31 = p1_t0 && p1_t1 && p25_t2;
-            
-            //=====
-            /*   xx#
-             *   #x#
-             *   #xx
-             */
-            BOOL p32 = p14_t0 && p1_t1 && p11_t2;
-            
-            /*   ##x
-             *   xxx
-             *   x##
-             */
-            BOOL p33 = p1_t0 && p0_t1 && p1_t2;
-            
-            /*   #xx
-             *   #x#
-             *   xx#
-             */
-            BOOL p34 = p15_t0 && p1_t1 && p10_t2;
-            
-            /*   x##
-             *   xxx
-             *   ##x
-             */
-            BOOL p35 = p3_t0 && p0_t1 && p3_t2;
-            
-            //=====
-            
-            
-            BOOL analysisStatement =
-            p0 || p1 || p2 || p3 || p4 ||
-            p5 || p6 || p7 || p8 || p9 ||
-            p10 || p11 || p12 || p13 || p14 ||
-            p15 || p16 || p17 || p18 || p19 ||
-            p20 || p21 || p22 || p23 || p24 ||
-            p25 || p26 || p27 || p28 || p29 ||
-            p30 || p31 || p32 || p33 || p34 ||
-            p35;
-            
-            if ( analysisStatement ) {
-                // place door
-                MLOG(@"Floor %d Door %d placed", floor.floorNumber, doors);
-                Entity *tmpDoor = [Items simpleDoor];
-                [GameRenderer setEntity: tmpDoor onTile: t];
-                [[floor entityArray] addObject: tmpDoor];
-                doors--;
-            }
-            
-            if ( doors <= 0 ) {
-                break;
+                BOOL p4 = p1_t0 && p0_t1 && p3_t2;
+                
+                /*   xxx
+                 *   #x#
+                 *   #x#
+                 */
+                BOOL p5_t0 = t0ttnev && t1ttnev && t2ttnev;
+                BOOL p5 = p5_t0 && p1_t1 && p2_t2;
+                
+                /*   x##
+                 *   xxx
+                 *   x##
+                 */
+                BOOL p6 = p3_t0 && p0_t1 && p1_t2;
+                
+                /*   #x#
+                 *   #x#
+                 *   xxx
+                 */
+                BOOL p7_t2 = t5ttnev && t6ttnev && t7ttnev;
+                BOOL p7 = p2_t0 && p1_t1 && p7_t2;
+                
+                // ==========
+                
+                /*   ##x
+                 *   xxx
+                 *   ###
+                 */
+                BOOL p8 = p1_t0 && p0_t1 && p0_t2;
+                
+                /*   ###
+                 *   xxx
+                 *   ##x
+                 */
+                
+                BOOL p9 = p0_t0 && p0_t1 && p3_t2;
+                
+                /*   #x#
+                 *   #x#
+                 *   xx#
+                 */
+                BOOL p10_t2 = t5ttnev && t6ttnev && t7tteev;
+                BOOL p10 = p2_t0 && p1_t1 && p10_t2;
+                
+                /*   #x#
+                 *   #x#
+                 *   #xx
+                 */
+                BOOL p11_t2 = t5tteev && t6ttnev && t7ttnev;
+                BOOL p11 = p2_t0 && p1_t1 && p11_t2;
+                
+                /*   ###
+                 *   xxx
+                 *   x##
+                 */
+                
+                BOOL p12 = p0_t0 && p0_t1 && p1_t2;
+                
+                /*   x##
+                 *   xxx
+                 *   ###
+                 */
+                BOOL p13 = p3_t0 && p0_t1 && p0_t2;
+                
+                /*   xx#
+                 *   #x#
+                 *   #x#
+                 */
+                BOOL p14_t0 = t0ttnev && t1ttnev && t2tteev;
+                BOOL p14 = p14_t0 && p1_t1 && p2_t2;
+                
+                /*   #xx
+                 *   #x#
+                 *   #x#
+                 */
+                BOOL p15_t0 = t0tteev && t1ttnev && t2ttnev;
+                BOOL p15 = p15_t0 && p1_t1 && p2_t2;
+                
+                // ==========
+                
+                /*   xx#
+                 *   xx#
+                 *   ##x
+                 */
+                BOOL p16_t1 = t3ttnev && t4tteev;
+                BOOL p16 = p14_t0 && p16_t1 && p3_t2;
+                
+                /*   ##x
+                 *   xx#
+                 *   xx#
+                 */
+                
+                BOOL p17 = p1_t0 && p16_t1 && p10_t2;
+                
+                /*   x##
+                 *   #xx
+                 *   #xx
+                 */
+                BOOL p18_t1 = t3tteev && t4ttnev;
+                BOOL p18 = p3_t0 && p18_t1 && p11_t2;
+                
+                /*   #xx
+                 *   #xx
+                 *   x##
+                 */
+                BOOL p19 = p15_t0 && p18_t1 && p1_t2;
+                
+                // ==========
+                
+                /*   x##
+                 *   #xx
+                 *   #x#
+                 */
+                BOOL p20 = p3_t0 && p18_t1 && p2_t2;
+                
+                /*   ##x
+                 *   xx#
+                 *   #x#
+                 */
+                BOOL p21 = p1_t0 && p16_t1 && p2_t2;
+                
+                /*   x##
+                 *   #xx
+                 *   #x#
+                 */
+                BOOL p22 = p3_t0 && p18_t1 && p2_t2;
+                
+                /*   #x#
+                 *   #xx
+                 *   x##
+                 */
+                BOOL p23 = p2_t0 && p18_t1 && p1_t2;
+                
+                /*   x##
+                 *   #x#
+                 *   x##
+                 */
+                BOOL p24 = p3_t0 && p1_t1 && p1_t2;
+                
+                /*   ###
+                 *   #x#
+                 *   x#x
+                 */
+                
+                BOOL p25_t2 = t5ttnev && t6tteev && t7ttnev;
+                BOOL p25 = p0_t0 && p1_t1 && p25_t2;
+                
+                /*   ##x
+                 *   #x#
+                 *   ##x
+                 */
+                
+                BOOL p26 = p1_t0 && p1_t1 && p3_t2;
+                
+                /*   x#x
+                 *   #x#
+                 *   ###
+                 */
+                BOOL p27_t0 = t0ttnev && t1tteev && t2ttnev;
+                BOOL p27 = p27_t0 && p1_t1 && p0_t2;
+                
+                //==========
+                /*   x#x
+                 *   #x#
+                 *   x##
+                 */
+                BOOL p28 = p27_t0 && p1_t1 && p1_t2;
+                
+                /*   x##
+                 *   #x#
+                 *   x#x
+                 */
+                BOOL p29 = p3_t0 && p1_t1 && p25_t2;
+                
+                /*   x#x
+                 *   #x#
+                 *   ##x
+                 */
+                BOOL p30 = p27_t0 && p1_t1 && p3_t2;
+                
+                /*   ##x
+                 *   #x#
+                 *   x#x
+                 */
+                BOOL p31 = p1_t0 && p1_t1 && p25_t2;
+                
+                //=====
+                /*   xx#
+                 *   #x#
+                 *   #xx
+                 */
+                BOOL p32 = p14_t0 && p1_t1 && p11_t2;
+                
+                /*   ##x
+                 *   xxx
+                 *   x##
+                 */
+                BOOL p33 = p1_t0 && p0_t1 && p1_t2;
+                
+                /*   #xx
+                 *   #x#
+                 *   xx#
+                 */
+                BOOL p34 = p15_t0 && p1_t1 && p10_t2;
+                
+                /*   x##
+                 *   xxx
+                 *   ##x
+                 */
+                BOOL p35 = p3_t0 && p0_t1 && p3_t2;
+                
+                //=====
+                //
+
+                BOOL analysisStatement =
+                p0 || p1 || p2 || p3 || p4 ||
+                p5 || p6 || p7 || p8 || p9 ||
+                p10 || p11 || p12 || p13 || p14 ||
+                p15 || p16 || p17 || p18 || p19 ||
+                p20 || p21 || p22 || p23 || p24 ||
+                p25 || p26 || p27 || p28 || p29 ||
+                p30 || p31 || p32 || p33 || p34 ||
+                p35;
+                
+                if ( analysisStatement ) {
+                    // place door
+                    MLOG(@"Floor %d Door %d placed", floor.floorNumber, doors);
+                    Entity *tmpDoor = [Items simpleDoor];
+                    [GameRenderer setEntity: tmpDoor onTile: t];
+                    [[floor entityArray] addObject: tmpDoor];
+                    doors--;
+                }
+                
+                if ( doors <= 0 ) {
+                    break;
+                }
+
             }
             
         }
@@ -1844,6 +1944,7 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
 
 
 +( void ) spawnMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor {
+    MLOG(@"Spawn Monster At Random Location On Floor %d", floor.floorNumber);
     BOOL locationIsAcceptable = NO;
     Tile *spawnTile = nil;
     
@@ -1897,15 +1998,13 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                 Entity *e;
                 
                 // set number of monsterTypes
-                NSUInteger numMonsterTypes = 3; //4;
+                NSUInteger numMonsterTypes = 2; //4;
                 NSUInteger m0 = [Dice roll: numMonsterTypes];
                 
                 // define monsters to spawn below
                 e =
-                ( m0 == 1 ) ? Cat :
-                ( m0 == 2 ) ? Ghoul :
-                ( m0 == 3 ) ? Totoro :
- //               ( m0 == 4 ) ? Tree :
+                ( m0 == 1 ) ? Ghoul :
+                ( m0 == 2 ) ? Totoro :
                 Cat;
 
                 // level up monster appropriately
@@ -1918,11 +2017,7 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                 MLOG(@"placed monster: %@", e.name);
             }
     }
-    //}
 }
-
-
-
 
 
 +( void ) spawnRandomMonsterAtRandomLocationOnFloor: (DungeonFloor *) floor withPC: (Entity *) pc withChanceDie: (NSInteger) chanceDie {

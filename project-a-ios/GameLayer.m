@@ -432,7 +432,7 @@ unsigned get_memory_mb(void) {
     // initialize our various HUDs
     MLOG(@"Initialize HUDs");
     [ self initializeHUDs ];
-        MLOG(@"...finished ");
+    MLOG(@"...finished ");
     
     // haven't touched the hero yet
     heroTouches = 0;
@@ -444,11 +444,10 @@ unsigned get_memory_mb(void) {
     zodiacEra = [Dice roll:ZODIAC_T_COUNT] - 1;
     
     
-    
     MLOG(@"Initialize notifications");
     // initialize our notifications
     [ self initializeNotifications ];
-        MLOG(@"...finished ");
+    MLOG(@"...finished ");
     
     // schedule our update method, tick
     [ self schedule:@selector(tick:)];
@@ -470,102 +469,15 @@ unsigned get_memory_mb(void) {
     
     needsRedraw = YES;
     
+    // place doors
+    //int maxDoors = 10;
+    //int numDoors = [Dice roll: maxDoors];
+    //[ GameRenderer spawnDoors: numDoors forFloor: currentFloor ];
+    
     // populate treasure
     // generate and scatter some treasure
- 
-    /*
-    MLOG(@"Generating treasure");
-    
-    for ( int i = 0; i < 1; i++ ) {
-        //NSInteger tilecount     = [((DungeonFloor *)[dungeon objectAtIndex:i]).tileDataArray count];
-        NSInteger minItemCount  = 2;
-        NSInteger maxItemCount  = 12;
-        NSInteger treasureCount = [Dice roll: maxItemCount ] + (minItemCount - 1);
-        //NSInteger treasureCount = [Dice roll: tilecount / 5 ] + 1;
-        for ( int j = 0; j < treasureCount; j++ ) {
-            
-            //Entity *itemToTest = [Armor bootsOfAntiacid];
-            // Entity *itemToTest = [Items note:[[HintGenerator sharedHintGenerator] getNextHint]];
-            //Entity *itemToTest = [Items ringOfAntihunger];
-            //Entity *itemToTest = [Armor blindfold];
-            //Entity *itemToTest = [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE stone:STONE_T_ROCK withBonus:0];
-            //Entity *itemToTest = [Armor robe:CLOTH_T_CLOTH bonus:0];
-            //Entity *itemToTest = [Items torch: 2];
-            //Entity *itemToTest = Tree;
-            //[GameRenderer spawnEntityAtRandomLocation:itemToTest onFloor:[dungeon objectAtIndex:i]];
-            
-             NSInteger roll = [Dice roll:5];
-             // weapons
-             if ( roll == 1 ) {
-                NSInteger _roll = [Dice roll: 12];
-                Entity *itemToSpawn =
-                 _roll <= 3 ?
-                    [Weapons shortSword:WOOD_T_FIR  metal:METAL_T_NONE  stone:STONE_T_NONE withBonus:0] :
-                 _roll <= 7 ?
-                    [Weapons shortSword:WOOD_T_NONE metal:METAL_T_IRON  stone:STONE_T_NONE withBonus:0] :
-                 _roll <= 9 ?
-                    [Weapons shortSword:WOOD_T_NONE metal:METAL_T_STEEL stone:STONE_T_NONE withBonus:0] :
-                 _roll <= 12 ?
-                    [Weapons shortSword:WOOD_T_NONE metal:METAL_T_NONE  stone:STONE_T_ROCK withBonus:0] :
-                [Weapons Asura];
-                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:currentFloor];
-            }
-            
-            // armor
-            else if ( roll == 2 ) {
-                NSInteger _roll = [Dice roll: 5];
-                Entity *itemToSpawn =   _roll == 1 ? [Armor smallShield:i]  :
-                                        _roll == 2 ? [Armor leatherArmor:i] :
-                                        _roll == 3 ? [Armor bootsOfAntiacid] :
-                                        _roll == 4 ? [Armor robe:CLOTH_T_CLOTH bonus:i] :
-                [Armor blindfold];
-                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:currentFloor];
-            }
-            
-            // random items
-            else if ( roll == 3 ) {
-                [ GameRenderer spawnRandomItemAtRandomLocationOnFloor:currentFloor];
-                
-            }
-            
-            else if ( roll == 4 ) {
-                //NSInteger torchLevel = [Dice roll: 3];
-                NSInteger torchLevel = 1;
-                Entity *itemToSpawn = [Items torch: torchLevel];
-                itemToSpawn.durability = 128;
-                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:currentFloor];
-            }
-            
-            else if ( roll == 5 ) {
-                Entity *itemToSpawn = Tree;
-                [GameRenderer spawnEntityAtRandomLocation:itemToSpawn onFloor:currentFloor];
-            }
-            
-            
-        }
-    }
-        MLOG(@"...finished ");
-             */
-    
+    [ GameRenderer spawnTreasureForFloor: currentFloor];
     //[ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:0 ] ];
-    
-     [ GameRenderer spawnTreasureForFloor: currentFloor];
-    
-    // place doors
-    /*
-    for (int i=0; i<[dungeon count]; i++) {
-        [ GameRenderer spawnDoors: 1 forFloor: [dungeon objectAtIndex:i] ];
-    }
-    */
-    
-    int maxDoors = 10;
-    int numDoors = [Dice roll: maxDoors];
-    [ GameRenderer spawnDoors: numDoors forFloor: currentFloor ];
-    
-    
-   // [ GameRenderer spawnBookOfAllKnowingAtRandomLocationOnFloor: [dungeon objectAtIndex:[dungeon count]-1 ] ];
-    MLOG(@"");
-    
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayerMenuCloseNotification" object:nil];
     
@@ -3108,16 +3020,22 @@ NSUInteger getMagicY( NSUInteger y ) {
                     
                 if ( entity == pcEntity ) {
                     if ( tile.tileType == TILE_FLOOR_DOWNSTAIRS ) {
+                        needsRedraw = YES;
                         [ self addMessageWindowString: @"Going downstairs..." ];
+                        [ self displayMessageWindow];
                         [ self goingDownstairs ];
-                    } else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
+                    } 
+                    /*
+                     * No more backtracking...10/21/2013
+                    else if ( tile.tileType == TILE_FLOOR_UPSTAIRS ) {
                         if ( floorNumber != 0 ) {
                             [ self addMessageWindowString: @"Going upstairs..." ];
                             //MLOG(@"Going upstairs...");
                         }
                         [ self goingUpstairs ];
                     }
-                    
+                    */
+
                     /*
                     else if ( tile.tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 ||
                               tile.tileType == TILE_FLOOR_STONE_TRAP_POISON_D6
@@ -3264,13 +3182,13 @@ NSUInteger getMagicY( NSUInteger y ) {
             // to fix crashing when moving boulders into doors
             if ( entity.itemType != E_ITEM_T_BASICBOULDER ) {
                 Entity *door = [self getEntityForPosition:position];
-                if ( door!=nil && door.itemType == E_ITEM_T_DOOR_SIMPLE) {
-                    if ( door.doorLocked )
+                if ( door!=nil && door.itemType == E_ITEM_T_DOOR_SIMPLE ) {
+                    if ( door.doorLocked && entity.isPC )
                         [self addMessageWindowString: @"The door is locked" ];
                     else {
                         if ( ! door.doorOpen ) {
                             door.doorOpen = YES;
-                            [self addMessageWindowString:@"The door is now open"];
+                            entity.isPC ? [self addMessageWindowString:@"The door is now open"] : 0;
                         }
                     }
                 }
@@ -3655,9 +3573,9 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ GameRenderer spawnTreasureForFloor: nextFloor ];
 
     // spawn doors
-    int maxDoors = 10;
-    int numDoors = [Dice roll: maxDoors];
-    [ GameRenderer spawnDoors: numDoors forFloor: nextFloor ];
+    //int maxDoors = 10;
+    //int numDoors = [Dice roll: maxDoors];
+    //[ GameRenderer spawnDoors: numDoors forFloor: nextFloor ];
     
 }
 
@@ -4103,14 +4021,12 @@ NSUInteger getMagicY( NSUInteger y ) {
  
         @try {
             // spawn a new monster on the current floor
-            //[ GameRenderer spawnRandomMonsterAtRandomLocationOnFloor:[ dungeon objectAtIndex:floorNumber] withPC:pcEntity withChanceDie: 10 ];
-            //[GameRenderer spawnMonsterAtRandomLocationOnFloor: [dungeon objectAtIndex:floorNumber]];
             [GameRenderer spawnMonsterAtRandomLocationOnFloor: currentFloor];
             
-            
-            Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
+            //Tile *tile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
             
             // check if we've won
+            /*
             if ( floorNumber == 0 &&    tile.tileType == TILE_FLOOR_UPSTAIRS &&     hasTheBook ) {
                 [ self addMessage:[NSString stringWithFormat: @"You win!\nYou killed %d monsters\n", pcEntity.totalKills ] ];
                 [ self addMessageWindowString:[NSString stringWithFormat: @"You win!\nYou killed %d monsters\n", pcEntity.totalKills ] ];
@@ -4121,6 +4037,7 @@ NSUInteger getMagicY( NSUInteger y ) {
                     MLOG(@"%d. %@", i, [dLog objectAtIndex:i]);
                 }
             }
+             */
         }
         @catch (NSException *exception) {
             MLOG(@"Exception caught: %@", exception);
@@ -4858,8 +4775,6 @@ NSUInteger getMagicY( NSUInteger y ) {
         
     }
     
-    
-    
     // reset the karma for turn
     gotKarmaThisTurn = NO;
     totalKarmaThisTurn = 0;
@@ -4913,11 +4828,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     Entity *itemDrop = [self itemDropForEntity: entity];
     [GameRenderer spawnEntity:itemDrop onFloor:currentFloor atLocation:entity.positionOnMap];
 }
-
-
-
-
-
 
 
 -(void) setEntityStatus: (Entity *) entity status: (Status *) status {

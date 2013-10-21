@@ -243,6 +243,45 @@
 
 -(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withStrength: (NSInteger) _str withDexterity: (NSInteger) _dex withConstitution: (NSInteger) _con withIntelligence: (NSInteger) _int withWisdom: (NSInteger) _wis withCharisma: (NSInteger) _cha withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
 
+
+-(Entity *) initWithName: (NSString *) _name
+            withPrefixes: (NSArray *) _prefixes
+          withEntityType: (EntityTypes_t) _entityType
+              withThreat: (Threat_t) _threat
+         withMonsterType: (Monster_t) _monsterType
+            withItemType: (EntityItemTypes_t) _itemType
+               withLevel: (NSInteger) _level
+              withHitDie: (NSInteger) _hd
+            withStrength: (NSInteger) _str
+           withDexterity: (NSInteger) _dex
+        withConstitution: (NSInteger) _con
+        withIntelligence: (NSInteger) _int
+              withWisdom: (NSInteger) _wis
+            withCharisma: (NSInteger) _cha
+                 withPFA: (EntityPathFindingAlgorithm_t) _pfa
+                 withIPA: (EntityItemPickupAlgorithm_t) _ipa
+      withDamageRollBase: (NSInteger) _damageRollBase
+             withAttacks: (NSArray *) _attacks 
+            //withItemType: (EntityItemTypes_t) _itemType
+          withPotionType: (PotionTypes_t) _potionType
+     withHealingRollBase: (NSInteger) _hrb
+        withHealingBonus: (NSInteger) _hb
+              withWeight: (NSInteger) _weight
+          withDurability: (NSInteger) _durability 
+     withTotalDurability: (NSInteger) _totalDurability 
+            withFoodBase: (NSInteger) _foodBase
+          withLightLevel: (NSInteger) _lightLevel
+            withDoorOpen: (BOOL) _doorOpen
+        withDoorIsLocked: (BOOL) _doorIsLocked
+               withSpell: (Spell_t) _spell 
+             withCharges: (NSInteger) _charges
+          withMaxCharges: (NSInteger) _maxcharges
+            withRingType: (Ring_t) _ringType
+               withMoney: (NSInteger) _money 
+            withNotetext: (NSString *) _notetext;
+
+
+
 -( NSInteger ) attackBonus;
 -( NSInteger ) attackRoll;
 -( NSInteger ) totalac;

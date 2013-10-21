@@ -109,4 +109,8 @@
     return nil;
 }
 
+-( BOOL ) isEmpty {
+    return [[self contents] count] == 0;
+}
+
 @end

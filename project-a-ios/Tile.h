@@ -381,4 +381,6 @@ typedef enum {
 
 +( NSString * ) stringForTileType: (Tile_t) _tileType;
 
+-( BOOL ) isEmpty;
+
 @end

@@ -10,7 +10,7 @@
 
 @interface Drawer : NSObject {}
 
-+(CCMutableTexture2D *) chicken;
+//+(CCMutableTexture2D *) chicken;
 +(CCMutableTexture2D *) tree;
 +(CCMutableTexture2D *) smallBlob: (Color_t) blobColor ;
 +(CCMutableTexture2D *) guy: (Color_t) head body: (Color_t) body pants: (Color_t) pants blindfolded: (BOOL) isBlindfolded;

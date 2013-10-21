@@ -189,7 +189,7 @@ typedef enum {
 -( void ) removeMonitor: ( EditorHUD * ) _monitor;
 -( void ) updateMonitorLabel;
 
--( void ) drawDungeonFloor;
+//-( void ) drawDungeonFloor;
 
 -( void ) initEntityInfoHUD;
 -( void ) addEntityInfoHUD: (EntityInfoHUD *) _entityInfoHUD ;
@@ -232,9 +232,9 @@ typedef enum {
 -( void ) appendNewTile;
 -( void ) appendNewColorTestTile;
 
--( void ) colorTest;
--( void ) colorScrambleTile;
--( void ) colorScrambleAllTiles;
+//-( void ) colorTest;
+//-( void ) colorScrambleTile;
+//-( void ) colorScrambleAllTiles;
 
 -( void ) addBlankTiles;
 -( void ) addColorTiles;
@@ -265,10 +265,10 @@ typedef enum {
 -( void ) selectTileAtPosition: ( CGPoint ) position;
 -( void ) resetCameraPosition;
 
--( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b;
+//-( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b;
 
 -( void ) initializeDungeon;
--( void ) loadDungeonFloor: ( NSUInteger ) floorNumber;
+//-( void ) loadDungeonFloor: ( NSUInteger ) floorNumber;
 
 -( void ) goingUpstairs;
 -( void ) goingDownstairs;
