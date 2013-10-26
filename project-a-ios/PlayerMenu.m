@@ -22,45 +22,47 @@
     if ( ( self = [ super initWithColor: color width: w height: h ] ) ) {
         
         Color3_t fontColor = white3;
-        
-        CCLabelTTF *menuItemLabelStatus         = [[CCLabelTTF alloc] initWithString:   @"Status"       fontName:@"Courier New" fontSize:16 ];
+ 
+        int fontsize = 14;
+
+        CCLabelTTF *menuItemLabelStatus         = [[CCLabelTTF alloc] initWithString:   @"Status"       fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelStatus.color               = fontColor;
         
-        CCLabelTTF *menuItemLabelEquip          = [[CCLabelTTF alloc] initWithString:   @"Equip"       fontName:@"Courier New" fontSize:16 ];
+        CCLabelTTF *menuItemLabelEquip          = [[CCLabelTTF alloc] initWithString:   @"Equip"       fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelEquip.color                = fontColor;
         
-        CCLabelTTF *menuItemLabelCast           = [[CCLabelTTF alloc] initWithString:   @"Cast"       fontName:@"Courier New" fontSize:16 ];
+        CCLabelTTF *menuItemLabelCast           = [[CCLabelTTF alloc] initWithString:   @"Cast"       fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelCast.color                 = fontColor;
         
         
         
-        CCLabelTTF *menuItemLabelInventory      = [[CCLabelTTF alloc] initWithString:   @"Inventory"    fontName:@"Courier New" fontSize:16 ];
+        CCLabelTTF *menuItemLabelInventory      = [[CCLabelTTF alloc] initWithString:   @"Inventory"    fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelInventory.color            = fontColor;
         
-        CCLabelTTF *menuItemLabelPickup         = [[CCLabelTTF alloc] initWithString:   @"Pickup"       fontName:@"Courier New" fontSize:16 ];
+        CCLabelTTF *menuItemLabelPickup         = [[CCLabelTTF alloc] initWithString:   @"Pickup"       fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelPickup.color               = fontColor;
         
         
-        CCLabelTTF *menuItemLabelDrop           = [[CCLabelTTF alloc] initWithString:   @"Drop"         fontName:@"Courier New" fontSize:16 ];
+        CCLabelTTF *menuItemLabelDrop           = [[CCLabelTTF alloc] initWithString:   @"Drop"         fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelDrop.color                 = fontColor;
         
-        CCLabelTTF *menuItemLabelAutostep       = [[CCLabelTTF alloc] initWithString:   @"Autostep"     fontName:@"Courier New" fontSize:16 ];
+        CCLabelTTF *menuItemLabelAutostep       = [[CCLabelTTF alloc] initWithString:   @"Autostep"     fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelAutostep.color             = fontColor;
         
-        CCLabelTTF *menuItemLabelMonitor        = [[CCLabelTTF alloc] initWithString:   @"Monitor"      fontName:@"Courier New" fontSize:16 ];
+        CCLabelTTF *menuItemLabelMonitor        = [[CCLabelTTF alloc] initWithString:   @"Monitor"      fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelMonitor.color              = fontColor;
         
-        CCLabelTTF *menuItemLabelHelp           = [[CCLabelTTF alloc] initWithString:   @"Help"         fontName:@"Courier New" fontSize:16 ];
+        CCLabelTTF *menuItemLabelHelp           = [[CCLabelTTF alloc] initWithString:   @"Help"         fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelHelp.color                 = fontColor;
         
-        CCLabelTTF *menuItemLabelEntityInfo     = [[CCLabelTTF alloc] initWithString:   @"EntityInfo"   fontName:@"Courier New" fontSize:16 ];
+        CCLabelTTF *menuItemLabelEntityInfo     = [[CCLabelTTF alloc] initWithString:   @"EntityInfo"   fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelEntityInfo.color           = fontColor;
         
-        CCLabelTTF *menuItemLabelReset          = [[CCLabelTTF alloc] initWithString:   @"Reset"        fontName:@"Courier New" fontSize:16 ];
+        CCLabelTTF *menuItemLabelReset          = [[CCLabelTTF alloc] initWithString:   @"Reset"        fontName:@"Courier New" fontSize:fontsize ];
         menuItemLabelReset.color                = fontColor;
         
         NSInteger baseHeight = h;
-        NSInteger hPad = 2;
+        NSInteger hPad = 4;
         
         NSInteger pad = 10;
         

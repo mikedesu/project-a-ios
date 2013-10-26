@@ -319,4 +319,8 @@ typedef enum {
 
 -(void) setEntityStatus: (Entity *) entity status: (Status *) status;
 
+
+-(void) preloadSoundEffects;
+-(void) playSound: (NSString *) soundfilepath;
+
 @end

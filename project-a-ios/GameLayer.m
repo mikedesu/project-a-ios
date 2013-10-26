@@ -8,6 +8,9 @@
 #import "Version.h"
 #import <mach/mach.h> // for reporting memory info
 
+#import "SimpleAudioEngine.h"
+
+unsigned max_memory_kb = 0;
 
 // used for reporting memory used in-game
 unsigned get_memory_bytes(void) {
@@ -18,7 +21,9 @@ unsigned get_memory_bytes(void) {
 }
 
 unsigned get_memory_kb(void) {
-    return get_memory_bytes() >> 10;
+    unsigned retVal = get_memory_bytes() >> 10;
+    max_memory_kb = retVal > max_memory_kb ? retVal : max_memory_kb;
+    return retVal;
 }
 
 unsigned get_memory_mb(void) {
@@ -380,8 +385,12 @@ unsigned get_memory_mb(void) {
     
     MLOG(@"Loading sprites");
     [self loadSprites];
-        MLOG(@"...finished ");
+    MLOG(@"...finished ");
     
+    MLOG(@"Loading sound effects");
+    [self preloadSoundEffects];
+    MLOG(@"...finished ");
+
     MLOG(@"Setting camera anchor point");
     // set the camera anchor point
     cameraAnchorPoint = ccp( 7, 5 );
@@ -1415,13 +1424,11 @@ static NSString  * const notifications[] = {
  ====================
  */
 -( void ) initPlayerMenu {
-    NSInteger width  = screenwidth/4;
+    NSInteger width  = screenwidth/2;
     NSInteger height = screenheight/2;
-    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(128) width:width height:height ];
+    playerMenu = [[ PlayerMenu alloc ] initWithColor: black_alpha(255) width:width height:height ];
     
-    //int offset = screenheight;
-    //playerMenu.position = ccp( 0 , playerHUD.contentSize.height + offset);
-    playerMenu.position = ccp( screenwidth - playerMenu.contentSize.width , screenheight - playerMenu.contentSize.height);
+    playerMenu.position = ccp( screenwidth/3 , screenheight/4  );
 }
 
 
@@ -1681,36 +1688,25 @@ static NSString  * const notifications[] = {
 -(void) updateMonitorLabel {
     @try {
     [monitor.label setString:
-     [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nEntities: %d\nInventory: %d\nMemory used: %u kb\n",
+  [NSString stringWithFormat: @"GameState: %@\nEntities: %d\nInventory: %d\nMemory used: %u kb\nMax Memory used: %u kb\n",
       
       [self getGameStateString: gameState],
-      selectedTilePoint.x,
-      selectedTilePoint.y,
-      pcEntity.positionOnMap.x,
-      pcEntity.positionOnMap.y,
-      cameraAnchorPoint.x,
-      cameraAnchorPoint.y,
       [[currentFloor entityArray] count],
-      //[[[dungeon objectAtIndex:floorNumber] entityArray] count],
       [[pcEntity inventoryArray] count],
-      get_memory_kb()
+      get_memory_kb(),
+      max_memory_kb
       ]
      ];
         
     } @catch ( NSException *e ) {
         [monitor.label setString:
-         [NSString stringWithFormat: @"GameState: %@\nSelected tile: (%.0f,%.0f)\nPC.pos: (%.0f,%.0f)\nCamera.pos: (%.0f,%.0f)\nEntities: %d\nInventory: %d\nMemory used: %u kb\n",
+      [NSString stringWithFormat: @"GameState: %@\nEntities: %d\nInventory: %d\nMemory used: %u kb\nMax Memory used: %u kb\n",
           
           [self getGameStateString:gameState],
-          selectedTilePoint.x,
-          selectedTilePoint.y,
-          pcEntity.positionOnMap.x,
-          pcEntity.positionOnMap.y,
-          cameraAnchorPoint.x,
-          cameraAnchorPoint.y,
           entityArray.count,
           [[ pcEntity inventoryArray ] count],
-          get_memory_kb()
+          get_memory_kb(),
+          max_memory_kb
           ]
          ];
     }
@@ -2151,6 +2147,9 @@ static NSString  * const notifications[] = {
  */
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
+    //[self playSound: @"sound/sword-1.mp3"];
+    //[[SimpleAudioEngine sharedEngine] playEffect:@"Resources/sound/sword-1.mp3"];
+
     UITouch *touch=[touches anyObject];
     touchEndedTime = [NSDate timeIntervalSinceReferenceDate];
     isTouched = NO;
@@ -4832,6 +4831,14 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 -(void) setEntityStatus: (Entity *) entity status: (Status *) status {
     entity.status = status;
+}
+
+-(void) preloadSoundEffects {
+    [[SimpleAudioEngine sharedEngine] preloadEffect: @"sound/sword-1.mp3" ];
+}
+
+-(void) playSound: (NSString *) soundfilepath {
+    [[SimpleAudioEngine sharedEngine] playEffect: soundfilepath];
 }
 
 @end

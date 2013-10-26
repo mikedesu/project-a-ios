@@ -136,6 +136,9 @@
 		272EF64B16C5695F005DF231 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF64A16C5695F005DF231 /* main.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		272EF64E16C5695F005DF231 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF64D16C5695F005DF231 /* AppDelegate.m */; };
 		272EF65116C5695F005DF231 /* GameLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 272EF65016C5695F005DF231 /* GameLayer.m */; };
+		2746D0FB181BBEC700E9C912 /* attack-1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2746D0F8181BBEC700E9C912 /* attack-1.mp3 */; };
+		2746D0FC181BBEC700E9C912 /* attacks.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2746D0F9181BBEC700E9C912 /* attacks.mp3 */; };
+		2746D0FD181BBEC700E9C912 /* sword-1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2746D0FA181BBEC700E9C912 /* sword-1.mp3 */; };
 		274701601770CA5B00988419 /* DropMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2747015F1770CA5B00988419 /* DropMenu.m */; };
 		27506B7216D7599700245F72 /* DungeonTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7116D7599700245F72 /* DungeonTree.m */; };
 		27506B7516D759E900245F72 /* DungeonTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 27506B7416D759E900245F72 /* DungeonTreeNode.m */; };
@@ -449,6 +452,9 @@
 		272EF64D16C5695F005DF231 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		272EF64F16C5695F005DF231 /* GameLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameLayer.h; sourceTree = "<group>"; };
 		272EF65016C5695F005DF231 /* GameLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameLayer.m; sourceTree = "<group>"; };
+		2746D0F8181BBEC700E9C912 /* attack-1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "attack-1.mp3"; sourceTree = "<group>"; };
+		2746D0F9181BBEC700E9C912 /* attacks.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = attacks.mp3; sourceTree = "<group>"; };
+		2746D0FA181BBEC700E9C912 /* sword-1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "sword-1.mp3"; sourceTree = "<group>"; };
 		2747015E1770CA5B00988419 /* DropMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropMenu.h; sourceTree = "<group>"; };
 		2747015F1770CA5B00988419 /* DropMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropMenu.m; sourceTree = "<group>"; };
 		27506B7016D7599700245F72 /* DungeonTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DungeonTree.h; sourceTree = "<group>"; };
@@ -713,6 +719,7 @@
 		272EF4DC16C5695D005DF231 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2746D0F7181BBEC700E9C912 /* sound */,
 				27DFEA1417039B2000933C8A /* tile.png */,
 				27C88FDF16C57607004AB4D8 /* ground_vertical.png */,
 				272EF4DD16C5695D005DF231 /* Default.png */,
@@ -1071,6 +1078,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		2746D0F7181BBEC700E9C912 /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				2746D0F8181BBEC700E9C912 /* attack-1.mp3 */,
+				2746D0F9181BBEC700E9C912 /* attacks.mp3 */,
+				2746D0FA181BBEC700E9C912 /* sword-1.mp3 */,
+			);
+			name = sound;
+			path = Resources/sound;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1121,6 +1139,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2746D0FB181BBEC700E9C912 /* attack-1.mp3 in Resources */,
 				272EF4DE16C5695D005DF231 /* Default.png in Resources */,
 				272EF4E016C5695D005DF231 /* fps_images.png in Resources */,
 				272EF4E216C5695D005DF231 /* fps_images-hd.png in Resources */,
@@ -1128,8 +1147,10 @@
 				272EF4E616C5695D005DF231 /* Icon-72.png in Resources */,
 				272EF4E816C5695D005DF231 /* Icon-Small-50.png in Resources */,
 				272EF4EA16C5695D005DF231 /* Icon-Small.png in Resources */,
+				2746D0FD181BBEC700E9C912 /* sword-1.mp3 in Resources */,
 				272EF4EC16C5695D005DF231 /* Icon-Small@2x.png in Resources */,
 				272EF4EE16C5695D005DF231 /* Icon.png in Resources */,
+				2746D0FC181BBEC700E9C912 /* attacks.mp3 in Resources */,
 				272EF4F016C5695D005DF231 /* Icon@2x.png in Resources */,
 				272EF4F316C5695D005DF231 /* iTunesArtwork in Resources */,
 				272EF62C16C5695F005DF231 /* ChangeLog in Resources */,

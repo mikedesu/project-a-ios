@@ -154,7 +154,7 @@
         
         NSMutableArray *menuItems = [NSMutableArray array];
         
-        CGFloat pad = 10;
+        CGFloat pad = 20;
         CGFloat x = 0;
         CGFloat y = s.height - pad;
         
