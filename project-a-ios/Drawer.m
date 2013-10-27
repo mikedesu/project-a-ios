@@ -8,6 +8,16 @@
 
 @implementation Drawer
 
++(CCMutableTexture2D *) colorFuzz {
+    CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
+    [t fill:clear];
+    for (int i=0; i<t.contentSizeInPixels.width; i++)
+        for (int j=0; j<t.contentSizeInPixels.height; j++)
+            [t setPixelAt:ccp(i,j) rgba:random_color];
+    [t apply];
+    return t;
+}
+
 
 +(CCMutableTexture2D *) greenBlob {
     CCMutableTexture2D *t = [self smallBlob: green];

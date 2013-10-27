@@ -298,9 +298,14 @@ unsigned get_memory_mb(void) {
     //[s setObject:[Drawer gelatinousCube:orange]                               forKey: @"Cat"];
     //[s setObject:[Drawer triangle:orange]                               forKey: @"Cat"];
     
-    [s setObject:[Drawer cat:black eyes:yellow]                               forKey: @"Cat"];
+    [s setObject:[Drawer cat:black  eyes:yellow]                              forKey: @"Cat"];
+    [s setObject:[Drawer cat:red    eyes:black]                               forKey: @"FireCat"];
+    [s setObject:[Drawer cat:lightblue eyes:black]                            forKey: @"IceCat"];
+    [s setObject:[Drawer cat:blue   eyes:white]                               forKey: @"WaterCat"];
+    [s setObject:[Drawer cat:brown  eyes:black]                               forKey: @"EarthCat"];
+    [s setObject:[Drawer cat:yellow eyes:black]                               forKey: @"LightningCat"];
     
-    [s setObject:[Drawer ghoulWithBody: darkgreen]                              forKey: @"Ghoul"];
+    [s setObject:[Drawer ghoulWithBody: darkgreen]                          forKey: @"Ghoul"];
     [s setObject:[Drawer ghoulWithBody: red]                                forKey: @"FireGhoul"];
     [s setObject:[Drawer ghoulWithBody: blue]                               forKey: @"IceGhoul"];
     [s setObject:[Drawer ghoulWithBody: yellow]                             forKey: @"LightningGhoul"];
@@ -479,9 +484,9 @@ unsigned get_memory_mb(void) {
     needsRedraw = YES;
     
     // place doors
-    //int maxDoors = 10;
-    //int numDoors = [Dice roll: maxDoors];
-    //[ GameRenderer spawnDoors: numDoors forFloor: currentFloor ];
+    int maxDoors = 5;
+    int numDoors = [Dice roll: maxDoors];
+    [ GameRenderer spawnDoors: numDoors forFloor: currentFloor ];
     
     // populate treasure
     // generate and scatter some treasure
@@ -3572,9 +3577,9 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ GameRenderer spawnTreasureForFloor: nextFloor ];
 
     // spawn doors
-    //int maxDoors = 10;
-    //int numDoors = [Dice roll: maxDoors];
-    //[ GameRenderer spawnDoors: numDoors forFloor: nextFloor ];
+    int maxDoors = 5;
+    int numDoors = [Dice roll: maxDoors];
+    [ GameRenderer spawnDoors: numDoors forFloor: nextFloor ];
     
 }
 
@@ -4221,6 +4226,66 @@ NSUInteger getMagicY( NSUInteger y ) {
                 [ self moveEntity:e toPosition: newPosition ];
                 e.wasBumped = NO;
             }
+        }
+    }
+
+    else if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_FOLLOW_PC_STRICT ) {
+        // calculate move for turn
+        // check if next to the PC
+        CGPoint basePos = e.positionOnMap;
+        CGPoint pcPos = pcEntity.positionOnMap;
+        CGPoint newPosition;
+                
+        CGPoint p1, p2, p3, p4, p5, p6, p7, p8;
+        p1 = ccp( basePos.x - 1, basePos.y - 1);
+        p2 = ccp( basePos.x, basePos.y - 1);
+        p3 = ccp( basePos.x + 1, basePos.y - 1);
+        p4 = ccp( basePos.x - 1, basePos.y );
+        p5 = ccp( basePos.x + 1, basePos.y );
+        p6 = ccp( basePos.x - 1, basePos.y + 1 );
+        p7 = ccp( basePos.x, basePos.y + 1 );
+        p8 = ccp( basePos.x + 1, basePos.y + 1 );
+                
+        BOOL isNextToPC = NO;
+        
+        isNextToPC =    ccpFuzzyEqual(pcPos, p1, 0) ||
+        ccpFuzzyEqual(pcPos, p2, 0) ||
+        ccpFuzzyEqual(pcPos, p3, 0) ||
+        ccpFuzzyEqual(pcPos, p4, 0) ||
+        ccpFuzzyEqual(pcPos, p5, 0) ||
+        ccpFuzzyEqual(pcPos, p6, 0) ||
+        ccpFuzzyEqual(pcPos, p7, 0) ||
+        ccpFuzzyEqual(pcPos, p8, 0);
+        
+        if ( isNextToPC ) {
+            // move into pc
+            [ self moveEntity:e toPosition:pcPos ];
+
+        } else {
+            CGPoint nearest;
+            nearest = [ self nearestNonVoidCGPointFromCGPoint:basePos toCGPoint:pcPos ];
+            newPosition = nearest;
+            
+            //Tile *oldTile = [ self getTileForCGPoint:basePos        forFloor:[dungeon objectAtIndex:floorNumber ] ];
+            Tile *oldTile = [ self getTileForCGPoint:basePos        forFloor:currentFloor];
+            Tile *newTile = [ self getTileForCGPoint:newPosition    forFloor:currentFloor];
+            //Tile *newTile = [ self getTileForCGPoint:newPosition    forFloor:[dungeon objectAtIndex:floorNumber ] ];
+            
+            if ( newTile.tileType != TILE_FLOOR_WATER_0 ) {
+                // if currently on a water tile
+                // panic and do nothing until bumped
+                if ( oldTile.tileType != TILE_FLOOR_WATER_0 ) {
+                    [ self moveEntity:e toPosition:newPosition ];
+                } else {
+                    // is water tile
+                    // cats hate water!
+                }
+            } else {
+                // is water tile
+                // cats hate water!
+            }
+        
+             
         }
     }
 }

@@ -156,61 +156,8 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
 //+( void ) setTile: ( CCSprite * ) tileSprite withData: ( Tile * ) data {
     Tile_t tileType = data.tileType;
  
-    CCMutableTexture2D *tileTexture =
-    
-    [sprites objectForKey:KEY_FOR_TILETYPE(tileType)]; // NEW :X MIGHT WORK!
-    
-    /*
-    tileType == TILE_FLOOR_STONE_0               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_0)]      :
-    tileType == TILE_FLOOR_STONE_1               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_1)]      :
-    tileType == TILE_FLOOR_STONE_2               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_2)]      :
-    tileType == TILE_FLOOR_STONE_3               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_3)]      :
-    tileType == TILE_FLOOR_STONE_4               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_4)]      :
-    tileType == TILE_FLOOR_STONE_5               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_5)]      :
-    tileType == TILE_FLOOR_STONE_6               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_6)]      :
-    tileType == TILE_FLOOR_STONE_7               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_7)]      :
-    tileType == TILE_FLOOR_STONE_8               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_8)]      :
-    tileType == TILE_FLOOR_STONE_9               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_9)]      :
-    tileType == TILE_FLOOR_STONE_10               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_10)]      :
-    tileType == TILE_FLOOR_STONE_11               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_11)]      :
-    tileType == TILE_FLOOR_STONE_12               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_12)]      :
-    tileType == TILE_FLOOR_STONE_13               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_13)]      :
-    tileType == TILE_FLOOR_STONE_14               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_14)]      :
-    tileType == TILE_FLOOR_STONE_15               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_15)]      :
-    tileType == TILE_FLOOR_STONE_16               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_16)]      :
-    tileType == TILE_FLOOR_STONE_17               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_17)]      :
-    tileType == TILE_FLOOR_STONE_18               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_18)]      :
-    tileType == TILE_FLOOR_STONE_19               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_19)]      :
-    tileType == TILE_FLOOR_STONE_20               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_20)]      :
-    tileType == TILE_FLOOR_STONE_21               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_21)]      :
-    tileType == TILE_FLOOR_STONE_22               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_22)]      :
-    tileType == TILE_FLOOR_STONE_23               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_23)]      :
-    tileType == TILE_FLOOR_STONE_24               ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_STONE_24)]      :
-    
-    
-    tileType == TILE_FLOOR_GRASS_0          ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_0)]      :
-    tileType == TILE_FLOOR_GRASS_1          ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_GRASS_1)]      :
-    
-    tileType == TILE_FLOOR_SAND_0 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_0)] : 
-    tileType == TILE_FLOOR_SAND_1 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_1)] :
-    tileType == TILE_FLOOR_SAND_2 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_2)] :
-    tileType == TILE_FLOOR_SAND_3 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_3)] :
-    tileType == TILE_FLOOR_SAND_4 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_4)] :
-    tileType == TILE_FLOOR_SAND_5 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_5)] :
-    tileType == TILE_FLOOR_SAND_6 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_6)] :
-    tileType == TILE_FLOOR_SAND_7 ? [sprites objectForKey:KEY_FOR_TILETYPE(TILE_FLOOR_SAND_7)] :
-    
-    
-    tileType == TILE_FLOOR_ACID           ? [sprites objectForKey:@"AcidTile"]      :
-    tileType == TILE_FLOOR_LAVA           ? [sprites objectForKey:@"LavaTile"]      :
- 
-    tileType == TILE_FLOOR_VOID           ? [sprites objectForKey:@"VoidTile"]       :
-    tileType == TILE_FLOOR_UPSTAIRS       ? [sprites objectForKey:@"UpstairsTile"]   :
-    tileType == TILE_FLOOR_DOWNSTAIRS     ? [sprites objectForKey:@"DownstairsTile"] :
-    
-    tileType == TILE_FLOOR_WATER_0          ? [sprites objectForKey:@"WaterTile0"]      :
-                                             nil;
- */
+    CCMutableTexture2D *tileTexture = 
+        [sprites objectForKey:KEY_FOR_TILETYPE(tileType)];
     
     // hidden traps
     //if ( tileType == TILE_FLOOR_STONE_TRAP_SPIKES_D6 && data.trapIsSet ) {
@@ -224,7 +171,6 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     //} else if ( tileType == TILE_FLOOR_STONE_TRAP_POISON_D6 && ! data.trapIsSet ) {
     //    tileTexture = [sprites objectForKey:@"StoneTileTrap"];
     //}
-    
     
     // in most cases, we will fill our texture
     CCMutableTexture2D *texture = ( CCMutableTexture2D * ) tileSprite.texture;
@@ -276,13 +222,33 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                 else if ( entity.prefixes == PREFIX_T_LIGHTNING ) {
                     t = [sprites objectForKey: @"LightningGhoul"];
                 }
+                else {
+                    [GameRenderer renderTileColorFuzz: t];
+                }
 
             } else if ( entity.monsterType == MONSTER_T_CAT ) {
                 t = [sprites objectForKey:@"Cat"];
+
+                t = entity.prefixes == PREFIX_T_NONE || 
+                    entity.prefixes == PREFIX_T_WEAK      ? [sprites objectForKey:@"Cat"] : 
+                    entity.prefixes == PREFIX_T_FIRE      ? [sprites objectForKey:@"FireCat"] : 
+                    entity.prefixes == PREFIX_T_ICE       ? [sprites objectForKey:@"IceCat"] : 
+                    entity.prefixes == PREFIX_T_WATER     ? [sprites objectForKey:@"WaterCat"] : 
+                    entity.prefixes == PREFIX_T_EARTH     ? [sprites objectForKey:@"EarthCat"] : 
+                    entity.prefixes == PREFIX_T_LIGHTNING ? [sprites objectForKey:@"LightningCat"] : 
+                    nil;
+
+                t == nil ? [GameRenderer renderTileColorFuzz: t] : 0;
+                    
             } else if ( entity.monsterType == MONSTER_T_TOTORO ) {
                 t = [sprites objectForKey:@"Totoro"];
-            } else if ( entity.monsterType == MONSTER_T_TREE ) {
+            } else if ( entity.monsterType == MONSTER_T_TREE || 
+                        entity.monsterType == MONSTER_T_TREANT ) {
                 t = [sprites objectForKey:@"Tree"];
+            } else if ( entity.monsterType == MONSTER_T_DRAGON ) {
+                //undefined monster_t drawing - its ok should work most of the time
+                //[GameRenderer renderTileColorFuzz: t];
+                t = [Drawer colorFuzz];
             }
             
             for ( int i = 0; i < 16; i++ )
@@ -651,6 +617,9 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
         Tile *tmpTile = [GameRenderer getTileForFloor:floor forCGPoint:tmpPoint];
         
         if ( tmpTile.tileType == TILE_FLOOR_VOID ) {
+
+            
+
             retVal = YES;
             MLOG(@"====VOID TILE====");
             break;
@@ -729,9 +698,11 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
     newAlpha =  distance == 0 ? 255 :
     distance < lightValue ? 255 - factor * distance : 0;
     
+    /*
     newAlpha =
     [GameRenderer voidTileExistsBetweenEntity:pc andTile:tile onFloor:floor] ? 0 : newAlpha;
-    
+    */
+
     [ GameRenderer setTileForTexture:texture toAlpha:newAlpha ];
 }
 
@@ -2003,26 +1974,32 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                 Entity *e;
                 
                 // set number of monsterTypes
-                NSUInteger numMonsterTypes = 9;
+                NSUInteger numMonsterTypes = 17;
                 NSUInteger m0 = [Dice roll: numMonsterTypes];
                 
                 // define monsters to spawn below
                 //
 
-                e = FireGhoul;
+                //e = FireCat;
 
-                /*
                 e =
-                ( m0 == 1 ) ? Ghoul :
-                ( m0 == 2 ) ? WeakGhoul :
-                ( m0 == 3 ) ? FireGhoul :
-                ( m0 == 4 ) ? IceGhoul :
-                ( m0 == 5 ) ? WaterGhoul :
-                ( m0 == 6 ) ? EarthGhoul :
+                ( m0 == 1 ) ? Ghoul      : ( m0 == 2 ) ? WeakGhoul :
+                ( m0 == 3 ) ? FireGhoul  : ( m0 == 4 ) ? IceGhoul :
+                ( m0 == 5 ) ? WaterGhoul : ( m0 == 6 ) ? EarthGhoul :
                 ( m0 == 7 ) ? LightningGhoul :
-                ( m0 == 8 ) ? Totoro :
-                Cat;
-*/
+                
+                ( m0 == 8 )  ? Cat      : ( m0 == 9 )  ? WeakCat : 
+                ( m0 == 10 ) ? FireCat  : ( m0 == 11 ) ? IceCat : 
+                ( m0 == 12 ) ? WaterCat : ( m0 == 13 ) ? EarthCat : 
+                ( m0 == 14 ) ? LightningCat : 
+                
+                ( m0 == 15 ) ? Totoro :
+
+                ( m0 == 16 ) ? Treant :
+                
+                ( m0 == 17 ) ? Dragon :
+                Dragon;
+
 
                 // level up monster appropriately
                 NSInteger levelRoll = [Dice roll: floor.floorNumber + 1] + (0.5 * (floor.floorNumber + 1));
@@ -2050,12 +2027,17 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
         NSUInteger m0 = [Dice roll: numMonsterTypes];
         
         // define monsters to spawn below
+        //
+
+        e = Ghoul;
+
+        /*
         e =
         ( m0 == 1 ) ? Cat :
         ( m0 == 2 ) ? Ghoul :
         ( m0 == 3 ) ? Totoro :
         Cat;
-        
+        */
         
         // level up monster appropriately
         NSInteger levelRoll = [Dice roll: floor.floorNumber + 1];

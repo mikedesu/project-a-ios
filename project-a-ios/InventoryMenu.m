@@ -110,13 +110,13 @@
         
         if (handled) {
             [gameLayer stepGameLogic];
-            ( eItem.itemType != E_ITEM_T_FISHING_ROD &&
-              eItem.itemType != E_ITEM_T_KEY_SIMPLE )
+            ( eItem.itemType != E_ITEM_T_FISHING_ROD )
+             //&& eItem.itemType != E_ITEM_T_KEY_SIMPLE )
             ? [gameLayer stepGameLogic] : 0 ;
             
             // dont remove fishing rods (or other things...)
             ( eItem.itemType != E_ITEM_T_FISHING_ROD && 
-              eItem.itemType != E_ITEM_T_KEY_SIMPLE  &&
+              //eItem.itemType != E_ITEM_T_KEY_SIMPLE  &&
               eItem.itemType != E_ITEM_T_WAND )
             ? [inventory removeObjectAtIndex: sender.tag] : 0 ;
             
