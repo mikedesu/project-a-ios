@@ -7,6 +7,7 @@
 //
 
 #import "Weapons.h"
+#import "Monsters.h"
 
 
 @implementation Weapons

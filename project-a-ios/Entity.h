@@ -8,18 +8,23 @@
 #import "EquipDefines.h"
 #import "Attack_t.h"
 #import "Armor.h"
-#import "Monsters.h"
 #import "Threat_t.h"
 #import "Spell.h"
 #import "Metal_t.h"
 #import "Stone_t.h"
 #import "Wood_t.h"
+#import "Prefix_t.h" 
 
 #import "GameConfig.h"
+
+#import "Monsters.h"
+
 
 @class CCMutableTexture2D;
 @class Attack_t;
 @class Status;
+
+
 
 @interface Entity : NSObject {
     BOOL isPC;
@@ -109,8 +114,8 @@
     // for food
     NSInteger foodBase;
  
-    NSMutableArray *prefixes;
-    NSMutableArray *effects;
+    Prefix_t prefixes;
+    Effect_t effects;
     
     BOOL wasBumped;
     
@@ -219,8 +224,8 @@
 @property (nonatomic) NSMutableArray *equipment;
 @property (atomic) NSMutableArray *pathTaken;
 
-@property (atomic) NSMutableArray *prefixes;
-@property (atomic) NSMutableArray *effects;
+@property (atomic, assign) Prefix_t prefixes;
+@property (atomic, assign) Effect_t effects;
 
 @property (atomic, assign) NSInteger foodBase;
 @property (atomic, assign) NSInteger healingRollBase;
@@ -239,13 +244,13 @@
 -(Entity *) initWithLevel: (NSInteger) _level;
 -(Entity *) initWithHitDie: (NSInteger) hd ;
 -(Entity *) initWithLevel:(NSInteger)_level withHitDie: (NSInteger) hd ;
--(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
+-(Entity *) initWithName: (NSString *) _name withPrefixes: (Prefix_t) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
 
--(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withStrength: (NSInteger) _str withDexterity: (NSInteger) _dex withConstitution: (NSInteger) _con withIntelligence: (NSInteger) _int withWisdom: (NSInteger) _wis withCharisma: (NSInteger) _cha withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
+-(Entity *) initWithName: (NSString *) _name withPrefixes: (Prefix_t) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withStrength: (NSInteger) _str withDexterity: (NSInteger) _dex withConstitution: (NSInteger) _con withIntelligence: (NSInteger) _int withWisdom: (NSInteger) _wis withCharisma: (NSInteger) _cha withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks;
 
 
 -(Entity *) initWithName: (NSString *) _name
-            withPrefixes: (NSArray *) _prefixes
+            withPrefixes: (Prefix_t) _prefixes
           withEntityType: (EntityTypes_t) _entityType
               withThreat: (Threat_t) _threat
          withMonsterType: (Monster_t) _monsterType

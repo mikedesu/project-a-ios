@@ -4,6 +4,15 @@
 //  Created by Mike Bell on 4/4/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
+
+
+typedef enum {
+    EFFECT_T_NONE,
+    EFFECT_T_NUMTYPES
+} Effect_t;
+
+
+/*
 @interface Effect_t : NSObject {
     NSInteger area;
     NSInteger distance;
@@ -63,3 +72,4 @@
 
 
 @end
+*/

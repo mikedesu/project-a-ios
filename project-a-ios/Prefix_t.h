@@ -21,15 +21,25 @@
  
  The check for these values will occur...lazily? IDK yet (4/2/2013)
  
+(10/27/13) changed to a simple enum for now
+
  */
 
-/*
 typedef enum {
     PREFIX_T_NONE=0,
+    PREFIX_T_FIRE,
+    PREFIX_T_WATER,
+    PREFIX_T_EARTH,
+    PREFIX_T_ICE,
+    PREFIX_T_LIGHTNING,
+    PREFIX_T_WEAK,
+
     PREFIX_T_NUMTYPES
 } Prefix_t;
 
 
+
+/*
 #define NUM_PREFIXES 3
 
 #define PREFIX(n) (\
@@ -39,7 +49,6 @@ n==2 ? @"Ice"  : \
 @"Unknown")
 
 #define RANDOM_PREFIX ( PREFIX( arc4random_uniform( NUM_PREFIXES )))
-*/
 
 #import "GameConfig.h"
 
@@ -54,6 +63,8 @@ n==2 ? @"Ice"  : \
 
 +(Prefix_t *) effectWithName: (NSString *) _name ;
 +(Prefix_t *) randomPrefix;
+
++(void) setPrefixEffect: (Prefix_t *) prefix;
 +(Prefix_t *) noPrefix;
 
 @property (atomic) NSString *name;
@@ -61,6 +72,7 @@ n==2 ? @"Ice"  : \
 
 @end
 
+*/
 
 
 

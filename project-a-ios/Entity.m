@@ -138,9 +138,12 @@
         itemType    = E_ITEM_T_NONE;
         armorType   = ARMOR_T_NONE;
         
-        prefixes    = [[NSMutableArray alloc] init];
-        effects     = [[NSMutableArray alloc] init];
-        
+ //       prefixes    = [[NSMutableArray alloc] init];
+   //     effects     = [[NSMutableArray alloc] init];
+     
+        prefixes = PREFIX_T_NONE;
+        effects = EFFECT_T_NONE;
+
         NSInteger numEquipSlots = 19;
         equipment = [NSMutableArray array];
         
@@ -246,7 +249,7 @@
 
 
     
--(Entity *) initWithName: (NSString *) _name withPrefixes: (NSArray *) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat
+-(Entity *) initWithName: (NSString *) _name withPrefixes: (Prefix_t) _prefixes withEntityType: (EntityTypes_t) _entityType withThreat: (Threat_t) _threat
          withMonsterType: (Monster_t) _monsterType withItemType: (EntityItemTypes_t) _itemType withLevel: (NSInteger) _level withHitDie: (NSInteger) _hd withPFA: (EntityPathFindingAlgorithm_t) _pfa withIPA: (EntityItemPickupAlgorithm_t) _ipa withDamageRollBase: (NSInteger) _damageRollBase withAttacks: (NSArray *) _attacks {
 
 
@@ -260,8 +263,12 @@
     e.monsterType           = _monsterType;
     e.itemType              = _itemType;
     
-    [e.prefixes             setArray: _prefixes];
+     e.prefixes = _prefixes;
+    NSMutableString *prefixNames = [NSMutableString stringWithFormat: @"%@ %@", [NameEngine randomNameForPrefix: e.prefixes], _name];
+    [e.name setString:      prefixNames];
     
+/*
+    [e.prefixes             setArray: _prefixes];
     NSMutableString *prefixNames = [NSMutableString string];
     for (Prefix_t *prefix in e.prefixes) {
         [prefixNames appendFormat: @"%@ ", prefix.name ];
@@ -269,6 +276,8 @@
     [prefixNames appendString: _name];
     
     [e.name setString:      prefixNames];
+    */
+
     // parse a big prefix
     // this is to get around an annoying bug involving commas and the C preprocessor
     // see Monsters.h and later Items/EntitySubtypeDefines
@@ -290,7 +299,7 @@
 
 
 -(Entity *) initWithName: (NSString *) _name
-            withPrefixes: (NSArray *) _prefixes
+            withPrefixes: (Prefix_t) _prefixes
           withEntityType: (EntityTypes_t) _entityType
               withThreat: (Threat_t) _threat
          withMonsterType: (Monster_t) _monsterType
@@ -325,6 +334,12 @@
     e.monsterType           = _monsterType;
     e.itemType              = _itemType;
     
+    e.prefixes = _prefixes;
+    NSMutableString *prefixNames = [NSMutableString stringWithFormat: @"%@ %@", [NameEngine randomNameForPrefix: e.prefixes], _name];
+    [e.name setString:      prefixNames];
+
+/*
+
     [e.prefixes             setArray: _prefixes];
     
     NSMutableString *prefixNames = [NSMutableString string];
@@ -334,6 +349,8 @@
     [prefixNames appendString: _name];
     
     [e.name setString:      prefixNames];
+  */
+
     // parse a big prefix
     // this is to get around an annoying bug involving commas and the C preprocessor
     // see Monsters.h and later Items/EntitySubtypeDefines
@@ -353,10 +370,9 @@
 }
 
 
-
-
 -(Entity *) initWithName: (NSString *) _name
-            withPrefixes: (NSArray *) _prefixes
+              withPrefixes: (Prefix_t) _prefixes
+            //withPrefixes: (NSArray *) _prefixes
           withEntityType: (EntityTypes_t) _entityType
               withThreat: (Threat_t) _threat
          withMonsterType: (Monster_t) _monsterType
@@ -409,15 +425,19 @@
     e.monsterType           = _monsterType;
     e.itemType              = _itemType;
     
-    [e.prefixes             setArray: _prefixes];
+    //[e.prefixes             setArray: _prefixes];
     
-    NSMutableString *prefixNames = [NSMutableString string];
+    e.prefixes = _prefixes;
+    NSMutableString *prefixNames = [NSMutableString stringWithFormat: @"%@ %@", [NameEngine randomNameForPrefix: e.prefixes], _name];
+    [e.name setString:      prefixNames];
+    
+    /*
     for (Prefix_t *prefix in e.prefixes) {
         [prefixNames appendFormat: @"%@ ", prefix.name ];
     }
     [prefixNames appendString: _name];
+*/
     
-    [e.name setString:      prefixNames];
     // parse a big prefix
     // this is to get around an annoying bug involving commas and the C preprocessor
     // see Monsters.h and later Items/EntitySubtypeDefines
@@ -473,19 +493,6 @@
     
     return e;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 -(Entity *) initWithLevel: (NSInteger) _level {
@@ -574,28 +581,23 @@
 
 -( NSInteger ) prefixDamageSum {
     NSInteger sum = 0;
-    for (Prefix_t *prefix in self.prefixes) {
-        sum += prefix.effect.fireDamage;
-        sum += prefix.effect.waterDamage;
-        sum += prefix.effect.earthDamage;
-        sum += prefix.effect.iceDamage;
-        sum += prefix.effect.lightningDamage;
-    }
+    sum = prefixes == PREFIX_T_NONE      ?  0 : 
+          prefixes == PREFIX_T_FIRE      ?  1 : 
+          prefixes == PREFIX_T_ICE       ?  1 : 
+          prefixes == PREFIX_T_WATER     ?  1 : 
+          prefixes == PREFIX_T_EARTH     ?  1 : 
+          prefixes == PREFIX_T_LIGHTNING ?  1 : 
+          prefixes == PREFIX_T_WEAK      ? -1 : 
+          0;
     return sum;
 }
 
 -(NSInteger) effectsDamageSum {
     NSInteger sum = 0;
-    for (Effect_t *effect in self.effects) {
-        sum += effect.fireDamage;
-        sum += effect.waterDamage;
-        sum += effect.earthDamage;
-        sum += effect.iceDamage;
-        sum += effect.lightningDamage;
-    }
+    sum = effects == EFFECT_T_NONE ? 0 :
+          0;
     return sum;
 }
-
 
 
 /*

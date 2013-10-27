@@ -257,21 +257,26 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
             if (entity.monsterType == MONSTER_T_GHOUL) {
                 t = [sprites objectForKey: @"Ghoul"];
             
-                if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@""] ||
-                 [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Weak"]
-                ) {
+                if ( entity.prefixes == PREFIX_T_NONE || 
+                     entity.prefixes == PREFIX_T_WEAK ) {
                     t = [sprites objectForKey: @"Ghoul"];
-                } else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Fire"] ) {
+                } 
+                else if ( entity.prefixes == PREFIX_T_FIRE ) {
                     t = [sprites objectForKey: @"FireGhoul"];
-                } else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Ice"] ) {
+                } 
+                else if ( entity.prefixes == PREFIX_T_ICE ) {
                     t = [sprites objectForKey: @"IceGhoul"];
-                } else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Water"] ) {
+                } 
+                else if ( entity.prefixes == PREFIX_T_WATER ) {
                     t = [sprites objectForKey: @"WaterGhoul"];
-                } else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Earth"] ) {
+                } 
+                else if ( entity.prefixes == PREFIX_T_EARTH ) {
                     t = [sprites objectForKey: @"EarthGhoul"];
-                } else if ( [((Prefix_t *)[entity.prefixes objectAtIndex:0]).name isEqualToString:@"Lightning"] ) {
+                } 
+                else if ( entity.prefixes == PREFIX_T_LIGHTNING ) {
                     t = [sprites objectForKey: @"LightningGhoul"];
                 }
+
             } else if ( entity.monsterType == MONSTER_T_CAT ) {
                 t = [sprites objectForKey:@"Cat"];
             } else if ( entity.monsterType == MONSTER_T_TOTORO ) {
@@ -1998,17 +2003,30 @@ static NSString *clothTable [2] = { @"", @"Cloth" };
                 Entity *e;
                 
                 // set number of monsterTypes
-                NSUInteger numMonsterTypes = 2; //4;
+                NSUInteger numMonsterTypes = 9;
                 NSUInteger m0 = [Dice roll: numMonsterTypes];
                 
                 // define monsters to spawn below
+                //
+
+                e = FireGhoul;
+
+                /*
                 e =
                 ( m0 == 1 ) ? Ghoul :
-                ( m0 == 2 ) ? Totoro :
+                ( m0 == 2 ) ? WeakGhoul :
+                ( m0 == 3 ) ? FireGhoul :
+                ( m0 == 4 ) ? IceGhoul :
+                ( m0 == 5 ) ? WaterGhoul :
+                ( m0 == 6 ) ? EarthGhoul :
+                ( m0 == 7 ) ? LightningGhoul :
+                ( m0 == 8 ) ? Totoro :
                 Cat;
+*/
 
                 // level up monster appropriately
-                NSInteger levelRoll = [Dice roll: floor.floorNumber + 1];
+                NSInteger levelRoll = [Dice roll: floor.floorNumber + 1] + (0.5 * (floor.floorNumber + 1));
+                levelRoll = levelRoll > floor.floorNumber+1 ? floor.floorNumber+1 : levelRoll;
                 for (int i=e.level; i<levelRoll; i++) [e handleLevelUp];
                 
                 [ GameRenderer setEntity: e onTile: spawnTile ];

@@ -4,9 +4,6 @@
 //  Created by Mike Bell on 3/11/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
-#import "GameConfig.h"
-
-
 typedef enum {
     MONSTER_T_NONE,
     
@@ -84,7 +81,7 @@ withAttacks: a])
 
 // Monster(
 // name,
-// prefix array,
+// prefix array/int,
 // entity type,
 // threat,
 // monster type,
@@ -100,28 +97,52 @@ withAttacks: a])
 // item pickup algorithm,
 // damage roll base,
 // attacks)
-#define Monster(n,r,t,m,l,h,str,dex,con,int,wis,cha,p,i,d,a) MONSTER(n,r,t,m,l,h,str,dex,con,int,wis,cha,p,i,d,a)
 
+//#define N4M(m) ([NameEngine nameForMonsterType: m])
 
-#define Ghoul (Monster(@"Ghoul", [NSArray arrayWithObject: [Prefix_t randomPrefix]], THREAT_T_HOSTILE, MONSTER_T_GHOUL, \
-1, 6, \
-10, 10, 10, 10, 10, 10, \
+#define Monster(n,r,t,m,l,h,str,dex,con,int,wis,cha,p,i,d,a) \
+MONSTER(n,r,t,m,l,h,str,dex,con,int,wis,cha,p,i,d,a)
+
+//====================
+
+#define Ghoul (Monster(@"Ghoul", PREFIX_T_NONE, \
+THREAT_T_HOSTILE, MONSTER_T_GHOUL, 1, 6, 10, 10, 10, 10, 10, 10, \
+ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, ENTITYITEMPICKUPALGORITHM_T_NONE, 6, nil))
+
+#define WeakGhoul (Monster(@"Ghoul", PREFIX_T_WEAK, \
+THREAT_T_HOSTILE, MONSTER_T_GHOUL, 1, 6, 10, 10, 10, 10, 10, 10, \
+ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, ENTITYITEMPICKUPALGORITHM_T_NONE, 6, nil))
+
+#define FireGhoul (Monster(@"Ghoul", PREFIX_T_FIRE, \
+THREAT_T_HOSTILE, MONSTER_T_GHOUL, 1, 6, 10, 10, 10, 10, 10, 10, \
+ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, ENTITYITEMPICKUPALGORITHM_T_NONE, 6, nil))
+
+#define IceGhoul (Monster(@"Ghoul", PREFIX_T_ICE, \
+THREAT_T_HOSTILE, MONSTER_T_GHOUL, 1, 6, 10, 10, 10, 10, 10, 10, \
+ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, ENTITYITEMPICKUPALGORITHM_T_NONE, 6, nil))
+
+#define WaterGhoul (Monster(@"Ghoul", PREFIX_T_WATER, \
+THREAT_T_HOSTILE, MONSTER_T_GHOUL, 1, 6, 10, 10, 10, 10, 10, 10, \
+ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, ENTITYITEMPICKUPALGORITHM_T_NONE, 6, nil))
+
+#define EarthGhoul (Monster(@"Ghoul", PREFIX_T_EARTH, \
+THREAT_T_HOSTILE, MONSTER_T_GHOUL, 1, 6, 10, 10, 10, 10, 10, 10, \
+ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, ENTITYITEMPICKUPALGORITHM_T_NONE, 6, nil))
+
+#define LightningGhoul (Monster(@"Ghoul", PREFIX_T_LIGHTNING, \
+THREAT_T_HOSTILE, MONSTER_T_GHOUL, 1, 6, 10, 10, 10, 10, 10, 10, \
 ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, ENTITYITEMPICKUPALGORITHM_T_NONE, 6, nil))
 
 
-#define Totoro (Monster(@"Totoro", [NSArray arrayWithObject: [Prefix_t noPrefix]], THREAT_T_HOSTILE, MONSTER_T_TOTORO, \
-1, 6, \
-12, 8, 14, 10, 10, 10, \
+
+#define Totoro (Monster(@"Totoro", PREFIX_T_NONE, \
+THREAT_T_HOSTILE, MONSTER_T_TOTORO, 1, 6, 12, 8, 14, 10, 10, 10, \
 ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM, ENTITYITEMPICKUPALGORITHM_T_NONE, 8, nil))
 
-
-#define Tree (Monster(@"Tree", [NSArray arrayWithObject: [Prefix_t noPrefix]], THREAT_T_HOSTILE, MONSTER_T_TREE, \
-1, 12, \
-12, 12, 12, 12, 12, 12, \
+#define Tree (Monster(@"Tree", PREFIX_T_NONE, \
+THREAT_T_HOSTILE, MONSTER_T_TREE, 1, 12, 12, 12, 12, 12, 12, 12, \
 ENTITYPATHFINDINGALGORITHM_T_NONE, ENTITYITEMPICKUPALGORITHM_T_NONE, 8, nil))
 
-
-#define Cat (Monster([[NameEngine sharedEngine] getNextCatName], [NSArray arrayWithObject: [Prefix_t noPrefix]], THREAT_T_FRIENDLY, MONSTER_T_CAT, \
-1, 4, \
-12, 12, 12, 12, 12, 12, \
+#define Cat (Monster(@"Cat", PREFIX_T_NONE, \
+THREAT_T_FRIENDLY, MONSTER_T_CAT, 1, 4, 12, 12, 12, 12, 12, 12, \
 ENTITYPATHFINDINGALGORITHM_T_FRIENDLY_FOLLOW_PC_STRICT, ENTITYITEMPICKUPALGORITHM_T_NONE, 4, nil))

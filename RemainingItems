@@ -1,7 +1,12 @@
 1. Move the PlayerMenu to the center 
 
-2. Move the Monitor to just above the PlayerStatus
+2.  Move the Monitor to just above the PlayerStatus
+2a. Add a "max memory used"
 
 3. Adjust the Inventory menu position
 
-
+4. Add sound effects for:
+--attack-success
+--attack-miss
+--attack-deflect / defend
+--magic-cast

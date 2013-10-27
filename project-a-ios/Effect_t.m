@@ -4,6 +4,7 @@
 //  Created by Mike Bell on 4/4/13.
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 
+/*
 #import "Effect_t.h"
 
 @implementation Effect_t
@@ -116,3 +117,5 @@
 
 
 @end
+
+*/
