@@ -22,7 +22,8 @@
     else if (roll==5)   e = [Items catfish];
     //else if (roll==5)   e = [Items simpleDoor];
     
-    else if (roll==6)   e = [Items simpleKey];
+    //else if (roll==6)   e = [Items simpleKey];
+    else if (roll==6)   e = [Items poisonAntidote];
     else if (roll==7)   e = [Items poisonAntidote];
     else if (roll==8)   e = [Items scrollOfCureLightWounds];
     else if (roll==9)   e = [Items wandOfCureLightWounds];

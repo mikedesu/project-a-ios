@@ -76,7 +76,8 @@ unsigned get_memory_mb(void) {
     // Tiles
     
     [s setObject:[Drawer voidTile]                                          forKey: KEY_FOR_TILETYPE(TILE_FLOOR_VOID)];
-    
+ 
+    // should be new versions of upstairs/downstairs
     [s setObject:[Drawer upstairsTile]                                      forKey: KEY_FOR_TILETYPE(TILE_FLOOR_UPSTAIRS)];
     [s setObject:[Drawer downstairsTile]                                    forKey: KEY_FOR_TILETYPE(TILE_FLOOR_DOWNSTAIRS)];
     
@@ -484,10 +485,14 @@ unsigned get_memory_mb(void) {
     needsRedraw = YES;
     
     // place doors
+    /*
+     * cant get doors in this version - no way to get progress bar in!
+     *
     int maxDoors = 5;
     int numDoors = [Dice roll: maxDoors];
     [ GameRenderer spawnDoors: numDoors forFloor: currentFloor ];
-    
+    */
+
     // populate treasure
     // generate and scatter some treasure
     [ GameRenderer spawnTreasureForFloor: currentFloor];
@@ -1347,24 +1352,15 @@ static NSString  * const notifications[] = {
         messageWindowIsVisible = NO;
         if ( [messageQueue count] > 0 ) {
             [messageQueue removeObjectAtIndex:0];
-            
             [messageQueue count] > 0  ? [self displayMessageWindow] : 0;
-            
             [messageQueue count] == 0 && gameState == GAMESTATE_T_GAME_PC_DEAD ?
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"UnloadGame" object:nil] : 0;
-            
         }
     }
 }
 
 
 #pragma mark - Equip Menu
-
-/*
- ====================
- equip menu methods
- ====================
- */
 
 -(void) initEquipMenu {
     equipMenu = [[EquipMenu alloc] initWithPC:pcEntity withFloor:currentFloor withGameLayer:self];
@@ -1391,13 +1387,8 @@ static NSString  * const notifications[] = {
 }
 
 
-
 #pragma mark - Help Menu
-/*
- ====================
- help menu methods
- ====================
- */
+
 -(void) initHelpMenu {
     CGSize size = [[CCDirector sharedDirector] winSize];
     helpMenu = [[HelpMenu alloc] initWithColor:black width:size.width height:size.height];
@@ -1421,13 +1412,6 @@ static NSString  * const notifications[] = {
 
 #pragma mark - Player Menu
 
-/*
- ====================
- initPlayerMenu
- 
- initializes the Player menu
- ====================
- */
 -( void ) initPlayerMenu {
     NSInteger width  = screenwidth/2;
     NSInteger height = screenheight/2;
@@ -1437,13 +1421,6 @@ static NSString  * const notifications[] = {
 }
 
 
-/*
- ====================
- addPlayerMenu: menu
- 
- adds the Player menu to the visible screen
- ====================
- */
 -( void ) addPlayerMenu: ( PlayerMenu * ) _menu {
     if ( ! playerMenuIsVisible ) {
         [ self addChild: _menu ];
@@ -1451,13 +1428,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- removePlayerMenu: menu
- 
- removes the Player menu from the visible screen
- ====================
- */
 -( void ) removePlayerMenu: ( PlayerMenu * ) _menu {
     if ( playerMenuIsVisible ) {
         [ self removeChild: _menu cleanup: NO ];
@@ -1465,13 +1435,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- initPlayerMenuMin
- 
- initializes the Player menu minimized
- ====================
- */
 -( void ) initPlayerMenuMin {
     CGSize size = [[CCDirector sharedDirector] winSize];
     playerMenuMin = [[ PlayerMenu alloc ] initWithColor: black width:100 height:30 isMinimized:YES];
@@ -1479,13 +1442,6 @@ static NSString  * const notifications[] = {
 }
 
 
-/*
- ====================
- addPlayerMenuMin: menu
- 
- adds the Player menu to the visible screen minimized
- ====================
- */
 -( void ) addPlayerMenuMin: ( PlayerMenu * ) _menu {
     if ( ! playerMenuIsMin ) {
         [ self addChild: _menu ];
@@ -1493,13 +1449,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- removePlayerMenuMin: menu
- 
- removes the Player menu from the visible screen minimized
- ====================
- */
 -( void ) removePlayerMenuMin: ( PlayerMenu * ) _menu {
     if ( playerMenuIsMin ) {
         [ self removeChild: _menu cleanup: NO ];
@@ -1507,13 +1456,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- initEntityInfoHUD
- 
- initializes the Entity Info HUD
- ====================
- */
 -( void ) initEntityInfoHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
     entityInfoHUD = [[ EntityInfoHUD alloc ] initWithColor:black_alpha(150) width:200 height:100 ];
@@ -1522,13 +1464,6 @@ static NSString  * const notifications[] = {
     [ self updateEntityInfoHUDLabel ];
 }
 
-/*
- ====================
- initEntityInfoHUD
- 
- initializes the Entity Info HUD
- ====================
- */
 
 -( void ) addEntityInfoHUD: (EntityInfoHUD *) _entityInfoHUD {
     if ( ! self->entityInfoHUDIsVisible ) {
@@ -1537,13 +1472,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- updateEntityInfoHUDLabel
- 
- updates the entity info hud label
- ====================
- */
 -( void ) updateEntityInfoHUDLabel {
     @try {
         BOOL selectedPointIsValid = (selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0 );
@@ -1625,13 +1553,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- removeEntityInfoHUD: entityInfoHUD
- 
- removes the entity info hud
- ====================
- */
 
 -( void ) removeEntityInfoHUD: (EntityInfoHUD *) _entityInfoHUD {
     if ( self->entityInfoHUDIsVisible ) {
@@ -1641,13 +1562,6 @@ static NSString  * const notifications[] = {
 }
 
 
-/*
- ====================
- initMonitor
- 
- initializes the Editor HUD 'Monitor'
- ====================
- */
 -( void ) initMonitor {
     //CGSize size = [[CCDirector sharedDirector] winSize];
     NSInteger width = 250,
@@ -1661,11 +1575,6 @@ static NSString  * const notifications[] = {
     [ self updateMonitorLabel ];
 }
 
-/*
- ====================
- addMonitor: monitor
- ====================
- */
 -(void) addMonitor: (EditorHUD *) _monitor {
     if ( ! self->monitorIsVisible ) {
         [ self addChild: _monitor ];
@@ -1673,11 +1582,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- removeMonitor: monitor
- ====================
- */
 -(void) removeMonitor: (EditorHUD *) _monitor {
     if ( self->monitorIsVisible ) {
         [ self removeChild: _monitor cleanup: NO ];
@@ -1685,11 +1589,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- updateMonitorLabel
- ====================
- */
 -(void) updateMonitorLabel {
     @try {
     [monitor.label setString:
@@ -1718,13 +1617,6 @@ static NSString  * const notifications[] = {
 }
 
 
-/*
- ====================
- initEditorHUD
- 
- initializes the Editor HUD
- ====================
- */
 -( void ) initEditorHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
     editorHUD = [[ EditorHUD alloc ] initWithColor:black width:200 height:60 ];
@@ -1735,26 +1627,12 @@ static NSString  * const notifications[] = {
     [ self updateEditorHUDLabel ];
 }
 
-/*
- ====================
- updateEditorHUDLabel
- 
- updates the Editor HUD Label
- ====================
- */
 -( void ) updateEditorHUDLabel {
     [[editorHUD label] setString: [ NSString stringWithFormat: @"%@",
                                    [dLog objectAtIndex: dLogIndex ]
                                    ]];
 }
 
-/*
- ====================
- addEditorHUD: hud
- 
- adds the Editor HUD to the visible screen
- ====================
- */
 -( void ) addEditorHUD: ( EditorHUD * ) _hud {
     if ( ! editorHUDIsVisible ) {
         [ self addChild: _hud ];
@@ -1762,13 +1640,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- removeEditorHUD: hud
- 
- removes the Editor HUD from the visible screen
- ====================
- */
 -( void ) removeEditorHUD: ( EditorHUD * ) _hud {
     if ( editorHUDIsVisible ) {
         [ self removeChild: _hud cleanup: NO ];
@@ -1776,13 +1647,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- initPlayerHUD
- 
- initializes the Player HUD
- ====================
- */
 -( void ) initPlayerHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
     playerHUD = [[ PlayerHUD alloc ] initWithColor:black width: size.width height:50 ];
@@ -1790,13 +1654,6 @@ static NSString  * const notifications[] = {
     [ self updatePlayerHUDLabel ];
 }
 
-/*
- ====================
- addPlayerHUD: hud
- 
- adds the Player HUD to the visible screen
- ====================
- */
 -( void ) addPlayerHUD: ( PlayerHUD * ) _hud {
     if ( ! playerHUDIsVisible ) {
         [ self addChild: _hud ];
@@ -1804,13 +1661,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- removePlayerHUD: hud
- 
- removes the Player HUD from the visible screen
- ====================
- */
 -( void ) removePlayerHUD: ( PlayerHUD * ) _hud {
     if ( playerHUDIsVisible ) {
         [ self removeChild: _hud cleanup: NO ];
@@ -1818,13 +1668,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- updatePlayerHUDLabel
- 
- updates the Player HUD Label
- ====================
- */
 -( void ) updatePlayerHUDLabel {
     playerHUD.label.fontSize = 12;
     [ [playerHUD label] setString: [ NSString stringWithFormat: @"%@\n%@\n%@\n",
@@ -1863,13 +1706,6 @@ static NSString  * const notifications[] = {
                                    ]];
 }
 
-/*
- ====================
- initGearHUD
- 
- initializes the Gear HUD
- ====================
- */
 -( void ) initGearHUD {
     CGSize size = [[CCDirector sharedDirector] winSize];
     gearHUD = [[ PlayerHUD alloc ] initWithColor:black_alpha(150) width: 100 height:100 ];
@@ -1877,13 +1713,6 @@ static NSString  * const notifications[] = {
     [ self updateGearHUDLabel ];
 }
 
-/*
- ====================
- addGearHUD: hud
- 
- adds the Gear HUD to the visible screen
- ====================
- */
 -( void ) addGearHUD: ( PlayerHUD * ) _hud {
     if ( ! gearHUDIsVisible ) {
         [ self addChild: _hud ];
@@ -1891,13 +1720,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- removeGearHUD: hud
- 
- removes the Gear HUD from the visible screen
- ====================
- */
 -( void ) removeGearHUD: ( PlayerHUD * ) _hud {
     if ( gearHUDIsVisible ) {
         [ self removeChild: _hud cleanup: NO ];
@@ -1905,13 +1727,6 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- updateGearHUDLabel
- 
- updates the Gear HUD Label
- ====================
- */
 -( void ) updateGearHUDLabel {
     gearHUD.label.fontSize = 10;
     NSString *str = [NSString stringWithFormat:@"Equipment:\n%@\n%@\n%@\n" ,
@@ -2052,13 +1867,6 @@ static NSString  * const notifications[] = {
 
 #pragma mark - Update code
 
-/*
- ====================
- tick: dt
- 
- represents a single frame tick
- ====================
- */
 -(void)tick:(ccTime)dt {
     //double before = [NSDate timeIntervalSinceReferenceDate];
 
@@ -2086,11 +1894,6 @@ static NSString  * const notifications[] = {
 
 #pragma mark - Touch code
 
-/*
- ====================
- ccTouchesBegan: touches withEvent: event
- ====================
- */
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	//UITouch *touch=[touches anyObject];
     touchBeganTime = [NSDate timeIntervalSinceReferenceDate];
@@ -2115,11 +1918,6 @@ static NSString  * const notifications[] = {
     needsRedraw = YES;
 }
 
-/*
- ====================
- ccTouchesMoved: touches withEvent: event
- ====================
- */
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     
     UITouch *touch=[touches anyObject];
@@ -2145,11 +1943,6 @@ static NSString  * const notifications[] = {
     needsRedraw = YES;
 }
 
-/*
- ====================
- ccTouchesEnded: touches withEvent: event
- ====================
- */
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
     //[self playSound: @"sound/sword-1.mp3"];
@@ -2177,169 +1970,14 @@ static NSString  * const notifications[] = {
     else {
         [self longPress];
     }
-    
-    /*
-    if ( messageWindowIsVisible ) {
-        // make window go away, we acknowledge message
-        [ self removeMessageWindow ];
-    } else {
-        if ( gameState == GAMESTATE_T_GAME_PC_FISHING_PRECAST ) {
-            // check tile cast on
-            if ( validMapPoint ) {
-                Tile *a = [ self getTileForCGPoint: mapPoint ];
-                
-                // check tiletype...
-                if ( a.tileType != TILE_FLOOR_WATER ) {
-                    [ self addMessageWindowString: @"That is not a water tile..." ];
-                } else {
-                    [ self addMessageWindowString: @"You catch a fish!" ];
-                    [self handleItemPickup:[Items catfish] forEntity:pcEntity];
-                }
-            }
-            gameState = GAMESTATE_T_MAINMENU;
-            gameLogicIsOn ? [self stepGameLogic] : 0;
-        }
-        
-        else if ( gameState == GAMESTATE_T_GAME_PC_KEY_PREUSE ) {
-            // check tile for locked door
-            
-            if ( validMapPoint ) {
-                Tile *a = [self getTileForCGPoint: mapPoint];
-                
-                Entity *door = nil;
-                for (Entity *e in a.contents) {
-                    if (e.itemType == E_ITEM_T_DOOR_SIMPLE) {
-                        door = e;
-                        break;
-                    }
-                }
-                
-                if ( door != nil ) {
-                    door.doorLocked = NO;
-                    [self addMessageWindowString: @"Door unlocked"];
-                }
-                else {
-                    [self addMessageWindowString: @"No door here"];
-                }
-            }
-            
-            gameState = GAMESTATE_T_MAINMENU;
-            gameLogicIsOn ? [self stepGameLogic] : 0;
-        }
-        
-        // not fishing, going for quick-move
-        else {
-            // something was previously selected
-            //if ( validSelectedPoint ) {
-            if ( validMapPoint ) {
-                // check if we hit the same tile again
-                Tile *a = [ self getTileForCGPoint: mapPoint ];
-                
-                // check distance from pcEntity
-                Tile *pcTile = [ self getTileForCGPoint: pcEntity.positionOnMap ];
-                NSInteger distance = [ GameTools distanceFromTile:a toTile: pcTile ];
-                
-                if ( distance <= pcEntity.movement ) {
-                    // valid quick-move
-                    // deselect the tile
-                    [ self selectTileAtPosition: mapPoint ];
-                    
-                    // move the pcEntity to the tile
-                    if ( pcEntity.positionOnMap.x != mapPoint.x || pcEntity.positionOnMap.y != mapPoint.y ) {
-                        [ self moveEntity:pcEntity toPosition:mapPoint ];
-                    } else {
-                        // rest
-                        [self addMessage:@"You rest..."];
-                        [self addMessageWindowString:@"You rest..."];
-                        pcEntity.hp++;
-                        if (pcEntity.hp >= pcEntity.maxhp) pcEntity.hp = pcEntity.maxhp;
-                        [pcEntity getHungry];
-                    }
-                }
-                    
-                else {
-                    // invalid quick-move
-                    // possibly other quick-action
-                    // deselect the tile
-                    MLOG(@"Invalid quick-move. Deselecting tile...");
-                    [ self selectTileAtPosition: mapPoint ];
-                        
-                    // long-distance move
-                    // 1. get the nearest tile from the pc
-                    // this code was taken and altered from the friendly cat movement algorithm
-                        
-                    CGPoint basePos = pcEntity.positionOnMap;
-                        
-                    // check around the pc and compare each point
-                        
-                    CGPoint p[8];
-                    int p_dist[8];
-                    p[0] = ccp( basePos.x - 1, basePos.y - 1);
-                    p[1] = ccp( basePos.x, basePos.y - 1);
-                    p[2] = ccp( basePos.x + 1, basePos.y - 1);
-                    p[3] = ccp( basePos.x - 1, basePos.y );
-                    p[4] = ccp( basePos.x + 1, basePos.y );
-                    p[5] = ccp( basePos.x - 1, basePos.y + 1 );
-                    p[6] = ccp( basePos.x, basePos.y + 1 );
-                    p[7] = ccp( basePos.x + 1, basePos.y + 1 );
-                        
-                    for (int i=0; i<8; i++)
-                        p_dist[i] = [ GameTools distanceFromCGPoint:p[i] toCGPoint: mapPoint ];
-                     
-                    // compute min
-                    int min = 1000;
-                    int min_index = 1000;
-                    for (int i=0; i<8; i++) {
-                        // also check if it is a void tile
-                        if ( p_dist[i] <= min && [self getTileForCGPoint:p[i]].tileType != TILE_FLOOR_VOID ) {
-                            min = p_dist[i];
-                            min_index = i;
-                        }
-                    }
-                        
-                    // check for border-ties
-                    BOOL topRowTie    = (min_index == 0 || min_index == 1 || min_index == 2) && (p_dist[0] == p_dist[1] && p_dist[0] == p_dist[2]);
-                    BOOL leftColTie   = (min_index == 0 || min_index == 3 || min_index == 5) && p_dist[0] == p_dist[3] && p_dist[0] == p_dist[5];
-                    BOOL rightColTie  = (min_index == 2 || min_index == 4 || min_index == 7) && p_dist[2] == p_dist[4] && p_dist[2] == p_dist[7];
-                    BOOL bottomRowTie = (min_index == 5 || min_index == 6 || min_index == 7) && p_dist[5] == p_dist[6] && p_dist[5] == p_dist[7];
-                        
-                    // prefer central indices in case of triple-tie
-                    min_index = topRowTie    ? 1 :
-                                leftColTie   ? 3 :
-                                rightColTie  ? 4 :
-                                bottomRowTie ? 6 : min_index;
-                        
-                    // move the entity
-                    [ self moveEntity:pcEntity toPosition:p[min_index]];
-                    
-                }
-                gameLogicIsOn ? [self stepGameLogic] : 0;
-                [ self resetCameraPosition ];
-            }
-            // something was not prev. selected
-        }
-        needsRedraw = YES;
-    }
-     */
 }
 
-/*
- ====================
- ccTouchesCancelled: touches withEvent: event
- ====================
- */
 - (void)ccTouchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
 	[self ccTouchesEnded:touches withEvent:event];
 }
 
-/*
- ====================
- shortPress: touch
- ====================
- */
 -( void ) shortPress: (UITouch *) touch {
     //MLOG( @"short press" );
-    
     //UITouch *touch=[touches anyObject];
     //touchEndedTime = [NSDate timeIntervalSinceReferenceDate];
     //isTouched = NO;
@@ -2495,27 +2133,13 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- longPress
- ====================
- */
 -( void ) longPress {
     //MLOG( @"long press" );
-    
-    //UIAlertView *alert = [[ UIAlertView alloc] initWithTitle:@"Test" message:@"Long Press" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    //[alert show];
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayerMenuCloseNotification" object:nil];
 }
 
 #pragma mark - Tile code
 
-/*
- ====================
- appendNewTile
- ====================
- */
 -( void ) appendNewTile {
     CGSize size = [ [ CCDirector sharedDirector ] winSize ];
     float x = 0;
@@ -2547,11 +2171,6 @@ static NSString  * const notifications[] = {
     [ tileArray addObject: tileSprite ];
 }
 
-/*
- ====================
- appendNewColorTestTile
- ====================
- */
 -( void ) appendNewColorTestTile {
     CGSize size = [ [ CCDirector sharedDirector ] winSize ];
     float x = 0;
@@ -2582,31 +2201,16 @@ static NSString  * const notifications[] = {
     [ tileArray addObject: tileSprite ];
 }
 
-/*
- ====================
- initializeTileArray
- ====================
- */
 -( void ) initializeTileArray {
     tileArray = [[ NSMutableArray alloc ] init ];
 }
 
-/*
- ====================
- addBlankTiles
- ====================
- */
 -( void ) addBlankTiles {
     for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN ; i++ ) {
        [ self appendNewTile ];
     }
 }
 
-/*
- ====================
- addColorTiles
- ====================
- */
 -( void ) addColorTiles {
     tileArray = [ NSMutableArray arrayWithCapacity: NUMBER_OF_TILES_ONSCREEN ];
     for ( int i = 0 ; i < NUMBER_OF_TILES_ONSCREEN ; i++ ) {
@@ -2614,21 +2218,11 @@ static NSString  * const notifications[] = {
     }
 }
 
-/*
- ====================
- initializeTiles
- ====================
- */
 -( void ) initializeTiles {
     [ self initializeTileArray ];
     [ self addBlankTiles ];
 }
 
-/*
- ====================
- initializeTileData
- ====================
- */
 -( Tile * ) getTileForCGPoint: ( CGPoint ) p  {
     Tile *tile = nil;
     //tile = [[[dungeon objectAtIndex:floorNumber] tileDataArray] objectAtIndex: p.x + ( p.y * [ (DungeonFloor *)[dungeon objectAtIndex:floorNumber] width ] ) ];
@@ -2648,11 +2242,6 @@ static NSString  * const notifications[] = {
     return sprite;
 }
 
-/*
- ====================
- getTileForTouch
- ====================
- */
 -( CCSprite * ) getTileForTouch: ( UITouch * ) touch {
     // calculate tile position based on (x,y)
     NSInteger index = [ self getTileIndexForTouch: touch ];
@@ -2666,11 +2255,6 @@ static NSString  * const notifications[] = {
     return sprite;
 }
 
-/*
- ====================
- getTileForIndex
- ====================
- */
 -( Tile * ) getTileForIndex: ( NSInteger ) index {
     Tile *t = nil;
     @try {
@@ -2683,11 +2267,6 @@ static NSString  * const notifications[] = {
     return t;
 }
 
-/*
- ====================
- getTileIndexForTouch
- ====================
- */
 // magic numbers below are for 16x16 tiles w/ 150 tiles on-screen
 static BOOL isMagicXArrayInitialized = NO;
 static BOOL isMagicYArrayInitialized = NO;
@@ -2735,7 +2314,6 @@ NSUInteger getMagicX( NSUInteger x ) {
      */
 }
 
-
 // magic numbers below are for 16x16 tiles w/ 150 tiles on-screen
 NSUInteger getMagicY( NSUInteger y ) {
     if ( ! isMagicYArrayInitialized ) {
@@ -2745,66 +2323,41 @@ NSUInteger getMagicY( NSUInteger y ) {
     return magicYArray[ y ];
 }
 
-
 -( NSInteger ) getTileIndexForTouch: ( UITouch * ) touch {
     CGPoint touchLocation = [ touch locationInView: nil ];
     touchLocation = [ [ CCDirector sharedDirector ] convertToGL: touchLocation ];
-    
     NSUInteger x = ( NSUInteger ) touchLocation.x;
     NSUInteger y = ( NSUInteger ) touchLocation.y;
     NSUInteger tx = getMagicX( x );
     NSUInteger ty = getMagicY( y );
-
     // calculate tile position based on (x,y)
     NSInteger index = tx + ty * 10;
     return index;
 }
 
-/*
- ====================
- getTileCGPointForTouch
- ====================
- */
 -( CGPoint ) getTileCGPointForTouch: ( UITouch * ) touch {
     CGPoint touchLocation = [ touch locationInView: nil ];
     touchLocation = [ [ CCDirector sharedDirector ] convertToGL: touchLocation ];
-    
     NSUInteger x = ( NSUInteger ) touchLocation.x;
     NSUInteger y = ( NSUInteger ) touchLocation.y;
     NSUInteger tx = getMagicX( x );
     NSUInteger ty = getMagicY( y );
-    
     // calculate tile position based on (x,y)
     CGPoint returnPoint = ccp( tx, ty );
     return returnPoint;
 }
 
-/*
- ====================
- setEntity: entity onTile: tile
- ====================
- */
 -( void ) setEntity: ( Entity * ) entity onTile: ( Tile * ) tile {
     entity.positionOnMap = tile.position;
     [ tile addObjectToContents: entity ];
 }
 
-/*
- ====================
- translateTouchPointToMapPoint: (CGPoint) touchPoint
- ====================
- */
 -( CGPoint ) translateTouchPointToMapPoint: (CGPoint) touchPoint {
     CGPoint c = cameraAnchorPoint;
     CGPoint mapPoint = ccp( touchPoint.x + c.x, touchPoint.y + c.y );
     return mapPoint;
 }
 
-/*
- ====================
- getMapTileFromPoint: p
- ====================
- */
 -( Tile * ) getMapTileFromPoint: (CGPoint) p {
     Tile *tile = nil;
     //for ( Tile *t in [ [dungeon objectAtIndex:floorNumber] tileDataArray ] ) {
@@ -2831,11 +2384,6 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 #pragma mark - EntityHUD Message code
 
-/*
- ====================
- addMessage: message
- ====================
- */
 #define MAX_DISPLAYED_MESSAGES      1
 -( void ) addMessage: (NSString * ) message {
     NSString *str = [ NSString stringWithFormat: @"%@\n",
@@ -2848,13 +2396,6 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 #pragma mark - Entity code
 
-/*
- ====================
- getEntityForName: name
- 
- returns the entity for the given name
- ====================
- */
 -( Entity * ) getEntityForName: ( NSString * ) name {
     Entity *entity = nil;
     //for ( Entity *e in [[dungeon objectAtIndex:floorNumber] entityArray] ) {
@@ -2867,13 +2408,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     return entity;
 }
 
-/*
- ====================
- getEntityForPosition: p
- 
- returns the entity for the given position on the current floor
- ====================
- */
 -( Entity * ) getEntityForPosition: (CGPoint) p {
     Entity *entity = nil;
     //for ( Entity *e in [[dungeon objectAtIndex:floorNumber] entityArray] ) {
@@ -2886,26 +2420,11 @@ NSUInteger getMagicY( NSUInteger y ) {
     return entity;
 }
 
-/*
- ====================
- moveEntity: entity toPosition: position
- 
- moves the entity on the map to position
- ====================
- */
-
 -( BOOL ) moveEntity:(Entity *)entity toPosition:(CGPoint)position {
     //return [ self moveEntity: entity toPosition:position onFloor:[dungeon objectAtIndex:floorNumber ] ];
     return [ self moveEntity: entity toPosition:position onFloor:currentFloor ];
 }
 
-/*
- ====================
- moveEntity: entity toPosition: position onFloor: floor
- 
- moves the entity on the map to position on given dungeon floor
- ====================
- */
 -( BOOL ) moveEntity: ( Entity * ) entity toPosition: ( CGPoint ) position onFloor: (DungeonFloor *) _floor {
     //MLOG( @"moveEntity: %@ toPosition: (%f, %f)", entity.name, position.x, position.y );
     BOOL retVal = FALSE;
@@ -3222,13 +2741,6 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
-/*
- ====================
- handleTrapSetOffPC
- 
- handles when a tile trap is set off by the pc
- ====================
- */
 -( void ) handleTrapSetOffPC {
     //CGPoint pcPos = pcEntity.positionOnMap;
     
@@ -3286,13 +2798,6 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
-/*
- ====================
- didPCDieJustNow
- 
- checks to see if the PC is alive / has hp
- ====================
- */
 -( BOOL ) didPCDieJustNow {
     BOOL retVal = NO;
     if ( pcEntity.hp <= 0 ) {
@@ -3327,13 +2832,6 @@ NSUInteger getMagicY( NSUInteger y ) {
 
 
 
-/*
- ====================
- selectTileAtPosition: position
- 
- selects/deselects the tile at given position
- ====================
- */
 -( void ) selectTileAtPosition: ( CGPoint ) position {
     if ( selectedTilePoint.x >= 0 && selectedTilePoint.y >= 0 ) {
         Tile *prevTile = [ self getMapTileFromPoint: selectedTilePoint ];
@@ -3373,57 +2871,12 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
-/*
- ====================
- resetCameraPosition
- 
- resets the camera position relative to the pcEntity
- ====================
- */
 -( void ) resetCameraPosition {
     // reset the camera position
     cameraAnchorPoint.x = pcEntity.positionOnMap.x - 5;
     cameraAnchorPoint.y = pcEntity.positionOnMap.y - 7;
 }
 
-/*
- ====================
- distanceFromTile: toTile: (DEPRECATED!!! - use: [GameTools distanceFromTile: toTile:])
- 
- returns distance from a tile to another
- ====================
--( NSInteger ) distanceFromTile: ( Tile * ) a toTile: ( Tile * ) b {
-    NSInteger ax = (NSInteger)a.position.x;
-    NSInteger bx = (NSInteger)b.position.x;
-    NSInteger ay = (NSInteger)a.position.y;
-    NSInteger by = (NSInteger)b.position.y;
-    return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
-}
- */
-
-/*
- ====================
- distanceFromCGPoint: toCGPoint: (DEPRECATED!!! - use: [GameTools distanceFromCGPoint: toCGPoint:])
- 
- returns distance from a cgpoint to another
- ====================
--( NSInteger ) distanceFromCGPoint: (CGPoint) a toCGPoint: (CGPoint) b {
-    //MLOG( @"distanceFromTile: a toTile: b" );
-    NSInteger ax = (NSInteger)a.x;
-    NSInteger bx = (NSInteger)b.x;
-    NSInteger ay = (NSInteger)a.y;
-    NSInteger by = (NSInteger)b.y;
-    return sqrt( (bx-ax)*(bx-ax) + (by-ay)*(by-ay) );
-}
- */
-
-/*
- ====================
- nearestCGPointFromCGPoint: a toCGPoint: b
- 
- returns the nearest cgpoint surrounding a to b
- ====================
- */
 -( CGPoint ) nearestCGPointFromCGPoint: (CGPoint) a toCGPoint: (CGPoint) b {
     CGPoint nearest = { 0, 0 };
     
@@ -3464,13 +2917,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     return nearest;
 }
 
-/*
- ====================
- nearestNonVoidCGPointFromCGPoint: a toCGPoint: b
- 
- returns nearest non-void cgpoint surrounding a to b
- ====================
- */
 -( CGPoint ) nearestNonVoidCGPointFromCGPoint: (CGPoint) a toCGPoint: (CGPoint) b {
     CGPoint nearest = { 0, 0 };
     if ( a.x == b.x && a.y == b.y ) {
@@ -3543,11 +2989,6 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 #pragma mark - Initialization helper code
-/*
- ====================
- initializeDungeon
- ====================
- */
 -( void ) initializeDungeon {
     [ self initializeTiles ];
     /*
@@ -3577,10 +3018,12 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ GameRenderer spawnTreasureForFloor: nextFloor ];
 
     // spawn doors
+    /*
+     * doors removed - cant get progress bar in this version!
     int maxDoors = 5;
     int numDoors = [Dice roll: maxDoors];
     [ GameRenderer spawnDoors: numDoors forFloor: nextFloor ];
-    
+    */
 }
 
 -(void) setNextFloor {
@@ -3588,13 +3031,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     floorNumber++;
 }
 
-
-
-/*
- ====================
- goingUpstairs
- ====================
- */
 -( void ) goingUpstairs {
     /* temporarily disabled 10/16/13
      *
@@ -3613,11 +3049,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     */
 }
 
-/*
- ====================
- goingDownstairs
- ====================
- */
 -( void ) goingDownstairs {
     /* temporarily disabled 10/16/13
      *
@@ -3643,11 +3074,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     needsRedraw = YES;
 }
 
-/*
- ====================
- setEntityOnUpstairs: entity
- ====================
- */
 -( void ) setEntityOnUpstairs:(Entity *)entity {
     // find the upstairs tile
     //CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: [dungeon objectAtIndex:floorNumber] ];
@@ -3665,11 +3091,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ GameRenderer setEntity:entity onTile:tile];
 }
 
-/*
- ====================
- setEntityOnUpstairs: entity forFloor: floor
- ====================
- */
 -( void ) setEntityOnUpstairs:(Entity *)entity forFloor: (DungeonFloor *) _floor {
     // find the upstairs tile
     CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: _floor ];
@@ -3685,11 +3106,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ GameRenderer setEntity:entity onTile:tile];
 }
 
-/*
- ====================
- setEntity: entity onRandomTileForFloor: floor
- ====================
- */
 -( void ) setEntity: (Entity *) entity onRandomTileForFloor: (DungeonFloor *) _floor {
     CGPoint startPoint = ccp( 10, 10 );
     Tile *tile = nil;
@@ -3702,11 +3118,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     [GameRenderer setEntity:entity onTile:tile];
 }
 
-/*
- ====================
- setEntityOnDownstairs: entity forFloor: floor
- ====================
- */
 -( void ) setEntityOnDownstairs:(Entity *)entity forFloor: (DungeonFloor *) _floor {
     // find the upstairs tile
     CGPoint startPoint = [ GameRenderer getUpstairsTileForFloor: _floor ];
@@ -3722,11 +3133,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ GameRenderer setEntity:entity onTile:tile];
 }
 
-/*
- ====================
- setEntityOnDownstairs: entity
- ====================
- */
 -( void ) setEntityOnDownstairs:(Entity *)entity {
     // find the downstairs tile
     CGPoint startPoint = [ GameRenderer getDownstairsTileForFloor:currentFloor ];
@@ -3744,13 +3150,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     [ GameRenderer setEntity:entity onTile:tile];
 }
 
-/*
- ====================
- initializeHUDs
- 
- initializes the various HUDs used by the game
- ====================
- */
 -( void ) initializeHUDs {
     editorHUDIsVisible = NO;
     [ self initEditorHUD ];
@@ -3809,8 +3208,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     [self initLevelUpWindow];
     //[self addLevelUpWindow];
     
-    
-    
     messageWindowIsVisible = NO;
     [self initMessageWindow];
     
@@ -3818,13 +3215,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     [self displayMessageWindow];
 }
 
-/*
- ====================
- initializePCEntity
- 
- initializes the PC Entity
- ====================
- */
 -( void ) initializePCEntity {
     Entity *hero = [ [ Entity alloc ] init ];
     [ hero.name setString: @"Mike" ];
@@ -3895,13 +3285,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     //MLOG(@"");
 }
 
-/*
- ====================
- getGameStateString: state
- 
- returns a string for the given state
- ====================
- */
 -( NSString * ) getGameStateString: ( GameState_t ) state {
     NSString *retval = nil;
     retval =
@@ -3939,13 +3322,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
-/*
- ====================
- stepGameLogic
- 
- steps the game's logic forward
- ====================
- */
 -( void ) stepGameLogic {
     if ( gameLogicIsOn ) {
           // check if we've obtained the Book of All-Knowing
@@ -4055,13 +3431,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
-/*
- ====================
- handleEntityStep: e
- 
- handle the step for entity e
- ====================
- */
 -( void ) handleEntityStep: ( Entity * ) e {
     MLOG(@"Handling Entity Step...");
     if (e.pathFindingAlgorithm == ENTITYPATHFINDINGALGORITHM_T_SMART_RANDOM ) {
@@ -4290,13 +3659,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
-/*
- ====================
- npcEntityAtPosition: pos
- 
- returns the NPC entity at position pos
- ====================
- */
 -( Entity * ) npcEntityAtPosition: (CGPoint) pos {
     Entity *e = nil;
     Tile *t = [ self getTileForCGPoint:pos ];
@@ -4309,13 +3671,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     return e;
 }
 
-/*
- ====================
- handleAttackForEntity: e toPosition: pos
- 
- handles attack logic between entities and positions
- ====================
- */
 -( void ) handleAttackForEntity: ( Entity * ) e toPosition: (CGPoint) pos {
     // get the tile we are attacking
     Tile *t = [ self getTileForCGPoint: pos ];
@@ -4509,11 +3864,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
-/*
- ====================
- handleItemPickup: item forEntity: entity
- ====================
- */
 -( void ) handleItemPickup: (Entity *) item forEntity: (Entity *) entity {
     BOOL wasPickedUp = NO;
     if ( item != nil && entity == pcEntity ) {
@@ -4733,11 +4083,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
-/*
- ================
- handleDropItem: item forEntity: entity
- ================
- */
 -( void ) handleDropItem: (Entity *) item forEntity: (Entity *) entity {
     if ( [[Maybe something:item] hasSomething] && [[Maybe something:entity] hasSomething] ) {
         // get the entity's tile
@@ -4767,48 +4112,20 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
-/*
- ====================
- scheduledStepAction
- 
- this method is scheduled in the init for gameLogic autostepping
- ====================
- */
 -( void ) scheduledStepAction {
     if ( autostepGameLogic ) {
         [ [ NSNotificationCenter defaultCenter ] postNotificationName: @"PlayerMenuStepNotification" object: self ];
     }
 }
 
-/*
- ====================
- scheduleStepAction
- 
- schedules the scheduledStepAction
- ====================
- */
 -( void ) scheduleStepAction {
     [ self schedule:@selector(scheduledStepAction) interval: STEP_SPEED ];
 }
 
-/*
- ====================
- unscheduleStepAction
- 
- unschedules the scheduleStepAction
- ====================
- */
 -( void ) unscheduleStepAction {
     [ self unschedule:@selector(scheduledStepAction)];
 }
 
-/*
- ====================
- doTimer
- 
- times the method selector
- ====================
- */
 -( void ) doTimer: (SEL) selector {
     if ( selector != nil ) {
         //CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
@@ -4819,13 +4136,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     }
 }
 
-/*
- ====================
- incrementTurn
- 
- increments the turnCounter
- ====================
- */
 -( void ) incrementTurn {
     // post available karma
     gotKarmaThisTurn ? [[KarmaEngine sharedEngine] addKarma: totalKarmaThisTurn] : 0;
@@ -4848,9 +4158,6 @@ NSUInteger getMagicY( NSUInteger y ) {
     autostepGameLogic = ! autostepGameLogic;
 }
 
-
-
-
 -(void) cleanupEntityArray {
     // cleanup entityArray
     //for ( int i = 0; i < [[[dungeon objectAtIndex:floorNumber] entityArray] count]; i++ ) {
@@ -4858,11 +4165,8 @@ NSUInteger getMagicY( NSUInteger y ) {
         Entity *e = [[currentFloor entityArray] objectAtIndex: i];
         if ( e.isAlive == NO ) {
             //CGPoint entityPos = e.positionOnMap;
-            
             // drop a green blob if they die
-            
             // handle item drop for the entity
- 
             [self handleItemDropForEntity: e];
  
             // remove the dead entity from the array
@@ -4874,17 +4178,10 @@ NSUInteger getMagicY( NSUInteger y ) {
 }
 
 
-
 -(Entity *) itemDropForEntity: (Entity *) entity {
-    Entity *itemDrop = nil;
-    
     // item-generation logic
-    NSInteger roll = [Dice roll:4];
-    itemDrop =
-    roll == 1 || roll == 2 ? [Items catfish] :
-    [Items simpleKey];
-    
-    
+    Entity *itemDrop = nil;
+    itemDrop = [Items catfish] ;
     return itemDrop;
 }
 

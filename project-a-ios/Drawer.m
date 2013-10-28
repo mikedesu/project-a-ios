@@ -650,12 +650,13 @@
     //CCMutableTexture2D *t = [self heartWithColors:black c1:red c2:red];
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
-    
     return t;
 }
 
 
 +(CCMutableTexture2D *) upstairsTile {
+    CCMutableTexture2D *t = [Drawer flatTile:gray];
+    /*
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
     
@@ -676,11 +677,14 @@
         [t setPixelAt:ccp(i, 13) rgba:c1];
     }
     [ t apply ];
+    */
     return t;
 }
 
 
 +(CCMutableTexture2D *) downstairsTile {
+    CCMutableTexture2D *t = [Drawer colorFuzz];
+    /*
     CCMutableTexture2D *t = [CCMutableTexture2D textureWithSize:CGSizeMake(16, 16)];
     [t fill:black_alpha(0)];
     
@@ -700,6 +704,7 @@
     }
     
     [ t apply ];
+    */
     return t;
 }
 
