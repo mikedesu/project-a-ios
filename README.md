@@ -7,6 +7,6 @@ So I am releasing this version as open-source.<br/>
 Future work will be available open-source as well.<br/>
 I will update this readme as necessary.<br/>
 <br/>
-http://gikh.in<br/>
+PLEASE DONATE! http://gikh.in<br/>
 https://youtube.com/user/MikemageEX<br/>
 https://twitter.com/zengamingdojo<br/>
